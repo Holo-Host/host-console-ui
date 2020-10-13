@@ -1,26 +1,27 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <HostedHapps />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HostedHapps from 'pages/HostedHapps.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HostedHapps
   }
 }
 </script>
 
 <style>
+body, html {
+  height: 100%;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background-color: #fafcfe;
+  height: 100%;
 }
 </style>

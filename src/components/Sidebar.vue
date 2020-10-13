@@ -1,0 +1,85 @@
+<template>
+  <div class="sidebar">
+    <div class="banner">Host Console</div>
+    <div class="menu">
+      <div class="menu-row">
+        <HomeIcon class="home-icon" />Home
+      </div>
+      <div class="footer">
+        <div class='holo-brand'>
+          <img src='/images/holo-logo.png' class='holo-logo'/>
+          HOLO
+        </div>
+        <a href='FIXME'>View Privacy Policy</a>
+        <a href='FIXME'>View Terms of Service</a>        
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HomeIcon from 'components/icons/HomeIcon.vue'
+
+export default {
+  name: 'Sidebar',
+  components: {
+    HomeIcon
+  }
+}
+</script>
+
+<style scoped>
+.sidebar {
+  display: flex;  
+  flex-direction: column;
+  width: 270px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(54, 59, 71, 0.1);
+}
+.banner {
+  background-color: rgba(0, 202, 217, 0.06);
+  color: #00CAD9;
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+  padding: 44px 0;
+}
+.menu {
+  padding: 30px 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.menu-row {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.home-icon {
+  margin-right: 10px;
+}
+.footer {
+  margin-top: auto;
+  padding-bottom: 8px;
+}
+.footer a {
+  display: block;
+  margin-bottom: 5px;
+  color: black;
+  font-weight: 600;
+  text-decoration: none;
+}
+.holo-brand {
+  display: flex;
+  margin-bottom: 25px;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 12px;
+}
+.holo-logo {
+  width: 30px;
+  margin-right: 8px;
+}
+</style>
