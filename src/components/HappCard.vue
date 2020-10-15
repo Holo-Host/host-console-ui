@@ -11,16 +11,16 @@
       </div>
       <div class="snapshot-label">7 day snapshot:</div>
       <div class="earnings-row">
-        <HoloIcon class='holo-icon' /> Earnings:&nbsp;<span class="earnings">{{ happ.earnings }} TF</span>
+        <HoloIcon class='holo-icon' /> Earnings:<span class="earnings">&nbsp;{{ happ.earnings }} TF</span>
       </div>
       <div class="usage-row">
-        <div>
+        <div class='usage'>
           <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
         </div>
-        <div>
+        <div class='usage'>
           <span class="usage-value">{{ happ.usage.storage }}MB</span> Storage
         </div>
-        <div>
+        <div class='usage'>
           <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
         </div>
       </div>
@@ -54,14 +54,14 @@ export default {
 <style scoped>
 .happ-card {
   display: flex;
-  min-width: 500px; /* fixme */
   background-color: white;
+  max-width: 546px;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 12px;
   margin-right: 18px;
   margin-bottom: 20px;
   padding: 20px;
-  flex: 1;
+  flex: 1 0 546px;
 }
 .avatar {
   width: 140px;
@@ -133,6 +133,9 @@ export default {
   font-size: 12px;
   font-weight: 600;
   padding-right: 36px;
+}
+.usage {
+  display: flex;
 }
 .usage-value {
   padding: 0 5px;

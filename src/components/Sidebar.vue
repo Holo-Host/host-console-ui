@@ -10,8 +10,7 @@
           <img src='/images/holo-logo.png' class='holo-logo'/>
           HOLO
         </div>
-        <a href='FIXME'>View Privacy Policy</a>
-        <a href='FIXME'>View Terms of Service</a>        
+        <a href='https://forum.holo.host/t/alpha-testnet-terms-conditions/193'>View Terms of Service</a>        
       </div>
     </div>
   </div>
@@ -19,6 +18,7 @@
 
 <script>
 import HappsIcon from 'components/icons/HappsIcon.vue'
+
 
 export default {
   name: 'Sidebar',

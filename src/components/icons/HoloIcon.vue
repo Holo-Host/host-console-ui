@@ -9,7 +9,7 @@
 import Icon from 'components/icons/Icon.vue'
 
 export default {
-  name: 'HomeIcon',
+  name: 'HoloIcon',
   components: {
     Icon
   }

@@ -1,6 +1,6 @@
 <template>
   <Icon stroke="#00CAD9" class='icon'>
-    <path d="M5 12h14M15 16l4-4M15 8l4 4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4.94 5.23L8 8.28l3.06-3.05.94.94-4 4-4-4 .94-.94z" />
   </Icon>
 </template>
 
@@ -9,7 +9,7 @@
 import Icon from 'components/icons/Icon.vue'
 
 export default {
-  name: 'ArrowIcon',
+  name: 'ChevronIcon',
   components: {
     Icon
   }
