@@ -5,6 +5,7 @@
         Filter by:
       </div>
       <input v-model="filter" class="filter" />
+      <ExIcon v-if="filter.length > 0" @click="clearFilter" class='ex-icon' />
       <div class="label">
         Sort by:&nbsp;
       </div>
@@ -24,7 +25,7 @@
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HappCard from 'components/HappCard.vue'
-import ChevronIcon from 'components/icons/ChevronIcon.vue'
+import ExIcon from 'components/icons/ExIcon.vue'
 
 const happs = [{
   id: 1,
@@ -116,7 +117,7 @@ export default {
   components: {
     PrimaryLayout,
     HappCard,
-    ChevronIcon
+    ExIcon
   },
   data () {
     return {
@@ -137,13 +138,19 @@ export default {
     }, {
       label: 'Alphabetical', value: SORT_ALPHABETICAL
     }]
-  }  
+  },
+  methods: {
+    clearFilter () {
+      this.filter = ''
+    }
+  }
 }
 
 </script>
 
 <style scoped>
 .controls {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -158,6 +165,11 @@ export default {
 .filter {
   border: 1px solid #E5E5E5;
   border-radius: 5px;
+}
+.ex-icon {
+  position: relative;
+  top: 7px;
+  right: 16px;
 }
 .sort {
   appearance: none;
