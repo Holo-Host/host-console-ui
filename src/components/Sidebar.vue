@@ -1,7 +1,7 @@
 <template>
-  <div class="sidebar">
-    <div class="banner">Host Console</div>
-    <div class="menu">
+  <section class="sidebar">
+    <h1 class="banner">Host Console</h1>
+    <section class="menu">
       <div class="menu-row">
         <HappsIcon class="home-icon" />Happs
       </div>
@@ -12,8 +12,8 @@
         </div>
         <a href='https://forum.holo.host/t/alpha-testnet-terms-conditions/193'>View Terms of Service</a>        
       </div>
-    </div>
-  </div>
+    </section>
+  </section>
 </template>
 
 <script>
@@ -43,6 +43,7 @@ export default {
   font-size: 24px;
   text-align: center;
   padding: 44px 0;
+  margin: 0;
 }
 .menu {
   padding: 30px 40px;

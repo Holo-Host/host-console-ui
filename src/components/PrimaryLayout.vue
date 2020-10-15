@@ -1,13 +1,13 @@
 <template>
-  <div class='layout'>
+  <section class='layout'>
     <Sidebar />
-    <div class='main-column'>
+    <section class='main-column'>
       <TopNav :title="title" />
-      <div class='content'>
+      <section class='content'>
         <slot />
-      </div>
-    </div>
-  </div>
+      </section>
+    </section>
+  </section>
 </template>
 
 <script>
