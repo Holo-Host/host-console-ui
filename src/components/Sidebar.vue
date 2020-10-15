@@ -3,7 +3,7 @@
     <div class="banner">Host Console</div>
     <div class="menu">
       <div class="menu-row">
-        <HomeIcon class="home-icon" />Home
+        <HappsIcon class="home-icon" />Happs
       </div>
       <div class="footer">
         <div class='holo-brand'>
@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import HomeIcon from 'components/icons/HomeIcon.vue'
+import HappsIcon from 'components/icons/HappsIcon.vue'
 
 export default {
   name: 'Sidebar',
   components: {
-    HomeIcon
+    HappsIcon
   }
 }
 </script>
@@ -32,7 +32,7 @@ export default {
 .sidebar {
   display: flex;  
   flex-direction: column;
-  width: 270px;
+  flex: 0 0 270px;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(54, 59, 71, 0.1);
 }

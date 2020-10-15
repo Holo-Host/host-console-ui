@@ -1,7 +1,7 @@
 <template>
-  <svg :viewBox="viewBox" class="icon" :class="$attrs.class" version="1" xmlns="http://www.w3.org/2000/svg">
+  <svg class="icon" :class="$attrs.class" version="1" xmlns="http://www.w3.org/2000/svg">
     <title>{{ title }}</title>
-    <g :fill="color">
+    <g :fill="fill" :stroke="stroke">
       <slot />
     </g>
   </svg>
@@ -12,7 +12,8 @@ export default {
   name: 'Icon',
   props: {
     title: String,
-    color: String
+    stroke: String,
+    fill: String,
   }
 }
 </script>

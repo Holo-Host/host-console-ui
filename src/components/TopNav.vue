@@ -16,7 +16,7 @@ export default {
 <style scoped>
 .top-nav {
   border-bottom: 1px solid #E7E9ED;
-  height: 136px;
+  height: 82px;
   padding-top: 46px;
 }
 .title {
