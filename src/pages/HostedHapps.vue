@@ -41,7 +41,7 @@ const happs = [{
   id: 2,
   name: 'Community',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 832120,
   usage: {
     cpu: '258',
     storage: '9',
@@ -51,7 +51,7 @@ const happs = [{
   id: 3,
   name: 'H-Wiki',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 464057,
   usage: {
     cpu: '258',
     storage: '9',
@@ -61,7 +61,7 @@ const happs = [{
   id: 4,
   name: 'HoloFuel',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 844,
   usage: {
     cpu: '258',
     storage: '9',
@@ -71,7 +71,7 @@ const happs = [{
   id: 5,
   name: 'Community',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 54170,
   usage: {
     cpu: '258',
     storage: '9',
@@ -81,7 +81,7 @@ const happs = [{
   id: 6,
   name: 'H-Wiki',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 428820,
   usage: {
     cpu: '258',
     storage: '9',
@@ -91,7 +91,7 @@ const happs = [{
   id: 7,
   name: 'HoloFuel',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 283256,
   usage: {
     cpu: '258',
     storage: '9',
@@ -101,7 +101,7 @@ const happs = [{
   id: 8,
   name: 'Community',
   hostedDays: 34,
-  earnings: 476005,
+  earnings: 190096,
   usage: {
     cpu: '258',
     storage: '9',
@@ -129,7 +129,7 @@ export default {
   computed: {
     filteredHapps () {
       const sort = this.sort === SORT_EARNINGS
-        ? (a, b) => a.earnings > b.earnings ? 1 : -1
+        ? (a, b) => a.earnings < b.earnings ? 1 : -1
         : (a, b) => a.name > b.name ? 1 : -1
       return this.happs.filter(({ name }) => name.toLowerCase().includes(this.filter.toLowerCase())).sort(sort)
     },
