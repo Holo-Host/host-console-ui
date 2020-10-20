@@ -2,9 +2,9 @@
   <section class="sidebar">
     <h1 class="banner">Host Console</h1>
     <section class="menu">
-      <div class="menu-row">
-        <HappsIcon class="home-icon" />Happs
-      </div>
+      <router-link to="/">
+        <HappsIcon class="home-icon" />hApps
+      </router-link>
       <div class="footer">
         <div class='holo-brand'>
           <img src='/images/holo-logo.png' class='holo-logo'/>
