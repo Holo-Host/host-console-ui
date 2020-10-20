@@ -2,7 +2,7 @@
   <section class="sidebar">
     <h1 class="banner">Host Console</h1>
     <section class="menu">
-      <router-link to="/">
+      <router-link to="/" class='menu-row'>
         <HappsIcon class="home-icon" />hApps
       </router-link>
       <div class="footer">
@@ -55,6 +55,8 @@ export default {
   display: flex;
   align-items: center;
   font-size: 14px;
+  text-decoration: none;
+  color: #313C59;
 }
 .home-icon {
   margin-right: 10px;

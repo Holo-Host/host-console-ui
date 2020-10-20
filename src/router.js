@@ -9,7 +9,7 @@ const routes = [
     component: HostedHapps,
   },
   {
-    path: "/happ",
+    path: "/happ/:id",
     name: "HappDetails",
     component: HappDetails,
   },
