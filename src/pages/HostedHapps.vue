@@ -26,7 +26,93 @@
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HappCard from 'components/HappCard.vue'
 import ExIcon from 'components/icons/ExIcon.vue'
+<<<<<<< HEAD
 import happs from 'src/mockHapps'
+=======
+
+const happs = [{
+  id: 1,
+  name: 'HoloFuel',
+  hostedDays: 34,
+  earnings: 476005,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 2,
+  name: 'Community',
+  hostedDays: 34,
+  earnings: 832120,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 3,
+  name: 'H-Wiki',
+  hostedDays: 34,
+  earnings: 464057,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 4,
+  name: 'HoloFuel',
+  hostedDays: 34,
+  earnings: 844,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 5,
+  name: 'Community',
+  hostedDays: 34,
+  earnings: 54170,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 6,
+  name: 'H-Wiki',
+  hostedDays: 34,
+  earnings: 428820,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 7,
+  name: 'HoloFuel',
+  hostedDays: 34,
+  earnings: 283256,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}, {
+  id: 8,
+  name: 'Community',
+  hostedDays: 34,
+  earnings: 190096,
+  usage: {
+    cpu: '258',
+    storage: '9',
+    bandwidth: '64'
+  }
+}]
+
+>>>>>>> master
 const SORT_EARNINGS = 'earnings'
 const SORT_ALPHABETICAL = 'alphabetical'
 
@@ -47,7 +133,7 @@ export default {
   computed: {
     filteredHapps () {
       const sort = this.sort === SORT_EARNINGS
-        ? (a, b) => a.earnings > b.earnings ? 1 : -1
+        ? (a, b) => a.earnings < b.earnings ? 1 : -1
         : (a, b) => a.name > b.name ? 1 : -1
       return this.happs.filter(({ name }) => name.toLowerCase().includes(this.filter.toLowerCase())).sort(sort)
     },
