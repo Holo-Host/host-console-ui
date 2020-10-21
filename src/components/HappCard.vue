@@ -11,7 +11,7 @@
       </div>
       <div class="snapshot-label">7 day snapshot:</div>
       <div class="earnings-row">
-        <HoloIcon class='holo-icon' /> Earnings:<span class="earnings">&nbsp;{{ happ.earnings }} TF</span>
+        <HoloIcon class='holo-icon' /> Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
       </div>
       <div class="usage-row">
         <div class='usage'>

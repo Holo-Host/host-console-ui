@@ -2,13 +2,19 @@
   <section class='top-nav'>    
     <h1 v-if="!path" class='main-title'>{{ mainTitle }}</h1>    
     <router-link v-if="!!path" class='main-title' :to="path">{{ mainTitle }}</router-link>
-    <div v-if="showSubtitle" class='sub-title'>&nbsp;&nbsp;&nbsp;&gt;&nbsp;&nbsp;&nbsp;{{ subTitle }}</div>
+    <RightChevronIcon v-if="showSubtitle" class='chevron' />
+    <div v-if="showSubtitle" class='sub-title'>{{ subTitle }}</div>
   </section>
 </template>
 
 <script>
+import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
+
 export default {
   name: 'TopNav',
+  components: {
+    RightChevronIcon
+  },
   props: {
     breadcrumbs: {
       type: Array,
@@ -46,12 +52,15 @@ export default {
   color: #273048;
   text-decoration: none;
 }
+.chevron {
+  margin: 12px 10px 0 15px;
+}
 .sub-title {
   font-size: 14px;
   font-weight: 600;
   margin: 0;
   color: #606C8B;
   text-decoration: none;
-  margin-top: 8px;
+  margin-top: 9px;
 }
 </style>
