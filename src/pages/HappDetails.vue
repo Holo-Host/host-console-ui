@@ -14,10 +14,10 @@
         <div class='main-column'>
           <h2 class="name">{{ happ.name }}</h2>
           <div class="info-row large-text">
-            <HoloIcon class='holo-icon' /> Total Earnings:<span class="info">&nbsp;{{ happ.earnings }} TF</span>
+            <HoloIcon class='holo-icon' /> Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} TF</span>
           </div>
           <div class="info-row">
-            Earned in last 7 days:<span class="info">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
+            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} TF</span>
           </div>
           <div class="info-row earnings-margin">
             Average weekly earnings:<span class="info">&nbsp;223,005 TF</span>
@@ -72,6 +72,7 @@ import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import DangerIcon from 'components/icons/DangerIcon.vue'
 import happs from 'src/mockHapps'
+import { formatHolofuelAmount } from 'src/utils'
 
 export default {
   name: 'HappDetails',
@@ -103,7 +104,8 @@ export default {
     },
     stopHosting () {
       alert('Stopping hosting is not implemented in this version')
-    }
+    },
+    formatHolofuelAmount
   },
   computed: {
     breadcrumbs () {
