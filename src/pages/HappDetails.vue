@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class='rates-title'>
-            Rates (Default) <PencilIcon class='pencil-icon' />
+            Rates (Default) <PencilIcon class='pencil-icon' @click="editRates" />
           </div>
           <div class="rate-row">
             <div class='rate-label'>CPU</div><span class="rate-value">26323653 ZPT</span>
@@ -52,7 +52,7 @@
           <div class="rate-row rates-margin">
             <div class='rate-label'>Storage</div><span class="rate-value">119 HF per MB</span>
           </div>
-          <button class="stop-hosting">Stop hosting</button>
+          <button class="stop-hosting" @click="stopHosting">Stop hosting</button>
           <div class="stop-hosting-warning">
             <DangerIcon class="danger-icon" />Stopping hosting will move any source chains to another host
           </div>
@@ -96,6 +96,14 @@ export default {
       throw new Error(`Failed to load happ with id: ${happId}`)
     }
     this.happ = happ
+  },
+  methods: {
+    editRates () {
+      alert('Editing rates is not implemented in this version')
+    },
+    stopHosting () {
+      alert('Stopping hosting is not implemented in this version')
+    }
   },
   computed: {
     breadcrumbs () {
@@ -242,6 +250,7 @@ export default {
 }
 .pencil-icon {
   margin-left: 8px;
+  cursor: pointer;
 }
 .rate-row {
   display: flex;
