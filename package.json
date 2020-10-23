@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "email-validator": "^2.0.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-beta.13"
   },
