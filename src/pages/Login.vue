@@ -42,9 +42,18 @@
 
 import validator from 'email-validator'
 import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
+import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
+import HposInterface from 'src/interfaces/HposInterface'
 
 const validateEmail = email => validator.validate(email)
 const validatePassword = password => password.length > 5
+
+async function createKeypairAndCheckAuth (email, password) {
+  eraseHpAdminKeypair()
+    // we call this to SET the singleton value of HpAdminKeypair
+  await getHpAdminKeypair(email, password)
+  return HposInterface.checkAuth()
+}
 
 export default {
   name: 'HappDetails',
@@ -59,7 +68,7 @@ export default {
     }
   },
   methods: {
-    login: function (e) {
+    login: async function (e) {
       if (!validateEmail(this.email)) {
         this.errors.email = "Please enter a valid email."
       }
@@ -69,13 +78,15 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        localStorage.setItem("auth_token", "Auth token goes here")
-        if(this.$route.params.nextUrl != null){
-          console.log(this.$route.params.nextUrl)
-          this.$router.push(this.$route.params.nextUrl)
-        } else {
-          console.log('just pushing straight happs')
-          this.$router.push('/happs')
+
+        const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
+        if (isAuthed) {
+          localStorage.setItem("isAuthed", "true")
+          if(this.$route.params.nextUrl != null) {
+            this.$router.push(this.$route.params.nextUrl)
+          } else {
+            this.$router.push('/happs')
+          }          
         }
       }
 

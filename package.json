@@ -9,6 +9,8 @@
     "test": "yarn jest"
   },
   "dependencies": {
+    "@holo-host/hp-admin-keypair": "^0.1.3",
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "email-validator": "^2.0.4",
     "vue": "^3.0.0",

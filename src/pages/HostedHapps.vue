@@ -26,7 +26,8 @@
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HappCard from 'components/HappCard.vue'
 import ExIcon from 'components/icons/ExIcon.vue'
-import happs from 'src/mockHapps'
+import HposInterface from 'src/interfaces/HposInterface'
+
 const SORT_EARNINGS = 'earnings'
 const SORT_ALPHABETICAL = 'alphabetical'
 
@@ -39,10 +40,14 @@ export default {
   },
   data () {
     return {
-      happs, 
+      happs: [], 
       filter: '',
       sort: SORT_EARNINGS
     }
+  },
+  created: async function () {
+    const happs = await HposInterface.hostedHapps()
+    this.happs = happs
   },
   computed: {
     filteredHapps () {
