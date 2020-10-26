@@ -71,10 +71,8 @@ export default {
       if (!this.errors.email && !this.errors.password) {
         localStorage.setItem("auth_token", "Auth token goes here")
         if(this.$route.params.nextUrl != null){
-          console.log(this.$route.params.nextUrl)
           this.$router.push(this.$route.params.nextUrl)
         } else {
-          console.log('just pushing straight happs')
           this.$router.push('/happs')
         }
       }
