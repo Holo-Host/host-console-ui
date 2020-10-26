@@ -78,7 +78,6 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-
         const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
           localStorage.setItem("isAuthed", "true")
