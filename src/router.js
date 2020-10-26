@@ -12,10 +12,6 @@ const routes = [
       guest: true
     }
   },
-  // {
-  //   path: '/',
-  //   redirect: '/happs'
-  // },
   {
     path: "/happs",
     name: "HostedHapps",
@@ -31,7 +27,11 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }  
+  },
+  {
+    path: '/',
+    redirect: '/happs'
+  }
 ]
 
 const router = createRouter({
@@ -41,21 +41,25 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    // page only visible when logged in
     if (localStorage.getItem('auth_token') == null) {
       next({
         name: 'Login',
         params: { nextUrl: to.fullPath }
       })
+    } else {
+      next()
     }
   } else if (to.matched.some(record => record.meta.guest)) {
-      if(localStorage.getItem('auth_token') == null) {
-          next()
-      } else{
-          next({ name: 'HostedHapps'})
-      }
+    // page only visible when *not* logged in
+    if(localStorage.getItem('auth_token') == null) {
+        next()
+    } else{
+        next({ name: 'HostedHapps'})
+    }
   } else {
-      console.log("Properly logged in")
-      next()
+    // publicly visible page
+    next()
   }
 })
 
