@@ -1,38 +1,39 @@
 <template>
   <div class="container">
-      <form @submit.prevent="login" class='form'>
-        <div class='form-box'>
-          <div class='holofuel-icon-disc'>
-            <HoloBadgeIcon class='holofuel-icon' fill='#fff' />
+      <div v-if="banner" class="banner">{{ banner }}</div>
+      <form @submit.prevent="login" class="form">
+        <div class="form-box">
+          <div class="holofuel-icon-disc">
+            <HoloBadgeIcon class="holofuel-icon" fill="#fff" />
           </div>
-          <h1 class='title'>Login to Host Console</h1>
-          <label class='label' htmlFor='email'>Email:</label>
+          <h1 class="title">Login to Host Console</h1>
+          <label class="label" htmlFor="email">Email:</label>
           <input
             v-model="email"
-            name='email'
-            id='email'
-            class='input'
+            name="email"
+            id="email"
+            class="input"
           />
           <small v-if="!!errors.email" class="field-error">
             {{ errors.email }}
           </small>
-          <label class='label' htmlFor='password'>Password:</label>
+          <label class="label" htmlFor="password">Password:</label>
           <input
             v-model="password" 
-            type='password'
-            name='password'
-            id='password'
-            class='input'
+            type="password"
+            name="password"
+            id="password"
+            class="input"
           />
-          <small v-if="!!errors.password" class='field-error'>
+          <small v-if="!!errors.password" class="field-error">
             {{ errors.password }}
           </small>
         </div>
-        <button type='submit' class='login-button'>Login</Button>
+        <button type="submit" class="login-button">Login</Button>
       </form>
       <div class="reminder-text reminder-text-padding">*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
       <div class="reminder-text reminder-text-padding">
-        <a class="reminder-text" href='https://holo.host/control-your-data' target='_blank' rel='noopener noreferrer'>Learn more</a> about controlling your own data.
+        <a class="reminder-text" href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
       </div>
       <div class="reminder-text reminder-text-padding">UI v0.1.0</div>
   </div>
@@ -64,28 +65,31 @@ export default {
     return {
       email: '',
       password: '',
-      errors: {}
+      errors: {},
+      banner: ''
     }
   },
   methods: {
     login: async function (e) {
       if (!validateEmail(this.email)) {
-        this.errors.email = "Please enter a valid email."
+        this.errors.email = 'Please enter a valid email.'
       }
 
       if (!validatePassword(this.password)) {
-        this.errors.password = "Password must have at least 6 characters."
+        this.errors.password = 'Password must have at least 6 characters.'
       }
 
       if (!this.errors.email && !this.errors.password) {
         const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
-          localStorage.setItem("isAuthed", "true")
+          localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
             this.$router.push(this.$route.params.nextUrl)
           } else {
             this.$router.push('/happs')
           }          
+        } else {
+          this.banner = 'There was a problem logging you in. Please check your credentials and try again.'
         }
       }
 
@@ -95,13 +99,16 @@ export default {
   },
   watch: {
     email (email) {
+      this.banner = ''
       if (this.errors.email && validateEmail(email)) {
         this.errors.email = null
       }
     },
     password (password) {
+      this.banner = ''
       if (this.errors.password && validatePassword(password)) {
         this.errors.password = null
+        this.banner = ''        
       }
     }
   }
@@ -114,14 +121,18 @@ export default {
   margin-left: 78px;
   margin-right: 78px;
 }
-.backdrop {
-  background-color: rgba(0, 202, 217, 0.06);
-  height: 354px;
-  right: 0;
-  top: 0;
-  left: 0;
-  z-index: -10;
+.banner {
   position: absolute;
+  top: 0;
+  width: 100%;
+  background-color: #00CAD9;
+  opacity: 0.9;
+  padding: 20px;
+  margin: 0px -78px;
+  text-align: center;
+  align-self: center;
+  z-index: 30;
+  color: white;
 }
 .form {
   display: flex;
