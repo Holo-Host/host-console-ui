@@ -171,7 +171,6 @@ export default {
   font-weight: 200;
 }
 .label {
-  font-family: 'MPLUS1p';
   font-weight: bold;
   font-size: 10px;
   line-height: 13px;
@@ -182,10 +181,8 @@ export default {
 .input {
   border: none;
   border-bottom: 1px solid rgba(44, 63, 89, 0.50);
-  font-size: 18px;
   padding: 5px 5px;
   margin-bottom: 20px;
-  font-family: 'MPLUS1p';
   color: rgba(44, 63, 89, 1); 
 }
 .login-button {
@@ -207,7 +204,6 @@ export default {
   margin: .3em 0 .0;
 }
 .reminder-text {
-  font-family: 'MPLUS1p';
   font-size: 10px;
   line-height: 13px;
   letter-spacing: 0.4px;
