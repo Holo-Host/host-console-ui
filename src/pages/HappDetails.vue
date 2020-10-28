@@ -72,6 +72,7 @@ import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import DangerIcon from 'components/icons/DangerIcon.vue'
 import { formatHolofuelAmount } from 'src/utils'
+import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
   name: 'HappDetails',
@@ -86,10 +87,14 @@ export default {
   },
   data() {
     return {
-      happ: {}
+      happ: {
+        name: '',
+        usage: {}
+      }
     }
   },
-  created () {
+  created: async function () {
+    const happs = await HposInterface.hostedHapps()
     const happId = Number(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
     if (!happ) {
