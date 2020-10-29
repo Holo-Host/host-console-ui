@@ -2,7 +2,7 @@
   <section class='layout'>
     <Sidebar />
     <section class='main-column'>
-      <TopNav :title="title" />
+      <TopNav :breadcrumbs="breadcrumbsOrTitle" />
       <section class='content'>
         <slot />
       </section>
@@ -14,6 +14,7 @@
 
 import Sidebar from 'components/Sidebar.vue'
 import TopNav from 'components/TopNav.vue'
+import { computed } from 'vue'
 
 export default {
   name: 'PrimaryLayout',
@@ -22,7 +23,19 @@ export default {
     TopNav
   },
   props: {
-    title: String
+    title: String,
+    breadcrumbs: Array
+  },
+  computed: {
+    breadcrumbsOrTitle() {
+      if (!!this.breadcrumbs) {
+        return this.breadcrumbs
+      } else {
+        return [{
+          label: this.title
+        }]
+      }
+    }
   }
 }
 </script>

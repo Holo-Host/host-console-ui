@@ -1,9 +1,9 @@
 <template>
-  <HostedHapps />
+  <router-view />
 </template>
 
 <script>
-import HostedHapps from 'pages/HostedHapps.vue'
+import HostedHapps from "pages/HostedHapps.vue";
 
 export default {
   name: 'App',

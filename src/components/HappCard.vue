@@ -1,5 +1,5 @@
 <template>
-  <div class='happ-card'>
+  <router-link :to="pathToHapp" class='happ-card'>
     <div class='avatar'>{{ initials }}</div>
     <div class='details'>
       <div class="name-row">
@@ -11,7 +11,7 @@
       </div>
       <div class="snapshot-label">7 day snapshot:</div>
       <div class="earnings-row">
-        <HoloIcon class='holo-icon' /> Earnings:<span class="earnings">&nbsp;{{ happ.earnings }} TF</span>
+        <HoloIcon class='holo-icon' /> Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
       </div>
       <div class="usage-row">
         <div class='usage'>
@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -46,6 +46,9 @@ export default {
   computed: {
     initials() {
       return this.happ.name.replace(/[^a-z]/gi, '').slice(0,2).toUpperCase()
+    },
+    pathToHapp() {
+      return `/happ/${this.happ.id}`
     }
   }
 }
@@ -62,6 +65,7 @@ export default {
   margin-bottom: 20px;
   padding: 20px;
   flex: 1 0 546px;
+  text-decoration: none;
 }
 .avatar {
   width: 140px;
