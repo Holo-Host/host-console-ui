@@ -1,9 +1,12 @@
 <template>
-  <section class='top-nav'>    
-    <h1 v-if="!path" class='main-title'>{{ mainTitle }}</h1>    
-    <router-link v-if="!!path" class='main-title' :to="path">{{ mainTitle }}</router-link>
-    <RightChevronIcon v-if="showSubtitle" class='chevron' />
-    <div v-if="showSubtitle" class='sub-title'>{{ subTitle }}</div>
+  <section class="top-nav">    
+    <h1 v-if="!path" class="main-title">{{ mainTitle }}</h1>    
+    <router-link v-if="!!path" class="main-title" :to="path">{{ mainTitle }}</router-link>
+    <RightChevronIcon v-if="showSubtitle" class="chevron" />
+    <div v-if="showSubtitle" class="sub-title">{{ subTitle }}</div>
+    <div class="right">
+      <button @click="logout" class="logout">Logout</button>
+    </div>
   </section>
 </template>
 
@@ -19,6 +22,12 @@ export default {
     breadcrumbs: {
       type: Array,
       default: [{}, {}]
+    }
+  },
+  methods: {
+    logout () {
+      localStorage.removeItem('auth_token')
+      this.$router.push('/login')
     }
   },
   computed: {
@@ -62,5 +71,14 @@ export default {
   color: #606C8B;
   text-decoration: none;
   margin-top: 9px;
+}
+.right {
+  margin-left: auto;  
+}
+.logout {
+  border: none;
+  background-color: transparent;
+  color: #313C59;
+  cursor: pointer;
 }
 </style>
