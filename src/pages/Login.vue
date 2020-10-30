@@ -11,6 +11,7 @@
             v-model="email"
             name='email'
             id='email'
+            type='email'
             class='input'
           />
           <small v-if="!!errors.email" class="field-error">
@@ -69,7 +70,7 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        localStorage.setItem("auth_token", "Auth token goes here")
+        localStorage.setItem("auth_token", "true")
         if(this.$route.params.nextUrl != null){
           this.$router.push(this.$route.params.nextUrl)
         } else {
