@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import Login from '../Login.vue'
+import wait from 'waait'
 
 it('shows an error when given a bad email', async () => {
   const email = 'invalidemail'
@@ -25,7 +26,7 @@ it('shows an error when given a bad password', async () => {
   expect(wrapper.text()).toContain('Password must have at least 6 characters.')
 })
 
-it.only('sets local storage and pushes the happs route on login', async (done) => {
+it('sets local storage and pushes the happs route on login', async () => {
   const email = 'good@email.com'
   const password = 'agoodpassword'
 
@@ -55,10 +56,9 @@ it.only('sets local storage and pushes the happs route on login', async (done) =
 
   await wrapper.find('form').trigger('submit.prevent')
 
-  wrapper.vm.$nextTick(() => {
-    expect(mockRouter.push).toHaveBeenCalledWith('/happs')
-    expect(localStorage.getItem('auth_token')).toEqual('true')
-    done()
-  })
+  await wait(0)
+
+  expect(mockRouter.push).toHaveBeenCalledWith('/happs')
+  expect(localStorage.getItem('isAuthed')).toEqual('true')
 })
 

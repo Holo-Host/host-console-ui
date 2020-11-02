@@ -81,21 +81,12 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        console.log('-------------------------good email and password')
         const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
-          console.log('-------------------------is authed')
-
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
-            console.log('-------------------------next url', this.$route.params.nextUrl)
-
             this.$router.push(this.$route.params.nextUrl)
           } else {
-            console.log('-------------------------Just happs', this.$router.push)
-
-
-
             this.$router.push('/happs')
           }          
         } else {
