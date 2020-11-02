@@ -10,9 +10,10 @@
           <label class="label" htmlFor="email">Email:</label>
           <input
             v-model="email"
+            type="email"
             name="email"
             id="email"
-            class="input"
+            class="input"            
           />
           <small v-if="!!errors.email" class="field-error">
             {{ errors.email }}
@@ -80,12 +81,21 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
+        console.log('-------------------------good email and password')
         const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
+          console.log('-------------------------is authed')
+
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
+            console.log('-------------------------next url', this.$route.params.nextUrl)
+
             this.$router.push(this.$route.params.nextUrl)
           } else {
+            console.log('-------------------------Just happs', this.$router.push)
+
+
+
             this.$router.push('/happs')
           }          
         } else {

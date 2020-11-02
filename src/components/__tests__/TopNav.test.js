@@ -5,7 +5,9 @@ it('renders a title', () => {
   const title = 'A page title'
   const wrapper = mount(TopNav, {
     props: {
-      title
+      breadcrumbs: [
+        { label: title }
+      ]
     }
   })
   expect(wrapper.text()).toContain(title)
