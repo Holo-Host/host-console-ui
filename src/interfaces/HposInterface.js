@@ -4,7 +4,9 @@ import mockHposCall from 'src/mocks/mockHposCall'
 import mergeMockHappData from 'src/mergeMockHappData'
 import { signPayload, hashString } from 'src/utils/keyManagement'
 
-const MOCK_HPOS_CONNECTION = true
+const MOCK_HPOS_CONNECTION = process.env.NODE_ENV === 'test'
+  ? false
+  : true
 
 const axiosConfig = {
   headers: {
@@ -13,16 +15,16 @@ const axiosConfig = {
   }
 }
 
+export const HPOS_API_URL = !process.env.VUE_APP_HPOS_URL 
+  ? (window.location.protocol + '//' + window.location.hostname) 
+  : process.env.VUE_APP_HPOS_URL
+
 export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: userHeaders = {} }) {
   if (MOCK_HPOS_CONNECTION) {
     return mockHposCall(method, apiVersion, path)
   } else {
     return async params => {
-
-      const fullPath = (!process.env.VUE_APP_HPOS_URL 
-        ? (window.location.protocol + '//' + window.location.hostname) 
-        : process.env.VUE_APP_HPOS_URL)
-        + '/api/' + apiVersion + '/' + path
+      const fullPath = HPOS_API_URL + '/api/' + apiVersion + '/' + path
 
       const urlObj = new URL(fullPath)
 
@@ -45,6 +47,7 @@ export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: us
 
       switch (method) {
         case 'get':
+          // console.log("******************** we're getting to here yo")
           ({ data } = await axios.get(fullPath, { params, headers }))
           return data
         case 'post':
