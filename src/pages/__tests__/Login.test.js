@@ -1,5 +1,9 @@
 import { mount } from '@vue/test-utils'
 import Login from '../Login.vue'
+import wait from 'waait'
+import HposInterface from 'src/interfaces/HposInterface'
+
+jest.mock('src/interfaces/HposInterface')
 
 it('shows an error when given a bad email', async () => {
   const email = 'invalidemail'
@@ -38,6 +42,8 @@ it('sets local storage and pushes the happs route on login', async () => {
     push: jest.fn()
   }
 
+  HposInterface.checkAuth.mockImplementationOnce(() => Promise.resolve(true))
+
   const wrapper = mount(Login, {
     global: {
       mocks: {
@@ -55,7 +61,9 @@ it('sets local storage and pushes the happs route on login', async () => {
 
   await wrapper.find('form').trigger('submit.prevent')
 
+  await wait(1000)
+
   expect(mockRouter.push).toHaveBeenCalledWith('/happs')
-  expect(localStorage.getItem('auth_token')).toEqual('true')
+  expect(localStorage.getItem('isAuthed')).toEqual('true')
 })
 

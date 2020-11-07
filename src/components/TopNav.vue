@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
 
 export default {
@@ -26,6 +27,7 @@ export default {
   },
   methods: {
     logout () {
+      eraseHpAdminKeypair()
       localStorage.removeItem('auth_token')
       this.$router.push('/login')
     }
