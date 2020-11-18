@@ -7,7 +7,7 @@
     <div class="right">
       <div class="owner" @click="toggleMenu">Your HP <DownTriangleIcon class='down-triangle' /></div>
       <div v-if="menuOpen" class="menu">
-        <button @click="logout" class="menu-item">Logout</button>
+        <div @click="logout" class="menu-item">Logout</div>
       </div>
     </div>
   </section>
@@ -40,9 +40,8 @@ export default {
       this.menuOpen = !this.menuOpen
     },
     logout () {
-      console.log('lougout!!')
       eraseHpAdminKeypair()
-      localStorage.removeItem('auth_token')
+      localStorage.removeItem('isAuthed')
       this.$router.push('/login')
     }
   },
@@ -109,6 +108,7 @@ export default {
   line-height: 19px;
   color: #606C8B;
   padding: 5px 0px;
+  cursor: pointer;
 }
 .menu-item {
   padding: 0px 6px;
