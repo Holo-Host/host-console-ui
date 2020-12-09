@@ -36,7 +36,7 @@
       <div class="reminder-text reminder-text-padding">
         <a class="reminder-text" href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
       </div>
-      <div class="reminder-text reminder-text-padding">UI v0.1.0</div>
+      <div class="reminder-text reminder-text-padding">UI v0.1.1</div>
   </div>
 </template>
 
