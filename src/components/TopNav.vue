@@ -7,6 +7,11 @@
     <div class="right">
       <div class="owner" @click="toggleMenu">Your HP <DownTriangleIcon class='down-triangle' /></div>
       <div v-if="menuOpen" class="menu">
+        <router-link to="/settings" class="settings-link">
+          <div class="menu-item">
+            HoloPort Settings
+          </div>
+        </router-link>
         <div @click="logout" class="menu-item">Logout</div>
       </div>
     </div>
@@ -96,22 +101,30 @@ export default {
   font-size: 14px;
   line-height: 19px;
   color: #313C59;
+  min-width: 150px;
+  cursor: pointer;
 }
 .down-triangle {
   margin-left: 3px;
 }
 .menu {
   background: #FFFFFF;
-  border: 1px solid #606C8B;
   border-radius: 2px;
   font-size: 14px;
   line-height: 19px;
   color: #606C8B;
+  margin-top: 1px;
   padding: 5px 0px;
   cursor: pointer;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+}
+.settings-link {
+  text-decoration: none;
+  color: #606C8B;
 }
 .menu-item {
-  padding: 0px 6px;
+  padding: 0px 16px;
+  margin: 7px 0;
 }
 .menu-item:hover {
   background-color: rgba(176, 236, 240, 0.72);
