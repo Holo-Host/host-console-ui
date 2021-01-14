@@ -52,9 +52,11 @@
           <div class="rate-row rates-margin">
             <div class='rate-label'>Storage</div><span class="rate-value">119 HF per MB</span>
           </div>
-          <button class="stop-hosting" @click="stopHosting">Stop hosting</button>
-          <div class="stop-hosting-warning">
-            <DangerIcon class="danger-icon" />Stopping hosting will move any source chains to another host
+          <div class="stop-hosting-row">
+            <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
+            <div class="stop-hosting-warning">
+              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting will move any source chains to another host
+            </div>
           </div>
         </div>
       </div>
@@ -70,7 +72,7 @@ import HoloIcon from 'components/icons/HoloIcon.vue'
 import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
-import DangerIcon from 'components/icons/DangerIcon.vue'
+import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
 import { formatHolofuelAmount } from 'src/utils'
 import HposInterface from 'src/interfaces/HposInterface'
 
@@ -83,7 +85,7 @@ export default {
     LeftChevronIcon,
     ChainIcon,
     PencilIcon,
-    DangerIcon
+    AlertCircleIcon
   },
   data() {
     return {
@@ -257,6 +259,7 @@ export default {
 .pencil-icon {
   margin-left: 8px;
   cursor: pointer;
+  opacity: 0.3;  
 }
 .rate-row {
   display: flex;
@@ -272,18 +275,17 @@ export default {
 .rates-margin {
   margin-bottom: 120px;
 }
+.stop-hosting-row {
+  display: flex;
+  align-items: center;
+}
 .stop-hosting {
-  background: #B0ECF0;
-  border: 1px solid #0870A3;
-  box-sizing: border-box;
-  border-radius: 100px;
-  color: #0870A3;
+  font-weight: bold;
   font-size: 12px;
-  font-weight: 700;
-  width: 132px;
-  height: 32px;
-  cursor: pointer;
-  margin-bottom: 12px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  color: #313C59;
+  margin-right: 10px;
 }
 .stop-hosting-warning {
   display: flex;
@@ -295,7 +297,7 @@ export default {
   font-weight: 400;
   padding: 4px 12px;
 }
-.danger-icon {
+.alert-circle-icon {
   margin-right: 12px;
 }
 </style>
