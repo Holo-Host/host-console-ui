@@ -4,9 +4,11 @@ import mockHposCall from 'src/mocks/mockHposCall'
 import mergeMockHappData from 'src/mergeMockHappData'
 import { signPayload, hashString } from 'src/utils/keyManagement'
 
-const MOCK_HPOS_CONNECTION = process.env.NODE_ENV === 'test'
-  ? false
-  : true
+// const MOCK_HPOS_CONNECTION = process.env.NODE_ENV === 'test'
+//   ? false
+//   : true
+
+const MOCK_HPOS_CONNECTION = false
 
 const axiosConfig = {
   headers: {
@@ -15,9 +17,9 @@ const axiosConfig = {
   }
 }
 
-export const HPOS_API_URL = !process.env.VUE_APP_HPOS_URL 
-  ? (window.location.protocol + '//' + window.location.hostname) 
-  : process.env.VUE_APP_HPOS_URL
+export const HPOS_API_URL = process.env.VUE_APP_HPOS_PORT
+  ? `http://localhost:${process.env.VUE_APP_HPOS_PORT}`
+  : (window.location.protocol + '//' + window.location.hostname) 
 
 export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: userHeaders = {} }) {
   if (MOCK_HPOS_CONNECTION) {
