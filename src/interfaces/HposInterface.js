@@ -1,3 +1,4 @@
+require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
 import { omitBy, isUndefined } from 'lodash/fp'
 import mockHposCall from 'src/mocks/mockHposCall'

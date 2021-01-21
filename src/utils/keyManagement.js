@@ -34,11 +34,8 @@ export const getHpAdminKeypair = async (email = "test@test.com", password = "pas
     const HpAdminKeypair = await importHpAdminKeypairClass()
     HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)
 
-    console.log('🎉 Successfully created HP Admin KeyPair!')
-
     return HpAdminKeypairInstance
   } catch (error) {
-    console.log('😞 Failed to create HP Admin KeyPair! -- ', error.toString())
     throw (error)
   }
 }
@@ -52,15 +49,10 @@ export const signPayload = async (method, request, bodyHash) => {
   const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
 
   try {
-    console.log('🎉 Signing payload: ', payload)
-
     const signature = keypair.sign(payload)
-
-    console.log('🎉 Successfully signed payload, signature: ', signature)
 
     return signature
   } catch (error) {
-    console.log('😞 Failed to sign payload -- ', error.toString())
     throw (error)
   }
 }

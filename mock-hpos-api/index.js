@@ -35,20 +35,36 @@ const NEXT_RESPONSE_KEY = generateResponseKey('', NEXT_PATH, {})
 
 class MockHposApi {
   constructor(port, authEmail, authPassword) {
-    this.app = express()
-
-    this.app.use(cors())
-    this.app.use(this.checkAuth.bind(this))
-    this.app.use(this.handleRequest.bind(this))
-
-    this.app.listen(port, () => {
-      console.log(`Mock hpos-admin-api listening at http://localhost:${port}`)
-    })
-
-    this.initializeResponses()
+    this.port = port
     this.shouldCheckAuth = !!authEmail && !!authPassword
     this.authEmail = authEmail
     this.authPassword = authPassword
+    
+    this.initializeResponses()
+  }
+
+  static async start (port, authEmail, authPassword) {
+    const mockHposApi = new MockHposApi(port, authEmail, authPassword)
+
+    const app = express()
+
+    app.use(cors())
+    app.use(mockHposApi.checkAuth.bind(mockHposApi))
+    app.use(mockHposApi.handleRequest.bind(mockHposApi))
+
+    await mockHposApi.startServer(app)
+
+    return mockHposApi
+  }
+
+  // this is more convoluted than I'd like because I want init to be a blocking call, so have to uncallback app.listen
+  startServer (app) {
+    return new Promise((resolve, reject) => {
+      this.server = app.listen(this.port, () => {
+        console.log(`Mock hpos-admin-api listening at http://localhost:${this.port}`)
+        resolve()
+      }).on('error', reject)
+    })
   }
 
   async checkAuth (req, res, next) {
@@ -126,6 +142,10 @@ class MockHposApi {
     const response = _.isFunction(responseOrResponseFunc) ? responseOrResponseFunc(method.toLowerCase(), removeApiRoot(path), body) : responseOrResponseFunc
 
     res.send(response)
+  }
+
+  close () {
+    this.server.close()
   }
 }
 

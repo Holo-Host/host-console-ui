@@ -30,7 +30,7 @@
             {{ errors.password }}
           </small>
         </div>
-        <button type="submit" class="login-button">Login</Button>
+        <button @click="login" class="login-button">Login</Button>
       </form>
       <div class="reminder-text reminder-text-padding">*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
       <div class="reminder-text reminder-text-padding">
@@ -81,7 +81,7 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)        
+        const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
