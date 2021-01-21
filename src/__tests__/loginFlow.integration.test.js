@@ -12,7 +12,7 @@ describe('Login Flow', () => {
   let mockHposApi
 
   beforeAll(async () => {
-    mockHposApi = await MockHposApi.start(process.env.VUE_APP_HPOS_PORT, email, password)
+    mockHposApi = await MockHposApi.start(Number(process.env.VUE_APP_HPOS_PORT) + 1, email, password)
   })  
 
   afterAll(() => {

@@ -3,13 +3,8 @@
 </template>
 
 <script>
-import HostedHapps from "pages/HostedHapps.vue";
-
 export default {
-  name: 'App',
-  components: {
-    HostedHapps
-  }
+  name: 'App'
 }
 </script>
 

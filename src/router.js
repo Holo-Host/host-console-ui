@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router"
 import HostedHapps from "pages/HostedHapps.vue"
 import HappDetails from "pages/HappDetails.vue"
 import Login from "pages/Login.vue"
+import Settings from "pages/Settings.vue"
 
 const routes = [
   {
@@ -28,6 +29,15 @@ const routes = [
       requiresAuth: true
     }
   },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
+    meta: {
+      requiresAuth: true
+    }
+  },
+
   {
     path: '/',
     redirect: '/happs'

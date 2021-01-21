@@ -18,8 +18,11 @@ const axiosConfig = {
   }
 }
 
-export const HPOS_API_URL = process.env.VUE_APP_HPOS_PORT
-  ? `http://localhost:${process.env.VUE_APP_HPOS_PORT}`
+// bump port number by 1 for tests so you can run tests with the UI open
+const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_HPOS_PORT) + 1 : process.env.VUE_APP_HPOS_PORT
+
+export const HPOS_API_URL = HPOS_PORT
+  ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname) 
 
 export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: userHeaders = {} }) {
@@ -68,14 +71,29 @@ export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: us
   }
 }
 
+const presentHposSettings = (hposSettings) => {
+  const { admin, holoportos = {}, name } = hposSettings
+  return {
+    hostPubKey: admin.public_key,
+    registrationEmail: admin.email,
+    networkStatus: holoportos.network || 'test', // ie: 'live'
+    sshAccess: holoportos.sshAccess || false,
+    deviceName: name || 'HoloPort'
+  }
+}
+
 const HposInterface = {
   hostedHapps: async () => {
     const result = await hposCall({ method: 'get', path: 'hosted_happs' })()
     return result.hosted_happs.map(mergeMockHappData)
   },
+  settings: async () => {
+    const result = await hposCall({ method: 'get', path: 'config' })()
+    return presentHposSettings(result)
+  },
   checkAuth: async () => {
     try {
-      await HposInterface.hostedHapps()
+      await HposInterface.config()
     } catch (error) {
       return false
     }
