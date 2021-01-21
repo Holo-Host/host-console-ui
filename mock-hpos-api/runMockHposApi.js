@@ -13,4 +13,4 @@ if (argv.port) {
 }
 
 
-new MockHposApi(port, argv.email, argv.password)
+MockHposApi.start(port, argv.email, argv.password)
