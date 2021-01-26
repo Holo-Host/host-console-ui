@@ -23,6 +23,7 @@
         <div v-if='isEditingDeviceName' class='row-value' style="position: relative; top: -2px; margin-left: -2px">
           <input v-model='editedDeviceName' class='device-input'>
           <FilledCheckIcon @click="saveDeviceName" class='filled-check' />
+          <CircledExIcon @click="cancelEditDeviceName" class='circled-ex' />          
         </div>
       </div>
 
@@ -61,6 +62,7 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import QuestionMarkIcon from 'src/components/icons/QuestionMarkIcon'
 import PencilIcon from 'src/components/icons/PencilIcon'
 import FilledCheckIcon from 'src/components/icons/FilledCheckIcon'
+import CircledExIcon from 'src/components/icons/CircledExIcon'
 import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
@@ -69,7 +71,8 @@ export default {
     PrimaryLayout,
     QuestionMarkIcon,
     PencilIcon,
-    FilledCheckIcon
+    FilledCheckIcon,
+    CircledExIcon
   },
   data () {
     return {
@@ -94,6 +97,9 @@ export default {
         deviceName: this.editedDeviceName
       })
       this.settings.deviceName = this.editedDeviceName
+      this.isEditingDeviceName = false
+    },
+    cancelEditDeviceName () {
       this.isEditingDeviceName = false
     },
   },
@@ -164,6 +170,10 @@ export default {
   cursor: pointer;
 }
 .filled-check {
+  margin-left: 5px;
+  cursor: pointer;
+}
+.circled-ex {
   margin-left: 5px;
   cursor: pointer;
 }
