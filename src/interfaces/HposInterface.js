@@ -4,6 +4,7 @@ import { omitBy, isUndefined } from 'lodash/fp'
 import mockHposCall from 'src/mocks/mockHposCall'
 import mergeMockHappData from 'src/mergeMockHappData'
 import { signPayload, hashString } from 'src/utils/keyManagement'
+import stringify from 'fast-json-stable-stringify'
 
 // const MOCK_HPOS_CONNECTION = process.env.NODE_ENV === 'test'
 //   ? false
@@ -87,10 +88,12 @@ const HposInterface = {
     const result = await hposCall({ method: 'get', path: 'hosted_happs' })()
     return result.hosted_happs.map(mergeMockHappData)
   },
+
   settings: async () => {
     const result = await hposCall({ method: 'get', path: 'config' })()
     return presentHposSettings(result)
   },
+
   checkAuth: async () => {
     try {
       await HposInterface.hostedHapps()
@@ -99,7 +102,37 @@ const HposInterface = {
     }
 
     return true
-  }
+  },
+
+  updateSettings: async ({ hostPubKey, deviceName, sshAccess }) => {
+    const settingsResponse = await hposCall({ method: 'get', path: 'config' })()
+
+    // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
+    const headers = {
+      'X-Hpos-Admin-CAS': await hashString(stringify(settingsResponse))
+    }
+
+    // settingsConfig must contain .admin.{email,public_key}, but may contain other arbitrary
+    // data.
+    const settingsConfig = {
+      ...settingsResponse
+    }
+    if (hostPubKey !== undefined) {
+      settingsConfig.admin.public_key = hostPubKey
+    }
+    if (deviceName !== undefined) {
+      settingsConfig.name = deviceName
+    }
+    if (sshAccess !== undefined) {
+      settingsConfig.holoportos = {
+        sshAccess: sshAccess
+      }
+    }
+
+    await hposCall({ method: 'put', path: 'config', headers })(settingsConfig)
+    // We don't assume the successful PUT /api/v1/config returns the current config
+    return presentHposSettings(settingsConfig)
+  },
 }
 
 export default HposInterface

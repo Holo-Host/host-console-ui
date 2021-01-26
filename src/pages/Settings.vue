@@ -2,6 +2,43 @@
   <PrimaryLayout title="HoloPort Settings">
     <div class='settings'>
       <h3>{{ deviceName }}</h3>
+      
+      <div class='settings-row'>
+        <div class='row-label'>
+          HPOS Version
+        </div>
+        <div class='row-value'>
+          {{ hposVersion }}
+        </div>
+      </div>
+
+      <div class='settings-row'>
+        <div class='row-label'>
+          Device Name
+        </div>
+        <div class='row-value'>
+          {{ deviceName }}
+        </div>
+      </div>
+
+      <div class='settings-row'>
+        <div class='row-label'>
+          Network
+        </div>
+        <div class='row-value'>
+          {{ networkStatus }}
+        </div>
+      </div>
+
+      <div class='settings-row'>
+        <div class='row-label'>
+          Access for HoloPort support (SSH)
+        </div>
+        <div class='row-value'>
+          <input type="checkbox" id="checkbox" v-model="sshAccess">
+        </div>
+      </div>
+
     </div>
   </PrimaryLayout>
 </template>
@@ -18,14 +55,36 @@ export default {
   },
   data () {
     return {
-      deviceName: 'Loading...'
+      settings: {},
+      isLoading: true
     }
   },
   async mounted () {
-    const { deviceName } = await HposInterface.settings()
-    if (deviceName) {
-      this.deviceName = deviceName
-    }
+    const settings = await HposInterface.settings()
+    this.settings = settings
+    this.isLoading = false
+  },
+  computed: {
+    hposVersion () {
+      return '70791b'
+    },
+    deviceName () {
+      return this.isLoading ? 'Loading...' : this.settings.deviceName
+    },
+    networkStatus () {
+      return this.isLoading ? 'Loading...' : this.settings.networkStatus
+    },
+    sshAccess: {
+      get () {
+        return this.settings.sshAccess
+      },
+      set (newValue) {
+        HposInterface.updateSettings({
+          sshAccess: newValue
+        })
+        this.settings.sshAccess = newValue
+      },
+    },
   }
 }
 
@@ -44,5 +103,11 @@ export default {
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
+}
+.settings-row {
+  display: flex;
+}
+.row-label {
+  flex-basis: 200px;
 }
 </style>

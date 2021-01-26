@@ -1,16 +1,11 @@
 const express = require('express')
 const cors = require('cors')
+const bodyParser = require('body-parser')
+const stringify = require('fast-json-stable-stringify')
 const _ = require('lodash')
 const HpAdminKeypair = require('@holo-host/hp-admin-keypair').HpAdminKeypair
-const { signPayload } = require('./authUtils')
+const { signPayload, hashString } = require('./authUtils')
 const defaultResponse = require('./defaultResponse')
-
-// PJ says: This import has to be async because of the way that dumb webpack interacts with wasm
-// It took me more than 2 days to make it work so DO NOT even try to touch this code!
-const importHpAdminKeypairClass = async () => {  
-  const wasm = await import('@holo-host/hp-admin-keypair')
-  return wasm.HpAdminKeypair
-}
 
 const HC_PUBKEY = '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
 
@@ -49,6 +44,7 @@ class MockHposApi {
     const app = express()
 
     app.use(cors())
+    app.use(bodyParser.json())
     app.use(mockHposApi.checkAuth.bind(mockHposApi))
     app.use(mockHposApi.handleRequest.bind(mockHposApi))
 
@@ -74,7 +70,6 @@ class MockHposApi {
 
       const { method, path, body } = req
 
-      // const HpAdminKeypair = importHpAdminKeypairClass()
       const keypairInstance = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
 
       const signature = await signPayload(keypairInstance, method, path, body)
@@ -135,6 +130,7 @@ class MockHposApi {
     let responseOrResponseFunc 
     try {
       responseOrResponseFunc = this.getSavedResponse(method, path, body)
+      console.log('responseOrResponseFunc', responseOrResponseFunc)
     } catch (e) {
       res.status(500).send(e.message)
     }

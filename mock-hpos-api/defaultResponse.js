@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const happs = [{
   id: 1,
   name: 'HoloFuel'
@@ -26,16 +28,23 @@ const data = {
       },
       name: "Lana Wilson's HP"
     }
+  },
+  put: {
+    '/config': args => args
   }
 }
 
 
-function defaultResponse (method, path) {
+function defaultResponse (method, path, body) {
   const pathsForMethod = data[method]
   if (pathsForMethod) {
     const response = pathsForMethod[path]
     if (response) {
-      return response
+      if (_.isFunction(response)) {
+        return response(body)
+      } else {
+        return response
+      }
     }
   }
 

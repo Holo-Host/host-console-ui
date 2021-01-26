@@ -46,11 +46,12 @@ export const signPayload = async (method, request, bodyHash) => {
 
   if (keypair === null) return ''
 
+
   const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
 
   try {
     const signature = keypair.sign(payload)
-
+    
     return signature
   } catch (error) {
     throw (error)
