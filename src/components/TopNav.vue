@@ -5,7 +5,7 @@
     <RightChevronIcon v-if="showSubtitle" class="chevron" />
     <div v-if="showSubtitle" class="sub-title">{{ subTitle }}</div>
     <div class="right">
-      <div class="owner" @click="toggleMenu">Your HP <DownTriangleIcon class='down-triangle' /></div>
+      <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' /></div>
       <div v-if="menuOpen" class="menu">
         <router-link to="/settings" class="settings-link">
           <div class="menu-item">
@@ -22,6 +22,7 @@
 import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
+import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
   name: 'TopNav',
@@ -37,7 +38,14 @@ export default {
   },
   data () {
     return {
-      menuOpen: false
+      menuOpen: false,
+      deviceName: 'Loading...'
+    }
+  },
+  async mounted () {
+    const { deviceName } = await HposInterface.settings()
+    if (deviceName) {
+      this.deviceName = deviceName
     }
   },
   methods: {

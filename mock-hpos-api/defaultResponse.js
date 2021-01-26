@@ -15,7 +15,7 @@ const data = {
     '/hosted_happs': {
       hosted_happs: happs
     },
-    'config': {
+    '/config': {
       admin: {
         public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
         email: 'test@test.com'

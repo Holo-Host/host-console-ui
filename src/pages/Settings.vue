@@ -1,7 +1,7 @@
 <template>
   <PrimaryLayout title="HoloPort Settings">
     <div class='settings'>
-      
+      <h3>{{ deviceName }}</h3>
     </div>
   </PrimaryLayout>
 </template>
@@ -15,6 +15,17 @@ export default {
   name: 'Settings',
   components: {
     PrimaryLayout
+  },
+  data () {
+    return {
+      deviceName: 'Loading...'
+    }
+  },
+  async mounted () {
+    const { deviceName } = await HposInterface.settings()
+    if (deviceName) {
+      this.deviceName = deviceName
+    }
   }
 }
 

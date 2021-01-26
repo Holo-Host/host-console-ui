@@ -7,12 +7,15 @@ import wait from 'waait'
 jest.mock('axios')
 
 it('calls the hosted_happs endpoint', async () => {
-  const axiosResult = {
+  const hostedHappsResult = {
     data: {
       hosted_happs: []
     }
   }
-  axios.get.mockImplementationOnce(() => Promise.resolve(axiosResult));
+
+  axios.get
+    .mockImplementationOnce(() => Promise.resolve(hostedHappsResult))
+    .mockImplementationOnce(() => Promise.resolve({ data: { admin: {} } })) // mock settings call
 
   mount(HostedHapps)
 

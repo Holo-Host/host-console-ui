@@ -78,7 +78,7 @@ const presentHposSettings = (hposSettings) => {
     registrationEmail: admin.email,
     networkStatus: holoportos.network || 'test', // ie: 'live'
     sshAccess: holoportos.sshAccess || false,
-    deviceName: name || 'HoloPort'
+    deviceName: name || 'Your HP'
   }
 }
 
@@ -93,7 +93,7 @@ const HposInterface = {
   },
   checkAuth: async () => {
     try {
-      await HposInterface.config()
+      await HposInterface.hostedHapps()
     } catch (error) {
       return false
     }
