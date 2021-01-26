@@ -130,7 +130,6 @@ class MockHposApi {
     let responseOrResponseFunc 
     try {
       responseOrResponseFunc = this.getSavedResponse(method, path, body)
-      console.log('responseOrResponseFunc', responseOrResponseFunc)
     } catch (e) {
       res.status(500).send(e.message)
     }

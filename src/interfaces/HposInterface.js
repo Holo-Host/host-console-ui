@@ -27,47 +27,45 @@ export const HPOS_API_URL = HPOS_PORT
   : (window.location.protocol + '//' + window.location.hostname) 
 
 export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: userHeaders = {} }) {
-  if (MOCK_HPOS_CONNECTION) {
-    return mockHposCall(method, apiVersion, path)
-  } else {
-    return async params => {
-      const fullPath = HPOS_API_URL + '/api/' + apiVersion + '/' + path
+  return async params => {
+    const fullPath = HPOS_API_URL + '/api/' + apiVersion + '/' + path
 
-      const urlObj = new URL(fullPath)
+    const urlObj = new URL(fullPath)
 
-      let bodyHash
+    let bodyHash
 
-      if (params) {
-        bodyHash = await hashString(stringify(params))
-      }
+    if (params) {
+      bodyHash = await hashString(stringify(params))
+    }
 
-      const signature = await signPayload(method, urlObj.pathname, bodyHash)
+    const signature = await signPayload(method, urlObj.pathname, bodyHash)
 
-      const headers = omitBy(isUndefined, {
-        ...axiosConfig.headers,
-        ...userHeaders,
-        'X-Body-Hash': bodyHash,
-        'X-Hpos-Admin-Signature': signature
-      })
+    const headers = omitBy(isUndefined, {
+      ...axiosConfig.headers,
+      ...userHeaders,
+      'X-Body-Hash': bodyHash,
+      'X-Hpos-Admin-Signature': signature
+    })
 
-      let data
+    let data
 
-      switch (method) {
-        case 'get':
-          ({ data } = await axios.get(fullPath, { params, headers }))
-          return data
-        case 'post':
-          ({ data } = await axios.post(fullPath, params, { headers }))
-          return data
-        case 'put':
-          ({ data } = await axios.put(fullPath, params, { headers }))
-          return data
-        case 'delete':
-          ({ data } = await axios.delete(fullPath, { params, headers }))
-          return data
-        default:
-          throw new Error(`No case in hposCall for ${method} method`)
-      }
+    console.log('AXIOS', fullPath)
+
+    switch (method) {
+      case 'get':
+        ({ data } = await axios.get(fullPath, { params, headers }))
+        return data
+      case 'post':
+        ({ data } = await axios.post(fullPath, params, { headers }))
+        return data
+      case 'put':
+        ({ data } = await axios.put(fullPath, params, { headers }))
+        return data
+      case 'delete':
+        ({ data } = await axios.delete(fullPath, { params, headers }))
+        return data
+      default:
+        throw new Error(`No case in hposCall for ${method} method`)
     }
   }
 }
