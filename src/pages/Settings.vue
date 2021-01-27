@@ -14,16 +14,16 @@
 
       <div class='settings-row'>
         <div class='row-label'>
-          Device Name
+          <label for='device-name'>Device Name</label>
         </div>
         <div v-if='!isEditingDeviceName' class='row-value'>
           {{ deviceName }}
-          <PencilIcon v-if='!isLoading' @click="editDeviceName" class='pencil' />
+          <PencilIcon v-if='!isLoading' @click="editDeviceName" class='pencil' data-testid='edit-button' />
         </div>
         <div v-if='isEditingDeviceName' class='row-value' style="position: relative; top: -2px; margin-left: -2px">
-          <input v-model='editedDeviceName' class='device-input'>
-          <FilledCheckIcon @click="saveDeviceName" class='filled-check' />
-          <CircledExIcon @click="cancelEditDeviceName" class='circled-ex' />          
+          <input v-model='editedDeviceName' class='device-input' id='device-name'>
+          <FilledCheckIcon @click="saveDeviceName" class='filled-check' data-testid='save-button' />
+          <CircledExIcon @click="cancelEditDeviceName" class='circled-ex' data-testid='cancel-button' />          
         </div>
       </div>
 
