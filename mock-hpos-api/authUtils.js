@@ -2,6 +2,8 @@ const stringify = require('fast-json-stable-stringify')
 const sha512 = require('js-sha512')
 const { isEmpty } = require('lodash')
 
+// there's some duplication between this file and src/utils/keyManagement.js
+
 const signPayload = (keypair, method, request, body) => {
   let bodyHash
 

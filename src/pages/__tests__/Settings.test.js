@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
-import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import Settings from '../Settings.vue'
 import wait from 'waait'
 

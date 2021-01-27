@@ -1,14 +1,15 @@
-import { mount } from '@vue/test-utils'
+import { render, waitFor, fireEvent } from '@testing-library/vue'
 import TopNav from '../TopNav.vue'
 
 it('renders a title', () => {
   const title = 'A page title'
-  const wrapper = mount(TopNav, {
+  const { getByText } = render(TopNav, {
     props: {
       breadcrumbs: [
         { label: title }
       ]
     }
   })
-  expect(wrapper.text()).toContain(title)
+
+  getByText(title)
 })

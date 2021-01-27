@@ -1,3 +1,5 @@
+// there's some duplication between this file and mock-hpos-api/authUtils.js
+
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
 const getHcPubkey = () => {
   return ((process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')

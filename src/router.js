@@ -4,7 +4,7 @@ import HappDetails from "pages/HappDetails.vue"
 import Login from "pages/Login.vue"
 import Settings from "pages/Settings.vue"
 
-const routes = [
+export const routes = [
   {
     path: "/login",
     name: "Login",

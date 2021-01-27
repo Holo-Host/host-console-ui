@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { mount } from '@vue/test-utils'
+import { render } from  '@testing-library/vue'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import HostedHapps from '../HostedHapps.vue'
 import wait from 'waait'
@@ -17,7 +17,7 @@ it('calls the hosted_happs endpoint', async () => {
     .mockImplementationOnce(() => Promise.resolve(hostedHappsResult))
     .mockImplementationOnce(() => Promise.resolve({ data: { admin: {} } })) // mock settings call
 
-  mount(HostedHapps)
+  render(HostedHapps)
 
   await wait(0)
 

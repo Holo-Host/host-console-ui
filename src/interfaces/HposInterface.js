@@ -1,16 +1,9 @@
 require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
 import { omitBy, isUndefined } from 'lodash/fp'
-import mockHposCall from 'src/mocks/mockHposCall'
 import mergeMockHappData from 'src/mergeMockHappData'
 import { signPayload, hashString } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
-
-// const MOCK_HPOS_CONNECTION = process.env.NODE_ENV === 'test'
-//   ? false
-//   : true
-
-const MOCK_HPOS_CONNECTION = false
 
 const axiosConfig = {
   headers: {
@@ -19,7 +12,7 @@ const axiosConfig = {
   }
 }
 
-// bump port number by 1 for tests so you can run tests with the UI open
+// bump port number by 1 for tests so we can run tests with the UI open
 const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_HPOS_PORT) + 1 : process.env.VUE_APP_HPOS_PORT
 
 export const HPOS_API_URL = HPOS_PORT
