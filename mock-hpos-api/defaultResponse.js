@@ -1,5 +1,7 @@
 const _ = require('lodash')
 
+// mock of normal hpos api responses
+
 const happs = [{
   id: 1,
   name: 'HoloFuel'
