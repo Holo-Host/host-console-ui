@@ -7,7 +7,7 @@
     "start-ui-and-mock": "npm run start-mock-hpos-api & npm run serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test": "yarn jest --watch",
+    "test": "yarn jest --watch --runInBand --detectOpenHandles",
     "start-mock-hpos-api": "node mock-hpos-api/runMockHposApi.js --port 4567 --email test@test.com --password passw0rd"
   },
   "dependencies": {
