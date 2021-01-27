@@ -32,10 +32,10 @@ const defaultSettingsResult = {
 
 describe('Settings page', () => {
   beforeEach(() => {
+    axios.get.mockClear()
+    axios.put.mockClear()
     axios.get
-    .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
-    .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
-    .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
+    .mockImplementation(() => Promise.resolve(defaultSettingsResult))
   })
 
   it('renders the deviceName and network type', async () => {
@@ -81,9 +81,31 @@ describe('Settings page', () => {
 
     await wait(0)
 
-
     // check that save does save the device name
     expect(axios.put.mock.calls[0][1].name).toEqual(newDeviceName)    
   })
-})
 
+  it('saves changes to ssh access', async () => {
+    axios.put
+      .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
+      .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
+
+    const { getByLabelText, getByTestId } = render(Settings)
+
+    // wait til settings have loaded
+    await waitFor(() => getByTestId('edit-button'))
+
+    const sshButton = getByLabelText('Access for HoloPort support (SSH)')
+    fireEvent.click(sshButton)
+    await wait(0)
+
+    // toggles off
+    expect(axios.put.mock.calls[0][1].holoportos.sshAccess).toEqual(!defaultSettings.holoportos.sshAccess)
+
+    fireEvent.click(sshButton)
+    await wait(0)
+
+    // toggles back on
+    expect(axios.put.mock.calls[1][1].holoportos.sshAccess).toEqual(defaultSettings.holoportos.sshAccess)
+  })
+})

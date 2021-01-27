@@ -49,8 +49,6 @@ export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: us
 
     let data
 
-    console.log('AXIOS', fullPath)
-
     switch (method) {
       case 'get':
         ({ data } = await axios.get(fullPath, { params, headers }))

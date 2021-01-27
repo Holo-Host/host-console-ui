@@ -38,10 +38,10 @@
 
       <div class='settings-row'>
         <div class='row-label'>
-          Access for HoloPort support (SSH)
+          <label for='sshAccess'>Access for HoloPort support (SSH)</label>
         </div>
         <div class='row-value'>
-          <input type="checkbox" id="checkbox" v-model="sshAccess">
+          <input type='checkbox' id='sshAccess' v-model='sshAccess'>
         </div>
       </div>
 
