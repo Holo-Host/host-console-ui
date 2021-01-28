@@ -19,6 +19,11 @@ You will mostly want to run this along with the next command
 npm run start-mock-hpos-api
 ```
 
+The login email and password for this server are in the package.json script
+`test@test.com`
+and
+`asasasas`
+
 ### Start both UI server and mock API server with one command
 ```
 npm run start-ui-and-mock
