@@ -87,10 +87,10 @@ class MockHposApi {
   }
 
   next (response) {
-    this.once(NEXT_PATH, {}, response)
+    this.once('', NEXT_PATH, {}, response)
   }
 
-  once (path, body, response) {
+  once (method, path, body, response) {
     const responseKey = generateResponseKey(method, path, body)
 
     if (!this.responseQueues[responseKey]) {
