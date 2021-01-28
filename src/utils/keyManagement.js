@@ -25,21 +25,17 @@ export const eraseHpAdminKeypair = () => {
 // Use singleton pattern
 // Return null when trying to initialize with no params
 // TODO: the default email and password here are for testing only and should be removed before merging
-export const getHpAdminKeypair = async (email = "test@test.com", password = "passw0rd") => {
+export const getHpAdminKeypair = async (email, password) => {
   if (HpAdminKeypairInstance) return HpAdminKeypairInstance
 
-  try {
-    const hcKey = getHcPubkey()
+  const hcKey = getHcPubkey()
 
-    if (!hcKey || !email || !password) return null
+  if (!hcKey || !email || !password) return null
 
-    const HpAdminKeypair = await importHpAdminKeypairClass()
-    HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)
+  const HpAdminKeypair = await importHpAdminKeypairClass()
+  HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)
 
-    return HpAdminKeypairInstance
-  } catch (error) {
-    throw (error)
-  }
+  return HpAdminKeypairInstance
 }
 
 // Return empty string if HpAdminKeypair is still not initialized

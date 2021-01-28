@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - TopNav now displays real device name
+- Styling for logout button
 ### Removed
 - previous local hpos mock
 ### Fixed
