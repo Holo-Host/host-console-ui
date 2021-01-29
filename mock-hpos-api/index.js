@@ -111,6 +111,8 @@ class MockHposApi {
 
   initializeResponses () {
     this.responseQueues = {}
+    // sets the `any` response which is called as a fallback when no other response has been specified. 
+    // In this case, defaultResponse is a mock of normal behavior of the hpos apis
     this.anyResponse = defaultResponse
   }
 
