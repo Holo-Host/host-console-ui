@@ -45,13 +45,10 @@ const data = {
 
 
 function defaultResponse (method, path, body) {  
-  console.log('defaultResponse', {method, path, body})
   const pathsForMethod = data[method]
   if (pathsForMethod) {
-    console.log('pathsForMethod', pathsForMethod)
     const response = pathsForMethod[path]
     if (response) {
-      console.log('response', response)
       if (_.isFunction(response)) {
         return response(body)
       } else {

@@ -51,7 +51,6 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
         return data
       case 'put':
         ({ data } = await axios.put(fullPath, params, { headers }))
-        console.log('hpos call . put - data', data)
         return data
       case 'delete':
         ({ data } = await axios.delete(fullPath, { params, headers }))

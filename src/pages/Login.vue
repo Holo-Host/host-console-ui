@@ -85,13 +85,10 @@ export default {
       if (!this.errors.email && !this.errors.password) {
         const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
-          console.log('IZ AUUUTHED')
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
             this.$router.push(this.$route.params.nextUrl)
           } else {
-            console.log('PUSHING THE HAPP ROUTE DADDY')
-            console.log('this.$router', this.$router)
             this.$router.push('/happs')
           }          
         } else {

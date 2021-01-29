@@ -25,7 +25,7 @@ export const eraseHpAdminKeypair = () => {
 // Use singleton pattern
 // Return null when trying to initialize with no params
 // TODO: the default email and password here are for testing only and should be removed before merging
-export const getHpAdminKeypair = async (email='test@test.com', password='asasas') => {
+export const getHpAdminKeypair = async (email, password) => {
   if (HpAdminKeypairInstance) return HpAdminKeypairInstance
 
   const hcKey = getHcPubkey()
@@ -48,7 +48,6 @@ export const signPayload = async (method, request, bodyHash) => {
 
   try {
     const signature = keypair.sign(payload)
-    // console.log({method, request, bodyHash, signature})
     
     return signature
   } catch (error) {
