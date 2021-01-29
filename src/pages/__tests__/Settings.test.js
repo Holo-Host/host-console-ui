@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
-import Settings from '../Settings.vue'
 import wait from 'waait'
+import { HPOS_API_URL } from 'src/interfaces/HposInterface'
+import Settings from '../Settings.vue'
 
 jest.mock('axios')
 
@@ -22,11 +23,15 @@ const defaultSettings = {
     network: 'test',
     sshAccess: true
   },
-  name: "Lana Wilson's HP"
+  deviceName: "Lana Wilson's HP"
 }
 
 const defaultSettingsResult = {
   data: defaultSettings
+}
+
+const defaultSshAccessResult = {
+  data: { enabled: true }
 }
 
 describe('Settings page', () => {
@@ -34,13 +39,19 @@ describe('Settings page', () => {
     axios.get.mockClear()
     axios.put.mockClear()
     axios.get
-    .mockImplementation(() => Promise.resolve(defaultSettingsResult))
+    .mockImplementation(path => {
+      if (path.endsWith('/api/v1/config')) {
+        return Promise.resolve(defaultSettingsResult)
+      } else if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
+        return Promise.resolve(defaultSshAccessResult)
+      }
+    })
   })
 
   it('renders the deviceName and network type', async () => {
     const { getAllByText } = render(Settings)
   
-    await waitFor(() => getAllByText(defaultSettings.name))
+    await waitFor(() => getAllByText(defaultSettings.deviceName))
     await waitFor(() => getAllByText(defaultSettings.holoportos.network))
   })
 
@@ -81,30 +92,35 @@ describe('Settings page', () => {
     await wait(0)
 
     // check that save does save the device name
-    expect(axios.put.mock.calls[0][1].name).toEqual(newDeviceName)    
+    expect(axios.put.mock.calls[0][1].deviceName).toEqual(newDeviceName)    
   })
 
   it('saves changes to ssh access', async () => {
     axios.put
-      .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
-      .mockImplementationOnce(() => Promise.resolve(defaultSettingsResult))
+      .mockImplementationOnce(() => Promise.resolve({ data: { enabled: true } }))
+
+    axios.delete
+      .mockImplementationOnce(() => Promise.resolve({ data: { enabled: false } }))
 
     const { getByLabelText, getByTestId } = render(Settings)
 
     // wait til settings have loaded
     await waitFor(() => getByTestId('edit-button'))
 
+    expect(axios.delete.mock.calls.length).toEqual(0)
+
     const sshButton = getByLabelText('Access for HoloPort support (SSH)')
     fireEvent.click(sshButton)
     await wait(0)
 
     // toggles off
-    expect(axios.put.mock.calls[0][1].holoportos.sshAccess).toEqual(!defaultSettings.holoportos.sshAccess)
+    expect(axios.delete.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/api/v1/profiles/development/features/ssh`)
+    expect(axios.put.mock.calls.length).toEqual(0)
 
     fireEvent.click(sshButton)
     await wait(0)
 
     // toggles back on
-    expect(axios.put.mock.calls[1][1].holoportos.sshAccess).toEqual(defaultSettings.holoportos.sshAccess)
+    expect(axios.put.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/api/v1/profiles/development/features/ssh`)
   })
 })

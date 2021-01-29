@@ -46,6 +46,7 @@ export default {
     }
   },
   created: async function () {
+    console.log('IN THE HAPP PAGE BABY')
     const happs = await HposInterface.hostedHapps()
     this.happs = happs
   },

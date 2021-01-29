@@ -16,6 +16,9 @@ const signPayload = (keypair, method, request, body) => {
   try {
     const signature = keypair.sign(payload)
     
+    console.log({method, request, bodyHash, signature})
+
+
     return signature
   } catch (error) {
     throw (error)

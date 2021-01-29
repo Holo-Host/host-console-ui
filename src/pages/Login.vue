@@ -1,7 +1,7 @@
 <template>
   <div class="container">
       <div v-if="banner" class="banner">{{ banner }}</div>
-      <form @submit.prevent="login" class="form">
+      <form @submit.prevent="" class="form">
         <div class="form-box">
           <div class="holofuel-icon-disc">
             <HoloBadgeIcon class="holofuel-icon" fill="#fff" />
@@ -52,8 +52,10 @@ const validatePassword = password => password.length > 5
 
 async function createKeypairAndCheckAuth (email, password) {
   eraseHpAdminKeypair()
-    // we call this to SET the singleton value of HpAdminKeypair
+
+  // we call this to SET the singleton value of HpAdminKeypair
   await getHpAdminKeypair(email, password)
+
   return HposInterface.checkAuth()
 }
 
@@ -83,10 +85,13 @@ export default {
       if (!this.errors.email && !this.errors.password) {
         const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
+          console.log('IZ AUUUTHED')
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
             this.$router.push(this.$route.params.nextUrl)
           } else {
+            console.log('PUSHING THE HAPP ROUTE DADDY')
+            console.log('this.$router', this.$router)
             this.$router.push('/happs')
           }          
         } else {

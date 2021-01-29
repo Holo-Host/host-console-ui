@@ -8,7 +8,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test": "yarn jest --watch --runInBand --detectOpenHandles",
-    "start-mock-hpos-api": "node mock-hpos-api/runMockHposApi.js --email test@test.com --password asasasas"
+    "start-mock-hpos-api": "node mock-hpos-api/runMockHposApi.js --email test@test.com --password asasas"
   },
   "dependencies": {
     "@holo-host/hp-admin-keypair": "^0.1.3",

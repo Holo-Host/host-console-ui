@@ -9,18 +9,8 @@ const defaultResponse = require('./defaultResponse')
 
 const HC_PUBKEY = '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
 
-const API_ROOT = '/api/v1'
-
-function removeApiRoot (path) {
-  if (path.indexOf(API_ROOT) == 0) {
-    return path.slice(API_ROOT.length);
-  } else {
-    return path
-  }
-}
-
 function generateResponseKey (method, path, data) {
-  return `${method}:${removeApiRoot(path)}:${JSON.stringify(data)}`
+  return `${method}:${path}:${JSON.stringify(data)}`
 }
 
 // NEXT_PATH is used to key a next response in place of an actual path. It's required to be different from any value that could come from req.path
@@ -134,7 +124,7 @@ class MockHposApi {
       res.status(500).send(e.message)
     }
 
-    const response = _.isFunction(responseOrResponseFunc) ? responseOrResponseFunc(method.toLowerCase(), removeApiRoot(path), body) : responseOrResponseFunc
+    const response = _.isFunction(responseOrResponseFunc) ? responseOrResponseFunc(method.toLowerCase(), path, body) : responseOrResponseFunc
 
     res.send(response)
   }

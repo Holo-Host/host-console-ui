@@ -21,6 +21,6 @@ it('calls the hosted_happs endpoint', async () => {
 
   await wait(0)
 
-  expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/api/v1/hosted_happs`)
+  expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
   expect(true).toEqual(true)
 })

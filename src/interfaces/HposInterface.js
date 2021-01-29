@@ -19,9 +19,9 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname) 
 
-export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: userHeaders = {} }) {
+export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
-    const fullPath = HPOS_API_URL + '/api/' + apiVersion + '/' + path
+    const fullPath = HPOS_API_URL + pathPrefix + path
 
     const urlObj = new URL(fullPath)
 
@@ -51,6 +51,7 @@ export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: us
         return data
       case 'put':
         ({ data } = await axios.put(fullPath, params, { headers }))
+        console.log('hpos call . put - data', data)
         return data
       case 'delete':
         ({ data } = await axios.delete(fullPath, { params, headers }))
@@ -61,25 +62,41 @@ export function hposCall ({ method = 'get', path, apiVersion = 'v1', headers: us
   }
 }
 
+export function hposAdminCall (args) {
+  return hposCall({
+    ...args,
+    pathPrefix: '/api/v1'
+  })
+}
+
+export function hposHolochainCall (args) {
+  return hposCall({
+    ...args,
+    pathPrefix: '/holochain-api/v1'
+  })
+}
+
+
+
 const presentHposSettings = (hposSettings) => {
-  const { admin, holoportos = {}, name } = hposSettings
+  const { admin, holoportos = {}, deviceName } = hposSettings
   return {
     hostPubKey: admin.public_key,
     registrationEmail: admin.email,
     networkStatus: holoportos.network || 'test', // ie: 'live'
     sshAccess: holoportos.sshAccess || false,
-    deviceName: name || 'Your HP'
+    deviceName: deviceName || 'Your HP'
   }
 }
 
 const HposInterface = {
   hostedHapps: async () => {
-    const result = await hposCall({ method: 'get', path: 'hosted_happs' })()
+    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
     return result.hosted_happs.map(mergeMockHappData)
   },
 
   settings: async () => {
-    const result = await hposCall({ method: 'get', path: 'config' })()
+    const result = await hposAdminCall({ method: 'get', path: '/config' })()
     return presentHposSettings(result)
   },
 
@@ -93,35 +110,40 @@ const HposInterface = {
     return true
   },
 
-  updateSettings: async ({ hostPubKey, deviceName, sshAccess }) => {
-    const settingsResponse = await hposCall({ method: 'get', path: 'config' })()
+  updateSettings: async ({ deviceName }) => {
+    const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })()
 
     // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
     const headers = {
       'X-Hpos-Admin-CAS': await hashString(stringify(settingsResponse))
     }
 
-    // settingsConfig must contain .admin.{email,public_key}, but may contain other arbitrary
-    // data.
     const settingsConfig = {
       ...settingsResponse
     }
-    if (hostPubKey !== undefined) {
-      settingsConfig.admin.public_key = hostPubKey
-    }
     if (deviceName !== undefined) {
-      settingsConfig.name = deviceName
-    }
-    if (sshAccess !== undefined) {
-      settingsConfig.holoportos = {
-        sshAccess: sshAccess
-      }
+      settingsConfig.deviceName = deviceName
     }
 
-    await hposCall({ method: 'put', path: 'config', headers })(settingsConfig)
+    await hposAdminCall({ method: 'put', path: '/config', headers })(settingsConfig)
     // We don't assume the successful PUT /api/v1/config returns the current config
     return presentHposSettings(settingsConfig)
   },
+
+  getSshAccess: async () => {
+    const { enabled } = await hposAdminCall({ method: 'get', path: '/profiles/development/features/ssh' })()
+    return enabled
+  },
+
+  enableSshAccess: async () => {
+    const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })()
+    return enabled
+  },
+
+  disableSshAccess: async () => {
+    const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })()
+    return enabled
+  }
 }
 
 export default HposInterface

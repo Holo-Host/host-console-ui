@@ -85,6 +85,13 @@ export default {
   async mounted () {
     const settings = await HposInterface.settings()
     this.settings = settings
+    const sshAccess = await HposInterface.getSshAccess()
+
+    // Need to assign like this to trigger Vue reactivity
+    this.settings = {
+      ...this.settings,
+      sshAccess
+    }
     this.isLoading = false
   },
   methods: {
@@ -118,12 +125,14 @@ export default {
         return this.settings.sshAccess
       },
       set (newValue) {
-        HposInterface.updateSettings({
-          sshAccess: newValue
-        })
+        if (newValue) {
+          HposInterface.enableSshAccess()
+        } else {
+          HposInterface.disableSshAccess()
+        }
         this.settings.sshAccess = newValue
-      },
-    },
+      }
+    }
   }
 }
 
