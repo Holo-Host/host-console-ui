@@ -22,9 +22,8 @@ export const eraseHpAdminKeypair = () => {
 }
 
 // Create keypair using wasm-based HpAdminKeypair Class
-// Use singleton pattern
+// Uses singleton pattern
 // Return null when trying to initialize with no params
-// TODO: the default email and password here are for testing only and should be removed before merging
 export const getHpAdminKeypair = async (email, password) => {
   if (HpAdminKeypairInstance) return HpAdminKeypairInstance
 
