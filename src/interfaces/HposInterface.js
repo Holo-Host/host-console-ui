@@ -19,9 +19,13 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname) 
 
+// export const HPOS_API_URL = "https://rkbpxayrx3b9mrslvp26oz88rw36wzltxaklm00czl5u5mx1w.holohost.net"
+
 export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
     const fullPath = HPOS_API_URL + pathPrefix + path
+
+    console.log('calling hposCall with fullPath', fullPath)
 
     const urlObj = new URL(fullPath)
 
@@ -33,6 +37,8 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
 
     const signature = await signPayload(method, urlObj.pathname, bodyHash)
 
+    console.log('in hposCall - signature', signature)
+
     const headers = omitBy(isUndefined, {
       ...axiosConfig.headers,
       ...userHeaders,
@@ -42,6 +48,8 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
 
     let data
 
+    console.log('5 - Soon to switch')
+    
     switch (method) {
       case 'get':
         ({ data } = await axios.get(fullPath, { params, headers }))
@@ -103,6 +111,7 @@ const HposInterface = {
     try {
       await HposInterface.hostedHapps()
     } catch (error) {
+      console.error(error)
       return false
     }
 

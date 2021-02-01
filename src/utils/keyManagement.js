@@ -46,10 +46,15 @@ export const signPayload = async (method, request, bodyHash) => {
   const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
 
   try {
+    console.log('in signPayload - payload', payload)
+
     const signature = keypair.sign(payload)
-    
+
+    console.log('in signPayload - signature', signature)
+
     return signature
   } catch (error) {
+    console.log('in signPayload - error', error)
     throw (error)
   }
 }
