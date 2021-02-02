@@ -26,9 +26,7 @@ const data = {
     '/api/v1/profiles/development/features/ssh': {
       enabled: true
     },
-    '/holochain-api/v1/hosted_happs': {
-      hosted_happs: happs
-    }
+    '/holochain-api/v1/hosted_happs': happs
   },
   put: {
     '/api/v1/config': args => args,

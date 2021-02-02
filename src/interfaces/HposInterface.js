@@ -48,8 +48,6 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
 
     let data
 
-    console.log('5 - Soon to switch')
-    
     switch (method) {
       case 'get':
         ({ data } = await axios.get(fullPath, { params, headers }))
@@ -99,7 +97,11 @@ const presentHposSettings = (hposSettings) => {
 const HposInterface = {
   hostedHapps: async () => {
     const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
-    return result.hosted_happs.map(mergeMockHappData)
+    if (Array.isArray(result)) {
+      return result.hosted_happs.map(mergeMockHappData)
+    } else {
+      return []
+    }
   },
 
   settings: async () => {

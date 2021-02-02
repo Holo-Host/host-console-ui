@@ -39,7 +39,7 @@ const mockHappData = [{
 }]
 
 export default function mergeMockHappData (happ) {
-  const mockData = mockHappData.find(mh => mh.id === happ.id) || {}
+  const mockData = mockHappData.find(mh => mh.id === happ.id) || mockHappData[0]
   return {
     ...happ,
     ...mockData
