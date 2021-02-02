@@ -98,7 +98,7 @@ const HposInterface = {
   hostedHapps: async () => {
     const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
     if (Array.isArray(result)) {
-      return result.hosted_happs.map(mergeMockHappData)
+      return result.map(mergeMockHappData)
     } else {
       return []
     }
