@@ -145,7 +145,7 @@ export default {
   background-color: white;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 5px;
-  margin: 40px 18px 20px 0;
+  margin: 40px 10px 20px 12px;
   padding: 30px;
   color: #606C8B;
   font-size: 14px;
@@ -157,6 +157,7 @@ export default {
 }
 .settings-row {
   display: flex;
+  align-items: center;
   margin-bottom: 12px;
 }
 .row-label {

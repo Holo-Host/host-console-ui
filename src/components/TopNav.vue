@@ -78,7 +78,6 @@ export default {
 <style scoped>
 .top-nav {
   display: flex;
-  border-bottom: 1px solid #E7E9ED;
   flex: 0 0 92px;
   padding-top: 46px;
 }
@@ -102,7 +101,7 @@ export default {
 }
 .right {
   margin-left: auto;  
-  margin-right: 80px;
+  margin-right: -3px;
 }
 .owner {
   font-weight: 600;

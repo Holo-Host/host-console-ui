@@ -137,7 +137,7 @@ export default {
   background-color: white;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 5px;
-  margin: 40px 18px 20px 0;
+  margin: 40px 10px 20px 12px;
   padding: 30px;
   color: #606C8B;
   font-size: 14px;
@@ -222,7 +222,7 @@ export default {
   margin-right: 4px;
 }
 .clock-icon {
-  margin-right: 8px;
+  margin-right: 12px;
 }
 .chain-icon {
   margin-right: 8px;
