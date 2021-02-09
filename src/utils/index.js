@@ -1,1 +1,3 @@
-export const formatHolofuelAmount = amount => Number(amount).toLocaleString()
+export const formatHolofuelAmount = amount => isNaN(amount) 
+  ? '-- ' 
+  : Number(amount).toLocaleString()
