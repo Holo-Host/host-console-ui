@@ -151,6 +151,7 @@ export default {
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
+  min-width: 300px;
 }
 .heading {
   color: #313C59;
