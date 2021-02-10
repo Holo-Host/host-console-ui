@@ -7,7 +7,7 @@
       </router-link>
       <div class='columns'>
         <div class='left-column'>
-          <HappImage :happ="happ" size="178px" class="happ-image" />
+          <div class='avatar'>{{ initials }}</div>
           <div class='description-label'>Description</div>
           <div class='description'>{{ happ.description }}</div>
         </div>
@@ -44,13 +44,13 @@
             Rates (Default) <PencilIcon class='pencil-icon' @click="editRates" />
           </div>
           <div class="rate-row">
-            <div class='rate-label'>CPU</div><span class="rate-value">-- ZPT</span>
+            <div class='rate-label'>CPU</div><span class="rate-value">26323653 ZPT</span>
           </div>          
           <div class="rate-row">
-            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- TF per Mb</span>
+            <div class='rate-label'>Bandwidth</div><span class="rate-value">134 HF per Mb</span>
           </div>          
           <div class="rate-row rates-margin">
-            <div class='rate-label'>Storage</div><span class="rate-value">-- TF per MB</span>
+            <div class='rate-label'>Storage</div><span class="rate-value">119 HF per MB</span>
           </div>
           <div class="stop-hosting-row">
             <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
@@ -67,7 +67,6 @@
 <script>
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
-import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import HoloIcon from 'components/icons/HoloIcon.vue'
 import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
@@ -81,7 +80,6 @@ export default {
   name: 'HappDetails',
   components: {
     PrimaryLayout,
-    HappImage,
     ClockIcon,
     HoloIcon,
     LeftChevronIcon,
@@ -139,7 +137,7 @@ export default {
   background-color: white;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 5px;
-  margin: 40px 10px 20px 12px;
+  margin: 40px 18px 20px 0;
   padding: 30px;
   color: #606C8B;
   font-size: 14px;
@@ -161,7 +159,17 @@ export default {
   flex-direction: column;
   margin-right: 32px;
 }
-.happ-image {
+.avatar {
+  width: 178px;
+  height: 178px;
+  border: 1px solid #606C8B;
+  border-radius: 12px;
+  text-align: center;  
+  line-height: 178px;
+  font-size: 40px;
+  font-weight: bold;
+  color:rgba(96, 108, 139, 0.46);
+  margin-right: 10px;
   margin-bottom: 34px;
 }
 .description-label {
@@ -214,7 +222,7 @@ export default {
   margin-right: 4px;
 }
 .clock-icon {
-  margin-right: 12px;
+  margin-right: 8px;
 }
 .chain-icon {
   margin-right: 8px;

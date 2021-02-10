@@ -145,20 +145,18 @@ export default {
   background-color: white;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 5px;
-  margin: 40px 10px 20px 12px;
+  margin: 40px 18px 20px 0;
   padding: 30px;
   color: #606C8B;
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
-  min-width: 300px;
 }
 .heading {
   color: #313C59;
 }
 .settings-row {
   display: flex;
-  align-items: center;
   margin-bottom: 12px;
 }
 .row-label {

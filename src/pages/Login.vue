@@ -123,8 +123,6 @@ export default {
   padding-top: 70px;
   margin-left: 78px;
   margin-right: 78px;
-  max-width: 466px;
-  align-self: center;
 }
 .banner {
   position: absolute;

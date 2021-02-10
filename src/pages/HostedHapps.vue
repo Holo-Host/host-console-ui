@@ -4,10 +4,8 @@
       <div class="label">
         Filter by:
       </div>
-      <div class='filter'>
-        <input v-model="filter" class="filter-input" />
-        <ExIcon v-if="filter.length > 0" @click="clearFilter" class='ex-icon' />
-      </div>
+      <input v-model="filter" class="filter" />
+      <ExIcon v-if="filter.length > 0" @click="clearFilter" class='ex-icon' />
       <div class="label">
         Sort by:&nbsp;
       </div>
@@ -88,17 +86,13 @@ export default {
   margin-right: 2px;
 }
 .filter {
-  display: flex;
-  position: relative
-}
-.filter-input {
   border: 1px solid #E5E5E5;
   border-radius: 5px;
 }
 .ex-icon {
-  position: absolute;
-  top: 5px;
-  right: -7px;
+  position: relative;
+  top: 7px;
+  right: 16px;
 }
 .sort {
   appearance: none;
@@ -107,7 +101,7 @@ export default {
   font-size: 12px;
   font-weight: 600;
   color: #313C59;
-  padding: 4px 16px 4px 4px;
+  padding-right: 16px;
   background-image: url(/images/chevron.svg);
   background-repeat: no-repeat;
   background-position: right;  

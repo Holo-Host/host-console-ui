@@ -25,6 +25,8 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
   return async params => {
     const fullPath = HPOS_API_URL + pathPrefix + path
 
+    console.log('calling hposCall with fullPath', fullPath)
+
     const urlObj = new URL(fullPath)
 
     let bodyHash
@@ -34,6 +36,8 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
     }
 
     const signature = await signPayload(method, urlObj.pathname, bodyHash)
+
+    console.log('in hposCall - signature', signature)
 
     const headers = omitBy(isUndefined, {
       ...axiosConfig.headers,
