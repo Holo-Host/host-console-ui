@@ -1,6 +1,6 @@
 <template>
   <router-link :to="pathToHapp" class='happ-card'>
-    <div class='avatar'>{{ initials }}</div>
+    <HappImage :happ="happ" />
     <div class='details'>
       <div class="name-row">
         <h2 class="name">{{ happ.name }}</h2>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import HoloIcon from 'components/icons/HoloIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
@@ -36,6 +37,7 @@ import ArrowIcon from 'components/icons/ArrowIcon.vue'
 export default {
   name: 'HappCard',
   components: {
+    HappImage,
     ClockIcon,
     HoloIcon,
     ArrowIcon
@@ -44,9 +46,6 @@ export default {
     happ: Object
   },
   computed: {
-    initials() {
-      return this.happ.name.replace(/[^a-z]/gi, '').slice(0,2).toUpperCase()
-    },
     pathToHapp() {
       return `/happ/${this.happ.id}`
     }
@@ -66,18 +65,6 @@ export default {
   padding: 20px;
   flex: 1 0 546px;
   text-decoration: none;
-}
-.avatar {
-  width: 140px;
-  height: 140px;
-  border: 1px solid #606C8B;
-  border-radius: 12px;
-  text-align: center;  
-  line-height: 140px;
-  font-size: 40px;
-  font-weight: bold;
-  color:rgba(96, 108, 139, 0.46);
-  margin-right: 10px;
 }
 .details {
   display: flex;

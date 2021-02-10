@@ -18,5 +18,7 @@ body, html {
   -moz-osx-font-smoothing: grayscale;
   background-color: #fafcfe;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -78,7 +78,6 @@ export default {
 <style scoped>
 .top-nav {
   display: flex;
-  border-bottom: 1px solid #E7E9ED;
   flex: 0 0 92px;
   padding-top: 46px;
 }
@@ -102,7 +101,7 @@ export default {
 }
 .right {
   margin-left: auto;  
-  margin-right: 80px;
+  margin-right: -3px;
 }
 .owner {
   font-weight: 600;
@@ -116,6 +115,8 @@ export default {
   margin-left: 3px;
 }
 .menu {
+  position: relative;
+  right: 12px;
   background: #FFFFFF;
   border-radius: 2px;
   font-size: 14px;
@@ -125,6 +126,18 @@ export default {
   padding: 5px 0px;
   cursor: pointer;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+}
+.menu::before {
+  position: absolute;
+  right: 7px;
+  top: -5px;
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 6px 6px 6px;
+  border-color: transparent transparent white transparent;
+
 }
 .settings-link {
   text-decoration: none;
