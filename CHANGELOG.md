@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show X for happ image instead of initials
 - Favicon to holo logo
 - Small style tweaks
+- Refreshing now logs you out
 ### Removed
 - previous local hpos mock
 ### Fixed

@@ -37,6 +37,8 @@ export const getHpAdminKeypair = async (email, password) => {
   return HpAdminKeypairInstance
 }
 
+export const checkHpAdminKeypair = () => !!HpAdminKeypairInstance
+
 // Return empty string if HpAdminKeypair is still not initialized
 export const signPayload = async (method, request, bodyHash) => {
   const keypair = await getHpAdminKeypair()
@@ -46,15 +48,10 @@ export const signPayload = async (method, request, bodyHash) => {
   const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
 
   try {
-    console.log('in signPayload - payload', payload)
-
     const signature = keypair.sign(payload)
-
-    console.log('in signPayload - signature', signature)
 
     return signature
   } catch (error) {
-    console.log('in signPayload - error', error)
     throw (error)
   }
 }

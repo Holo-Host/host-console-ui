@@ -109,7 +109,7 @@ const HposInterface = {
     try {
       await HposInterface.hostedHapps()
     } catch (error) {
-      console.error(error)
+      console.log('checkAuth failed')
       return false
     }
 
