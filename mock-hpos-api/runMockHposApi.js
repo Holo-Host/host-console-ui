@@ -13,5 +13,8 @@ if (argv.port) {
   port = process.env.VUE_APP_HPOS_PORT
 }
 
+if (!port) {
+  throw new Error ('no port provided. Please pass in a port arg with --port or define a VUE_APP_HPOS_PORT env variable')
+}
 
 MockHposApi.start(port, argv.email, argv.password)

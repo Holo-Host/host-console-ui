@@ -111,6 +111,8 @@ export default {
   color: #313C59;
   min-width: 150px;
   cursor: pointer;
+  text-align: end;
+  padding-right: 20px;
 }
 .down-triangle {
   margin-left: 3px;

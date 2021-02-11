@@ -1,6 +1,6 @@
 <template>
+  <div v-if="banner" class="banner">{{ banner }}</div>
   <div class="container">
-      <div v-if="banner" class="banner">{{ banner }}</div>
       <form @submit.prevent="" class="form">
         <div class="form-box">
           <div class="holofuel-icon-disc">
