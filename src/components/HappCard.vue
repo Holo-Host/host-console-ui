@@ -10,8 +10,8 @@
         <ClockIcon class="clock-icon" /> Hosted for&nbsp;<span class="days">{{ happ.hostedDays }} days</span>
       </div>
       <div class="snapshot-label">7 day snapshot:</div>
-      <div class="earnings-row">
-        <HoloIcon class='holo-icon' /> Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
+      <div class="earnings-row grayed-out">
+        Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
       </div>
       <div class="usage-row">
         <div class='usage'>
@@ -31,7 +31,6 @@
 <script>
 import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
-import HoloIcon from 'components/icons/HoloIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
 
 export default {
@@ -39,7 +38,6 @@ export default {
   components: {
     HappImage,
     ClockIcon,
-    HoloIcon,
     ArrowIcon
   },
   props: {
@@ -110,9 +108,7 @@ export default {
   align-items: center;
   color: #313C59;
   margin-bottom: 10px;
-}
-.holo-icon {
-  margin-right: 4px;
+  margin-left: 3px;  
 }
 .earnings {
   font-weight: 700;
@@ -133,5 +129,12 @@ export default {
   border-bottom: 2px solid #00CAD9;
   font-size: 14px;
   font-weight: 700;
+}
+/* Temporary, remove once we have all live data */
+.grayed-out {
+  color: rgba(96, 108, 139, 0.18);
+}
+.grayed-out span {
+  color: rgba(96, 108, 139, 0.18);
 }
 </style>
