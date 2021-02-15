@@ -1,6 +1,6 @@
 <template>
+  <div v-if="banner" class="banner">{{ banner }}</div>
   <div class="container">
-      <div v-if="banner" class="banner">{{ banner }}</div>
       <form @submit.prevent="" class="form">
         <div class="form-box">
           <div class="holofuel-icon-disc">
@@ -123,6 +123,8 @@ export default {
   padding-top: 70px;
   margin-left: 78px;
   margin-right: 78px;
+  max-width: 466px;
+  align-self: center;
 }
 .banner {
   position: absolute;
