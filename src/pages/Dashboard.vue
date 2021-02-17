@@ -227,7 +227,6 @@ export default {
   margin: 0;
   margin-bottom: 20px;
 }
-
 .more {
   font-size: 14px;
   line-height: 19px;

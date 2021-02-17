@@ -3,10 +3,10 @@
     <h1 class="banner">Host Console</h1>
     <section class="menu">
       <router-link to="/dashboard" class='menu-row' active-class="active-link">
-        <HomeIcon class="home-icon" />Dashboard
+        <HomeIcon class="home-icon" :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'" />Dashboard
       </router-link>      
       <router-link to="/happs" class='menu-row' active-class="active-link">
-        <HappsIcon class="home-icon" />hApps
+        <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />hApps
       </router-link>
       <div class="footer">
         <a class='holo-brand' href="https://holo.host/" target="_blank">
@@ -23,7 +23,6 @@
 <script>
 import HomeIcon from 'components/icons/HomeIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
-
 
 export default {
   name: 'Sidebar',
@@ -57,7 +56,7 @@ export default {
   margin: 0;
 }
 .menu {
-  padding: 30px 40px;
+  padding: 30px 24px 30px 18px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -68,11 +67,14 @@ export default {
   font-size: 14px;
   text-decoration: none;
   color: #313C59;
+  margin-bottom: 20px;
+  padding: 3px 0 3px 24px;
+}
+.menu-row:hover {
+  background: rgba(0, 202, 217, 0.06);
+  border-radius: 2px;
 }
 .active-link {
-  color: #00CAD9;
-}
-.active-link .icon {
   color: #00CAD9;
 }
 .icon {
@@ -81,6 +83,7 @@ export default {
 .footer {
   margin-top: auto;
   padding-bottom: 8px;
+  padding-left: 24px;
 }
 .holo-brand {
   display: flex;
@@ -96,6 +99,7 @@ export default {
 .holo-logo {
   width: 30px;
   margin-right: 8px;
+  margin-left: -6px;
 }
 .footer-link {
   display: block;
