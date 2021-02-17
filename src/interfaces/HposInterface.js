@@ -19,8 +19,6 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname) 
 
-// export const HPOS_API_URL = "https://rkbpxayrx3b9mrslvp26oz88rw36wzltxaklm00czl5u5mx1w.holohost.net"
-
 export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
     const fullPath = HPOS_API_URL + pathPrefix + path
@@ -96,6 +94,7 @@ const HposInterface = {
     if (Array.isArray(result)) {
       return result.map(mergeMockHappData)
     } else {
+      console.error("hosted_happs didn't return an array")
       return []
     }
   },
@@ -149,6 +148,16 @@ const HposInterface = {
   disableSshAccess: async () => {
     const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })()
     return enabled
+  },
+
+  dashboardData: async () => {
+    return {
+      totalHapps: 3,
+      totalSourceChains: 699,
+      dailyCpuUsage: 740,
+      dailyStorage: 12,
+      dailyBandwidth: 17
+    }
   }
 }
 

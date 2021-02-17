@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router"
 import { checkHpAdminKeypair } from 'src/utils/keyManagement'
+import Login from "pages/Login.vue"
+import Dashboard from "pages/Dashboard.vue"
 import HostedHapps from "pages/HostedHapps.vue"
 import HappDetails from "pages/HappDetails.vue"
-import Login from "pages/Login.vue"
 import Settings from "pages/Settings.vue"
 
 export const routes = [
@@ -10,6 +11,15 @@ export const routes = [
     path: "/login",
     name: "Login",
     component: Login,  
+    meta: {
+      guest: true
+    }
+  },
+  // TODO: fixme. this should be an auth route
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,  
     meta: {
       guest: true
     }
@@ -41,7 +51,7 @@ export const routes = [
 
   {
     path: '/',
-    redirect: '/happs'
+    redirect: '/dashboard'
   }
 ]
 
