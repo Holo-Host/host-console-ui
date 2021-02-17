@@ -14,13 +14,13 @@
         <div class='main-column'>
           <h2 class="name">{{ happ.name }}</h2>
           <div class="info-row large-text grayed-out">
-            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} TF</span>
+            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} HF</span>
           </div>
           <div class="info-row grayed-out">
-            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} TF</span>
+            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} HF</span>
           </div>
           <div class="info-row earnings-margin grayed-out">
-            Average weekly earnings:<span class="info">&nbsp;-- TF</span>
+            Average weekly earnings:<span class="info">&nbsp;-- HF</span>
           </div>
           <div class="info-row">
             <ClockIcon class="clock-icon" /> Hosted for:&nbsp;<span class="info">{{ happ.hostedDays }} days</span>
@@ -44,13 +44,13 @@
             Rates (Default) <PencilIcon class='pencil-icon' @click="editRates" />
           </div>
           <div class="rate-row grayed-out">
-            <div class='rate-label'>CPU</div><span class="rate-value">-- TF per Min</span>
+            <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
           </div>          
           <div class="rate-row grayed-out">
-            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- TF per Gb</span>
+            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
           </div>          
           <div class="rate-row rates-margin grayed-out">
-            <div class='rate-label'>Storage</div><span class="rate-value">-- TF per GB</span>
+            <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
           </div>
           <div class="stop-hosting-row">
             <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
