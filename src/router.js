@@ -15,13 +15,12 @@ export const routes = [
       guest: true
     }
   },
-  // TODO: fixme. this should be an auth route
   {
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,  
     meta: {
-      guest: true
+      requiresAuth: true
     }
   },
   {
@@ -65,7 +64,7 @@ export const routerFactory = () => {
   router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // page only visible when logged in
-  
+
       // isAuthed is true if the last keypair we generated was good. It persists across sessions.
       // checkHpAdminKeypair checks if we have a keypair in *this* session. If we don't, then we remove isAuthed
       // another way to handle this would be to store isAuthed in app state not local storage. Then we wouldn't need this line.
