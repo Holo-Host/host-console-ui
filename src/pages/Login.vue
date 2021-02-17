@@ -1,7 +1,7 @@
 <template>
+  <div v-if="banner" class="banner">{{ banner }}</div>
   <div class="container">
-      <div v-if="banner" class="banner">{{ banner }}</div>
-      <form @submit.prevent="login" class="form">
+      <form @submit.prevent="" class="form">
         <div class="form-box">
           <div class="holofuel-icon-disc">
             <HoloBadgeIcon class="holofuel-icon" fill="#fff" />
@@ -30,7 +30,7 @@
             {{ errors.password }}
           </small>
         </div>
-        <button type="submit" class="login-button">Login</Button>
+        <button @click="login" class="login-button">Login</Button>
       </form>
       <div class="reminder-text reminder-text-padding">*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
       <div class="reminder-text reminder-text-padding">
@@ -52,8 +52,10 @@ const validatePassword = password => password.length > 5
 
 async function createKeypairAndCheckAuth (email, password) {
   eraseHpAdminKeypair()
-    // we call this to SET the singleton value of HpAdminKeypair
+
+  // we call this to SET the singleton value of HpAdminKeypair
   await getHpAdminKeypair(email, password)
+
   return HposInterface.checkAuth()
 }
 
@@ -81,7 +83,7 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)        
+        const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
         if (isAuthed) {
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
@@ -121,6 +123,8 @@ export default {
   padding-top: 70px;
   margin-left: 78px;
   margin-right: 78px;
+  max-width: 466px;
+  align-self: center;
 }
 .banner {
   position: absolute;

@@ -7,20 +7,20 @@
       </router-link>
       <div class='columns'>
         <div class='left-column'>
-          <div class='avatar'>{{ initials }}</div>
+          <HappImage :happ="happ" size="178px" class="happ-image" />
           <div class='description-label'>Description</div>
           <div class='description'>{{ happ.description }}</div>
         </div>
         <div class='main-column'>
           <h2 class="name">{{ happ.name }}</h2>
-          <div class="info-row large-text">
-            <HoloIcon class='holo-icon' /> Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} TF</span>
+          <div class="info-row large-text grayed-out">
+            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} TF</span>
           </div>
-          <div class="info-row">
+          <div class="info-row grayed-out">
             Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} TF</span>
           </div>
-          <div class="info-row earnings-margin">
-            Average weekly earnings:<span class="info">&nbsp;223,005 TF</span>
+          <div class="info-row earnings-margin grayed-out">
+            Average weekly earnings:<span class="info">&nbsp;-- TF</span>
           </div>
           <div class="info-row">
             <ClockIcon class="clock-icon" /> Hosted for:&nbsp;<span class="info">{{ happ.hostedDays }} days</span>
@@ -40,17 +40,17 @@
               <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
             </div>
           </div>
-          <div class='rates-title'>
+          <div class='rates-title grayed-out'>
             Rates (Default) <PencilIcon class='pencil-icon' @click="editRates" />
           </div>
-          <div class="rate-row">
-            <div class='rate-label'>CPU</div><span class="rate-value">26323653 ZPT</span>
+          <div class="rate-row grayed-out">
+            <div class='rate-label'>CPU</div><span class="rate-value">-- TF per Min</span>
           </div>          
-          <div class="rate-row">
-            <div class='rate-label'>Bandwidth</div><span class="rate-value">134 HF per Mb</span>
+          <div class="rate-row grayed-out">
+            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- TF per Gb</span>
           </div>          
-          <div class="rate-row rates-margin">
-            <div class='rate-label'>Storage</div><span class="rate-value">119 HF per MB</span>
+          <div class="rate-row rates-margin grayed-out">
+            <div class='rate-label'>Storage</div><span class="rate-value">-- TF per GB</span>
           </div>
           <div class="stop-hosting-row">
             <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
@@ -67,8 +67,8 @@
 <script>
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
+import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
-import HoloIcon from 'components/icons/HoloIcon.vue'
 import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
@@ -80,8 +80,8 @@ export default {
   name: 'HappDetails',
   components: {
     PrimaryLayout,
+    HappImage,
     ClockIcon,
-    HoloIcon,
     LeftChevronIcon,
     ChainIcon,
     PencilIcon,
@@ -137,7 +137,7 @@ export default {
   background-color: white;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 5px;
-  margin: 40px 18px 20px 0;
+  margin: 40px 10px 20px 12px;
   padding: 30px;
   color: #606C8B;
   font-size: 14px;
@@ -159,17 +159,7 @@ export default {
   flex-direction: column;
   margin-right: 32px;
 }
-.avatar {
-  width: 178px;
-  height: 178px;
-  border: 1px solid #606C8B;
-  border-radius: 12px;
-  text-align: center;  
-  line-height: 178px;
-  font-size: 40px;
-  font-weight: bold;
-  color:rgba(96, 108, 139, 0.46);
-  margin-right: 10px;
+.happ-image {
   margin-bottom: 34px;
 }
 .description-label {
@@ -218,11 +208,9 @@ export default {
 .chains-margin {
   margin-bottom: 38px;
 }
-.holo-icon {
-  margin-right: 4px;
-}
 .clock-icon {
-  margin-right: 8px;
+  margin-left: 2px;
+  margin-right: 10px;
 }
 .chain-icon {
   margin-right: 8px;
@@ -299,5 +287,15 @@ export default {
 }
 .alert-circle-icon {
   margin-right: 12px;
+}
+/* Temporary, remove once we have all live data */
+.grayed-out {
+  color: rgba(96, 108, 139, 0.18);
+}
+.grayed-out div {
+  color: rgba(96, 108, 139, 0.18);
+}
+.grayed-out span {
+  color: rgba(96, 108, 139, 0.18);
 }
 </style>

@@ -1,32 +1,39 @@
+// @testing-library/vue has not caught up all features of Vue 3 yet, specifically their support for tests involving routing
+// is not there. So while waiting for them, I'm using '@vue/test-utils' for routing tests.
+import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import Login from '../Login.vue'
-import wait from 'waait'
+import App from '../../App.vue'
 import HposInterface from 'src/interfaces/HposInterface'
+import router from 'src/router'
+import wait from 'waait'
 
 jest.mock('src/interfaces/HposInterface')
 
 it('shows an error when given a bad email', async () => {
   const email = 'invalidemail'
-  const wrapper = mount(Login)
+  const { getByLabelText, getByText } = render(Login)
 
-  const emailField = wrapper.find('input[type="email"]')
-  emailField.setValue(email)
+  const emailField = getByLabelText('Email:')
+  fireEvent.update(emailField, email)
 
-  await wrapper.find('form').trigger('submit.prevent')
+  const loginButton = getByText('Login')
+  fireEvent.click(loginButton)
 
-  expect(wrapper.text()).toContain('Please enter a valid email.')
+  await waitFor(() => getByText('Please enter a valid email.'))
 })
 
 it('shows an error when given a bad password', async () => {
   const password = '2shrt'
-  const wrapper = mount(Login)
+  const { getByLabelText, getByText } = render(Login)
 
-  const passwordField = wrapper.find('input[type="password"]')
-  passwordField.setValue(password)
+  const passwordField = getByLabelText('Password:')
+  fireEvent.update(passwordField, password)
 
-  await wrapper.find('form').trigger('submit.prevent')
+  const loginButton = getByText('Login')
+  fireEvent.click(loginButton)
 
-  expect(wrapper.text()).toContain('Password must have at least 6 characters.')
+  await waitFor(() => getByText('Password must have at least 6 characters.'))
 })
 
 it('sets local storage and pushes the happs route on login', async () => {
@@ -59,11 +66,12 @@ it('sets local storage and pushes the happs route on login', async () => {
   const passwordField = wrapper.find('input[type="password"]')
   passwordField.setValue(password)
 
-  await wrapper.find('form').trigger('submit.prevent')
+  const loginButton = wrapper.find('.login-button')
+
+  loginButton.trigger('click')
 
   await wait(1000)
 
   expect(mockRouter.push).toHaveBeenCalledWith('/happs')
   expect(localStorage.getItem('isAuthed')).toEqual('true')
 })
-

@@ -3,13 +3,8 @@
 </template>
 
 <script>
-import HostedHapps from "pages/HostedHapps.vue";
-
 export default {
-  name: 'App',
-  components: {
-    HostedHapps
-  }
+  name: 'App'
 }
 </script>
 
@@ -23,5 +18,7 @@ body, html {
   -moz-osx-font-smoothing: grayscale;
   background-color: #fafcfe;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 </style>

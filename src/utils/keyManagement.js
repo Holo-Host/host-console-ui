@@ -1,4 +1,4 @@
-const HOLOCHAIN_LOGGING = true
+// there's some duplication between this file and mock-hpos-api/authUtils.js
 
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
 const getHcPubkey = () => {
@@ -22,29 +22,22 @@ export const eraseHpAdminKeypair = () => {
 }
 
 // Create keypair using wasm-based HpAdminKeypair Class
-// Use singleton pattern
+// Uses singleton pattern
 // Return null when trying to initialize with no params
-export const getHpAdminKeypair = async (email = undefined, password = undefined) => {
+export const getHpAdminKeypair = async (email, password) => {
   if (HpAdminKeypairInstance) return HpAdminKeypairInstance
-  try {
-    const hcKey = getHcPubkey()
-    if (!hcKey || !email || !password) return null
 
-    const HpAdminKeypair = await importHpAdminKeypairClass()
-    HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)
+  const hcKey = getHcPubkey()
 
-    if (HOLOCHAIN_LOGGING) {
-      console.log('🎉 Successfully created HP Admin KeyPair!')
-    }
+  if (!hcKey || !email || !password) return null
 
-    return HpAdminKeypairInstance
-  } catch (error) {
-    if (HOLOCHAIN_LOGGING) {
-      console.log('😞 Failed to create HP Admin KeyPair! -- ', error.toString())
-    }
-    throw (error)
-  }
+  const HpAdminKeypair = await importHpAdminKeypairClass()
+  HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)
+
+  return HpAdminKeypairInstance
 }
+
+export const checkHpAdminKeypair = () => !!HpAdminKeypairInstance
 
 // Return empty string if HpAdminKeypair is still not initialized
 export const signPayload = async (method, request, bodyHash) => {
@@ -55,21 +48,10 @@ export const signPayload = async (method, request, bodyHash) => {
   const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
 
   try {
-    if (HOLOCHAIN_LOGGING) {
-      console.log('🎉 Signing payload: ', payload)
-    }
-
     const signature = keypair.sign(payload)
-
-    if (HOLOCHAIN_LOGGING) {
-      console.log('🎉 Successfully signed payload with signature ', signature)
-    }
 
     return signature
   } catch (error) {
-    if (HOLOCHAIN_LOGGING) {
-      console.log('😞 Failed to sign payload -- ', error.toString())
-    }
     throw (error)
   }
 }

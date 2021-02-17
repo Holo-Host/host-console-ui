@@ -6,11 +6,12 @@
         <HappsIcon class="home-icon" />hApps
       </router-link>
       <div class="footer">
-        <div class='holo-brand'>
+        <a class='holo-brand' href="https://holo.host/" target="_blank">
           <img src='/images/holo-logo.png' class='holo-logo'/>
           HOLO
-        </div>
-        <a href='https://forum.holo.host/t/alpha-testnet-terms-conditions/193'>View Terms of Service</a>        
+        </a>
+        <a class='footer-link' href='https://forum.holo.host/t/alpha-testnet-terms-conditions/193' target="_blank">View Terms of Service</a>
+        <div class='ui-version'>Host Console version {{ uiVersion }}</div>
       </div>
     </section>
   </section>
@@ -24,6 +25,11 @@ export default {
   name: 'Sidebar',
   components: {
     HappsIcon
+  },
+  computed: {
+    uiVersion () {
+      return process.env.VUE_APP_UI_VERSION
+    }
   }
 }
 </script>
@@ -65,13 +71,6 @@ export default {
   margin-top: auto;
   padding-bottom: 8px;
 }
-.footer a {
-  display: block;
-  margin-bottom: 5px;
-  color: black;
-  font-weight: 600;
-  text-decoration: none;
-}
 .holo-brand {
   display: flex;
   margin-bottom: 25px;
@@ -80,9 +79,26 @@ export default {
   font-size: 20px;
   font-weight: 500;
   letter-spacing: 12px;
+  color: black;
+  text-decoration: none;
 }
 .holo-logo {
   width: 30px;
   margin-right: 8px;
 }
+.footer-link {
+  display: block;
+  margin-bottom: 6px;
+  color: black;
+  font-weight: 600;
+  font-size: 14px;
+}
+.ui-version {
+  line-height: 14px;
+  font-size: 10px;
+  color: black;
+  font-style: italic;
+  font-weight: 600;
+}
+
 </style>
