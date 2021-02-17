@@ -11,7 +11,7 @@
       </div>
       <div class="snapshot-label">7 day snapshot:</div>
       <div class="earnings-row grayed-out">
-        Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
+        Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} HF</span>
       </div>
       <div class="usage-row">
         <div class='usage'>
