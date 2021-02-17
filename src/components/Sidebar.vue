@@ -2,7 +2,10 @@
   <section class="sidebar">
     <h1 class="banner">Host Console</h1>
     <section class="menu">
-      <router-link to="/" class='menu-row'>
+      <router-link to="/dashboard" class='menu-row' active-class="active-link">
+        <HomeIcon class="home-icon" />Dashboard
+      </router-link>      
+      <router-link to="/happs" class='menu-row' active-class="active-link">
         <HappsIcon class="home-icon" />hApps
       </router-link>
       <div class="footer">
@@ -18,12 +21,14 @@
 </template>
 
 <script>
+import HomeIcon from 'components/icons/HomeIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
 
 
 export default {
   name: 'Sidebar',
   components: {
+    HomeIcon,
     HappsIcon
   },
   computed: {
@@ -64,7 +69,13 @@ export default {
   text-decoration: none;
   color: #313C59;
 }
-.home-icon {
+.active-link {
+  color: #00CAD9;
+}
+.active-link .icon {
+  color: #00CAD9;
+}
+.icon {
   margin-right: 10px;
 }
 .footer {
