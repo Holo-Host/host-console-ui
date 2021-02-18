@@ -4,7 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## unreleased
 
-## [0.1.2]
+## [0.1.2] - 2021-02-18
 ### Added
 - Mock Hpos Api server, for use as both as a standalone server (via npm package scripts) and as a customizable test mock. This is specifically useful for testing auth.
 - Implementation of login and auth logic
