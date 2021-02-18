@@ -96,8 +96,9 @@ export default {
   },
   methods: {
     editDeviceName () {
-      this.editedDeviceName = this.settings.deviceName
-      this.isEditingDeviceName = true
+      // temporarily disabled until hpos bug is fixed
+      // this.editedDeviceName = this.settings.deviceName
+      // this.isEditingDeviceName = true
     },
     saveDeviceName () {
       HposInterface.updateSettings({
@@ -179,6 +180,7 @@ export default {
 .pencil {
   margin-left: 5px;
   cursor: pointer;
+  opacity: 0.2;
 }
 .filled-check {
   margin-left: 5px;
