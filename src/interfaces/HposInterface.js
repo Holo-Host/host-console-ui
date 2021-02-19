@@ -107,7 +107,7 @@ const HposInterface = {
 
   checkAuth: async () => {
     try {
-      await HposInterface.hostedHapps()
+      await HposInterface.settings()
     } catch (error) {
       console.log('checkAuth failed')
       return false
