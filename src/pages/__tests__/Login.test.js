@@ -3,9 +3,7 @@
 import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import Login from '../Login.vue'
-import App from '../../App.vue'
 import HposInterface from 'src/interfaces/HposInterface'
-import router from 'src/router'
 import wait from 'waait'
 
 jest.mock('src/interfaces/HposInterface')
