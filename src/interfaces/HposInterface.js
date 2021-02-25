@@ -89,10 +89,12 @@ const presentHposSettings = (hposSettings) => {
 }
 
 const HposInterface = {
+  dashboard: () => hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 }),
+
   hostedHapps: async () => {
-    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
+    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({ duration_unit: 'WEEK', amount: 1 })
     if (Array.isArray(result)) {
-      return result.map(mergeMockHappData)
+      return result.filter(happ => happ.enabled).map(mergeMockHappData)
     } else {
       console.error("hosted_happs didn't return an array")
       return []
