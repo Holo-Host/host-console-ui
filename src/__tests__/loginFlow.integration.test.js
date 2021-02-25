@@ -6,6 +6,14 @@ import MockHposApi from '../../mock-hpos-api'
 import { routerFactory } from '../router'
 import { eraseHpAdminKeypair } from '../utils/keyManagement'
 
+Object.defineProperty(global, 'crypto', {
+  value: {
+    subtle: {
+      digest: () => Promise.resolve('unchecked string')
+    }
+  }
+});
+
 // These tests have to use @vue/test-utils currently because @testing-library/vue does not yet have full support for 
 // testing vue router in Vue 3. Once @testing-library/vue has caught up, we can rewrite these tests to be user centric
 // and not depend on class querySelectors.
@@ -61,6 +69,24 @@ describe('Login Flow', () => {
     expect(wrapper.find('.banner').text()).toContain('There was a problem logging you in. Please check your credentials and try again.')
   })
 
+  it("logs you out if you don't have a keypair", async () => {
+    const wrapper = mount(App, {
+      global: {
+        plugins: [router]
+      }
+    })
+
+    // simulate the state of having been logged in in a previous session and then starting a new session on an authed page
+    // eg when refreshing an authed page
+    localStorage.setItem('isAuthed', 'true')
+
+    router.replace('/happs')
+
+    await wait(750)
+
+    expect(wrapper.find('.container').text()).toContain('Login to Host Console')
+  })  
+
   it('logs in and redirects to hApps page with correct credentials', async () => {
     const wrapper = mount(App, {
       global: {
@@ -81,24 +107,6 @@ describe('Login Flow', () => {
     await wait(750)
 
     expect(wrapper.text()).toContain('Dashboard')
-  })  
-
-  it("logs you out if you don't have a keypair", async () => {
-    const wrapper = mount(App, {
-      global: {
-        plugins: [router]
-      }
-    })
-
-    // simulate the state of having been logged in in a previous session and then starting a new session on an authed page
-    // eg when refreshing an authed page
-    localStorage.setItem('isAuthed', 'true')
-
-    router.replace('/happs')
-
-    await wait(750)
-
-    expect(wrapper.find('.container').text()).toContain('Login to Host Console')
   })  
 })
 

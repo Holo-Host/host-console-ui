@@ -93,6 +93,7 @@ const HposInterface = {
 
   hostedHapps: async () => {
     const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({ duration_unit: 'WEEK', amount: 1 })
+
     if (Array.isArray(result)) {
       return result.filter(happ => happ.enabled).map(mergeMockHappData)
     } else {
@@ -108,7 +109,7 @@ const HposInterface = {
 
   checkAuth: async () => {
     try {
-      await HposInterface.hostedHapps()
+      await HposInterface.settings()
     } catch (error) {
       console.log('checkAuth failed')
       return false
