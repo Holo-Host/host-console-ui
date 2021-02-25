@@ -7,9 +7,9 @@ const mockHappData = {
   sevenDayEarnings: '-- ',
   description: '',
   sourceChains: '-- ',
+  storage: '-- ',
   usage: {
     cpu: '-- ',
-    storage: '-- ',
     bandwidth: '-- '
   }
 }

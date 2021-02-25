@@ -50,6 +50,7 @@ export default {
   created: async function () {
     const happs = await HposInterface.hostedHapps()
     this.happs = happs
+    console.log('happs', happs)
   },
   computed: {
     filteredHapps () {

@@ -31,13 +31,13 @@
           <div class="usage-row">
             <span class='usage-label'>Total usage:</span>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
+              <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span> CPU
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.storage }}MB</span> Storage
+              <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
+              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth            
             </div>
           </div>
           <div class='rates-title grayed-out'>
@@ -73,8 +73,9 @@ import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
-import { formatHolofuelAmount } from 'src/utils'
+import { formatHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 import HposInterface from 'src/interfaces/HposInterface'
+
 
 export default {
   name: 'HappDetails',
@@ -111,7 +112,9 @@ export default {
     stopHosting () {
       alert('Stopping hosting is not implemented in this version')
     },
-    formatHolofuelAmount
+    formatHolofuelAmount,
+    presentMicroSeconds,
+    presentBytes
   },
   computed: {
     breadcrumbs () {

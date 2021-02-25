@@ -7,10 +7,10 @@
           <div class="inner-column">
             <h3 class="inner-title">hApps</h3>
             <div class="info-row">
-              <span class="bold">{{ data.totalHapps }}&nbsp;</span> Total hApps hosted
+              <span class="bold">{{ totalHostedHapps }}&nbsp;</span> Total hApps hosted
             </div>
             <div class="info-row">
-              <span class="bold">{{ data.totalSourceChains }}&nbsp;</span> Total source chains hosted
+              <span class="bold">{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
             </div>
             <div class="info-row grayed-out">
               <GearIcon class="gear-icon" />Hosting Preferences
@@ -20,15 +20,15 @@
             <h3 class="inner-title">Daily Snapshot</h3>
             <div class="info-row">
               <span class="daily-label">CPU</span>
-              <span class="bold">{{ data.dailyCpuUsage }} mins</span>
+              <span class="bold">{{ presentMicroSeconds(dashboard.usage.cpu) }}</span>
             </div>
             <div class="info-row">
               <span class="daily-label">Storage</span>
-              <span class="bold">{{ data.dailyStorage }} GB</span>
+              <span class="bold">{{ presentBytes(dashboard.currentTotalStorage) }}</span>
             </div>
             <div class="info-row">
               <span class="daily-label">Bandwidth</span>
-              <span class="bold">{{ data.dailyBandwidth }} Gb</span>
+              <span class="bold">{{ presentBytes(dashboard.usage.bandwidth) }}</span>
             </div>            
           </div>          
         </div>
@@ -111,6 +111,7 @@ import GearIcon from 'components/icons/GearIcon'
 import RightArrowIcon from 'components/icons/RightArrowIcon'
 import MissingLogoExIcon from 'components/icons/MissingLogoExIcon'
 import HposInterface from 'src/interfaces/HposInterface'
+import { presentMicroSeconds, presentBytes } from 'src/utils'
 
 const topHostedHapps = [
   {
@@ -155,13 +156,21 @@ export default {
   },
   data () {
     return {
-      data: {},
+      dashboard: {
+        usage: {}
+      },
+      totalHostedHapps: '--',
       topHostedHapps,
       recentPayments
     }
   },
   created: async function () {
-    this.data = await HposInterface.dashboardData()
+    this.dashboard = await HposInterface.dashboard()
+    this.totalHostedHapps = (await HposInterface.hostedHapps()).length
+  },
+  methods: {
+    presentMicroSeconds,
+    presentBytes
   }
 }
 

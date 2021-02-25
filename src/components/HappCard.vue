@@ -15,13 +15,13 @@
       </div>
       <div class="usage-row">
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
+          <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span> CPU
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.storage }}MB</span> Storage
+          <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
+          <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth            
         </div>
       </div>
     </div>
@@ -32,6 +32,7 @@
 import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
+import { presentMicroSeconds, presentBytes } from 'src/utils'
 
 export default {
   name: 'HappCard',
@@ -47,6 +48,10 @@ export default {
     pathToHapp() {
       return `/happ/${this.happ.id}`
     }
+  },
+  methods: {
+    presentMicroSeconds,
+    presentBytes
   }
 }
 </script>
