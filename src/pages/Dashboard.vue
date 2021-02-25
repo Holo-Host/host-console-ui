@@ -7,10 +7,10 @@
           <div class="inner-column">
             <h3 class="inner-title">hApps</h3>
             <div class="info-row">
-              <span class="bold">{{ totalHostedHapps }}&nbsp;</span> Total hApps hosted
+              <span class="bold" data-testid='happ-no'>{{ totalHostedHapps }}&nbsp;</span> Total hApps hosted
             </div>
             <div class="info-row">
-              <span class="bold">{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
+              <span class="bold" data-testid='sc-no'>{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
             </div>
             <div class="info-row grayed-out">
               <GearIcon class="gear-icon" />Hosting Preferences

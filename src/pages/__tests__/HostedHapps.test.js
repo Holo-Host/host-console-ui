@@ -3,24 +3,40 @@ import { render } from  '@testing-library/vue'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import HostedHapps from '../HostedHapps.vue'
 import wait from 'waait'
+import { routes } from 'src/router'
 
 jest.mock('axios')
 
-it('calls the hosted_happs endpoint', async () => {
-  const hostedHappsResult = {
-    data: {
-      hosted_happs: []
+Object.defineProperty(global, 'crypto', {
+  value: {
+    subtle: {
+      digest: () => Promise.resolve('unchecked string')
     }
   }
+});
 
-  axios.get
-    .mockImplementationOnce(() => Promise.resolve(hostedHappsResult))
-    .mockImplementationOnce(() => Promise.resolve({ data: { admin: {} } })) // mock settings call
+it('calls the hosted_happs endpoint', async () => {
+  const hostedHappsResult = {
+    data: []
+  }
 
-  render(HostedHapps)
+  axios.get.mockImplementation(path => {
+    if (path.endsWith('hosted_happs')) {
+      return hostedHappsResult
+    }
+
+    if (path.endsWith('config')) {
+      return {
+        data: {
+          admin: {}
+        }
+      }      
+    }
+  })
+
+  render(HostedHapps, {routes})
 
   await wait(0)
 
-  expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
-  expect(true).toEqual(true)
+  expect(axios.get.mock.calls[1][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
 })

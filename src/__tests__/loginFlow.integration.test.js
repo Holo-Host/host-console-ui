@@ -80,7 +80,7 @@ describe('Login Flow', () => {
 
     await wait(750)
 
-    expect(wrapper.text()).toContain('hApps')
+    expect(wrapper.text()).toContain('Dashboard')
   })  
 
   it("logs you out if you don't have a keypair", async () => {
