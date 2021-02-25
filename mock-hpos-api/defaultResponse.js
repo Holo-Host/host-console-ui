@@ -42,7 +42,7 @@ const dashboard = {
   totalSourceChains: 387,
   currentTotalStorage: 590348543805,
   usage: {
-    cpu: 39084093988,
+    cpu: 39084998,
     bandwidth: 5094853480509
   }
 }

@@ -3,6 +3,7 @@ import { render, waitFor, fireEvent } from '@testing-library/vue'
 import wait from 'waait'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import Settings from '../Settings.vue'
+import { routes } from 'src/router'
 
 jest.mock('axios')
 
@@ -49,8 +50,9 @@ describe('Settings page', () => {
   })
 
   it('renders the deviceName and network type', async () => {
-    const { getAllByText } = render(Settings)
-  
+    const { getAllByText } = render(Settings, {routes})
+    await wait(0)
+
     await waitFor(() => getAllByText(defaultSettings.deviceName))
     await waitFor(() => getAllByText(defaultSettings.holoportos.network))
   })
@@ -61,7 +63,7 @@ describe('Settings page', () => {
 
     const newDeviceName = "Sean's HP"
 
-    const { getByLabelText, getByTestId } = render(Settings)
+    const { getByLabelText, getByTestId } = render(Settings, {routes})
   
     await waitFor(() => getByTestId('edit-button'))
 
@@ -103,7 +105,7 @@ describe('Settings page', () => {
     axios.delete
       .mockImplementationOnce(() => Promise.resolve({ data: { enabled: false } }))
 
-    const { getByLabelText, getByTestId } = render(Settings)
+    const { getByLabelText, getByTestId } = render(Settings, {routes})
 
     // wait til settings have loaded
     await waitFor(() => getByTestId('edit-button'))
