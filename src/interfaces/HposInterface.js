@@ -151,16 +151,6 @@ const HposInterface = {
   disableSshAccess: async () => {
     const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })()
     return enabled
-  },
-
-  dashboardData: async () => {
-    return {
-      totalHapps: 3,
-      totalSourceChains: 699,
-      dailyCpuUsage: 740,
-      dailyStorage: 12,
-      dailyBandwidth: 17
-    }
   }
 }
 
