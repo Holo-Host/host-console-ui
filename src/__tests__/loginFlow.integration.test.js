@@ -15,8 +15,9 @@ Object.defineProperty(global, 'crypto', {
 });
 
 // These tests have to use @vue/test-utils currently because @testing-library/vue does not yet have full support for 
-// testing vue router in Vue 3. Once @testing-library/vue has caught up, we can rewrite these tests to be user centric
-// and not depend on class querySelectors.
+// testing vue router in Vue 3. Once @testing-library/vue has caught up, we can rewrite these tests using that so that
+// 1) all tests use the same library and
+// 2) these tests will be user centric and not depend on class querySelectors.
 
 describe('Login Flow', () => {
   const email = "test@test.com"
