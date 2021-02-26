@@ -18,7 +18,7 @@ Object.defineProperty(global, 'crypto', {
 // testing vue router in Vue 3. Once @testing-library/vue has caught up, we can rewrite these tests to be user centric
 // and not depend on class querySelectors.
 
-describe.skip('Login Flow', () => {
+describe('Login Flow', () => {
   const email = "test@test.com"
   const password = "passw0rd"
 
