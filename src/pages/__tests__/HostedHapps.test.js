@@ -32,6 +32,8 @@ it('calls the hosted_happs endpoint', async () => {
         }
       }      
     }
+
+    throw new Error (`axios mock doesn't recognise this path: ${path}`)
   })
 
   render(HostedHapps, {routes})
