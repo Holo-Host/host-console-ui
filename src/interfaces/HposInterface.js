@@ -19,8 +19,6 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname) 
 
-// export const HPOS_API_URL = "https://rkbpxayrx3b9mrslvp26oz88rw36wzltxaklm00czl5u5mx1w.holohost.net"
-
 export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
     const fullPath = HPOS_API_URL + pathPrefix + path
@@ -91,11 +89,15 @@ const presentHposSettings = (hposSettings) => {
 }
 
 const HposInterface = {
+  dashboard: () => hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 }),
+
   hostedHapps: async () => {
-    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
+    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({ duration_unit: 'WEEK', amount: 1 })
+
     if (Array.isArray(result)) {
-      return result.map(mergeMockHappData)
+      return result.filter(happ => happ.enabled).map(mergeMockHappData)
     } else {
+      console.error("hosted_happs didn't return an array")
       return []
     }
   },
@@ -107,7 +109,7 @@ const HposInterface = {
 
   checkAuth: async () => {
     try {
-      await HposInterface.hostedHapps()
+      await HposInterface.settings()
     } catch (error) {
       console.log('checkAuth failed')
       return false

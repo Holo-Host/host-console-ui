@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router"
 import { checkHpAdminKeypair } from 'src/utils/keyManagement'
+import Login from "pages/Login.vue"
+import Dashboard from "pages/Dashboard.vue"
 import HostedHapps from "pages/HostedHapps.vue"
 import HappDetails from "pages/HappDetails.vue"
-import Login from "pages/Login.vue"
 import Settings from "pages/Settings.vue"
 
 export const routes = [
@@ -12,6 +13,14 @@ export const routes = [
     component: Login,  
     meta: {
       guest: true
+    }
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,  
+    meta: {
+      requiresAuth: true
     }
   },
   {
@@ -41,7 +50,7 @@ export const routes = [
 
   {
     path: '/',
-    redirect: '/happs'
+    redirect: '/dashboard'
   }
 ]
 
@@ -55,7 +64,7 @@ export const routerFactory = () => {
   router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // page only visible when logged in
-  
+
       // isAuthed is true if the last keypair we generated was good. It persists across sessions.
       // checkHpAdminKeypair checks if we have a keypair in *this* session. If we don't, then we remove isAuthed
       // another way to handle this would be to store isAuthed in app state not local storage. Then we wouldn't need this line.
