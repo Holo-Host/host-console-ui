@@ -3,7 +3,7 @@ export const formatHolofuelAmount = amount => isNaN(amount)
   : Number(amount).toLocaleString()
 
 export const presentBytes = bytes => {
-  if (isNaN(bytes)) {
+  if (isNaN(bytes) || bytes == 0 ) {
     return '-- GB'
   }
 
@@ -16,7 +16,7 @@ export const presentBytes = bytes => {
 }
 
 export const presentMicroSeconds = ms => {
-  if (isNaN(ms)) {
+  if (isNaN(ms) || ms == 0 ) {
     return '-- ms'
   }
 
