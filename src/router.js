@@ -4,6 +4,7 @@ import Login from "pages/Login.vue"
 import Dashboard from "pages/Dashboard.vue"
 import HostedHapps from "pages/HostedHapps.vue"
 import HappDetails from "pages/HappDetails.vue"
+import NotFoundComponent from "pages/NotFoundComponent.vue"
 import Settings from "pages/Settings.vue"
 
 export const routes = [
@@ -51,6 +52,11 @@ export const routes = [
   {
     path: '/',
     redirect: '/dashboard'
+  },
+
+  { 
+    path: '*',
+    component: NotFoundComponent 
   }
 ]
 
