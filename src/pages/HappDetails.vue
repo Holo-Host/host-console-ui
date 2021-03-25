@@ -61,6 +61,7 @@
         </div>
       </div>
     </div>
+    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" />
   </PrimaryLayout>
 </template>
 
@@ -68,6 +69,7 @@
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HappImage from 'components/HappImage.vue'
+import StopHostingModal from 'components/StopHostingModal.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
@@ -86,14 +88,16 @@ export default {
     LeftChevronIcon,
     ChainIcon,
     PencilIcon,
-    AlertCircleIcon
+    AlertCircleIcon,
+    StopHostingModal
   },
   data() {
     return {
       happ: {
         name: '',
         usage: {}
-      }
+      },
+      hostingModalVisible: true
     }
   },
   created: async function () {
@@ -110,7 +114,10 @@ export default {
       alert('Editing rates is not implemented in this version')
     },
     stopHosting () {
-      alert('Stopping hosting is not implemented in this version')
+      this.hostingModalVisible = true
+    },
+    closeHostingModal () {
+      this.hostingModalVisible = false
     },
     formatHolofuelAmount,
     presentMicroSeconds,
@@ -277,6 +284,7 @@ export default {
   text-decoration-line: underline;
   color: #313C59;
   margin-right: 10px;
+  cursor: pointer;
 }
 .stop-hosting-warning {
   display: flex;
