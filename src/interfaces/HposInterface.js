@@ -17,9 +17,7 @@ const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_H
 
 export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
-  : (window.location.protocol + '//' + window.location.hostname) 
-
-// export const HPOS_API_URL = "https://rkbpxayrx3b9mrslvp26oz88rw36wzltxaklm00czl5u5mx1w.holohost.net"
+  : (window.location.protocol + '//' + window.location.hostname)
 
 export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
@@ -91,6 +89,8 @@ const presentHposSettings = (hposSettings) => {
 }
 
 const HposInterface = {
+  dashboard: () => hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 }),
+
   hostedHapps: async () => {
     const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({
       duration_unit: "WEEK",
@@ -98,11 +98,9 @@ const HposInterface = {
     })
 
     if (Array.isArray(result)) {
-      console.log('hostedHapps', result)
-      console.log('hostedHapps merged', result.map(mergeMockHappData))
       return result.map(mergeMockHappData)
-
     } else {
+      console.error("hosted_happs didn't return an array")
       return []
     }
   },

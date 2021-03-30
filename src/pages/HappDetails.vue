@@ -14,13 +14,13 @@
         <div class='main-column'>
           <h2 class="name">{{ happ.name }}</h2>
           <div class="info-row large-text grayed-out">
-            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} TF</span>
+            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} HF</span>
           </div>
           <div class="info-row grayed-out">
-            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} TF</span>
+            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} HF</span>
           </div>
           <div class="info-row earnings-margin grayed-out">
-            Average weekly earnings:<span class="info">&nbsp;-- TF</span>
+            Average weekly earnings:<span class="info">&nbsp;-- HF</span>
           </div>
           <div class="info-row">
             <ClockIcon class="clock-icon" /> Hosted for:&nbsp;<span class="info">{{ happ.hostedDays }} days</span>
@@ -31,26 +31,26 @@
           <div class="usage-row">
             <span class='usage-label'>Total usage:</span>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
+              <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span> CPU
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ happ.storage }}MB</span> Storage
+              <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
+              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth
             </div>
           </div>
           <div class='rates-title grayed-out'>
             Rates (Default) <PencilIcon class='pencil-icon' @click="editRates" />
           </div>
           <div class="rate-row grayed-out">
-            <div class='rate-label'>CPU</div><span class="rate-value">-- TF per Min</span>
-          </div>          
+            <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
+          </div>
           <div class="rate-row grayed-out">
-            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- TF per Gb</span>
-          </div>          
+            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
+          </div>
           <div class="rate-row rates-margin grayed-out">
-            <div class='rate-label'>Storage</div><span class="rate-value">-- TF per GB</span>
+            <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
           </div>
           <div class="stop-hosting-row">
             <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
@@ -73,8 +73,9 @@ import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
-import { formatHolofuelAmount } from 'src/utils'
+import { formatHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 import HposInterface from 'src/interfaces/HposInterface'
+
 
 export default {
   name: 'HappDetails',
@@ -111,7 +112,9 @@ export default {
     stopHosting () {
       alert('Stopping hosting is not implemented in this version')
     },
-    formatHolofuelAmount
+    formatHolofuelAmount,
+    presentMicroSeconds,
+    presentBytes
   },
   computed: {
     breadcrumbs () {
@@ -172,7 +175,7 @@ export default {
 .main-column {
   display: flex;
   flex: 1;
-  flex-direction: column;  
+  flex-direction: column;
 }
 .name {
   margin: 0 0 34px 0;
@@ -247,7 +250,7 @@ export default {
 .pencil-icon {
   margin-left: 8px;
   cursor: pointer;
-  opacity: 0.3;  
+  opacity: 0.3;
 }
 .rate-row {
   display: flex;
