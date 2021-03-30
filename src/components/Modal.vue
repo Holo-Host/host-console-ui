@@ -27,7 +27,7 @@ export default {
 <style scoped>
 .overlay {
   position: fixed;
-  display: flex;  
+  display: flex;
   top: 0;
   left: 0;
   z-index: 10;
@@ -52,5 +52,6 @@ export default {
   border: none;
   padding: 0;
   background-color: transparent;
+  cursor: pointer;
 }
 </style>

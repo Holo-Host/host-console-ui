@@ -1,12 +1,20 @@
 <template>
   <Modal :handleClose="handleClose">
-    <div class='stop-hosting-modal'>
+    <div class='stop-hosting-modal' v-if="!confirmed">
       <ExclamationIcon class="exclamation-icon" />
       <p class='content'>Are you sure you want to stop hosting this hApp?</p>
       <p class='content'>It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.</p>
       <div class='buttons'>
         <Button color='white' @click="handleClose">Cancel</Button>
-        <Button color='teal'>Yes, I want to stop hosting this hApp</Button>
+        <Button color='teal' @click="confirm">Yes, I want to stop hosting this hApp</Button>
+      </div>
+    </div>
+    <div class='stop-hosting-modal' v-if="confirmed">
+      <BigCheckIcon class="exclamation-icon" />
+      <p class='content'>This hApp has been removed from hosting.</p>
+      <p class='content'>Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the publisher.</p>
+      <div class='buttons'>
+        <Button color='teal' @click="handleClose">Close</Button>
       </div>
     </div>
   </Modal>
@@ -16,22 +24,35 @@
 import Modal from 'components/Modal'
 import Button from 'components/Button'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
+import BigCheckIcon from 'components/icons/BigCheckIcon'
 
 export default {
   name: 'StopHostingModal',
   components: {
     Modal,
     Button,
-    ExclamationIcon
+    ExclamationIcon,
+    BigCheckIcon
   },
   props: {
     handleClose: {
       type: Function,
       required: true
-    }
+    },
+    stopHostingHapp: {
+      type: Function,
+      required: true
+    },
   },
   data: function () {
     return {
+      confirmed: false
+    }
+  },
+  methods: {
+    confirm () {
+      this.stopHostingHapp()
+      this.confirmed = true
     }
   }
 }

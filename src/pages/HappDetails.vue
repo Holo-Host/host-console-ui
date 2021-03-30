@@ -37,7 +37,7 @@
               <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth            
+              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth
             </div>
           </div>
           <div class='rates-title grayed-out'>
@@ -45,23 +45,23 @@
           </div>
           <div class="rate-row grayed-out">
             <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
-          </div>          
+          </div>
           <div class="rate-row grayed-out">
             <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
-          </div>          
+          </div>
           <div class="rate-row rates-margin grayed-out">
             <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
           </div>
           <div class="stop-hosting-row">
-            <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
+            <div class="stop-hosting" @click="openHostingModal">Stop hosting</div>
             <div class="stop-hosting-warning">
-              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting will move any source chains to another host
+              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting of a hApp will remove it and all associated data from your HoloPort.
             </div>
           </div>
         </div>
       </div>
     </div>
-    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" />
+    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" :stopHostingHapp="stopHostingHapp"/>
   </PrimaryLayout>
 </template>
 
@@ -97,7 +97,7 @@ export default {
         name: '',
         usage: {}
       },
-      hostingModalVisible: true
+      hostingModalVisible: false
     }
   },
   created: async function () {
@@ -113,11 +113,14 @@ export default {
     editRates () {
       alert('Editing rates is not implemented in this version')
     },
-    stopHosting () {
+    openHostingModal () {
       this.hostingModalVisible = true
     },
     closeHostingModal () {
       this.hostingModalVisible = false
+    },
+    stopHostingHapp () {
+      console.log('Stopping hosting happ', this.happ.name)
     },
     formatHolofuelAmount,
     presentMicroSeconds,
@@ -182,7 +185,7 @@ export default {
 .main-column {
   display: flex;
   flex: 1;
-  flex-direction: column;  
+  flex-direction: column;
 }
 .name {
   margin: 0 0 34px 0;
@@ -257,7 +260,7 @@ export default {
 .pencil-icon {
   margin-left: 8px;
   cursor: pointer;
-  opacity: 0.3;  
+  opacity: 0.3;
 }
 .rate-row {
   display: flex;
