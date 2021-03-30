@@ -32,6 +32,7 @@
 import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
+import { happDetailsPath } from '../router'
 
 export default {
   name: 'HappCard',
@@ -45,7 +46,7 @@ export default {
   },
   computed: {
     pathToHapp() {
-      return `/happ/${this.happ.id}`
+      return happDetailsPath(this.happ)
     }
   }
 }

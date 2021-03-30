@@ -91,3 +91,5 @@ export const routerFactory = () => {
 const router = routerFactory()
 
 export default router
+
+export const happDetailsPath = ({ id }) => '/happ/' + encodeURIComponent(id)
