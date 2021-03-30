@@ -10,7 +10,7 @@ export const routes = [
   {
     path: "/login",
     name: "Login",
-    component: Login,  
+    component: Login,
     meta: {
       guest: true
     }
@@ -18,7 +18,7 @@ export const routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    component: Dashboard,  
+    component: Dashboard,
     meta: {
       requiresAuth: true
     }
@@ -71,7 +71,7 @@ export const routerFactory = () => {
       if (!checkHpAdminKeypair()) {
         localStorage.removeItem('isAuthed')
       }
-  
+
       if (localStorage.getItem('isAuthed') == null) {
         next({
           name: 'Login',
@@ -81,7 +81,7 @@ export const routerFactory = () => {
         next()
       }
     } else if (to.matched.some(record => record.meta.guest)) {
-  
+
       // page only visible when *not* logged in
       if(localStorage.getItem('isAuthed') == null) {
           next()

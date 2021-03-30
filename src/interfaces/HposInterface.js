@@ -98,7 +98,7 @@ const HposInterface = {
     })
 
     if (Array.isArray(result)) {
-      return result.map(mergeMockHappData)
+      return result.filter(happ => happ.enabled).map(mergeMockHappData)
     } else {
       console.error("hosted_happs didn't return an array")
       return []
