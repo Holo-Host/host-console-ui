@@ -18,7 +18,7 @@
           <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.storage }}MB</span> Storage
+          <span class="usage-value">{{ happ.storage }}MB</span> Storage
         </div>
         <div class='usage'>
           <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            

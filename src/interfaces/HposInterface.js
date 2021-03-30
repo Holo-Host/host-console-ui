@@ -92,9 +92,16 @@ const presentHposSettings = (hposSettings) => {
 
 const HposInterface = {
   hostedHapps: async () => {
-    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
+    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({
+      duration_unit: "WEEK",
+      amount: 1
+    })
+
     if (Array.isArray(result)) {
+      console.log('hostedHapps', result)
+      console.log('hostedHapps merged', result.map(mergeMockHappData))
       return result.map(mergeMockHappData)
+
     } else {
       return []
     }
