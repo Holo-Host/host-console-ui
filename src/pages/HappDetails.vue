@@ -120,7 +120,7 @@ export default {
       this.hostingModalVisible = false
     },
     stopHostingHapp () {
-      console.log('Stopping hosting happ', this.happ.name)
+      console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
     formatHolofuelAmount,
     presentMicroSeconds,
