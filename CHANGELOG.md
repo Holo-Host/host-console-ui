@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## unreleased
+### Changed
+- Display 0 bytes as `0 GB` instead of `--GB`, and 0 milliseconds as `0 ms` instead of `--ms`
+### Fixed
+- uri encode happ id in url so that it gets passed properly to the api
 
 ## [0.1.4] - 2021-02-18
 ### Changed
