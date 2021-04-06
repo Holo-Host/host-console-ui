@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VUE_APP_HPOS_PORT: 4567
     strategy:
       matrix:
         node-version: [14.x]
