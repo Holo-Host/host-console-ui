@@ -37,7 +37,7 @@
               <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth            
+              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth
             </div>
           </div>
           <div class='rates-title grayed-out'>
@@ -45,22 +45,23 @@
           </div>
           <div class="rate-row grayed-out">
             <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
-          </div>          
+          </div>
           <div class="rate-row grayed-out">
             <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
-          </div>          
+          </div>
           <div class="rate-row rates-margin grayed-out">
             <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
           </div>
           <div class="stop-hosting-row">
-            <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
+            <div class="stop-hosting" @click="openHostingModal">Stop hosting</div>
             <div class="stop-hosting-warning">
-              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting will move any source chains to another host
+              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting of a hApp will remove it and all associated data from your HoloPort.
             </div>
           </div>
         </div>
       </div>
     </div>
+    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" :stopHostingHapp="stopHostingHapp"/>
   </PrimaryLayout>
 </template>
 
@@ -68,6 +69,7 @@
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HappImage from 'components/HappImage.vue'
+import StopHostingModal from 'components/StopHostingModal.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
@@ -86,14 +88,16 @@ export default {
     LeftChevronIcon,
     ChainIcon,
     PencilIcon,
-    AlertCircleIcon
+    AlertCircleIcon,
+    StopHostingModal
   },
   data() {
     return {
       happ: {
         name: '',
         usage: {}
-      }
+      },
+      hostingModalVisible: false
     }
   },
   created: async function () {
@@ -109,8 +113,14 @@ export default {
     editRates () {
       alert('Editing rates is not implemented in this version')
     },
-    stopHosting () {
-      alert('Stopping hosting is not implemented in this version')
+    openHostingModal () {
+      this.hostingModalVisible = true
+    },
+    closeHostingModal () {
+      this.hostingModalVisible = false
+    },
+    stopHostingHapp () {
+      console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
     formatHolofuelAmount,
     presentMicroSeconds,
@@ -175,7 +185,7 @@ export default {
 .main-column {
   display: flex;
   flex: 1;
-  flex-direction: column;  
+  flex-direction: column;
 }
 .name {
   margin: 0 0 34px 0;
@@ -250,7 +260,7 @@ export default {
 .pencil-icon {
   margin-left: 8px;
   cursor: pointer;
-  opacity: 0.3;  
+  opacity: 0.3;
 }
 .rate-row {
   display: flex;
@@ -277,6 +287,7 @@ export default {
   text-decoration-line: underline;
   color: #313C59;
   margin-right: 10px;
+  cursor: pointer;
 }
 .stop-hosting-warning {
   display: flex;

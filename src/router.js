@@ -10,7 +10,7 @@ export const routes = [
   {
     path: "/login",
     name: "Login",
-    component: Login,  
+    component: Login,
     meta: {
       guest: true
     }
@@ -18,7 +18,7 @@ export const routes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    component: Dashboard,  
+    component: Dashboard,
     meta: {
       requiresAuth: true
     }
@@ -65,13 +65,15 @@ export const routerFactory = () => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // page only visible when logged in
 
+      // TODO: remove before merging
+      return next()
       // isAuthed is true if the last keypair we generated was good. It persists across sessions.
       // checkHpAdminKeypair checks if we have a keypair in *this* session. If we don't, then we remove isAuthed
       // another way to handle this would be to store isAuthed in app state not local storage. Then we wouldn't need this line.
       if (!checkHpAdminKeypair()) {
         localStorage.removeItem('isAuthed')
       }
-  
+
       if (localStorage.getItem('isAuthed') == null) {
         next({
           name: 'Login',
@@ -81,7 +83,7 @@ export const routerFactory = () => {
         next()
       }
     } else if (to.matched.some(record => record.meta.guest)) {
-  
+
       // page only visible when *not* logged in
       if(localStorage.getItem('isAuthed') == null) {
           next()
