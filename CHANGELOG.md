@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - Use '/api/v1/config' instead of '/holochain-api/v1/hosted_happs' to check auth
 
+## [0.1.4] - 2021-02-18
+### Changed
+- Use '/api/v1/config' instead of '/holochain-api/v1/hosted_happs' to check auth
+
 ## [0.1.3] - 2021-02-18
 ### Changed
 - Edit device name disabled and pencil icon grayed out

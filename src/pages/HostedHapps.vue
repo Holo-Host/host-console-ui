@@ -42,7 +42,7 @@ export default {
   },
   data () {
     return {
-      happs: [], 
+      happs: [],
       filter: '',
       sort: SORT_EARNINGS
     }
@@ -110,7 +110,7 @@ export default {
   padding: 4px 16px 4px 4px;
   background-image: url(/images/chevron.svg);
   background-repeat: no-repeat;
-  background-position: right;  
+  background-position: right;
 }
 .happ-list {
   display: flex;

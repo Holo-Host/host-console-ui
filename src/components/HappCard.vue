@@ -21,7 +21,7 @@
           <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth            
+          <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth
         </div>
       </div>
     </div>
@@ -32,6 +32,7 @@
 import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
+import { happDetailsPath } from '../router'
 import { presentMicroSeconds, presentBytes } from 'src/utils'
 
 export default {
@@ -46,7 +47,7 @@ export default {
   },
   computed: {
     pathToHapp() {
-      return `/happ/${this.happ.id}`
+      return happDetailsPath(this.happ)
     }
   },
   methods: {
@@ -72,7 +73,7 @@ export default {
 .details {
   display: flex;
   flex: 1;
-  flex-direction: column;  
+  flex-direction: column;
   color: #606C8B;
   font-size: 14px;
   line-height: 19px;
@@ -113,7 +114,7 @@ export default {
   align-items: center;
   color: #313C59;
   margin-bottom: 10px;
-  margin-left: 3px;  
+  margin-left: 3px;
 }
 .earnings {
   font-weight: 700;

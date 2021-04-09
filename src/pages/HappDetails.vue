@@ -102,7 +102,7 @@ export default {
   },
   created: async function () {
     const happs = await HposInterface.hostedHapps()
-    const happId = Number(this.$route.params.id)
+    const happId = decodeURIComponent(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
     if (!happ) {
       throw new Error(`Failed to load happ with id: ${happId}`)

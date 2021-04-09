@@ -17,7 +17,7 @@ const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_H
 
 export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
-  : (window.location.protocol + '//' + window.location.hostname) 
+  : (window.location.protocol + '//' + window.location.hostname)
 
 export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
@@ -92,7 +92,10 @@ const HposInterface = {
   dashboard: () => hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 }),
 
   hostedHapps: async () => {
-    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({ duration_unit: 'WEEK', amount: 1 })
+    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({
+      duration_unit: "WEEK",
+      amount: 1
+    })
 
     if (Array.isArray(result)) {
       return result.filter(happ => happ.enabled).map(mergeMockHappData)
