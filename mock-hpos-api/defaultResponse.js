@@ -3,7 +3,7 @@ const _ = require('lodash')
 // mock of normal hpos api responses
 
 const happs = [{
-  id: 1,
+  id: '1',
   name: 'HoloFuel',
   enabled: true,
   sourceChains: 110,
@@ -13,7 +13,7 @@ const happs = [{
     cpu: 49083408432
   }
 }, {
-  id: 2,
+  id: '2',
   name: 'Community',
   enabled: true,
   sourceChains: 79,
@@ -23,7 +23,7 @@ const happs = [{
     cpu: 83408432
   }
 }, {
-  id: 3,
+  id: '3',
   name: 'Elemental Chat',
   enabled: true,
   sourceChains: 34,
@@ -33,7 +33,7 @@ const happs = [{
     cpu: 595430
   }
 }, {
-  id: 4,
+  id: '4',
   name: 'A disabled happ you should never see',
   enabled: false
 }]
@@ -61,7 +61,7 @@ const data = {
       enabled: true
     },
     '/holochain-api/v1/hosted_happs': happs,
-    '/holochain-api/v1/dashboard': dashboard    
+    '/holochain-api/v1/dashboard': dashboard
   },
   put: {
     '/api/v1/config': args => args,
@@ -77,7 +77,7 @@ const data = {
 }
 
 
-function defaultResponse (method, path, body) {  
+function defaultResponse (method, path, body) {
   const pathsForMethod = data[method]
   if (pathsForMethod) {
     const response = pathsForMethod[path]

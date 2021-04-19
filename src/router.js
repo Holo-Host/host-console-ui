@@ -65,6 +65,10 @@ export const routerFactory = () => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // page only visible when logged in
 
+      // TODO: remove before merging
+      next()
+      return
+
       // isAuthed is true if the last keypair we generated was good. It persists across sessions.
       // checkHpAdminKeypair checks if we have a keypair in *this* session. If we don't, then we remove isAuthed
       // another way to handle this would be to store isAuthed in app state not local storage. Then we wouldn't need this line.

@@ -94,6 +94,10 @@ export default {
 .filter-input {
   border: 1px solid #E5E5E5;
   border-radius: 5px;
+  padding: 5px;
+}
+.filter-input:focus {
+  outline-color: #313C59;
 }
 .ex-icon {
   position: absolute;

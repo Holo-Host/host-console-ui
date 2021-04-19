@@ -14,7 +14,7 @@
       <p class='content'>This hApp has been removed from hosting.</p>
       <p class='content'>Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the publisher.</p>
       <div class='buttons'>
-        <Button color='teal' @click="handleClose">Close</Button>
+        <Button color='teal' @click="closeAndGoToHapps">Close</Button>
       </div>
     </div>
   </Modal>
@@ -53,6 +53,10 @@ export default {
     confirm () {
       this.stopHostingHapp()
       this.confirmed = true
+    },
+    closeAndGoToHapps () {
+      this.handleClose()
+      this.$router.push('/happs')
     }
   }
 }
