@@ -40,7 +40,7 @@ it('shows the proper data', async () => {
         data: {
           admin: {}
         }
-      }      
+      }
     }
 
     if (path.endsWith('dashboard')) {
@@ -48,17 +48,17 @@ it('shows the proper data', async () => {
     }
 
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
-  })    
+  })
 
   const { getByText, getByTestId } = render(Dashboard, {routes})
   await wait(0)
 
   await waitFor(() => getByText('39.08 s'))
-  getByText('549.8 GB')
-  getByText('4.63 TB')        
+  getByText('-- GB') // once we have real api data this should go back to '549.8 GB'
+  getByText('4.63 TB')
 
   expect(getByTestId('happ-no').textContent == hostedHappsResult.data.length)
-  expect(getByTestId('sc-no').textContent == dashboardResult.data.totalSourceChains)  
+  expect(getByTestId('sc-no').textContent == dashboardResult.data.totalSourceChains)
 
 
 })
