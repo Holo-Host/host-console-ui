@@ -52,8 +52,8 @@
           <div class="rate-row grayed-out">
             <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
           </div>
-          <div class="stop-hosting-row">
-            <div class="stop-hosting" @click="openHostingModal">Stop hosting</div>
+          <div class="stop-hosting-row grayed-out">
+            <div class="stop-hosting" @click="stopHostingHapp">Stop hosting</div>
             <div class="stop-hosting-warning">
               <AlertCircleIcon class="alert-circle-icon" />Stopping hosting of a hApp will remove it and all associated data from your HoloPort.
             </div>
@@ -114,6 +114,7 @@ export default {
       alert('Editing rates is not implemented in this version')
     },
     openHostingModal () {
+      // This function is not currently used but should replace the call to stopHostingHapp once we have implemented stopping hosting
       this.hostingModalVisible = true
     },
     closeHostingModal () {
