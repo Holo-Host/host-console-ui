@@ -5,8 +5,8 @@
   "scripts": {
     "serve": "VUE_APP_UI_VERSION=$npm_package_version vue-cli-service serve",
     "start-ui-and-mock": "npm run start-mock-hpos-api & npm run serve",
-    "build": "VUE_APP_UI_VERSION=$npm_package_version USE_REAL_PUB_KEY=true vue-cli-service build",
-    "build:dev": "VUE_APP_UI_VERSION=$npm_package_version USE_REAL_PUB_KEY=true vue-cli-service build --mode development",
+    "build": "VUE_APP_UI_VERSION=$npm_package_version VUE_APP_USE_REAL_PUB_KEY=true vue-cli-service build",
+    "build:dev": "VUE_APP_UI_VERSION=$npm_package_version VUE_APP_USE_REAL_PUB_KEY=true vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",
     "test": "yarn jest --watch --runInBand --detectOpenHandles",
     "test:ci": "yarn jest --runInBand --detectOpenHandles",
