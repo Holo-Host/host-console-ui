@@ -2,7 +2,7 @@
 
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
 const getHcPubkey = () => {
-  return ((process.env.NODE_ENV === 'test')
+  return ((process.env.USE_REAL_PUB_KEY === 'true')
     ? '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
     : window.location.hostname.split('.')[0])
 }
