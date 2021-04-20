@@ -6,7 +6,7 @@
       </div>
       <div class='filter'>
         <input v-model="filter" class="filter-input" />
-        <ExIcon v-if="filter.length > 0" @click="clearFilter" class='ex-icon' />
+        <ExIcon v-if="filter.length > 0" @click="clearFilter" size='15' class='ex-icon' />
       </div>
       <div class="label">
         Sort by:&nbsp;
@@ -94,11 +94,15 @@ export default {
 .filter-input {
   border: 1px solid #E5E5E5;
   border-radius: 5px;
+  padding: 5px;
+}
+.filter-input:focus {
+  outline-color: #313C59;
 }
 .ex-icon {
   position: absolute;
-  top: 5px;
-  right: -7px;
+  top: 8px;
+  right: 6px;
 }
 .sort {
   appearance: none;

@@ -9,6 +9,9 @@ export default {
 </script>
 
 <style>
+html {
+  overflow-y: scroll;
+}
 body, html {
   height: 100%;
 }

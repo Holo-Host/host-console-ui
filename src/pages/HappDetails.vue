@@ -1,7 +1,7 @@
 <template>
   <PrimaryLayout :breadcrumbs="breadcrumbs">
     <div class='happ-details'>
-      <router-link class="back-link" to="/">
+      <router-link class="back-link" to="/happs">
         <LeftChevronIcon class="left-chevron" />
         Back
       </router-link>
@@ -46,11 +46,11 @@
           <div class="rate-row grayed-out">
             <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
           </div>
-          <div class="rate-row grayed-out">
-            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
-          </div>
           <div class="rate-row rates-margin grayed-out">
             <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
+          </div>
+          <div class="rate-row grayed-out">
+            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
           </div>
           <div class="stop-hosting-row">
             <div class="stop-hosting" @click="openHostingModal">Stop hosting</div>

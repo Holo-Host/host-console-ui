@@ -14,7 +14,7 @@
             </div>
             <div class="info-row grayed-out">
               <GearIcon class="gear-icon" />Hosting Preferences
-            </div>            
+            </div>
           </div>
           <div class="inner-column">
             <h3 class="inner-title">Daily Snapshot</h3>
@@ -29,8 +29,8 @@
             <div class="info-row">
               <span class="daily-label">Bandwidth</span>
               <span class="bold">{{ presentBytes(dashboard.usage.bandwidth) }}</span>
-            </div>            
-          </div>          
+            </div>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -55,7 +55,7 @@
               <div class="holofuel-info-row grayed-out">{{ happ.name }}</div>
               <div class="holofuel-info-row margin-bottom grayed-out">-- HF</div>
             </div>
-          </div>          
+          </div>
           <a class='more'>
             More <RightArrowIcon class='right-arrow-icon' />
           </a>
@@ -64,7 +64,7 @@
       <div class="card">
         <h2 class="title grayed-out">
           Earnings
-          <h3 class="subtitle grayed-out">Last 7 days</h3>        
+          <h3 class="subtitle grayed-out">Last 7 days</h3>
         </h2>
         <div class="body">
           <div class="earnings-info-row grayed-out">
@@ -78,7 +78,7 @@
           <div class="earnings-info-row grayed-out">
             <span class="earnings-label">Weekly Change:</span>
             -- %
-          </div>                    
+          </div>
           <a class='more'>
             More <RightArrowIcon class='right-arrow-icon' />
           </a>
@@ -92,16 +92,16 @@
             <div class="payment-amount">-- HF</div>
             <div class="payment-details">
               <div class="">Received</div>
-              <div class="payment-happ">{{ payment.happ }}</div>              
+              <div class="payment-happ">{{ payment.happ }}</div>
             </div>
             <div class="payment-time">{{ payment.time }}</div>
-          </div>     
+          </div>
           <a class='more'>
             More <RightArrowIcon class='right-arrow-icon' />
           </a>
         </div>
       </div>
-    </div>    
+    </div>
   </PrimaryLayout>
 </template>
 
@@ -191,13 +191,16 @@ export default {
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 12px;
 }
+.card:last-child {
+  margin-right: 14px;
+}
 .two-columns {
   flex-basis: 69%;
 }
 .title {
   display: flex;
   align-items: center;
-  border-top-left-radius: 12px;  
+  border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   background-color: rgba(176, 236, 240, 0.72);
   font-weight: bold;
@@ -308,7 +311,7 @@ export default {
   box-sizing: border-box;
   border-radius: 5px;
   width: 37px;
-  height: 37px;  
+  height: 37px;
   margin: 0 16px;
 }
 .redeem-button {
@@ -321,7 +324,7 @@ export default {
   background: rgba(8, 112, 163, 0.18);
   border-radius: 100px;
   height: 35px;
-  padding: 0 25px; 
+  padding: 0 25px;
   cursor: pointer;
   margin-bottom: 10px;
 }
