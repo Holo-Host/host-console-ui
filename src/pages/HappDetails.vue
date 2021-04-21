@@ -46,10 +46,10 @@
           <div class="rate-row grayed-out">
             <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
           </div>
-          <div class="rate-row rates-margin grayed-out">
+          <div class="rate-row grayed-out">
             <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
           </div>
-          <div class="rate-row grayed-out">
+          <div class="rate-row rates-margin grayed-out">
             <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
           </div>
           <div class="stop-hosting-row grayed-out">
