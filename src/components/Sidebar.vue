@@ -4,7 +4,7 @@
     <section class="menu">
       <router-link to="/dashboard" class='menu-row' active-class="active-link">
         <HomeIcon class="home-icon" :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'" />Dashboard
-      </router-link>      
+      </router-link>
       <router-link to="/happs" class='menu-row' active-class="active-link">
         <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />hApps
       </router-link>
@@ -40,7 +40,7 @@ export default {
 
 <style scoped>
 .sidebar {
-  display: flex;  
+  display: flex;
   flex-direction: column;
   flex: 0 0 270px;
   background: #FFFFFF;
@@ -114,6 +114,11 @@ export default {
   color: black;
   font-style: italic;
   font-weight: 600;
+}
+@media screen and (max-width: 1050px) {
+  .sidebar {
+    display: none;
+  }
 }
 
 </style>

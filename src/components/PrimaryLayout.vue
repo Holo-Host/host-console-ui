@@ -2,7 +2,8 @@
   <section class='layout'>
     <Sidebar />
     <section class='main-column'>
-      <TopNav :breadcrumbs="breadcrumbsOrTitle" />
+      <MobileBanner :deviceName="deviceName" />
+      <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" />
       <section class='content'>
         <slot />
       </section>
@@ -14,17 +15,30 @@
 
 import Sidebar from 'components/Sidebar.vue'
 import TopNav from 'components/TopNav.vue'
-import { computed } from 'vue'
+import MobileBanner from 'components/MobileBanner.vue'
+import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
   name: 'PrimaryLayout',
   components: {
     Sidebar,
-    TopNav
+    TopNav,
+    MobileBanner
   },
   props: {
     title: String,
     breadcrumbs: Array
+  },
+  data () {
+    return {
+      deviceName: 'Loading...'
+    }
+  },
+  async mounted () {
+    const { deviceName } = await HposInterface.settings()
+    if (deviceName) {
+      this.deviceName = deviceName
+    }
   },
   computed: {
     breadcrumbsOrTitle() {
