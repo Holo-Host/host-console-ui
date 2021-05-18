@@ -2,7 +2,7 @@
   <section class='layout'>
     <Sidebar />
     <section class='main-column'>
-      <MobileBanner :deviceName="deviceName" />
+      <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" />
       <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" />
       <section class='content'>
         <slot />
@@ -31,13 +31,19 @@ export default {
   },
   data () {
     return {
-      deviceName: 'Loading...'
+      deviceName: 'Loading...',
+      mobileSidebarVisible: false
     }
   },
   async mounted () {
     const { deviceName } = await HposInterface.settings()
     if (deviceName) {
       this.deviceName = deviceName
+    }
+  },
+  methods: {
+    showMobileSidebar (shouldShow = false) {
+      this.mobileSidebarVisible = shouldShow
     }
   },
   computed: {

@@ -30,12 +30,6 @@ export default {
       menuOpen: false
     }
   },
-  async mounted () {
-    const { deviceName } = await HposInterface.settings()
-    if (deviceName) {
-      this.deviceName = deviceName
-    }
-  },
   methods: {
     toggleMenu () {
       this.menuOpen = !this.menuOpen

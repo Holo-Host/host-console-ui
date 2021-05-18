@@ -45,6 +45,10 @@ export default {
   flex: 0 0 270px;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(54, 59, 71, 0.1);
+  z-index: 10;
+}
+.mobile-banner .sidebar {
+  display: none;
 }
 .banner {
   background-color: rgba(0, 202, 217, 0.06);
@@ -118,6 +122,15 @@ export default {
 @media screen and (max-width: 1050px) {
   .sidebar {
     display: none;
+  }
+
+  .mobile-banner .sidebar {
+    display: flex;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    min-width: 272px;
   }
 }
 
