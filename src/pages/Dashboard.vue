@@ -344,4 +344,24 @@ export default {
 .grayed-out {
   color: rgba(96, 108, 139, 0.18);
 }
+
+@media screen and (max-width: 1050px) {
+  .row {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .card {
+    margin-bottom: 28px;
+    margin-right: 0;
+  }
+
+  .card:last-child {
+    margin-right: 0;
+  }
+
+  .inner-row {
+    flex-direction: column;
+  }
+}
 </style>

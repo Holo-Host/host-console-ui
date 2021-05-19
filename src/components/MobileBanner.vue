@@ -33,7 +33,6 @@ export default {
 </script>
 
 <style scoped>
-/* note this style sheet is not scoped, because we use the class in TopNavMenu */
 .mobile-banner {
   display: none;
   flex: 0 0 128px;

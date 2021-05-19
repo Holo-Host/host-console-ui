@@ -66,4 +66,11 @@ export default {
   text-decoration: none;
   margin-top: 9px;
 }
+
+@media screen and (max-width: 1050px) {
+  .top-nav {
+    padding-top: 22px;
+    flex: 0 0 46px;
+  }
+}
 </style>
