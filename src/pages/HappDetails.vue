@@ -102,7 +102,7 @@ export default {
         name: '',
         usage: {}
       },
-      hostingModalVisible: true
+      hostingModalVisible: false
     }
   },
   created: async function () {
@@ -126,8 +126,6 @@ export default {
       this.hostingModalVisible = false
     },
     stopHostingHapp () {
-      // TODO: remove this change before merging
-      this.openHostingModal()
       console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
     formatHolofuelAmount,
