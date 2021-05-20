@@ -1,6 +1,6 @@
 <template>
   <PrimaryLayout :breadcrumbs="breadcrumbs">
-    <div class='happ-details'>
+    <div class='happ-details' :class="{ 'modal-open': hostingModalVisible }">
       <router-link class="back-link" to="/happs">
         <LeftChevronIcon class="left-chevron" />
         Back
@@ -102,7 +102,7 @@ export default {
         name: '',
         usage: {}
       },
-      hostingModalVisible: false
+      hostingModalVisible: true
     }
   },
   created: async function () {
@@ -126,6 +126,8 @@ export default {
       this.hostingModalVisible = false
     },
     stopHostingHapp () {
+      // TODO: remove this change before merging
+      this.openHostingModal()
       console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
     formatHolofuelAmount,
@@ -377,6 +379,9 @@ export default {
   }
   .stop-hosting-row {
     align-items: flex-start;
+  }
+  .modal-open {
+    display: none;
   }
 }
 </style>
