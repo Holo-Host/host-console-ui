@@ -5,7 +5,7 @@
         Filter by:
       </div>
       <div class='filter'>
-        <input v-model="filter" class="filter-input" />
+        <input v-model="filter" class="filter-input" placeholder="Filter by" />
         <ExIcon v-if="filter.length > 0" @click="clearFilter" size='15' class='ex-icon' />
       </div>
       <div class="label">
@@ -99,6 +99,9 @@ export default {
 .filter-input:focus {
   outline-color: #313C59;
 }
+.filter-input::placeholder {
+  color: #BCBFC6;
+}
 .ex-icon {
   position: absolute;
   top: 8px;
@@ -121,5 +124,26 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   margin-right: -18px;
+}
+
+@media screen and (max-width: 1050px) {
+  .controls {
+    justify-content: center;
+  }
+  .filter {
+    flex-basis: 100%;
+  }
+  .filter-input {
+    flex-basis: 100%;
+    padding: 10px;
+  }
+  .sort, .label {
+    display: none;
+  }
+
+  .happ-list {
+    flex-direction: column;
+    margin-right: 0;
+  }
 }
 </style>
