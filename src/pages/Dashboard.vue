@@ -5,9 +5,9 @@
         <h2 class="title">Usage</h2>
         <div class="inner-row">
           <div class="inner-column">
-            <h3 class="inner-title">hApps</h3>
+            <h3 class="inner-title">Happs</h3>
             <div class="info-row">
-              <span class="bold" data-testid='happ-no'>{{ totalHostedHapps }}&nbsp;</span> Total hApps hosted
+              <span class="bold" data-testid='happ-no'>{{ totalHostedHapps }}&nbsp;</span> Total Happs hosted
             </div>
             <div class="info-row">
               <span class="bold" data-testid='sc-no'>{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
@@ -46,9 +46,9 @@
     </div>
     <div class="row">
       <div class="card">
-        <h2 class="title grayed-out">Top Hosted hApps</h2>
+        <h2 class="title grayed-out">Top Hosted Happs</h2>
         <div class="body grayed-out">
-          <div v-if="!topHostedHapps || topHostedHapps.length === 0">Currently no hApps to display</div>
+          <div v-if="!topHostedHapps || topHostedHapps.length === 0">Currently no Happs to display</div>
           <div v-for="happ in topHostedHapps" class="top-happ-row" :key="happ.id">
             <div class='logo'><MissingLogoExIcon class='ex-icon' /></div>
             <div class='top-happ-details'>

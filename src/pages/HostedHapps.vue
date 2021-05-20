@@ -1,5 +1,5 @@
 <template>
-  <PrimaryLayout title="hApps">
+  <PrimaryLayout title="Happs">
     <div class="controls">
       <div class="label">
         Filter by:

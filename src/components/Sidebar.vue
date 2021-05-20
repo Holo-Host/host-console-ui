@@ -6,7 +6,7 @@
         <HomeIcon class="home-icon" :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'" />Dashboard
       </router-link>
       <router-link to="/happs" class='menu-row' active-class="active-link">
-        <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />hApps
+        <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />Happs
       </router-link>
       <div class="footer">
         <a class='holo-brand' href="https://holo.host/" target="_blank">
