@@ -5,6 +5,7 @@ import Dashboard from "pages/Dashboard.vue"
 import HostedHapps from "pages/HostedHapps.vue"
 import HappDetails from "pages/HappDetails.vue"
 import Settings from "pages/Settings.vue"
+import Earnings from "pages/Earnings.vue"
 
 export const routes = [
   {
@@ -47,7 +48,14 @@ export const routes = [
       requiresAuth: true
     }
   },
-
+  {
+    path: "/earnings",
+    name: "Earnings",
+    component: Earnings,
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: '/',
     redirect: '/dashboard'
@@ -64,6 +72,9 @@ export const routerFactory = () => {
   router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // page only visible when logged in
+
+      // TODO: remove before merge
+      return next()
 
       // isAuthed is true if the last keypair we generated was good. It persists across sessions.
       // checkHpAdminKeypair checks if we have a keypair in *this* session. If we don't, then we remove isAuthed

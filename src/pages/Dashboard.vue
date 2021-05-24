@@ -147,7 +147,7 @@ const recentPayments = [
 ]
 
 export default {
-  name: 'HostedHapps',
+  name: 'Dashboard',
   components: {
     PrimaryLayout,
     GearIcon,
