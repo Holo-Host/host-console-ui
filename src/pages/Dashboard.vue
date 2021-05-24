@@ -12,7 +12,7 @@
             <div class="info-row">
               <span class="bold" data-testid='sc-no'>{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
             </div>
-            <div class="info-row grayed-out">
+            <div class="info-row grayed-out hosting-preferences">
               <GearIcon class="gear-icon" />Hosting Preferences
             </div>
           </div>
@@ -362,6 +362,10 @@ export default {
 
   .inner-row {
     flex-direction: column;
+  }
+
+  .hosting-preferences {
+    display: none;
   }
 }
 </style>
