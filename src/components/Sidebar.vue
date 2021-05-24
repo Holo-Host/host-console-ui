@@ -15,6 +15,7 @@
         </a>
         <a class='footer-link' href='https://forum.holo.host/t/alpha-testnet-terms-conditions/193' target="_blank">View Terms of Service</a>
         <div class='ui-version'>Host Console version {{ uiVersion }}</div>
+        <a @click="useDesktopView" class='use-desktop-view-link'>Use desktop view</a>
       </div>
     </section>
   </section>
@@ -33,6 +34,12 @@ export default {
   computed: {
     uiVersion () {
       return process.env.VUE_APP_UI_VERSION
+    }
+  },
+  methods: {
+    useDesktopView () {
+      const descEl = document.querySelector('head meta[name="viewport"]');
+      descEl.setAttribute('content', "width=1051")
     }
   }
 }
@@ -119,6 +126,15 @@ export default {
   font-style: italic;
   font-weight: 600;
 }
+.use-desktop-view-link {
+  display: none;
+  margin-top: 25px;
+  font-size: 12px;
+  line-height: 14px;
+  text-decoration-line: underline;
+  color: #000000;
+  cursor: pointer;
+}
 @media screen and (max-width: 1050px) {
   .sidebar {
     display: none;
@@ -131,6 +147,10 @@ export default {
     left: 0px;
     height: 100%;
     min-width: 272px;
+  }
+
+  .use-desktop-view-link {
+    display: block;
   }
 }
 
