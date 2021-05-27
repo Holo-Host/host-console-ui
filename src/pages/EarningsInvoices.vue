@@ -13,7 +13,12 @@
     <div class='invoices-padding'>
       <table class="invoices">
         <tr class='header-row'>
-          <th v-for="header in headers" :key='header' @click="handleHeaderClick(header)" :class="{ selected: header === sort }">
+          <th v-for="header in headers"
+            :key='header'
+            @click="handleHeaderClick(header)"
+            :class="{ selected: header === sort }"
+            :title="header"
+          >
             {{ header }}
             <ShortUpArrowIcon :color="header === sort ? '#000' : '#FFF'" :class="{ 'upside-down': sortDesc }"/>
           </th>
@@ -223,7 +228,7 @@ th.selected {
   font-weight: 700;
 }
 /* this rule prevents the layout from jumping when the font-weight changes */
-.header-row th::after {
+th::after {
   display: block;
   content: attr(title);
   font-weight: 700;
