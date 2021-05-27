@@ -8,7 +8,7 @@
       <div class='column'>
         <h3 class='card-title'>Weekly Earnings</h3>
         <div class='hf-amount'>{{ weeklyEarnings.toLocaleString() }} HF</div>
-        <div class='graph' />
+        <TmpGraphIcon class='graph' />
       </div>
       <div class='column main-links'>
         <router-link to='/earnings/invoices' class='main-link'>
@@ -43,6 +43,7 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import LeaveSiteIcon from 'components/icons/LeaveSiteIcon'
 import PaymentIcon from 'components/icons/PaymentIcon'
 import RightChevronIcon from 'components/icons/RightChevronIcon'
+import TmpGraphIcon from 'components/icons/TmpGraphIcon'
 
 export default {
   name: 'Earnings',
@@ -50,7 +51,8 @@ export default {
     PrimaryLayout,
     LeaveSiteIcon,
     PaymentIcon,
-    RightChevronIcon
+    RightChevronIcon,
+    TmpGraphIcon
   },
   data () {
     return {
@@ -145,10 +147,7 @@ export default {
   margin-bottom: 40px;
 }
 .graph {
-  width: 306px;
-  height: 123px;
-  border: 1px solid lightgray;
-  border-radius: 4px;
+
 }
 .main-link {
   height: 52px;
