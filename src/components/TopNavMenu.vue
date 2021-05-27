@@ -82,7 +82,7 @@ export default {
 }
 .mobile-banner .menu {
   position: absolute;
-  right: 49px;
+  right: 15px;
 }
 .menu::before {
   position: absolute;
@@ -114,6 +114,10 @@ export default {
 
   .mobile-banner .top-nav-menu {
     display: block;
+  }
+
+  .owner {
+    padding-right: 6px;
   }
 }
 </style>

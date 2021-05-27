@@ -23,11 +23,6 @@ export default {
     deviceName: String,
     showMobileSidebar: Function,
     mobileSidebarVisible: Boolean
-  },
-  watch: {
-    mobileSidebarVisible (val) {
-      console.log('mobileSidebarVisible', val)
-    }
   }
 }
 </script>
@@ -39,7 +34,7 @@ export default {
   align-items: flex-end;
   background-color: #00CAD9;
   padding: 20px;
-  margin-left: -20px;
+  margin: 0 -20px;
 }
 
 .sidebar-backdrop {
