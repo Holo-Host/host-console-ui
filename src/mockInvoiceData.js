@@ -25,7 +25,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 133456.0095,
+    amount: 344566.2344,
     payment_status: PSTATUS_UNPAID,
     exception_status: ESTATUS_EXCEPTION
   },
@@ -35,7 +35,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
     date_created: moment("2021-09-08"),
     date_due: moment("2021-10-08"),
-    amount: 345554.3213,
+    amount: 899553.1233,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -45,7 +45,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
     date_created: moment("2021-09-08"),
     date_due: moment("2021-10-08"),
-    amount: 122347.8640,
+    amount: 133456.0095,
     payment_status: PSTATUS_LATE,
     exception_status: ESTATUS_NA
   },
@@ -55,7 +55,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
     date_created: moment("2021-09-07"),
     date_due: moment("2021-10-07"),
-    amount: 99234.3422,
+    amount: 34556.3233,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -65,7 +65,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 670213.8902,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -75,7 +75,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 345554.3213,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -85,7 +85,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 122347.8640,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -95,7 +95,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 190334.5644,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -105,7 +105,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 345669.5422,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -115,7 +115,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 99234.3422,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -125,7 +125,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 456903.3321,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -135,7 +135,7 @@ const mockInvoiceData = [
     publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
     date_created: moment("2021-09-12"),
     date_due: moment("2021-10-12"),
-    amount: 344566.2344,
+    amount: 239320.2211,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -155,7 +155,7 @@ const mockInvoiceData = [
     publisher: 'uhCAknuUVuN5gzCE0su3efwTmErbVXObiCpx-9qMNF2Gji5pR96GX',
     date_created: moment("2021-09-07"),
     date_due: moment("2021-10-07"),
-    amount: 89930.2224,
+    amount: 120459.9022,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   },
@@ -165,7 +165,7 @@ const mockInvoiceData = [
     publisher: 'uhCAknuUVuN5gzCE0su3efwTmErbVXObiCpx-9qMNF2Gji5pR96GX',
     date_created: moment("2021-09-07"),
     date_due: moment("2021-10-07"),
-    amount: 89930.2224,
+    amount: 78293.9903,
     payment_status: PSTATUS_PAID,
     exception_status: ESTATUS_NA
   }

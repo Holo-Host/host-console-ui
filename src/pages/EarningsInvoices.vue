@@ -4,7 +4,7 @@
       <div class="label">
         Filter:&nbsp;
       </div>
-      <select v-model="filter" class="filter">
+      <select v-model="filter" class="dropdown">
         <option v-for="option in filterOptions" :value="option" :key="option">
           {{ option }}
         </option>
@@ -20,10 +20,10 @@
             :title="header"
           >
             {{ header }}
-            <ShortUpArrowIcon :color="header === sort ? '#000' : '#FFF'" :class="{ 'upside-down': sortDesc }"/>
+            <ShortUpArrowIcon :color="header === sort ? '#000' : '#FFF'" :class="{ 'rotate-180': sortDesc }"/>
           </th>
         </tr>
-        <tr v-for="invoice in filteredSortedInvoices" class='invoice-row' :key='invoice.id'>
+        <tr v-for="invoice in pagedInvoices" class='invoice-row' :key='invoice.id'>
           <td class='happ-cell'>
             {{ invoice.happ }}
           </td>
@@ -51,6 +51,19 @@
         </tr>
       </table>
     </div>
+    <div class='footer'>
+      Rows per page:&nbsp;&nbsp;
+      <select v-model="pageSize" class="dropdown">
+        <option v-for="option in pageSizeOptions" :value="option" :key="option">
+          {{ option }}
+        </option>
+      </select>
+      <div class='pagination'>
+        {{ paginationLegend }}
+        <RightChevronIcon @click="hasPrevPage && goToPrevPage()" class="page-arrow-left" :color="hasPrevPage ? '#00CAD9' : '#606C8B'" />
+        <RightChevronIcon @click="hasNextPage && goToNextPage()" class="page-arrow-right" :color="hasNextPage ? '#00CAD9' : '#606C8B'" />
+      </div>
+    </div>
   </PrimaryLayout>
 </template>
 
@@ -58,6 +71,7 @@
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import ShortUpArrowIcon from 'components/icons/ShortUpArrowIcon.vue'
+import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
 import mockInvoiceData, { PSTATUS_LATE, PSTATUS_PAID, PSTATUS_UNPAID, ESTATUS_EXCEPTION } from 'src/mockInvoiceData'
 import { presentPublisherHash, presentHolofuelAmount } from 'src/utils'
 
@@ -79,7 +93,8 @@ export default {
   name: 'EarningsInvoices',
   components: {
     PrimaryLayout,
-    ShortUpArrowIcon
+    ShortUpArrowIcon,
+    RightChevronIcon
   },
   data () {
     return {
@@ -96,7 +111,20 @@ export default {
       ],
       filter: FILTER_ALL,
       sort: SORT_CREATED,
-      sortDesc: true
+      sortDesc: true,
+      pageSize: 10,
+      page: 0
+    }
+  },
+  created () {
+    this.filterOptions = [FILTER_ALL, FILTER_UNPAID_LATE, FILTER_PAID, FILTER_EXCEPTIONS]
+    this.pageSizeOptions = [5, 10, 20, 30, 50]
+
+    const queryFilter = this.$route.query.filter
+    if (queryFilter === 'unpaid') {
+      this.filter = FILTER_UNPAID_LATE
+    } else if (queryFilter === 'exceptions') {
+      this.filter = FILTER_EXCEPTIONS
     }
   },
   computed: {
@@ -108,7 +136,17 @@ export default {
         label: 'Invoices'
       }]
     },
-    filterOptions: () => [FILTER_ALL, FILTER_UNPAID_LATE, FILTER_PAID, FILTER_EXCEPTIONS],
+    paginationLegend () {
+      const first = (this.page * this.pageSize) + 1
+      const last = first + this.pagedInvoices.length - 1
+      return `${first}-${last} of ${this.invoiceCount} items`
+    },
+    hasPrevPage () {
+      return this.page > 0
+    },
+    hasNextPage () {
+      return ((this.page + 1) * this.pageSize <= this.invoiceCount)
+    },
     filteredSortedInvoices () {
       let filtered
       switch (this.filter) {
@@ -148,7 +186,15 @@ export default {
           : a[sortKey] < b[sortKey]
             ? -1
             : 1)
-    }
+    },
+    pagedInvoices () {
+      const startIndex = this.page * this.pageSize
+      const endIndex = (this.page + 1) * this.pageSize
+      return this.filteredSortedInvoices.slice(startIndex, endIndex)
+    },
+    invoiceCount () {
+      return this.filteredSortedInvoices.length
+    },
   },
   methods: {
     presentPublisherHash,
@@ -162,6 +208,21 @@ export default {
       } else {
         this.sort = header
       }
+    },
+    goToPrevPage () {
+      if (this.hasPrevPage) {
+        this.page = this.page - 1
+      }
+    },
+    goToNextPage () {
+      if (this.hasNextPage) {
+        this.page = this.page + 1
+      }
+    }
+  },
+  watch: {
+    pageSize () {
+      this.page = 0
     }
   }
 }
@@ -182,7 +243,7 @@ export default {
   margin-left: 30px;
   margin-right: 2px;
 }
-.filter {
+.dropdown {
   appearance: none;
   border: none;
   background-color: transparent;
@@ -199,6 +260,7 @@ export default {
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 12px;
   padding: 0 10px;
+  margin-bottom: 20px;
 }
 .invoices {
   font-weight: 600;
@@ -221,7 +283,7 @@ export default {
   cursor: pointer;
 }
 
-.upside-down {
+.rotate-180 {
   transform: rotate(180deg);
 }
 th.selected {
@@ -249,6 +311,28 @@ th::after {
 }
 .happ-cell, .amount-cell {
   font-weight: bold;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #313C59;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  margin-left: auto;
+}
+.page-arrow-right {
+  margin-left: 40px;
+  transform: scale(1.4);
+}
+.page-arrow-left {
+  margin-left: 40px;
+  transform: scale(1.4) rotate(180deg);
 }
 
 @media screen and (max-width: 1050px) {

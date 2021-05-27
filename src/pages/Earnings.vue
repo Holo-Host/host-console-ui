@@ -11,13 +11,13 @@
         <div class='graph' />
       </div>
       <div class='column main-links'>
-        <router-link to='/earnings' class='main-link'>
+        <router-link to='/earnings/invoices' class='main-link'>
           <PaymentIcon class='main-link-icon'/>Payments <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
         </router-link>
-        <router-link to='/earnings' class='main-link'>
+        <router-link :to="{ path: '/earnings/invoices', query: { filter: 'unpaid'} }" class='main-link'>
           <PaymentIcon class='main-link-icon'/>Unpaid & Late <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
         </router-link>
-        <router-link to='/earnings' class='main-link'>
+        <router-link :to="{ path: '/earnings/invoices', query: { filter: 'exceptions'} }" class='main-link'>
           <PaymentIcon class='main-link-icon'/>Exceptions <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
         </router-link>
       </div>
