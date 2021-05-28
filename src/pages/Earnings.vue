@@ -145,7 +145,7 @@ export default {
   margin-bottom: 40px;
 }
 .graph {
-  width: 306px;
+  width: 200px;
   height: 123px;
   border: 1px solid lightgray;
   border-radius: 4px;
@@ -176,5 +176,21 @@ export default {
 .redemption-links .main-link {
   padding-left: 35px;
   padding-right: 35px;
+}
+
+
+@media screen and (max-width: 1050px) {
+  .card.row {
+    flex-direction: column;
+  }
+  .column {
+    flex-basis: initial;
+  }
+  .redemption-links {
+    flex-direction: column;
+  }
+  .main-link {
+    margin-right: 0;
+  }
 }
 </style>
