@@ -13,42 +13,76 @@
     <div class='invoices-padding'>
       <table class="invoices">
         <tr class='header-row'>
-          <th v-for="header in headers"
-            :key='header'
-            @click="handleHeaderClick(header)"
-            :class="{ selected: header === sort }"
-            :title="header"
+          <th v-for="{ name } in headers"
+            :key='name'
+            @click="handleHeaderClick(name)"
+            :class="[{ selected: name === sort }, 'desktop-cell']"
+            :title="name"
           >
-            {{ header }}
-            <ShortUpArrowIcon :color="header === sort ? '#000' : '#FFF'" :class="{ 'rotate-180': sortDesc }"/>
+            {{ name }}
+            <ShortUpArrowIcon :color="name === sort ? '#000' : '#FFF'" :class="{ 'rotate-180': sortDesc }"/>
+          </th>
+          <th v-for="{ mobileName, name } in mobileHeaders"
+            :key='mobileName'
+            @click="handleHeaderClick(name)"
+            :class="[{ selected: name === sort }, 'mobile-cell']"
+            :title="mobileName"
+          >
+            {{ mobileName }}
+            <ShortUpArrowIcon :color="name === sort ? '#000' : '#FFF'" :class="{ 'rotate-180': sortDesc }"/>
           </th>
         </tr>
-        <tr v-for="invoice in pagedInvoices" class='invoice-row' :key='invoice.id'>
-          <td class='happ-cell'>
-            {{ invoice.happ }}
-          </td>
-          <td>
-            {{ presentPublisherHash(invoice.publisher) }}
-          </td>
-          <td>
-            {{ presentDate(invoice.date_created) }}
-          </td>
-          <td>
-            {{ presentDate(invoice.date_due) }}
-          </td>
-          <td>
-            {{ invoice.id }}
-          </td>
-          <td class='amount-cell'>
-            {{ presentHolofuelAmount(invoice.amount) }}
-          </td>
-          <td>
-            {{ invoice.payment_status }}
-          </td>
-          <td>
-            {{ invoice.exception_status }}
-          </td>
-        </tr>
+        <template v-for="invoice in pagedInvoices" :key='invoice.id'>
+          <tr :class="['invoice-row', {'expanded-parent-row': isExpanded(invoice)}]">
+            <td class='happ-cell'>
+              {{ invoice.happ }}
+            </td>
+            <td class='desktop-cell'>
+              {{ presentPublisherHash(invoice.publisher) }}
+            </td>
+            <td class='desktop-cell'>
+              {{ presentDate(invoice.date_created) }}
+            </td>
+            <td class='mobile-cell'>
+              {{ presentShortDate(invoice.date_created) }}
+            </td>
+            <td class='desktop-cell'>
+              {{ presentDate(invoice.date_due) }}
+            </td>
+            <td class='desktop-cell'>
+              {{ invoice.id }}
+            </td>
+            <td class='amount-cell desktop-cell'>
+              {{ presentHolofuelAmount(invoice.amount) }}
+            </td>
+            <td class='amount-cell mobile-cell'>
+              {{ presentShortHolofuelAmount(invoice.amount) }}
+            </td>
+            <td class='pstatus-cell'>
+              {{ invoice.payment_status }}
+              <RightChevronIcon @click="toggleExpandInvoice(invoice)" :class="[isExpanded(invoice) ? 'up-chevron' : 'down-chevron']" color="#00CAD9" />
+            </td>
+            <td class='desktop-cell'>
+              {{ invoice.exception_status }}
+            </td>
+          </tr>
+          <tr v-if="isExpanded(invoice)" class='expanded-invoice-row'>
+            <td class='expanded-invoice' colspan='4'>
+              <div class='inner-row'>
+                <span class='label'>Publisher</span><span class='data'>{{ presentPublisherHash(invoice.publisher) }}</span>
+              </div>
+              <div class='inner-row'>
+                <span class='label'>Date Due</span><span class='data'>{{ presentDate(invoice.date_due) }}</span>
+              </div>
+              <div class='inner-row'>
+                <span class='label'>Invoice #</span><span class='data'>{{ invoice.id }}</span>
+              </div>
+              <div class='inner-row'>
+                <span class='label'>Exception Status</span><span class='data'>{{ invoice.exception_status }}</span>
+              </div>
+            </td>
+          </tr>
+        </template>
       </table>
     </div>
     <div class='footer'>
@@ -73,7 +107,7 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import ShortUpArrowIcon from 'components/icons/ShortUpArrowIcon.vue'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
 import mockInvoiceData, { PSTATUS_LATE, PSTATUS_PAID, PSTATUS_UNPAID, ESTATUS_EXCEPTION } from 'src/mockInvoiceData'
-import { presentPublisherHash, presentHolofuelAmount } from 'src/utils'
+import { presentPublisherHash, presentHolofuelAmount, presentShortHolofuelAmount } from 'src/utils'
 
 const SORT_HAPP = 'hApp'
 const SORT_PUBLISHER = 'Publisher'
@@ -83,6 +117,29 @@ const SORT_INVOICE = 'Invoice #'
 const SORT_AMOUNT = 'Amount'
 const SORT_PAYMENT = 'Payment Status'
 const SORT_EXCEPTION_STATUS = 'Exception Status'
+
+const headers = [{
+  name: SORT_HAPP,
+  mobileName: SORT_HAPP
+}, {
+  name: SORT_PUBLISHER
+}, {
+  name: SORT_CREATED,
+  mobileName: 'Date'
+}, {
+  name: SORT_DUE
+}, {
+  name: SORT_INVOICE,
+}, {
+  name: SORT_AMOUNT,
+  mobileName: SORT_AMOUNT
+}, {
+  name: SORT_PAYMENT,
+  mobileName: 'Status'
+}, {
+  name: SORT_EXCEPTION_STATUS
+},
+]
 
 const FILTER_ALL = 'All'
 const FILTER_UNPAID_LATE = 'Unpaid & Late'
@@ -99,26 +156,19 @@ export default {
   data () {
     return {
       invoices: mockInvoiceData,
-      headers: [
-        SORT_HAPP,
-        SORT_PUBLISHER,
-        SORT_CREATED,
-        SORT_DUE,
-        SORT_INVOICE,
-        SORT_AMOUNT,
-        SORT_PAYMENT,
-        SORT_EXCEPTION_STATUS
-      ],
       filter: FILTER_ALL,
       sort: SORT_CREATED,
       sortDesc: true,
       pageSize: 10,
-      page: 0
+      page: 0,
+      expandedInvoiceId: null
     }
   },
   created () {
     this.filterOptions = [FILTER_ALL, FILTER_UNPAID_LATE, FILTER_PAID, FILTER_EXCEPTIONS]
     this.pageSizeOptions = [5, 10, 20, 30, 50]
+    this.headers = headers
+    this.mobileHeaders = headers.filter(header => header.mobileName)
 
     const queryFilter = this.$route.query.filter
     if (queryFilter === 'unpaid') {
@@ -201,7 +251,11 @@ export default {
     presentDate (date) {
       return date.format("D MMM YYYY")
     },
+    presentShortDate (date) {
+      return date.format("D MMM")
+    },
     presentHolofuelAmount,
+    presentShortHolofuelAmount,
     handleHeaderClick (header) {
       if (this.sort === header) {
         this.sortDesc = !this.sortDesc
@@ -217,6 +271,16 @@ export default {
     goToNextPage () {
       if (this.hasNextPage) {
         this.page = this.page + 1
+      }
+    },
+    isExpanded (invoice) {
+      return invoice.id === this.expandedInvoiceId
+    },
+    toggleExpandInvoice (invoice) {
+      if (this.isExpanded(invoice)) {
+        this.expandedInvoiceId = null
+      } else {
+        this.expandedInvoiceId = invoice.id
       }
     }
   },
@@ -237,7 +301,7 @@ export default {
   justify-content: flex-end;
   padding: 9px 0;
 }
-.label {
+.controls .label {
   color: #606C8B;
   font-size: 12px;
   margin-left: 30px;
@@ -312,7 +376,10 @@ th::after {
 .happ-cell, .amount-cell {
   font-weight: bold;
 }
-
+.pstatus-cell {
+  display: flex;
+  align-items: center;
+}
 .footer {
   display: flex;
   width: 100%;
@@ -322,7 +389,6 @@ th::after {
   color: #313C59;
   margin-bottom: 20px;
 }
-
 .pagination {
   margin-left: auto;
 }
@@ -335,7 +401,76 @@ th::after {
   transform: scale(1.4) rotate(180deg);
 }
 
+.up-chevron {
+  display: none;
+}
+
+.down-chevron {
+  display: none;
+}
+
+.mobile-cell {
+  display: none;
+}
+
+.expanded-invoice-row {
+  display: none;
+  box-shadow: 0px 2px 6px rgba(96, 108, 139, 0.4);
+}
+
 @media screen and (max-width: 1050px) {
+  .desktop-cell {
+    display: none;
+  }
+  .mobile-cell {
+    display: table-cell;
+  }
+
+  .up-chevron {
+    display: flex;
+    transform: scale(1.4) rotate(270deg);
+    padding: 5px;
+    margin: -1px 0 0 auto;
+  }
+
+  .down-chevron {
+    display: flex;
+    transform: scale(1.4) rotate(90deg);
+    padding: 5px;
+    margin: 6px 0 -5px auto;
+  }
+
+  .expanded-invoice-row {
+    display: table-row;
+  }
+
+  .expanded-parent-row {
+    border-bottom: none;
+    font-weight: 800;
+  }
+
+  .expanded-invoice {
+    padding: 12px;
+    line-height: 36px;
+  }
+
+  .expanded-invoice .inner-row {
+    display: flex;
+  }
+
+  .expanded-invoice .inner-row .label {
+    flex-basis: 50%;
+    font-weight: 600;
+    font-size: 16px;
+    color: #313C59;
+  }
+
+  .expanded-invoice .inner-row .data {
+    flex-basis: 50%;
+    font-weight: 600;
+    font-size: 14px;
+    color: #606C8B;
+  }
 
 }
 </style>
