@@ -471,6 +471,5 @@ th::after {
     font-size: 14px;
     color: #606C8B;
   }
-
 }
 </style>
