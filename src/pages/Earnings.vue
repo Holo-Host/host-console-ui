@@ -73,9 +73,6 @@ export default {
     weeklyEarnings () {
       return this.lastWeekOfEarnings.reduce((sum, day) => sum + day, 0)
     }
-  },
-  methods: {
-
   }
 }
 
@@ -175,7 +172,6 @@ export default {
   padding-left: 35px;
   padding-right: 35px;
 }
-
 
 @media screen and (max-width: 1050px) {
   .card.row {
