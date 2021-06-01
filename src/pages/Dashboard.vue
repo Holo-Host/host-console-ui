@@ -364,6 +364,7 @@ export default {
     flex-direction: column;
   }
 
+  /* Hiding hosting preferences link in mobile view as dictated in the designs */
   .hosting-preferences {
     display: none;
   }
