@@ -1,18 +1,23 @@
 <template>
   <PrimaryLayout :breadcrumbs="breadcrumbs">
-    <div class='happ-details'>
+    <div class='happ-details' :class="{ 'modal-open': hostingModalVisible }">
       <router-link class="back-link" to="/happs">
         <LeftChevronIcon class="left-chevron" />
         Back
       </router-link>
       <div class='columns'>
-        <div class='left-column'>
+        <div class='left-column desktop'>
           <HappImage :happ="happ" size="178px" class="happ-image" />
           <div class='description-label'>Description</div>
-          <div class='description'>{{ happ.description }}</div>
+          <div class='description'>{{ happ.description }}Happ to make you more productive.</div>
         </div>
         <div class='main-column'>
-          <h2 class="name">{{ happ.name }}</h2>
+          <div class='mobile-column'>
+            <HappImage :happ="happ" size="124px" class="happ-image" />
+            <h2 class="name">{{ happ.name }}</h2>
+            <div class='description'>{{ happ.description }}Happ to make you more productive.</div>
+          </div>
+          <h2 class="name desktop">{{ happ.name }}</h2>
           <div class="info-row large-text grayed-out">
             Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} HF</span>
           </div>
@@ -130,7 +135,7 @@ export default {
   computed: {
     breadcrumbs () {
       return [{
-        label: 'hApps',
+        label: 'Happs',
         path: '/'
       }, {
         label: this.happ.name || 'loading'
@@ -186,6 +191,11 @@ export default {
 .main-column {
   display: flex;
   flex: 1;
+  flex-direction: column;
+}
+.mobile-column {
+  display: none;
+  align-items: center;
   flex-direction: column;
 }
 .name {
@@ -289,10 +299,11 @@ export default {
   color: #313C59;
   margin-right: 10px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 .stop-hosting-warning {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   background: #F3F5F8;
   border-radius: 4px;
   color: #313C59;
@@ -301,6 +312,7 @@ export default {
   padding: 4px 12px;
 }
 .alert-circle-icon {
+  flex-shrink: 0;
   margin-right: 12px;
 }
 /* Temporary, remove once we have all live data */
@@ -312,5 +324,62 @@ export default {
 }
 .grayed-out span {
   color: rgba(96, 108, 139, 0.18);
+}
+
+@media screen and (max-width: 1050px) {
+  .happ-details {
+    margin: 0;
+    padding: 18px;
+  }
+  .mobile-column {
+    display: flex;
+  }
+  .main-column {
+    margin: 0 4px;
+  }
+  .back-link {
+    margin-bottom: 4px;
+  }
+  .desktop {
+    display: none;
+  }
+  .happ-image {
+    margin-bottom: 10px;
+  }
+  .name {
+    margin-bottom: 8px;
+  }
+  .description {
+    font-size: 11px;
+    margin-bottom: 46px;
+  }
+  .info-row {
+    font-size: 14px;
+  }
+  .earnings-margin {
+    margin-bottom: 40px;
+  }
+  .usage-row {
+    flex-direction: column;
+    margin-bottom: 24px;;
+  }
+  .usage-label {
+    margin-bottom: 10px;
+  }
+  .usage {
+    margin: 0 0 10px 0;
+  }
+  .rate-row {
+    margin-bottom: 11px;
+  }
+  .rates-margin {
+    margin-bottom: 70px;
+  }
+  .stop-hosting-row {
+    align-items: flex-start;
+  }
+  .modal-open {
+    display: none;
+  }
 }
 </style>

@@ -54,4 +54,19 @@ export default {
   background-color: transparent;
   cursor: pointer;
 }
+
+@media screen and (max-width: 1050px) {
+  .overlay {
+    background-color: transparent;
+    pointer-events: none;
+    position: unset;
+  }
+  .modal {
+    box-shadow: 0px 4px 20px #ECEEF1;;
+    pointer-events: all;
+    margin: 4px 40px 4px 0;
+    flex-basis: 100%;
+    height: fit-content;
+  }
+}
 </style>

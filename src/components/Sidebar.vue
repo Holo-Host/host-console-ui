@@ -4,9 +4,9 @@
     <section class="menu">
       <router-link to="/dashboard" class='menu-row' active-class="active-link">
         <HomeIcon class="home-icon" :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'" />Dashboard
-      </router-link>      
+      </router-link>
       <router-link to="/happs" class='menu-row' active-class="active-link">
-        <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />hApps
+        <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />Happs
       </router-link>
       <div class="footer">
         <a class='holo-brand' href="https://holo.host/" target="_blank">
@@ -40,11 +40,15 @@ export default {
 
 <style scoped>
 .sidebar {
-  display: flex;  
+  display: flex;
   flex-direction: column;
   flex: 0 0 270px;
   background: #FFFFFF;
   box-shadow: 0px 4px 4px rgba(54, 59, 71, 0.1);
+  z-index: 100;
+}
+.mobile-banner .sidebar {
+  display: none;
 }
 .banner {
   background-color: rgba(0, 202, 217, 0.06);
@@ -114,6 +118,20 @@ export default {
   color: black;
   font-style: italic;
   font-weight: 600;
+}
+@media screen and (max-width: 1050px) {
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-banner .sidebar {
+    display: flex;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    min-width: 272px;
+  }
 }
 
 </style>
