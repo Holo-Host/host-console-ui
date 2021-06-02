@@ -201,6 +201,9 @@ export default {
   .available {
     margin-bottom: 16px;
   }
+  .available-hf {
+    margin-right: 0;
+  }
   .card.row {
     flex-direction: column;
   }
