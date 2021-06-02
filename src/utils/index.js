@@ -2,6 +2,10 @@ export const presentHolofuelAmount = amount => isNaN(amount)
   ? '-- '
   : Number(amount).toLocaleString()
 
+export const presentShortHolofuelAmount = amount => isNaN(amount)
+  ? '-- '
+  : Math.floor(Number(amount)).toLocaleString()
+
 export const presentBytes = bytes => {
   if (isNaN(bytes)) {
     return '-- GB'
