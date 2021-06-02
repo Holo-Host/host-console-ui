@@ -2,83 +2,85 @@
   <PrimaryLayout title="Hosting Preferences">
     <section class='card'>
       <h3 class='card-title'>Price Configuration</h3>
-      <h4 class='card-subtitle'>Default rates</h4>
+      <div class='card-content'>
+        <h4 class='card-subtitle'>Default rates</h4>
 
-      <div class='rate-row'>
-        <span class='rate-label'>CPU</span>
-        <span class='rate-value'>100</span>
-        <span class='rate-unit'>HF per min</span>
-        <PencilIcon class='pencil' />
+        <div class='rate-row'>
+          <span class='rate-label'>CPU</span>
+          <span class='rate-value'>100</span>
+          <span class='rate-unit'>HF per min</span>
+          <PencilIcon class='pencil' />
+        </div>
+
+        <div class='rate-row'>
+          <span class='rate-label'>Storage</span>
+          <span class='rate-value'>100</span>
+          <span class='rate-unit'>HF per GB</span>
+          <PencilIcon class='pencil' />
+        </div>
+
+        <div class='rate-row'>
+          <span class='rate-label'>Bandwidth</span>
+          <span class='rate-value'>100</span>
+          <span class='rate-unit'>HF per GB</span>
+          <PencilIcon class='pencil' />
+        </div>
       </div>
-
-      <div class='rate-row'>
-        <span class='rate-label'>Storage</span>
-        <span class='rate-value'>100</span>
-        <span class='rate-unit'>HF per GB</span>
-        <PencilIcon class='pencil' />
-      </div>
-
-      <div class='rate-row'>
-        <span class='rate-label'>Bandwidth</span>
-        <span class='rate-value'>100</span>
-        <span class='rate-unit'>HF per GB</span>
-        <PencilIcon class='pencil' />
-      </div>
-
     </section>
 
     <section class='card'>
       <h3 class='card-title'>Invoice & Payment Terms</h3>
 
-      <div>
-        <div class='terms-row'>
-          <span class='terms-label'>Frequency of Invoicing:</span>
-          <span class='terms-info'>
-            Invoice hApp publishers the earlier of every
-            <select class='time-dropdown'><option>7 Days</option></select>
-            or when an invoice amount reaches
-            <span class='invoice-limit-amount'>100HF</span>
-          </span>
-          <PencilIcon class='pencil' />
+      <div class='card-content'>
+        <div>
+          <div class='terms-row'>
+            <span class='terms-label'>Frequency of Invoicing:</span>
+            <span class='terms-info'>
+              <span>Invoice hApp publishers the earlier of every</span>
+              <select class='time-dropdown'><option>7 Days</option></select>
+              <span>or when an invoice amount reaches</span>
+              <span class='invoice-limit'><span class='invoice-limit-amount'>100HF</span><PencilIcon class='pencil' /></span>
+            </span>
+          </div>
+
+          <div class='terms-row'>
+            <span class='terms-label'>Payment Terms (Net):</span>
+            <span class='terms-info'>
+              Payment is due
+              <select class='time-dropdown'><option>{{ paymentDue }} Days</option></select>
+              after invoice date
+            </span>
+          </div>
         </div>
 
-        <div class='terms-row'>
-          <span class='terms-label'>Payment Terms (Net):</span>
-          <span class='terms-info'>
-            Payment is due
-            <select class='time-dropdown'><option>{{ paymentDue }} Days</option></select>
-            after invoice date
-          </span>
-          <PencilIcon class='pencil' />
-        </div>
+        <div class='fine-print'>*hApps will be paused from hosting if payment is not received <span class='num-days'>{{ paymentDue * 2 }} days</span> after invoice date</div>
+        <div class='fine-print'>*hApps will be removed if payment is not received <span class='num-days'>{{ paymentDue * 4 }} days</span> after invoice date</div>
       </div>
-
-      <div class='fine-print'>*hApps will be paused from hosting if payment is not received <span class='num-days'>{{ paymentDue * 2 }} days</span> after invoice date</div>
-      <div class='fine-print'>*hApps will be removed if payment is not received <span class='num-days'>{{ paymentDue * 4 }} days</span> after invoice date</div>
-
     </section>
 
     <section class='card'>
       <div class='greyed-out'>
         <h3 class='card-title selection-title'>hApp Selection</h3>
 
-        <div class='selection-row'>
-          <span class='selection-label'>Jurisdiction Exclusions</span>
-          <span class='selection-choices'>None</span>
-          <PencilIcon class='pencil' />
-        </div>
-
-        <div class='selection-parent-row'>
-          <span class='selection-label'>Category Tags:</span>
-          <div class=selection-child-row>
-            <span class='selection-label'>Exclude</span>
+        <div class='card-content'>
+          <div class='selection-row'>
+            <span class='selection-label'>Jurisdiction Exclusions</span>
             <span class='selection-choices'>None</span>
             <PencilIcon class='pencil' />
           </div>
-          <div class=selection-child-row>
-            <span class='selection-label'>Include</span>
-            <span class='selection-choices'>None</span>
-            <PencilIcon class='pencil' />
+
+          <div class='selection-parent-row'>
+            <span class='selection-label'>Category Tags:</span>
+            <div class=selection-child-row>
+              <span class='selection-label'>Exclude</span>
+              <span class='selection-choices'>None</span>
+              <PencilIcon class='pencil' />
+            </div>
+            <div class=selection-child-row>
+              <span class='selection-label'>Include</span>
+              <span class='selection-choices'>None</span>
+              <PencilIcon class='pencil' />
+            </div>
           </div>
         </div>
       </div>
@@ -111,15 +113,18 @@ export default {
   background: #FFFFFF;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 12px;
-  padding: 35px 90px;
   margin-bottom: 55px;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
   color: #313C59;
 }
+.card-content {
+  padding: 0px 90px 35px 90px;
+}
 .card-title {
   margin: 0 0 5px 0;
+  padding: 35px 90px 0px 90px;
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
@@ -150,7 +155,7 @@ export default {
 .terms-row {
   display: flex;
   align-items: center;
-  line-height: 78px;
+  line-height: 32px;
 }
 .terms-row:last-child {
   margin-bottom: 10px;
@@ -170,6 +175,11 @@ export default {
   box-sizing: border-box;
   border-radius: 5px;
   padding: 2px 6px;
+  pointer-events: none;
+}
+.invoice-limit {
+  display: flex;
+  align-items: center;
 }
 .invoice-limit-amount {
   font-weight: 700;
@@ -218,7 +228,53 @@ export default {
 .selection-child-row .selection-label {
   flex-basis: 144px;
 }
-@media screen and (max-width: 1050px) {
 
+@media screen and (max-width: 1050px) {
+  .card {
+    box-shadow: 0px 4px 20px #ECEEF1;
+  }
+  .card-title {
+    background-color: #F0FCFD;
+    padding: 0 0 0 20px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+  }
+  .card-content {
+    padding: 0 20px 18px 20px;
+  }
+  .card-subtitle {
+    margin-bottom: 8px;
+  }
+  .rate-row {
+    padding-left: 0;
+    line-height: 30px;
+  }
+  .terms-row {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .terms-label {
+    font-weight: bold;
+    flex-basis: initial;
+  }
+  .terms-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .time-dropdown {
+    margin-right: auto;
+  }
+  .invoice-limit {
+    margin-right: auto;
+  }
+  .invoice-limit-amount {
+    margin-right: auto;
+    border: none;
+  }
+  .fine-print {
+    display: none;
+  }
 }
 </style>

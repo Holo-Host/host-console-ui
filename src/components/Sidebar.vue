@@ -128,6 +128,7 @@ export default {
   font-style: italic;
   font-weight: 600;
 }
+
 @media screen and (max-width: 1050px) {
   .sidebar {
     display: none;
