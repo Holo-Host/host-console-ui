@@ -123,7 +123,6 @@ export default {
   .sidebar {
     display: none;
   }
-
   .mobile-banner .sidebar {
     display: flex;
     position: fixed;

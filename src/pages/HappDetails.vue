@@ -19,10 +19,10 @@
           </div>
           <h2 class="name desktop">{{ happ.name }}</h2>
           <div class="info-row large-text grayed-out">
-            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} HF</span>
+            Total Earnings:<span class="info">&nbsp;{{ presentHolofuelAmount(happ.earnings) }} HF</span>
           </div>
           <div class="info-row grayed-out">
-            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} HF</span>
+            Earned in last 7 days:<span class="info">&nbsp;{{ presentHolofuelAmount(happ.sevenDayEarnings) }} HF</span>
           </div>
           <div class="info-row earnings-margin grayed-out">
             Average weekly earnings:<span class="info">&nbsp;-- HF</span>
@@ -80,7 +80,7 @@ import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
-import { formatHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
+import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 import HposInterface from 'src/interfaces/HposInterface'
 
 
@@ -128,7 +128,7 @@ export default {
     stopHostingHapp () {
       console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
-    formatHolofuelAmount,
+    presentHolofuelAmount,
     presentMicroSeconds,
     presentBytes
   },
@@ -136,7 +136,7 @@ export default {
     breadcrumbs () {
       return [{
         label: 'Happs',
-        path: '/'
+        path: '/happs'
       }, {
         label: this.happ.name || 'loading'
       }]
