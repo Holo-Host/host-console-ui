@@ -1,38 +1,42 @@
 <template>
   <PrimaryLayout title="Earnings">
     <section class='top-row'>
-      <span class='available-label'>Total Available HF: </span><span class='available-hf'>{{ availableHF.toLocaleString() }}</span>
+      <span class='available'><span class='available-label'>Total Available HF: </span><span class='available-hf'>{{ availableHF.toLocaleString() }}</span></span>
       <a href='' class='holofuel-link'><LeaveSiteIcon class='leave-site-icon' />Go to HoloFuel</a>
     </section>
-    <section class='card row'>
-      <div class='column'>
-        <h3 class='card-title'>Weekly Earnings</h3>
-        <div class='hf-amount'>{{ weeklyEarnings.toLocaleString() }} HF</div>
-        <TmpGraphIcon class='graph' />
-      </div>
-      <div class='column main-links'>
-        <router-link to='/earnings/invoices' class='main-link'>
-          <PaymentIcon class='main-link-icon'/>Payments <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
-        </router-link>
-        <router-link :to="{ path: '/earnings/invoices', query: { filter: 'unpaid'} }" class='main-link'>
-          <PaymentIcon class='main-link-icon'/>Unpaid &amp; Late <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
-        </router-link>
-        <router-link :to="{ path: '/earnings/invoices', query: { filter: 'exceptions'} }" class='main-link'>
-          <PaymentIcon class='main-link-icon'/>Exceptions <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
-        </router-link>
+    <section class='card'>
+      <h3 class='card-title'>Weekly Earnings</h3>
+      <div class='card-content row'>
+        <div class='column'>
+          <div class='hf-amount'>{{ weeklyEarnings.toLocaleString() }} HF</div>
+          <TmpGraphIcon class='graph' />
+        </div>
+        <div class='column main-links'>
+          <router-link to='/earnings/invoices' class='main-link'>
+            <PaymentIcon class='main-link-icon'/>Payments <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
+          </router-link>
+          <router-link :to="{ path: '/earnings/invoices', query: { filter: 'unpaid'} }" class='main-link'>
+            <PaymentIcon class='main-link-icon'/>Unpaid &amp; Late <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
+          </router-link>
+          <router-link :to="{ path: '/earnings/invoices', query: { filter: 'exceptions'} }" class='main-link'>
+            <PaymentIcon class='main-link-icon'/>Exceptions <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
+          </router-link>
+        </div>
       </div>
     </section>
 
     <section class='card'>
       <h3 class='card-title'>Redeemable HoloFuel</h3>
-      <div class='hf-amount'>{{ redeemableHF.toLocaleString() }} HF</div>
-      <div class='redemption-links'>
-        <router-link to='/earnings' class='main-link'>
-          <PaymentIcon class='main-link-icon'/>Redemption History
-        </router-link>
-        <router-link to='/earnings' class='main-link'>
-          <PaymentIcon class='main-link-icon'/>Redeem HoloFuel
-        </router-link>
+      <div class='card-content'>
+        <div class='hf-amount'>{{ redeemableHF.toLocaleString() }} HF</div>
+        <div class='redemption-links'>
+          <router-link to='/earnings' class='main-link'>
+            <PaymentIcon class='main-link-icon'/>Redemption History
+          </router-link>
+          <router-link to='/earnings' class='main-link'>
+            <PaymentIcon class='main-link-icon'/>Redeem HoloFuel
+          </router-link>
+        </div>
       </div>
     </section>
   </PrimaryLayout>
@@ -114,8 +118,10 @@ export default {
   background: #FFFFFF;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 12px;
-  padding: 35px 90px;
   margin-bottom: 55px;
+}
+.card-content {
+  padding: 0px 90px 35px 90px;
 }
 .row {
   display: flex;
@@ -131,6 +137,7 @@ export default {
 }
 .card-title {
   margin: 0 0 5px 0;
+  padding: 35px 90px 0px 90px;
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
@@ -142,8 +149,6 @@ export default {
   line-height: 19px;
   color: #606C8B;
   margin-bottom: 40px;
-}
-.graph {
 }
 .main-link {
   height: 52px;
@@ -174,17 +179,52 @@ export default {
 }
 
 @media screen and (max-width: 1050px) {
+  .card {
+    box-shadow: 0px 4px 20px #ECEEF1;
+  }
+  .card-title {
+    background-color: #F0FCFD;
+    padding: 0 0 0 20px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+  }
+  .card-content {
+    padding: 0 20px 18px 20px;
+  }
+  .card-content.row {
+    flex-direction: column;
+  }
+  .top-row {
+    flex-direction: column;
+  }
+  .available {
+    margin-bottom: 16px;
+  }
   .card.row {
     flex-direction: column;
   }
   .column {
     flex-basis: initial;
   }
+  .hf-amount {
+    line-height: 56px;
+    margin-bottom: 0;
+  }
   .redemption-links {
     flex-direction: column;
   }
+  .main-links {
+    padding-top: 0;
+  }
   .main-link {
     margin-right: 0;
+  }
+  .main-link:last-child {
+    margin-bottom: 8px;
+  }
+  .graph {
+    display: none;
   }
 }
 </style>
