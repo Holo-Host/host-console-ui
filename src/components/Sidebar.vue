@@ -8,6 +8,9 @@
       <router-link to="/happs" class='menu-row' active-class="active-link">
         <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />Happs
       </router-link>
+      <router-link to="/preferences" class='menu-row' active-class="active-link">
+        <GearIcon class="gear-icon" :color="$route.path.match('/preferences') ? '#00CAD9' : '#313C59'" />Hosting Preferences
+      </router-link>
       <div class="footer">
         <a class='holo-brand' href="https://holo.host/" target="_blank">
           <img src='/images/holo-logo.png' class='holo-logo'/>
@@ -23,12 +26,14 @@
 <script>
 import HomeIcon from 'components/icons/HomeIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
+import GearIcon from 'components/icons/GearIcon.vue'
 
 export default {
   name: 'Sidebar',
   components: {
     HomeIcon,
-    HappsIcon
+    HappsIcon,
+    GearIcon
   },
   computed: {
     uiVersion () {
@@ -81,8 +86,12 @@ export default {
 .active-link {
   color: #00CAD9;
 }
-.icon {
+.home-icon {
   margin-right: 10px;
+}
+.gear-icon {
+  margin-left: 3px;
+  margin-right: 15px;
 }
 .footer {
   margin-top: auto;

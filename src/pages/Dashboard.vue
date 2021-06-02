@@ -12,9 +12,9 @@
             <div class="info-row">
               <span class="bold" data-testid='sc-no'>{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
             </div>
-            <div class="info-row grayed-out hosting-preferences">
-              <GearIcon class="gear-icon" />Hosting Preferences
-            </div>
+            <router-link to="/preferences" class='info-row hosting-preferences' active-class="active-link">
+              <GearIcon class="gear-icon" color="#606C8B" />Hosting Preferences
+            </router-link>
           </div>
           <div class="inner-column">
             <h3 class="inner-title">Daily Snapshot</h3>
