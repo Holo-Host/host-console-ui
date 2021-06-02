@@ -30,7 +30,7 @@ export default {
 <style scoped>
 .mobile-banner {
   display: none;
-  flex: 0 0 128px;
+  flex: 0 0 88px;
   align-items: flex-end;
   background-color: #00CAD9;
   padding: 20px;

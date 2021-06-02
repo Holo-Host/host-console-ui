@@ -6,21 +6,21 @@
           <div class="holofuel-icon-disc">
             <HoloBadgeIcon class="holofuel-icon" fill="#fff" />
           </div>
-          <h1 class="title">Login to Host Console</h1>
+          <h1 class="title">Host Console Login</h1>
           <label class="label" htmlFor="email">Email:</label>
           <input
             v-model="email"
             type="email"
             name="email"
             id="email"
-            class="input"            
+            class="input"
           />
           <small v-if="!!errors.email" class="field-error">
             {{ errors.email }}
           </small>
           <label class="label" htmlFor="password">Password:</label>
           <input
-            v-model="password" 
+            v-model="password"
             type="password"
             name="password"
             id="password"
@@ -90,7 +90,7 @@ export default {
             this.$router.push(this.$route.params.nextUrl)
           } else {
             this.$router.push('/happs')
-          }          
+          }
         } else {
           this.banner = 'There was a problem logging you in. Please check your credentials and try again.'
         }
@@ -116,7 +116,7 @@ export default {
       this.banner = ''
       if (this.errors.password && validatePassword(password)) {
         this.errors.password = null
-        this.banner = ''        
+        this.banner = ''
       }
     }
   }
@@ -172,7 +172,7 @@ export default {
 }
 .holofuel-icon {
   width: 35px;
-  height: 25px;  
+  height: 25px;
 }
 .title {
   color: rgba(44, 63, 89, 0.80);
@@ -186,14 +186,14 @@ export default {
   line-height: 13px;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: rgba(44, 63, 89, 0.60); 
+  color: rgba(44, 63, 89, 0.60);
 }
 .input {
   border: none;
   border-bottom: 1px solid rgba(44, 63, 89, 0.50);
   padding: 5px 5px;
   margin-bottom: 20px;
-  color: rgba(44, 63, 89, 1); 
+  color: rgba(44, 63, 89, 1);
 }
 .login-button {
   align-self: center;
@@ -222,6 +222,13 @@ export default {
 .reminder-text-padding {
   margin-bottom: 13px;
   padding: 0 22px;
+}
+
+@media screen and (max-width: 1050px) {
+  .title {
+    text-align: center;
+    font-size: 26px;
+  }
 }
 
 </style>

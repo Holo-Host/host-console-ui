@@ -20,13 +20,13 @@
       </div>
       <div class="usage-row">
         <div class='usage'>
-          <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span> CPU
+          <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span><span class="usage-unit">CPU</span>
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
+          <span class="usage-value">{{ presentBytes(happ.storage) }}</span><span class="usage-unit">Storage</span>
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth
+          <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span><span class="usage-unit">Bandwidth</span>
         </div>
       </div>
     </div>
@@ -181,6 +181,17 @@ export default {
   }
   .snapshot-label {
     font-size: 11px;
+  }
+  .usage {
+    flex-direction: column;
+  }
+  .usage-value {
+    padding: 0;
+    border: none;
+  }
+  .usage-unit {
+    border-bottom: 2px solid #00CAD9;
+    margin-right: auto;
   }
 }
 </style>

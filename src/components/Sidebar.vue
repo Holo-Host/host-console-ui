@@ -141,6 +141,9 @@ export default {
     height: 100%;
     min-width: 272px;
   }
+  .banner {
+    padding: 50px 0 51px;
+  }
 }
 
 </style>

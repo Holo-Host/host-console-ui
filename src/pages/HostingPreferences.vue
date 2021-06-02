@@ -36,9 +36,9 @@
           <div class='terms-row'>
             <span class='terms-label'>Frequency of Invoicing:</span>
             <span class='terms-info'>
-              <span>Invoice hApp publishers the earlier of every</span>
+              Invoice hApp publishers the earlier of every
               <select class='time-dropdown'><option>7 Days</option></select>
-              <span>or when an invoice amount reaches</span>
+              or when an invoice amount reaches
               <span class='invoice-limit'><span class='invoice-limit-amount'>100HF</span><PencilIcon class='pencil' /></span>
             </span>
           </div>
@@ -164,7 +164,7 @@ export default {
   flex-basis: 184px;
 }
 .terms-info {
-
+  display: flex;
 }
 .time-dropdown {
   font-weight: 800;
@@ -180,10 +180,13 @@ export default {
 .invoice-limit {
   display: flex;
   align-items: center;
+  margin-left: 4px;
 }
 .invoice-limit-amount {
   font-weight: 700;
   border-bottom: 1px solid #313C59;
+  height: 24px;
+  margin-bottom: 5px;
 }
 .fine-print {
   line-height: 24px;
@@ -268,10 +271,13 @@ export default {
   }
   .invoice-limit {
     margin-right: auto;
+    margin-left: 0;
   }
   .invoice-limit-amount {
     margin-right: auto;
     border: none;
+    height: initial;
+    margin-bottom: initial;
   }
   .fine-print {
     display: none;
