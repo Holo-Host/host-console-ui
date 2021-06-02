@@ -1,4 +1,4 @@
-export const formatHolofuelAmount = amount => isNaN(amount)
+export const presentHolofuelAmount = amount => isNaN(amount)
   ? '-- '
   : Number(amount).toLocaleString()
 
@@ -35,3 +35,5 @@ export const presentMicroSeconds = ms => {
 
   return parseFloat((ms / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
+
+export const presentPublisherHash = hash => `...${hash.slice(-5)}`
