@@ -228,14 +228,17 @@ export default {
         [SORT_EXCEPTION_STATUS]: 'exception_status'
       })[this.sort]
 
-      return filtered.sort((a, b) =>
-        this.sortDesc
-          ? a[sortKey] > b[sortKey]
-            ? -1
-            : 1
-          : a[sortKey] < b[sortKey]
-            ? -1
-            : 1)
+      return filtered.sort((a, b) => {
+        if (a[sortKey] === b[sortKey]) {
+          return 0
+        }
+
+        if (this.sortDesc) {
+          return a[sortKey] > b[sortKey] ? -1 : 1
+        } else {
+          return a[sortKey] < b[sortKey] ? -1 : 1
+        }
+      })
     },
     pagedInvoices () {
       const startIndex = this.page * this.pageSize
