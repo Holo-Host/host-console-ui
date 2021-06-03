@@ -4,7 +4,7 @@
     <router-link v-if="!!path" class="main-title" :to="path">{{ mainTitle }}</router-link>
     <RightChevronIcon v-if="showSubtitle" class="chevron" />
     <div v-if="showSubtitle" class="sub-title">{{ subTitle }}</div>
-    <TopNavMenu :deviceName="deviceName" />
+    <TopNavMenu :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
     <div class='alpha-flag'>HF = Test Fuel</div>
   </section>
 </template>
@@ -24,7 +24,8 @@ export default {
       type: Array,
       default: [{}, {}]
     },
-    deviceName: String
+    deviceName: String,
+    openSettingsModal: Function
   },
   computed: {
     mainTitle () {

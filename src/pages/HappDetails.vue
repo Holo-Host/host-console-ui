@@ -126,6 +126,7 @@ export default {
       this.hostingModalVisible = false
     },
     stopHostingHapp () {
+      this.openHostingModal()
       console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
     presentHolofuelAmount,

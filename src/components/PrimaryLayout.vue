@@ -2,12 +2,13 @@
   <section class='layout'>
     <Sidebar />
     <section class='main-column'>
-      <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" />
-      <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" />
+      <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" :openSettingsModal="openSettingsModal" />
+      <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
       <section class='content'>
         <slot />
       </section>
     </section>
+    <SettingsModal v-if="settingsModalVisible" :handleClose="closeSettingsModal"  />
   </section>
 </template>
 
@@ -16,6 +17,7 @@
 import Sidebar from 'components/Sidebar.vue'
 import TopNav from 'components/TopNav.vue'
 import MobileBanner from 'components/MobileBanner.vue'
+import SettingsModal from 'components/SettingsModal.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
@@ -23,7 +25,8 @@ export default {
   components: {
     Sidebar,
     TopNav,
-    MobileBanner
+    MobileBanner,
+    SettingsModal
   },
   props: {
     title: String,
@@ -32,7 +35,8 @@ export default {
   data () {
     return {
       deviceName: 'Loading...',
-      mobileSidebarVisible: false
+      mobileSidebarVisible: false,
+      settingsModalVisible: true
     }
   },
   async mounted () {
@@ -44,6 +48,12 @@ export default {
   methods: {
     showMobileSidebar (shouldShow = false) {
       this.mobileSidebarVisible = shouldShow
+    },
+    openSettingsModal () {
+      this.settingsModalVisible = true
+    },
+    closeSettingsModal () {
+      this.settingsModalVisible = false
     }
   },
   computed: {

@@ -30,7 +30,7 @@ export default {
   display: flex;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 200;
   background-color: rgba(49, 60, 89, 0.67);
   width: 100vw;
   height: 100vh;

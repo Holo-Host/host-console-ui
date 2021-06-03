@@ -3,11 +3,9 @@
     <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' :white="white" /></div>
     <div class="verification-status">Unverified</div>
     <div v-if="menuOpen" class="menu">
-      <router-link to="/settings" class="settings-link">
-        <div class="menu-item">
-          HoloPort Settings
-        </div>
-      </router-link>
+      <div @click="openSettingsModal" class="menu-item">
+        HoloPort Settings
+      </div>
       <div @click="logout" class="menu-item">Logout</div>
     </div>
   </div>
@@ -24,7 +22,8 @@ export default {
   },
   props: {
     deviceName: String,
-    white: Boolean
+    white: Boolean,
+    openSettingsModal: Function
   },
   data () {
     return {
@@ -104,10 +103,6 @@ export default {
   border-style: solid;
   border-width: 0 6px 6px 6px;
   border-color: transparent transparent white transparent;
-}
-.settings-link {
-  text-decoration: none;
-  color: #606C8B;
 }
 .menu-item {
   padding: 0px 16px;
