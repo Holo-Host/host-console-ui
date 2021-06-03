@@ -29,7 +29,7 @@
     </section>
 
     <section class='card'>
-      <h3 class='card-title'>Invoice & Payment Terms</h3>
+      <h3 class='card-title'>Invoice &amp; Payment Terms</h3>
 
       <div class='card-content'>
         <div>
