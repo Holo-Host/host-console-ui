@@ -93,6 +93,7 @@ export default {
 .mobile-banner .menu {
   right: -2px;
   top: 20px;
+  z-index: 10;
 }
 .menu::before {
   position: absolute;
