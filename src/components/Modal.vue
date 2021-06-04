@@ -56,12 +56,6 @@ export default {
 }
 
 @media screen and (max-width: 1050px) {
-  .overlay {
-    /* background-color: transparent;
-    pointer-events: none;
-    position: unset;
-    width: auto; */
-  }
   .modal {
     pointer-events: all;
     margin: 210px 10px;

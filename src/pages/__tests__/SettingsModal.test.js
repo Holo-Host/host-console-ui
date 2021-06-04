@@ -36,6 +36,8 @@ const defaultSshAccessResult = {
 }
 
 const renderSettingsModal = async () => {
+  // using the Earnings page for the base as it doesn't have any extra api calls that need mocking
+  // As that changes, feel free to use a different page, or even add an empty page for this purpose.
   const queries = render(Earnings, {routes})
   const { getAllByText } = queries
   await wait(0)
