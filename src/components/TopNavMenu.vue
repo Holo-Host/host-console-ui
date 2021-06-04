@@ -1,6 +1,7 @@
 <template>
   <div class="top-nav-menu">
     <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' :white="white" /></div>
+    <div class="verification-status">Unverified</div>
     <div v-if="menuOpen" class="menu">
       <router-link to="/settings" class="settings-link">
         <div class="menu-item">
@@ -47,13 +48,13 @@ export default {
 <style scoped>
 .top-nav-menu {
   display: block;
+  position: relative;
   margin-left: auto;
   margin-right: -3px;
   color: #313C59;
 }
 .mobile-banner .top-nav-menu {
   display: none;
-  color: white;
 }
 .owner {
   font-weight: 600;
@@ -64,12 +65,21 @@ export default {
   text-align: end;
   padding-right: 20px;
 }
+.verification-status {
+  font-style: italic;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: right;
+  margin-right: 38px;
+}
 .down-triangle {
   margin-left: 3px;
 }
 .menu {
-  position: relative;
+  position: absolute;
   right: 12px;
+  top: 20px;
   background: #FFFFFF;
   border-radius: 2px;
   font-size: 14px;
@@ -81,8 +91,9 @@ export default {
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
 }
 .mobile-banner .menu {
-  position: absolute;
-  right: 15px;
+  right: -2px;
+  top: 20px;
+  z-index: 10;
 }
 .menu::before {
   position: absolute;
@@ -114,10 +125,15 @@ export default {
 
   .mobile-banner .top-nav-menu {
     display: block;
+    top: 11px;
+    color: white;
   }
 
   .owner {
     padding-right: 6px;
+  }
+  .verification-status {
+    margin-right: 24px;
   }
 }
 </style>

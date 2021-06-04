@@ -8,6 +8,18 @@
       <router-link to="/happs" class='menu-row' active-class="active-link">
         <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />Happs
       </router-link>
+      <router-link to="/preferences" class='menu-row' active-class="active-link">
+        <GearIcon class="gear-icon" :color="$route.path.match('/preferences') ? '#00CAD9' : '#313C59'" />Hosting Preferences
+      </router-link>
+      <div class='alpha-banner'>
+        <div class='flag'>ALPHA: HoloFuel = Test Fuel<div class='triangle' /></div>
+        <p>
+          Host Console is in Alpha testing. All references to HF should be interpreted as Test Fuel.
+        </p>
+        <p>
+          <a href='https://forum.holo.host/c/alpha-testing-holoports/31' target="_blank">Learn more</a>
+        </p>
+      </div>
       <div class="footer">
         <a class='holo-brand' href="https://holo.host/" target="_blank">
           <img src='/images/holo-logo.png' class='holo-logo'/>
@@ -23,12 +35,14 @@
 <script>
 import HomeIcon from 'components/icons/HomeIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
+import GearIcon from 'components/icons/GearIcon.vue'
 
 export default {
   name: 'Sidebar',
   components: {
     HomeIcon,
-    HappsIcon
+    HappsIcon,
+    GearIcon
   },
   computed: {
     uiVersion () {
@@ -81,8 +95,50 @@ export default {
 .active-link {
   color: #00CAD9;
 }
-.icon {
+.home-icon {
   margin-right: 10px;
+}
+.gear-icon {
+  margin-left: 3px;
+  margin-right: 15px;
+}
+.alpha-banner {
+  position: relative;
+  margin: auto -24px auto -18px;
+  padding: 35px 40px 18px 32px;
+  background-color: #F0FCFD;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.02em;
+  color: #313C59;
+}
+.alpha-banner a {
+  font-weight: 600;
+  color: #313C59;
+}
+.flag {
+  position: absolute;
+  top: -17px;
+  height: 40px;
+  margin-left: -32px;
+  padding: 0 6px 0 10px;
+  background: #E339FF;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 40px;
+  letter-spacing: 0.02em;
+  color: white;
+}
+.triangle {
+  position: absolute;
+  top: 0px;
+  right: -18px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 0 20px 18px;
+  border-color: transparent transparent transparent #e539ff;
 }
 .footer {
   margin-top: auto;
@@ -119,6 +175,7 @@ export default {
   font-style: italic;
   font-weight: 600;
 }
+
 @media screen and (max-width: 1050px) {
   .sidebar {
     display: none;
@@ -130,6 +187,10 @@ export default {
     left: 0px;
     height: 100%;
     min-width: 272px;
+    max-width: 72vw;
+  }
+  .banner {
+    padding: 50px 0 51px;
   }
 }
 

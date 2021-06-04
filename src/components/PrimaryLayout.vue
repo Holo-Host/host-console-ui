@@ -75,4 +75,10 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+@media screen and (max-width: 1050px) {
+  .main-column {
+    padding: 0 16px;
+  }
+}
 </style>

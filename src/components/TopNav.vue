@@ -5,6 +5,7 @@
     <RightChevronIcon v-if="showSubtitle" class="chevron" />
     <div v-if="showSubtitle" class="sub-title">{{ subTitle }}</div>
     <TopNavMenu :deviceName="deviceName" />
+    <div class='alpha-flag'>HF = Test Fuel</div>
   </section>
 </template>
 
@@ -66,11 +67,25 @@ export default {
   text-decoration: none;
   margin-top: 9px;
 }
-
+.alpha-flag {
+  display: none;
+}
 @media screen and (max-width: 1050px) {
   .top-nav {
     padding-top: 22px;
     flex: 0 0 46px;
+  }
+  .alpha-flag {
+    display: block;
+    height: 22px;
+    background-color: #E339FF;
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 22px;
+    color: #FFFFFF;
+    position: absolute;
+    right: 0;
+    padding: 0 7px;
   }
 }
 </style>

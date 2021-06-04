@@ -7,6 +7,7 @@ import HappDetails from "pages/HappDetails.vue"
 import Settings from "pages/Settings.vue"
 import Earnings from "pages/Earnings.vue"
 import EarningsInvoices from "pages/EarningsInvoices.vue"
+import HostingPreferences from "pages/HostingPreferences.vue"
 
 export const routes = [
   {
@@ -61,6 +62,14 @@ export const routes = [
     path: "/earnings/invoices",
     name: "EarningsInvoices",
     component: EarningsInvoices,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/preferences",
+    name: "HostingPreferences",
+    component: HostingPreferences,
     meta: {
       requiresAuth: true
     }
