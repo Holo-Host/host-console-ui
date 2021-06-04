@@ -156,13 +156,11 @@ const HposInterface = {
   },
 
   enableSshAccess: async () => {
-    console.log('enabling ssh access')
     const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })()
     return enabled
   },
 
   disableSshAccess: async () => {
-    console.log('disabling ssh access')
     const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })()
     return enabled
   }

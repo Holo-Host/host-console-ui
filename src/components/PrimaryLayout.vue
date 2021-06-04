@@ -36,7 +36,7 @@ export default {
     return {
       deviceName: 'Loading...',
       mobileSidebarVisible: false,
-      settingsModalVisible: true
+      settingsModalVisible: false
     }
   },
   async mounted () {
