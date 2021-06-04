@@ -4,11 +4,11 @@
     <section class='main-column'>
       <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" :openSettingsModal="openSettingsModal" />
       <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
+      <SettingsModal v-if="settingsModalVisible" :handleClose="closeSettingsModal"  />
       <section class='content'>
         <slot />
       </section>
     </section>
-    <SettingsModal v-if="settingsModalVisible" :handleClose="closeSettingsModal"  />
   </section>
 </template>
 

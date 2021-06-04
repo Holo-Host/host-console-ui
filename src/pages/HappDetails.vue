@@ -66,7 +66,7 @@
         </div>
       </div>
     </div>
-    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" :stopHostingHapp="stopHostingHapp"/>
+    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" :stopHostingHapp="stopHostingHapp" :happName="happ.name" />
   </PrimaryLayout>
 </template>
 
@@ -82,7 +82,6 @@ import PencilIcon from 'components/icons/PencilIcon.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
 import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 import HposInterface from 'src/interfaces/HposInterface'
-
 
 export default {
   name: 'HappDetails',
