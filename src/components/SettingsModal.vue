@@ -225,6 +225,26 @@ export default {
   justify-content: center;
 }
 @media screen and (max-width: 1050px) {
-
+  .settings-modal {
+    padding: 26px 0 28px;
+    margin: 0 -6px;
+  }
+  .title {
+    margin-bottom: 6px;
+  }
+  .sub-title {
+    margin-bottom: 26px
+  }
+  .settings-rows {
+    min-width: 0;
+    width: 100%;
+    margin-bottom: 40px
+  }
+  .row-label {
+    flex-basis: initial;
+  }
+  .row-value {
+    margin-left: auto;
+  }
 }
 </style>
