@@ -230,7 +230,7 @@ export default {
 }
 .inner-column {
   flex-basis: 50%;
-  padding: 26px 48px;
+  padding: 26px 30px;
 }
 .inner-title {
   font-weight: bold;

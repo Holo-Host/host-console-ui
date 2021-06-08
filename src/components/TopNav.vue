@@ -85,7 +85,7 @@ export default {
     line-height: 22px;
     color: #FFFFFF;
     position: absolute;
-    right: 0;
+    right: -2px;
     padding: 0 7px;
   }
 }

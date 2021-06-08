@@ -379,6 +379,9 @@ th::after {
 .happ-cell, .amount-cell {
   font-weight: bold;
 }
+.invoice-row td.amount-cell {
+  text-align: end;
+}
 .pstatus-cell {
   display: flex;
   align-items: center;
