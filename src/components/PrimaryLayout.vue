@@ -74,6 +74,8 @@ export default {
 .layout {
   display: flex;
   height: 100%;
+  /* Making room for the sidebar */
+  padding-left: 270px;
 }
 .main-column {
   display: flex;
@@ -89,6 +91,9 @@ export default {
 @media screen and (max-width: 1050px) {
   .main-column {
     padding: 0 16px;
+  }
+  .layout {
+    padding-left: 0;
   }
 }
 </style>
