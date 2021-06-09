@@ -2,7 +2,7 @@
   <Modal :handleClose="handleClose">
     <div class='stop-hosting-modal' v-if="!confirmed">
       <ExclamationIcon class="exclamation-icon" />
-      <p class='content'>Are you sure you want to stop hosting this hApp?</p>
+      <p class='content'>Are you sure you want to stop hosting {{ happName }}?</p>
       <p class='content'>It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.</p>
       <div class='buttons'>
         <Button color='teal' @click="confirm">Yes, I want to stop hosting this hApp</Button>
@@ -37,6 +37,10 @@ export default {
   props: {
     handleClose: {
       type: Function,
+      required: true
+    },
+    happName: {
+      type: String,
       required: true
     },
     stopHostingHapp: {

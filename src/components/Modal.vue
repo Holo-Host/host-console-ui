@@ -30,7 +30,7 @@ export default {
   display: flex;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 200;
   background-color: rgba(49, 60, 89, 0.67);
   width: 100vw;
   height: 100vh;
@@ -56,15 +56,9 @@ export default {
 }
 
 @media screen and (max-width: 1050px) {
-  .overlay {
-    background-color: transparent;
-    pointer-events: none;
-    position: unset;
-  }
   .modal {
-    box-shadow: 0px 4px 20px #ECEEF1;;
     pointer-events: all;
-    margin: 4px 40px 4px 0;
+    margin: 210px 10px;
     flex-basis: 100%;
     height: fit-content;
   }

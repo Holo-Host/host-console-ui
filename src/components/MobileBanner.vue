@@ -1,7 +1,7 @@
 <template>
   <section class="mobile-banner">
     <MenuIcon @click="showMobileSidebar(true)" />
-    <TopNavMenu :deviceName="deviceName" :white="true" />
+    <TopNavMenu :deviceName="deviceName" :white="true" :openSettingsModal="openSettingsModal" />
     <Sidebar v-if="mobileSidebarVisible" />
     <div v-if="mobileSidebarVisible" class='sidebar-backdrop' @click="showMobileSidebar(false)" />
   </section>
@@ -22,7 +22,8 @@ export default {
   props: {
     deviceName: String,
     showMobileSidebar: Function,
-    mobileSidebarVisible: Boolean
+    mobileSidebarVisible: Boolean,
+    openSettingsModal: Function
   }
 }
 </script>
