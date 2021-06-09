@@ -47,7 +47,7 @@ export default {
 <style scoped>
 .top-nav {
   display: flex;
-  flex: 0 0 92px;
+  flex: 0 0 70px;
   padding-top: 46px;
 }
 .main-title {
