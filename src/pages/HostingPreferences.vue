@@ -32,20 +32,20 @@
       <h3 class='card-title'>Invoice &amp; Payment Terms</h3>
 
       <div class='card-content'>
-        <div>
+        <div class='terms-rows'>
           <div class='terms-row'>
             <span class='terms-label'>Frequency of Invoicing:</span>
             <span class='terms-info'>
               Invoice hApp publishers the earlier of every
               <select class='time-dropdown'><option>7 Days</option></select>
               or when an invoice amount reaches
-              <span class='invoice-limit'><span class='invoice-limit-amount'>100HF</span><PencilIcon class='pencil' /></span>
+              <span class='invoice-limit'><span class='invoice-limit-amount'>100 HF</span><PencilIcon class='pencil' /></span>
             </span>
           </div>
 
           <div class='terms-row'>
             <span class='terms-label'>Payment Terms (Net):</span>
-            <span class='terms-info'>
+            <span class='terms-info net'>
               Payment is due
               <select class='time-dropdown'><option>{{ paymentDue }} Days</option></select>
               after invoice date
@@ -113,7 +113,7 @@ export default {
   background: #FFFFFF;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 12px;
-  margin-bottom: 55px;
+  margin-bottom: 32px;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
@@ -149,13 +149,20 @@ export default {
   flex-basis: 54px;
 }
 .rate-unit {
-  flex-basis: 86px;
+  flex-basis: 78px;
 }
 
+.terms-rows {
+  margin-bottom: 60px
+}
 .terms-row {
   display: flex;
   align-items: center;
   line-height: 32px;
+  flex-flow: wrap;
+}
+.terms-row:first-child {
+  margin-top: 12px;
 }
 .terms-row:last-child {
   margin-bottom: 10px;
@@ -165,6 +172,7 @@ export default {
 }
 .terms-info {
   display: flex;
+  flex-wrap: wrap;
 }
 .time-dropdown {
   font-weight: 800;
@@ -175,6 +183,7 @@ export default {
   box-sizing: border-box;
   border-radius: 5px;
   padding: 2px 6px;
+  margin: 0 4px;
   pointer-events: none;
 }
 .invoice-limit {
@@ -201,7 +210,10 @@ export default {
   cursor: pointer;
   opacity: 0.2;
 }
-
+.invoice-limit .pencil {
+  margin-left: 6px;
+  margin-top: 7px;
+}
 .greyed-out {
   opacity: 0.2;
 }
@@ -266,6 +278,9 @@ export default {
     display: flex;
     flex-direction: column;
   }
+  .terms-info.net {
+    flex-direction: row;
+  }
   .time-dropdown {
     margin-right: auto;
   }
@@ -281,6 +296,9 @@ export default {
   }
   .fine-print {
     display: none;
+  }
+  .pencil {
+    margin-top: 0;
   }
 }
 </style>

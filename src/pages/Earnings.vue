@@ -19,7 +19,9 @@
             <UnpaidLateIcon class='main-link-icon'/>Unpaid &amp; Late <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
           </router-link>
           <router-link :to="{ path: '/earnings/invoices', query: { filter: 'exceptions'} }" class='main-link'>
-            <FilledExclamationIcon class='main-link-icon'/>Exceptions <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
+            <FilledExclamationIcon class='main-link-icon'/>Exceptions
+            <span class='notification'>2 new</span>
+            <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
           </router-link>
         </div>
       </div>
@@ -175,6 +177,16 @@ export default {
 .main-link-icon {
   margin-right: 14px;
 }
+.notification {
+  background-color: white;
+  font-weight: bold;
+  font-size: 9px;
+  line-height: 12px;
+  color: #000000;
+  border-radius: 5px;
+  margin-left: 18px;
+  padding: 2px 8px;
+}
 .right-chevron-icon {
   margin-left: auto;
   transform: scale(1.8);
@@ -185,6 +197,7 @@ export default {
 .redemption-links .main-link {
   padding-left: 35px;
   padding-right: 35px;
+  min-width: 185px;
 }
 
 @media screen and (max-width: 1050px) {
