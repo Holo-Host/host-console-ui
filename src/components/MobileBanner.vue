@@ -35,7 +35,7 @@ export default {
   align-items: flex-end;
   background-color: #00CAD9;
   padding: 20px;
-  margin: 0 -20px;
+  margin: 0 -18px;
 }
 
 .sidebar-backdrop {

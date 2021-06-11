@@ -77,6 +77,7 @@ export default {
 }
 .menu {
   position: absolute;
+  z-index: 50;
   right: 12px;
   top: 20px;
   background: #FFFFFF;

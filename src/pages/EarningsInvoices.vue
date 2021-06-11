@@ -16,7 +16,7 @@
           <th v-for="{ name } in headers"
             :key='name'
             @click="handleHeaderClick(name)"
-            :class="[{ selected: name === sort }, 'desktop-cell']"
+            :class="[{ selected: name === sort}, 'desktop-cell']"
             :title="name"
           >
             {{ name }}
@@ -25,7 +25,7 @@
           <th v-for="{ mobileName, name } in mobileHeaders"
             :key='mobileName'
             @click="handleHeaderClick(name)"
-            :class="[{ selected: name === sort }, 'mobile-cell']"
+            :class="[{ selected: name === sort, 'amount-header': name === SORT_AMOUNT }, 'mobile-cell']"
             :title="mobileName"
           >
             {{ mobileName }}
@@ -252,7 +252,7 @@ export default {
   methods: {
     presentPublisherHash,
     presentDate (date) {
-      return date.format("D MMM YYYY")
+      return date.format("DD MMM YYYY")
     },
     presentShortDate (date) {
       return date.format("D MMM")
@@ -290,6 +290,12 @@ export default {
   watch: {
     pageSize () {
       this.page = 0
+    },
+    filter () {
+      this.page = 0
+    },
+    sort (val) {
+      console.log(val)
     }
   }
 }
@@ -378,6 +384,9 @@ th::after {
 }
 .happ-cell, .amount-cell {
   font-weight: bold;
+}
+.invoice-row td.amount-cell {
+  text-align: end;
 }
 .pstatus-cell {
   display: flex;
@@ -473,6 +482,23 @@ th::after {
     font-weight: 600;
     font-size: 14px;
     color: #606C8B;
+  }
+
+  .header-row th {
+    padding: 20px 0 30px 0;
+  }
+  .invoice-row td {
+    padding: 10px 0 14px 0;
+  }
+  .header-row th[title='Amount'] {
+    text-align: end;
+  }
+  .header-row th[title='Amount'].selected {
+    padding-right: 10px;
+    color: red;
+  }
+  .invoice-row td.amount-cell {
+    padding-right: 20px;
   }
 }
 </style>

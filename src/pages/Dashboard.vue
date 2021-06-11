@@ -202,7 +202,7 @@ export default {
   align-items: center;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  background-color: rgba(176, 236, 240, 0.72);
+  background-color: #F0FCFD;
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
@@ -230,7 +230,7 @@ export default {
 }
 .inner-column {
   flex-basis: 50%;
-  padding: 26px 48px;
+  padding: 26px 30px;
 }
 .inner-title {
   font-weight: bold;

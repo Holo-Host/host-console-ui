@@ -16,10 +16,12 @@
             <PaymentIcon class='main-link-icon'/>Payments <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
           </router-link>
           <router-link :to="{ path: '/earnings/invoices', query: { filter: 'unpaid'} }" class='main-link'>
-            <PaymentIcon class='main-link-icon'/>Unpaid &amp; Late <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
+            <UnpaidLateIcon class='main-link-icon'/>Unpaid &amp; Late <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
           </router-link>
           <router-link :to="{ path: '/earnings/invoices', query: { filter: 'exceptions'} }" class='main-link'>
-            <PaymentIcon class='main-link-icon'/>Exceptions <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
+            <FilledExclamationIcon class='main-link-icon'/>Exceptions
+            <span class='notification'>2 new</span>
+            <RightChevronIcon class='right-chevron-icon' color="#606C8B" />
           </router-link>
         </div>
       </div>
@@ -31,10 +33,10 @@
         <div class='hf-amount'>{{ redeemableHF.toLocaleString() }} HF</div>
         <div class='redemption-links'>
           <router-link to='/earnings' class='main-link'>
-            <PaymentIcon class='main-link-icon'/>Redemption History
+            <RedemptionHistoryIcon class='main-link-icon'/>Redemption History
           </router-link>
           <router-link to='/earnings' class='main-link'>
-            <PaymentIcon class='main-link-icon'/>Redeem HoloFuel
+            <FatArrowIcon class='main-link-icon'/>Redeem HoloFuel
           </router-link>
         </div>
       </div>
@@ -46,6 +48,10 @@
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import LeaveSiteIcon from 'components/icons/LeaveSiteIcon'
 import PaymentIcon from 'components/icons/PaymentIcon'
+import UnpaidLateIcon from 'components/icons/UnpaidLateIcon'
+import FilledExclamationIcon from 'components/icons/FilledExclamationIcon'
+import RedemptionHistoryIcon from 'components/icons/RedemptionHistoryIcon'
+import FatArrowIcon from 'components/icons/FatArrowIcon'
 import RightChevronIcon from 'components/icons/RightChevronIcon'
 import TmpGraphIcon from 'components/icons/TmpGraphIcon'
 
@@ -55,6 +61,10 @@ export default {
     PrimaryLayout,
     LeaveSiteIcon,
     PaymentIcon,
+    UnpaidLateIcon,
+    FilledExclamationIcon,
+    RedemptionHistoryIcon,
+    FatArrowIcon,
     RightChevronIcon,
     TmpGraphIcon
   },
@@ -162,9 +172,20 @@ export default {
   color: #313C59;
   display: flex;
   align-items: center;
+  text-decoration: none;
 }
 .main-link-icon {
   margin-right: 14px;
+}
+.notification {
+  background-color: white;
+  font-weight: bold;
+  font-size: 9px;
+  line-height: 12px;
+  color: #000000;
+  border-radius: 5px;
+  margin-left: 18px;
+  padding: 2px 8px;
 }
 .right-chevron-icon {
   margin-left: auto;
@@ -176,6 +197,7 @@ export default {
 .redemption-links .main-link {
   padding-left: 35px;
   padding-right: 35px;
+  min-width: 185px;
 }
 
 @media screen and (max-width: 1050px) {

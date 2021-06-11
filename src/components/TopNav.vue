@@ -47,7 +47,7 @@ export default {
 <style scoped>
 .top-nav {
   display: flex;
-  flex: 0 0 92px;
+  flex: 0 0 70px;
   padding-top: 46px;
 }
 .main-title {
@@ -85,7 +85,7 @@ export default {
     line-height: 22px;
     color: #FFFFFF;
     position: absolute;
-    right: 0;
+    right: -2px;
     padding: 0 7px;
   }
 }

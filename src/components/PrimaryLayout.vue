@@ -5,6 +5,9 @@
       <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" :openSettingsModal="openSettingsModal" />
       <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
       <SettingsModal v-if="settingsModalVisible" :handleClose="closeSettingsModal"  />
+      <div v-if="kycBannerVisible" class='kyc-banner'>
+        You haven't finished verifying your identity yet. Go to our <a href='https://holo.host/kyc' target="_blank">third party provider's site</a> to complete your verification.
+      </div>
       <section class='content'>
         <slot />
       </section>
@@ -36,7 +39,8 @@ export default {
     return {
       deviceName: 'Loading...',
       mobileSidebarVisible: false,
-      settingsModalVisible: false
+      settingsModalVisible: false,
+      kycBannerVisible: true
     }
   },
   async mounted () {
@@ -74,12 +78,28 @@ export default {
 .layout {
   display: flex;
   height: 100%;
+  /* Making room for the sidebar */
+  padding-left: 270px;
 }
 .main-column {
   display: flex;
   flex-direction: column;
   flex: 1;
   padding: 0 20px;
+}
+.kyc-banner {
+  margin: -30px -20px 28px -20px;
+  background-color: #FFE871;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 28px;
+  color: #000000;
+}
+.kyc-banner a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #000000;
 }
 .content{
   display: flex;
@@ -89,6 +109,14 @@ export default {
 @media screen and (max-width: 1050px) {
   .main-column {
     padding: 0 16px;
+  }
+  .layout {
+    padding-left: 0;
+  }
+  .kyc-banner {
+    margin-top: 0;
+    padding: 10px 30px;
+    line-height: 20px;
   }
 }
 </style>
