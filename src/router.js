@@ -112,7 +112,7 @@ export const routerFactory = () => {
       if(localStorage.getItem('isAuthed') == null) {
           next()
       } else{
-          next({ name: 'HostedHapps'})
+          next({ name: 'Dashboard'})
       }
     } else {
       // publicly visible page

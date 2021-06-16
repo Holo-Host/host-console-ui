@@ -114,7 +114,7 @@ const SORT_PUBLISHER = 'Publisher'
 const SORT_CREATED = 'Date Created'
 const SORT_DUE = 'Date Due'
 const SORT_INVOICE = 'Invoice #'
-const SORT_AMOUNT = 'Amount'
+const SORT_AMOUNT = 'HoloFuel'
 const SORT_PAYMENT = 'Payment Status'
 const SORT_EXCEPTION_STATUS = 'Exception Status'
 
@@ -255,7 +255,7 @@ export default {
       return date.format("DD MMM YYYY")
     },
     presentShortDate (date) {
-      return date.format("D MMM")
+      return date.format("DD MMM")
     },
     presentHolofuelAmount,
     presentShortHolofuelAmount,
@@ -387,6 +387,10 @@ th::after {
 }
 .invoice-row td.amount-cell {
   text-align: end;
+  padding-right: 20px;
+}
+.header-row th[title='HoloFuel'] {
+  text-align: end;
 }
 .pstatus-cell {
   display: flex;
@@ -490,12 +494,8 @@ th::after {
   .invoice-row td {
     padding: 10px 0 14px 0;
   }
-  .header-row th[title='Amount'] {
-    text-align: end;
-  }
-  .header-row th[title='Amount'].selected {
+  .header-row th[title='HoloFuel'].selected {
     padding-right: 10px;
-    color: red;
   }
   .invoice-row td.amount-cell {
     padding-right: 20px;

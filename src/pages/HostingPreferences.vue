@@ -163,6 +163,7 @@ export default {
 }
 .terms-row:first-child {
   margin-top: 12px;
+  margin-bottom: 18px;
 }
 .terms-row:last-child {
   margin-bottom: 10px;
@@ -264,6 +265,9 @@ export default {
   .rate-row {
     padding-left: 0;
     line-height: 30px;
+  }
+  .terms-rows {
+    margin-bottom: 0;
   }
   .terms-row {
     flex-direction: column;

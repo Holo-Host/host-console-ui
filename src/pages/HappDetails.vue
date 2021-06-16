@@ -134,7 +134,7 @@ export default {
   computed: {
     breadcrumbs () {
       return [{
-        label: 'Happs',
+        label: 'hApps',
         path: '/happs'
       }, {
         label: this.happ.name || 'loading'
@@ -327,7 +327,7 @@ export default {
 
 @media screen and (max-width: 1050px) {
   .happ-details {
-    margin: 0;
+    margin: 0 0 20px 0;
     padding: 18px;
   }
   .mobile-column {

@@ -1,5 +1,5 @@
 <template>
-  <PrimaryLayout title="Happs">
+  <PrimaryLayout title="hApps">
     <div class="controls">
       <div class="label">
         Filter by:
@@ -140,7 +140,9 @@ export default {
   .sort, .label {
     display: none;
   }
-
+  .ex-icon {
+    top: 12px;
+  }
   .happ-list {
     flex-direction: column;
     margin-right: 0;
