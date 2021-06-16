@@ -3,7 +3,7 @@
     <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' :white="white" /></div>
     <div class="verification-status">Unverified</div>
     <div v-if="menuOpen" class="menu">
-      <div @click="openSettingsModal" class="menu-item">
+      <div @click="openSettingsCloseMenu" class="menu-item">
         HoloPort Settings
       </div>
       <div @click="logout" class="menu-item">Logout</div>
@@ -39,6 +39,10 @@ export default {
       // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
       localStorage.removeItem('isAuthed')
       this.$router.push('/login')
+    },
+    openSettingsCloseMenu () {
+      this.menuOpen = false
+      this.openSettingsModal()
     }
   }
 }
