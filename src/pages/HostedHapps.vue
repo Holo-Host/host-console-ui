@@ -140,7 +140,9 @@ export default {
   .sort, .label {
     display: none;
   }
-
+  .ex-icon {
+    top: 12px;
+  }
   .happ-list {
     flex-direction: column;
     margin-right: 0;

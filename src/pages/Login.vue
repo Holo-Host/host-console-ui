@@ -89,7 +89,7 @@ export default {
           if(this.$route.params.nextUrl != null) {
             this.$router.push(this.$route.params.nextUrl)
           } else {
-            this.$router.push('/happs')
+            this.$router.push('/dashboard')
           }
         } else {
           this.banner = 'There was a problem logging you in. Please check your credentials and try again.'
