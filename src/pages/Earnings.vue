@@ -203,6 +203,7 @@ export default {
 @media screen and (max-width: 1050px) {
   .card {
     box-shadow: 0px 4px 20px #ECEEF1;
+    margin-bottom: 28px;
   }
   .card-title {
     background-color: #F0FCFD;

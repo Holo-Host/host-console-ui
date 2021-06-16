@@ -134,7 +134,7 @@ export default {
   computed: {
     breadcrumbs () {
       return [{
-        label: 'Happs',
+        label: 'hApps',
         path: '/happs'
       }, {
         label: this.happ.name || 'loading'
