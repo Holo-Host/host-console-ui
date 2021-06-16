@@ -3,7 +3,7 @@
     <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' :white="white" /></div>
     <div class="verification-status">Unverified</div>
     <div v-if="menuOpen" class="menu">
-      <div @click="openSettingsCloseMenu" class="menu-item">
+      <div @click="openSettingsAndCloseMenu" class="menu-item">
         HoloPort Settings
       </div>
       <div @click="logout" class="menu-item">Logout</div>
@@ -40,7 +40,7 @@ export default {
       localStorage.removeItem('isAuthed')
       this.$router.push('/login')
     },
-    openSettingsCloseMenu () {
+    openSettingsAndCloseMenu () {
       this.menuOpen = false
       this.openSettingsModal()
     }
