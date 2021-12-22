@@ -19,7 +19,7 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname)
 
-export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
+export function hposCall({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
     const fullPath = HPOS_API_URL + pathPrefix + path
 
@@ -28,7 +28,7 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
     let bodyHash
 
     if (params) {
-      bodyHash = await hashString(stringify(params))
+      // bodyHash = await hashString(stringify(params))
     }
 
     const signature = await signPayload(method, urlObj.pathname, bodyHash)
@@ -61,14 +61,14 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
   }
 }
 
-export function hposAdminCall (args) {
+export function hposAdminCall(args) {
   return hposCall({
     ...args,
     pathPrefix: '/api/v1'
   })
 }
 
-export function hposHolochainCall (args) {
+export function hposHolochainCall(args) {
   return hposCall({
     ...args,
     pathPrefix: '/holochain-api/v1'
