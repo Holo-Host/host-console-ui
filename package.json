@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "VUE_APP_UI_VERSION=$npm_package_version vue-cli-service serve",
-    "start-ui-and-mock": "npm run start-mock-hpos-api & npm run serve",
+    "start-ui-and-mock": "npm run start-mock-hpos-api-with-auth & npm run serve",
     "build": "VUE_APP_UI_VERSION=$npm_package_version VUE_APP_USE_REAL_PUB_KEY=true vue-cli-service build",
     "build:dev": "VUE_APP_UI_VERSION=$npm_package_version VUE_APP_USE_REAL_PUB_KEY=true vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",
@@ -14,7 +14,7 @@
     "start-mock-hpos-api-with-auth": "node mock-hpos-api/runMockHposApi.js --email test@test.com --password asasas"
   },
   "dependencies": {
-    "@holo-host/hp-admin-keypair": "^0.2.0",
+    "@holo-host/hp-admin-keypair": "^0.2.2",
     "axios": "^0.21.0",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",

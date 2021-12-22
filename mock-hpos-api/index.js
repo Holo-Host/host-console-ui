@@ -9,7 +9,7 @@ const defaultResponse = require('./defaultResponse')
 
 const HC_PUBKEY = '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
 
-function generateResponseKey (method, path, data) {
+function generateResponseKey(method, path, data) {
   return `${method}:${path}:${JSON.stringify(data)}`
 }
 
@@ -24,11 +24,11 @@ class MockHposApi {
     this.shouldCheckAuth = !!authEmail && !!authPassword
     this.authEmail = authEmail
     this.authPassword = authPassword
-    
+
     this.initializeResponses()
   }
 
-  static async start (port, authEmail, authPassword) {
+  static async start(port, authEmail, authPassword) {
     const mockHposApi = new MockHposApi(port, authEmail, authPassword)
 
     const app = express()
@@ -44,7 +44,7 @@ class MockHposApi {
   }
 
   // this is more convoluted than I'd like because I want init to be a blocking call, so have to uncallback app.listen
-  startServer (app) {
+  startServer(app) {
     return new Promise((resolve, reject) => {
       this.server = app.listen(this.port, () => {
         console.log(`Mock hpos-admin-api listening at http://localhost:${this.port}`)
@@ -53,7 +53,7 @@ class MockHposApi {
     })
   }
 
-  async checkAuth (req, res, next) {
+  async checkAuth(req, res, next) {
     if (!this.shouldCheckAuth) {
       next()
     } else {
@@ -72,25 +72,25 @@ class MockHposApi {
     }
   }
 
-  any (response) {
+  any(response) {
     this.anyResponse = response
   }
 
-  next (response) {
+  next(response) {
     this.once('', NEXT_PATH, {}, response)
   }
 
-  once (method, path, body, response) {
+  once(method, path, body, response) {
     const responseKey = generateResponseKey(method, path, body)
 
     if (!this.responseQueues[responseKey]) {
       this.responseQueues[responseKey] = []
     }
-  
-    this.responseQueues[responseKey].push(response)  
+
+    this.responseQueues[responseKey].push(response)
   }
 
-  getSavedResponse (method, type, data) {
+  getSavedResponse(method, type, data) {
     let responseKey
 
     // if there are responses in the 'next' queue, we use those and ignore the specific type and data of the request
@@ -109,17 +109,17 @@ class MockHposApi {
     return this.responseQueues[responseKey].shift()
   }
 
-  initializeResponses () {
+  initializeResponses() {
     this.responseQueues = {}
     // sets the `any` response which is called as a fallback when no other response has been specified. 
     // In this case, defaultResponse is a mock of normal behavior of the hpos apis
     this.anyResponse = defaultResponse
   }
 
-  handleRequest (req, res) {
+  handleRequest(req, res) {
     const { method, path, body } = req
 
-    let responseOrResponseFunc 
+    let responseOrResponseFunc
     try {
       responseOrResponseFunc = this.getSavedResponse(method, path, body)
     } catch (e) {
@@ -131,7 +131,7 @@ class MockHposApi {
     res.send(response)
   }
 
-  close () {
+  close() {
     this.server.close()
   }
 }
