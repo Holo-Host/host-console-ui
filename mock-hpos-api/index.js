@@ -57,12 +57,11 @@ class MockHposApi {
     if (!this.shouldCheckAuth) {
       next()
     } else {
-
-      const { method, path, body } = req
+      const { method, body, url } = req
 
       const keypairInstance = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
 
-      const signature = await signPayload(keypairInstance, method, path, body)
+      const signature = await signPayload(keypairInstance, method, url, body)
 
       if (signature === req.header('x-hpos-admin-signature')) {
         next()
