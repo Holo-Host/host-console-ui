@@ -3,9 +3,6 @@
   <div class="container">
       <form @submit.prevent="" class="form">
         <div class="form-box">
-          <div class="holofuel-icon-disc">
-            <HoloBadgeIcon class="holofuel-icon" fill="#fff" />
-          </div>
           <h1 class="title">Host Console Login</h1>
           <label class="label" htmlFor="email">Email:</label>
           <input
@@ -29,14 +26,20 @@
           <small v-if="!!errors.password" class="field-error">
             {{ errors.password }}
           </small>
+          <button @click="login" class="login-button">Login</Button>
         </div>
-        <button @click="login" class="login-button">Login</Button>
       </form>
-      <div class="reminder-text reminder-text-padding">*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
-      <div class="reminder-text reminder-text-padding">
-        <a class="reminder-text" href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
+      <div class="footer">
+        <div>Hosted by</div>
+        <div class="logo-row">
+          <img src="/images/holo-logo-bw.png" /> HOLO
+        </div>
+        <div>*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
+        <div>
+          <a href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
+        </div>
+        <div >Host Console version {{ uiVersion }}</div>
       </div>
-      <div class="reminder-text reminder-text-padding">Host Console version {{ uiVersion }}</div>
   </div>
 </template>
 
@@ -128,7 +131,6 @@ export default {
   padding-top: 70px;
   margin-left: 78px;
   margin-right: 78px;
-  max-width: 466px;
   align-self: center;
 }
 .banner {
@@ -155,8 +157,8 @@ export default {
   display: flex;
   flex-direction: column;
   margin-top: 60px;
-  margin-bottom: 40px;
-  padding: 0 24px 32px 24px;
+  margin-bottom: 32px;
+  padding: 58px 62px 54px 62px;
 }
 .holofuel-icon-disc {
   border-radius: 50%;
@@ -175,18 +177,19 @@ export default {
   height: 25px;
 }
 .title {
-  color: rgba(44, 63, 89, 0.80);
+  color: #606C8B;
   align-self: center;
   margin-bottom: 29px;
-  font-weight: 200;
+  font-weight: 600;
+  font-size: 28px;
+  margin: 0 0 50px 0;
 }
 .label {
-  font-weight: bold;
-  font-size: 10px;
-  line-height: 13px;
-  letter-spacing: 0.6px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #606C8B;
   text-transform: uppercase;
-  color: rgba(44, 63, 89, 0.60);
 }
 .input {
   border: none;
@@ -197,13 +200,15 @@ export default {
 }
 .login-button {
   align-self: center;
+  font-weight: bold;
   font-size: 16px;
-  height: 43px;
+  line-height: 22px;
+  height: 34px;
   width: 192px;
-  margin-bottom: 32px;
-  color: white;
-  border: 1px solid #00CAD9;
-  background: #00CAD9;
+  margin-top: 26px;
+  color: #606C8B;
+  border: 1px solid #606C8B;
+  background: white;
   border-radius: 100px;
   cursor: pointer;
 }
@@ -213,15 +218,39 @@ export default {
   color: #a00;
   margin: .3em 0 .0;
 }
-.reminder-text {
-  font-size: 10px;
-  line-height: 13px;
-  letter-spacing: 0.4px;
-  color: rgba(44, 63, 89, 0.50);
+
+.footer {
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #000000;
 }
-.reminder-text-padding {
-  margin-bottom: 13px;
-  padding: 0 22px;
+
+.footer img {
+  width: 30px;
+  margin-right: 8px;
+}
+
+.footer .logo-row {
+  display: flex;
+  align-items: center;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 23px;
+  letter-spacing: 0.6em;
+  color: #000000;
+  margin-top: 2px;
+  margin-bottom: 15px;
+}
+
+.footer div {
+  margin-bottom: 3px;
+}
+
+.footer a, .footer a:visited {
+  color: #000000;
 }
 
 @media screen and (max-width: 1050px) {
