@@ -16,13 +16,17 @@
             {{ errors.email }}
           </small>
           <label class="label" htmlFor="password">Password:</label>
-          <input
-            v-model="password"
-            type="password"
-            name="password"
-            id="password"
-            class="input"
-          />
+          <div class="password-input">
+            <input
+              v-model="password"
+              :type="passwordFieldType"
+              name="password"
+              id="password"
+              class="input"
+            />
+            <VisibleEyeIcon v-if="isPasswordVisible" @click="hidePassword" class='eye-icon' />
+            <InvisibleEyeIcon v-else @click="showPassword" class='eye-icon' />
+          </div>
           <small v-if="!!errors.password" class="field-error">
             {{ errors.password }}
           </small>
@@ -47,6 +51,8 @@
 
 import validator from 'email-validator'
 import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
+import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
+import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import HposInterface from 'src/interfaces/HposInterface'
 
@@ -65,14 +71,17 @@ async function createKeypairAndCheckAuth (email, password) {
 export default {
   name: 'HappDetails',
   components: {
-    HoloBadgeIcon
+    HoloBadgeIcon,
+    InvisibleEyeIcon,
+    VisibleEyeIcon
   },
   data () {
     return {
       email: '',
       password: '',
       errors: {},
-      banner: ''
+      banner: '',
+      isPasswordVisible: false
     }
   },
   methods: {
@@ -101,11 +110,20 @@ export default {
 
       e.preventDefault();
       return false
+    },
+    showPassword () {
+      this.isPasswordVisible = true
+    },
+    hidePassword () {
+      this.isPasswordVisible = false
     }
   },
   computed: {
     uiVersion () {
       return process.env.VUE_APP_UI_VERSION
+    },
+    passwordFieldType () {
+      return this.isPasswordVisible ? 'text' : 'password'
     }
   },
   watch: {
@@ -197,6 +215,17 @@ export default {
   padding: 5px 5px;
   margin-bottom: 20px;
   color: rgba(44, 63, 89, 1);
+}
+.password-input {
+  position: relative;
+  display: flex;
+}
+.password-input input {
+  flex-grow: 1;
+}
+.eye-icon {
+  position: absolute;
+  right: 0px;
 }
 .login-button {
   align-self: center;
