@@ -98,9 +98,8 @@ export default {
   },
   methods: {
     editDeviceName () {
-      // temporarily disabled until hpos bug is fixed
-      // this.editedDeviceName = this.settings.deviceName
-      // this.isEditingDeviceName = true
+      this.editedDeviceName = this.settings.deviceName
+      this.isEditingDeviceName = true
     },
     saveDeviceName () {
       HposInterface.updateSettings({

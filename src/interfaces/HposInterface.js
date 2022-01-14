@@ -86,7 +86,7 @@ const presentHposSettings = (hposSettings) => {
     registrationEmail: admin.email,
     networkStatus: holoportos.network || 'test', // ie: 'live'
     sshAccess: holoportos.sshAccess || false,
-    deviceName: deviceName || 'Your HP'
+    deviceName: deviceName || (admin.public_key && admin.public_key.slice(-8)) || 'Your HP'
   }
 }
 

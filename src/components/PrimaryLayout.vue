@@ -40,7 +40,7 @@ export default {
       deviceName: 'Loading...',
       mobileSidebarVisible: false,
       settingsModalVisible: false,
-      kycBannerVisible: true
+      kycBannerVisible: false
     }
   },
   async mounted () {
