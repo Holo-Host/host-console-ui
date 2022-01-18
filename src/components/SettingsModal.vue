@@ -98,8 +98,9 @@ export default {
   },
   methods: {
     editDeviceName () {
-      this.editedDeviceName = this.settings.deviceName
-      this.isEditingDeviceName = true
+      // Disabled until we get auth working
+      // this.editedDeviceName = this.settings.deviceName
+      // this.isEditingDeviceName = true
     },
     saveDeviceName () {
       HposInterface.updateSettings({
