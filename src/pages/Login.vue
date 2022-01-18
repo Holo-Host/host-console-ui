@@ -3,9 +3,6 @@
   <div class="container">
       <form @submit.prevent="" class="form">
         <div class="form-box">
-          <div class="holofuel-icon-disc">
-            <HoloBadgeIcon class="holofuel-icon" fill="#fff" />
-          </div>
           <h1 class="title">Host Console Login</h1>
           <label class="label" htmlFor="email">Email:</label>
           <input
@@ -19,24 +16,34 @@
             {{ errors.email }}
           </small>
           <label class="label" htmlFor="password">Password:</label>
-          <input
-            v-model="password"
-            type="password"
-            name="password"
-            id="password"
-            class="input"
-          />
+          <div class="password-input">
+            <input
+              v-model="password"
+              :type="passwordFieldType"
+              name="password"
+              id="password"
+              class="input"
+            />
+            <VisibleEyeIcon v-if="isPasswordVisible" @click="hidePassword" class='eye-icon' />
+            <InvisibleEyeIcon v-else @click="showPassword" class='eye-icon' />
+          </div>
           <small v-if="!!errors.password" class="field-error">
             {{ errors.password }}
           </small>
+          <button @click="login" class="login-button">Login</Button>
         </div>
-        <button @click="login" class="login-button">Login</Button>
       </form>
-      <div class="reminder-text reminder-text-padding">*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
-      <div class="reminder-text reminder-text-padding">
-        <a class="reminder-text" href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
+      <div class="footer">
+        <div>Hosted by</div>
+        <div class="logo-row">
+          <img src="/images/holo-logo-bw.png" /> HOLO
+        </div>
+        <div>*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!</div>
+        <div>
+          <a href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
+        </div>
+        <div class="version">Host Console version {{ uiVersion }}</div>
       </div>
-      <div class="reminder-text reminder-text-padding">Host Console version {{ uiVersion }}</div>
   </div>
 </template>
 
@@ -44,6 +51,8 @@
 
 import validator from 'email-validator'
 import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
+import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
+import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import HposInterface from 'src/interfaces/HposInterface'
 
@@ -62,14 +71,17 @@ async function createKeypairAndCheckAuth (email, password) {
 export default {
   name: 'HappDetails',
   components: {
-    HoloBadgeIcon
+    HoloBadgeIcon,
+    InvisibleEyeIcon,
+    VisibleEyeIcon
   },
   data () {
     return {
       email: '',
       password: '',
       errors: {},
-      banner: ''
+      banner: '',
+      isPasswordVisible: false
     }
   },
   methods: {
@@ -98,11 +110,20 @@ export default {
 
       e.preventDefault();
       return false
+    },
+    showPassword () {
+      this.isPasswordVisible = true
+    },
+    hidePassword () {
+      this.isPasswordVisible = false
     }
   },
   computed: {
     uiVersion () {
       return process.env.VUE_APP_UI_VERSION
+    },
+    passwordFieldType () {
+      return this.isPasswordVisible ? 'text' : 'password'
     }
   },
   watch: {
@@ -128,7 +149,6 @@ export default {
   padding-top: 70px;
   margin-left: 78px;
   margin-right: 78px;
-  max-width: 466px;
   align-self: center;
 }
 .banner {
@@ -155,8 +175,8 @@ export default {
   display: flex;
   flex-direction: column;
   margin-top: 60px;
-  margin-bottom: 40px;
-  padding: 0 24px 32px 24px;
+  margin-bottom: 32px;
+  padding: 58px 62px 54px 62px;
 }
 .holofuel-icon-disc {
   border-radius: 50%;
@@ -175,53 +195,97 @@ export default {
   height: 25px;
 }
 .title {
-  color: rgba(44, 63, 89, 0.80);
+  color: #606C8B;
   align-self: center;
   margin-bottom: 29px;
-  font-weight: 200;
+  font-weight: 600;
+  font-size: 28px;
+  margin: 0 0 50px 0;
 }
 .label {
-  font-weight: bold;
-  font-size: 10px;
-  line-height: 13px;
-  letter-spacing: 0.6px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  color: #606C8B;
   text-transform: uppercase;
-  color: rgba(44, 63, 89, 0.60);
 }
 .input {
   border: none;
+  outline: none;
   border-bottom: 1px solid rgba(44, 63, 89, 0.50);
   padding: 5px 5px;
   margin-bottom: 20px;
   color: rgba(44, 63, 89, 1);
 }
+.password-input {
+  position: relative;
+  display: flex;
+}
+.password-input input {
+  flex-grow: 1;
+}
+.eye-icon {
+  position: absolute;
+  right: 0px;
+  cursor: pointer;
+}
 .login-button {
   align-self: center;
+  font-weight: bold;
   font-size: 16px;
-  height: 43px;
+  line-height: 22px;
+  height: 34px;
   width: 192px;
-  margin-bottom: 32px;
-  color: white;
-  border: 1px solid #00CAD9;
-  background: #00CAD9;
+  margin-top: 26px;
+  color: #606C8B;
+  border: 1px solid #606C8B;
+  background: white;
   border-radius: 100px;
   cursor: pointer;
 }
 .field-error {
-  font-size: .9em;
+  font-size: 12px;
   font-weight: 500;
   color: #a00;
-  margin: .3em 0 .0;
+  margin: -10px 0 15px;
 }
-.reminder-text {
-  font-size: 10px;
-  line-height: 13px;
-  letter-spacing: 0.4px;
-  color: rgba(44, 63, 89, 0.50);
+
+.footer {
+  font-size: 12px;
+  line-height: 16px;
+
+  color: #000000;
 }
-.reminder-text-padding {
-  margin-bottom: 13px;
-  padding: 0 22px;
+
+.footer img {
+  width: 30px;
+  margin-right: 8px;
+}
+
+.footer .logo-row {
+  display: flex;
+  align-items: center;
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 23px;
+  letter-spacing: 0.6em;
+  color: #000000;
+  margin-top: 2px;
+  margin-bottom: 15px;
+}
+
+.footer div {
+  margin-bottom: 3px;
+}
+
+.footer a, .footer a:visited {
+  color: #000000;
+}
+
+.version {
+  margin-top: 20px;
 }
 
 @media screen and (max-width: 1050px) {

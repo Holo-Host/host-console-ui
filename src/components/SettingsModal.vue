@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     editDeviceName () {
-      // temporarily disabled until hpos bug is fixed
+      // Disabled until we get auth working
       // this.editedDeviceName = this.settings.deviceName
       // this.isEditingDeviceName = true
     },
@@ -205,7 +205,7 @@ export default {
 .pencil {
   margin-left: 5px;
   margin-top: 3px;
-  cursor: pointer;
+  /* cursor: pointer; */
   opacity: 0.2;
 }
 .filled-check {

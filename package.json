@@ -1,6 +1,6 @@
 {
   "name": "host-console",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "private": true,
   "scripts": {
     "serve": "VUE_APP_UI_VERSION=$npm_package_version vue-cli-service serve",
