@@ -24,7 +24,7 @@ class MockHposApi {
     this.shouldCheckAuth = !!authEmail && !!authPassword
     this.authEmail = authEmail
     this.authPassword = authPassword
-    
+
     this.initializeResponses()
   }
 
@@ -86,8 +86,8 @@ class MockHposApi {
     if (!this.responseQueues[responseKey]) {
       this.responseQueues[responseKey] = []
     }
-  
-    this.responseQueues[responseKey].push(response)  
+
+    this.responseQueues[responseKey].push(response)
   }
 
   getSavedResponse (method, type, data) {
@@ -111,7 +111,7 @@ class MockHposApi {
 
   initializeResponses () {
     this.responseQueues = {}
-    // sets the `any` response which is called as a fallback when no other response has been specified. 
+    // sets the `any` response which is called as a fallback when no other response has been specified.
     // In this case, defaultResponse is a mock of normal behavior of the hpos apis
     this.anyResponse = defaultResponse
   }
@@ -119,7 +119,7 @@ class MockHposApi {
   handleRequest (req, res) {
     const { method, path, body } = req
 
-    let responseOrResponseFunc 
+    let responseOrResponseFunc
     try {
       responseOrResponseFunc = this.getSavedResponse(method, path, body)
     } catch (e) {
