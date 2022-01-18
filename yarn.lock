@@ -913,10 +913,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@holo-host/hp-admin-keypair@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@holo-host/hp-admin-keypair/-/hp-admin-keypair-0.2.2.tgz#db3865a9ba19d33e1ca6a5961851aab2d7542a7b"
-  integrity sha512-CxQcbfTfIMRp68nKWXDYP+f1dFuujnpVoNBcp+XIB4H4BGDByv1u8DeLrpTofbiWr7rlsxEegLFi7g9sdyAmBg==
+"@holo-host/hp-admin-keypair@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@holo-host/hp-admin-keypair/-/hp-admin-keypair-0.2.6.tgz#c9c421550fd4295ddf8e55481d4b65b4db184134"
+  integrity sha512-uPftqjiRS8DNCCKWtiwhWS744KHS+Q8Jk3mjRF0UA8uBsX+bzHrwzzx/boQeMQeBSR1rI2sphhXcAhh104qxhA==
 
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
