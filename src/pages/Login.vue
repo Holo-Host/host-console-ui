@@ -242,10 +242,10 @@ export default {
   cursor: pointer;
 }
 .field-error {
-  font-size: .9em;
+  font-size: 12px;
   font-weight: 500;
   color: #a00;
-  margin: .3em 0 .0;
+  margin: -10px 0 15px;
 }
 
 .footer {
