@@ -42,7 +42,7 @@
         <div>
           <a href="https://holo.host/control-your-data" target="_blank" rel="noopener noreferrer">Learn more</a> about controlling your own data.
         </div>
-        <div >Host Console version {{ uiVersion }}</div>
+        <div class="version">Host Console version {{ uiVersion }}</div>
       </div>
   </div>
 </template>
@@ -280,6 +280,10 @@ export default {
 
 .footer a, .footer a:visited {
   color: #000000;
+}
+
+.version {
+  margin-top: 20px;
 }
 
 @media screen and (max-width: 1050px) {
