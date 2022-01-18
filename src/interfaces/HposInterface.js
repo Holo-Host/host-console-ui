@@ -26,14 +26,12 @@ export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, header
     const urlObj = new URL(fullPath)
 
     let bodyHash
-    let signature
 
     if (params) {
       bodyHash = await hashString(stringify(params))
-      signature = await signPayload(method, `${urlObj.pathname}?${new URLSearchParams(params).toString()}`, bodyHash)
-    } else {
-      signature = await signPayload(method, urlObj.pathname, bodyHash)
     }
+
+    const signature = await signPayload(method, urlObj.pathname, bodyHash)
 
     const headers = omitBy(isUndefined, {
       ...axiosConfig.headers,
