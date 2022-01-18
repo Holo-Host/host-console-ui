@@ -211,6 +211,7 @@ export default {
 }
 .input {
   border: none;
+  outline: none;
   border-bottom: 1px solid rgba(44, 63, 89, 0.50);
   padding: 5px 5px;
   margin-bottom: 20px;
@@ -226,6 +227,7 @@ export default {
 .eye-icon {
   position: absolute;
   right: 0px;
+  cursor: pointer;
 }
 .login-button {
   align-self: center;

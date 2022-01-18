@@ -205,7 +205,7 @@ export default {
 .pencil {
   margin-left: 5px;
   margin-top: 3px;
-  cursor: pointer;
+  /* cursor: pointer; */
   opacity: 0.2;
 }
 .filled-check {
