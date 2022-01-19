@@ -38,12 +38,12 @@
           </div>
         </div>
 
-        <div class='settings-row'>
+        <div class='settings-row disabled-row'>
           <div class='row-label'>
             <label for='sshAccess'>Access for HoloPort support (SSH)</label>
           </div>
           <div class='row-value'>
-            <input type='checkbox' id='sshAccess' v-model='sshAccess'>
+            <input type='checkbox' id='sshAccess' v-model='sshAccess' disabled="true">
           </div>
         </div>
       </section>
@@ -124,6 +124,7 @@ export default {
       return this.isLoading ? 'Loading...' : this.settings.networkStatus
     },
     sshAccess: {
+      // The checkbox is currently disabled in the html, so this code won't run. Pending a fix to a holo-nixpkgs bug
       get () {
         return this.settings.sshAccess
       },
@@ -186,6 +187,9 @@ export default {
   margin-bottom: 12px;
   width: 100%;
   line-height: 30px;
+}
+.disabled-row {
+  opacity: 0.2;
 }
 .row-label {
   flex-basis: 280px;
