@@ -64,8 +64,13 @@ export const signRequest = async (method, url, params) => {
       case 'post':
       case 'put':
         // BUG: real server (hp-admin-crypto) does not properly check the body when
-        //      verifying signature. pass empty string so that it validates
+        //      verifying signature [1]. pass empty string so that it validates
         //      successfully
+        //
+        // [1]: https://github.com/Holo-Host/hp-admin-crypto/issues/25
+        //
+        // correct code:
+        //
         // body = stringify(params)
         break
       default:

@@ -98,8 +98,13 @@ export default {
   },
   methods: {
     editDeviceName () {
-      // BUG: hpos-admin-api does not properly save config due to permissions issue.
+      // BUG: hpos-admin-api does not properly save config due to permissions issue. [1]
       //      Disable editing device name until bug is fixed
+      //
+      // [1]: https://github.com/Holo-Host/holo-nixpkgs/issues/1068
+      //
+      // correct code:
+      //
       // this.editedDeviceName = this.settings.deviceName
       // this.isEditingDeviceName = true
     },
