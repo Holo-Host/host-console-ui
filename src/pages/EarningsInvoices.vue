@@ -248,6 +248,9 @@ export default {
     invoiceCount () {
       return this.filteredSortedInvoices.length
     },
+    SORT_AMOUNT () {
+      return SORT_AMOUNT
+    },
   },
   methods: {
     presentPublisherHash,

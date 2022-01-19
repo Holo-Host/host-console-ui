@@ -30,7 +30,7 @@ it('calls the hosted_happs endpoint', async () => {
         data: {
           admin: {}
         }
-      }      
+      }
     }
 
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
@@ -40,5 +40,5 @@ it('calls the hosted_happs endpoint', async () => {
 
   await wait(0)
 
-  expect(axios.get.mock.calls[1][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
+  expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
 })
