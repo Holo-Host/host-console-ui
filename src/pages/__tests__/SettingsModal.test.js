@@ -116,7 +116,7 @@ describe('Settings page', () => {
     expect(axios.put.mock.calls[0][1].deviceName).toEqual(newDeviceName)
   })
 
-  // this is skipped until the hpos ssh update issue is fixed. See also Settings.vue
+  // this is skipped until the hpos ssh update issue is fixed. See also SettingsModal.vue
   it.skip('saves changes to ssh access', async () => {
     axios.put
       .mockImplementationOnce(() => Promise.resolve({ data: { enabled: true } }))
