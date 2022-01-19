@@ -16,7 +16,7 @@ const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_H
 
 export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
-  : (window.location.protocol + '//' + window.location.hostname)
+  : (window.location.protocol + '//' + window.location.host)
 
 function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {} }) {
   return async params => {

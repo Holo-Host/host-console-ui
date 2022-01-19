@@ -4,9 +4,13 @@ import stringify from 'fast-json-stable-stringify'
 
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
 const getHcPubkey = () => {
-  return ((process.env.VUE_APP_USE_REAL_PUB_KEY !== 'true')
-    ? '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
-    : window.location.hostname.split('.')[0])
+  if (process.env.VUE_APP_USE_REAL_PUB_KEY === 'true') {
+    return window.location.hostname.split('.')[0]
+  } else if (process.env.VUE_APP_HOLOPORT_URL) {
+    return (new URL(process.env.VUE_APP_HOLOPORT_URL)).hostname.split('.')[0]
+  } else {
+    return '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
+  }
 }
 
 // This import has to be async because of the way that dumb webpack interacts with wasm
