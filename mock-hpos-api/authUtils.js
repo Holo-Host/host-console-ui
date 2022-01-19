@@ -1,25 +1,26 @@
 const stringify = require('fast-json-stable-stringify')
 const sha512 = require('js-sha512')
-const { isEmpty } = require('lodash')
 
 // there's some duplication between this file and src/utils/keyManagement.js
 
-const signPayload = (keypair, method, request, body) => {
-  let bodyHash
+const verifySignedRequest = (givenSignature, method, pathIncludingQuery, body, keypair) => {
+  // BUG: real server (hp-admin-crypto) does not properly check the body when
+  //      verifying signature. pass empty string so that it validates
+  //      successfully
+  // correct code:
+  // let body_to_sign = stringify(body)
+  // if (body_to_sign === '{}') {
+  //   body_to_sign = ''
+  // }
+  const body_to_sign = ''
+  const payload = { method: method.toLowerCase(), request: pathIncludingQuery, body: body_to_sign }
 
-  if (body && !isEmpty(body)) {
-    bodyHash = hashString(stringify(body))
+  const expectedSignature = keypair.sign(payload)
+  const valid = givenSignature === expectedSignature
+  if (!valid) {
+    console.log('Invalid signature. Signed Payload:', payload, 'Expected Signature', expectedSignature, 'Given Signature', givenSignature)
   }
-
-  const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
-
-  try {
-    const signature = keypair.sign(payload)
-    
-    return signature
-  } catch (error) {
-    throw (error)
-  }
+  return valid
 }
 
 const hashString = string => {
@@ -27,6 +28,6 @@ const hashString = string => {
 }
 
 module.exports = {
-  signPayload,
+  verifySignedRequest,
   hashString
 }

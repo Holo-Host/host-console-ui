@@ -1,8 +1,7 @@
 require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
-import { omitBy, isUndefined } from 'lodash/fp'
 import mergeMockHappData from 'src/mergeMockHappData'
-import { signPayload, hashString } from 'src/utils/keyManagement'
+import { signRequest, hashString } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
 
 const axiosConfig = {
@@ -19,43 +18,31 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.hostname)
 
-export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
+function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
-    const fullPath = HPOS_API_URL + pathPrefix + path
+    const fullUrl = HPOS_API_URL + pathPrefix + path
 
-    const urlObj = new URL(fullPath)
-
-    let bodyHash
-    let signature
-
-    if (params) {
-      bodyHash = await hashString(stringify(params))
-      signature = await signPayload(method, `${urlObj.pathname}?${new URLSearchParams(params).toString()}`, bodyHash)
-    } else {
-      signature = await signPayload(method, urlObj.pathname, bodyHash)
-    }
-
-    const headers = omitBy(isUndefined, {
+    const signature = await signRequest(method, fullUrl, params)
+    const headers = {
       ...axiosConfig.headers,
       ...userHeaders,
-      'X-Body-Hash': bodyHash,
       'X-Hpos-Admin-Signature': signature
-    })
+    }
 
     let data
 
     switch (method) {
       case 'get':
-        ({ data } = await axios.get(fullPath, { params, headers }))
+        ({ data } = await axios.get(fullUrl, { params, headers }))
         return data
       case 'post':
-        ({ data } = await axios.post(fullPath, params, { headers }))
+        ({ data } = await axios.post(fullUrl, params, { headers }))
         return data
       case 'put':
-        ({ data } = await axios.put(fullPath, params, { headers }))
+        ({ data } = await axios.put(fullUrl, params, { headers }))
         return data
       case 'delete':
-        ({ data } = await axios.delete(fullPath, { params, headers }))
+        ({ data } = await axios.delete(fullUrl, { params, headers }))
         return data
       default:
         throw new Error(`No case in hposCall for ${method} method`)
@@ -125,7 +112,7 @@ const HposInterface = {
     try {
       await HposInterface.settings()
     } catch (error) {
-      console.log('checkAuth failed')
+      console.log('checkAuth failed', error)
       return false
     }
 

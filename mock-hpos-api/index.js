@@ -1,11 +1,10 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const stringify = require('fast-json-stable-stringify')
 const _ = require('lodash')
 const HpAdminKeypair = require('@holo-host/hp-admin-keypair').HpAdminKeypair
-const { signPayload, hashString } = require('./authUtils')
 const defaultResponse = require('./defaultResponse')
+const { verifySignedRequest } = require('./authUtils')
 
 const HC_PUBKEY = '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
 
@@ -53,18 +52,16 @@ class MockHposApi {
     })
   }
 
-  async checkAuth (req, res, next) {
+  checkAuth (req, res, next) {
     if (!this.shouldCheckAuth) {
       next()
     } else {
+      const { method, originalUrl, body } = req
 
-      const { method, path, body } = req
-
-      const keypairInstance = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
-
-      const signature = await signPayload(keypairInstance, method, path, body)
-
-      if (signature === req.header('x-hpos-admin-signature')) {
+      const keypair = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
+      const signature = req.header('x-hpos-admin-signature')
+      const valid = verifySignedRequest(signature, method, originalUrl, body, keypair)
+      if (valid) {
         next()
       } else {
         res.status(401).end()

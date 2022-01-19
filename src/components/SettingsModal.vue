@@ -98,7 +98,8 @@ export default {
   },
   methods: {
     editDeviceName () {
-      // Disabled until we get auth working
+      // BUG: hpos-admin-api does not properly save config due to permissions issue.
+      //      Disable editing device name until bug is fixed
       // this.editedDeviceName = this.settings.deviceName
       // this.isEditingDeviceName = true
     },
@@ -205,7 +206,9 @@ export default {
 .pencil {
   margin-left: 5px;
   margin-top: 3px;
-  /* cursor: pointer; */
+
+  /* Disable editing device name until bug is fixed
+  cursor: pointer; */
   opacity: 0.2;
 }
 .filled-check {

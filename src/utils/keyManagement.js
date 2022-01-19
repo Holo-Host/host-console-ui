@@ -1,3 +1,5 @@
+import stringify from 'fast-json-stable-stringify'
+
 // there's some duplication between this file and mock-hpos-api/authUtils.js
 
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
@@ -9,7 +11,7 @@ const getHcPubkey = () => {
 
 // This import has to be async because of the way that dumb webpack interacts with wasm
 // It took me more than 2 days to make it work so DO NOT even try to touch this code!
-const importHpAdminKeypairClass = async () => {  
+const importHpAdminKeypairClass = async () => {
   const wasm = await import('@holo-host/hp-admin-keypair')
   return wasm.HpAdminKeypair
 }
@@ -39,21 +41,38 @@ export const getHpAdminKeypair = async (email, password) => {
 
 export const checkHpAdminKeypair = () => !!HpAdminKeypairInstance
 
-// Return empty string if HpAdminKeypair is still not initialized
-export const signPayload = async (method, request, bodyHash) => {
+export const signRequest = async (method, url, params) => {
   const keypair = await getHpAdminKeypair()
 
-  if (keypair === null) return ''
-
-  const payload = { method: method.toLowerCase(), request, body: bodyHash || '' }
-
-  try {
-    const signature = keypair.sign(payload)
-
-    return signature
-  } catch (error) {
-    throw (error)
+  // Workaround to allow making requests within unit tests
+  if (keypair === null) {
+    return ''
   }
+
+  let path_to_sign = (new URL(url)).pathname
+  let body = ''
+  if (params) {
+    switch (method) {
+      case 'get':
+      case 'delete':
+        path_to_sign = `${path_to_sign}?${new URLSearchParams(params)}`
+        break
+      case 'post':
+      case 'put':
+        // BUG: real server (hp-admin-crypto) does not properly check the body when
+        //      verifying signature. pass empty string so that it validates
+        //      successfully
+        // body = stringify(params)
+        break
+      default:
+        throw new Error(`No case in hposCall for ${method} method`)
+    }
+  }
+
+  const payload = { method: method.toLowerCase(), request: path_to_sign, body }
+  const signature = keypair.sign(payload)
+
+  return signature
 }
 
 export const hashString = async (string) => {
