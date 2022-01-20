@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <div class='settings-row disabled-row'>
+        <div class='settings-row'>
           <div class='row-label'>
             <label for='sshAccess'>Access for HoloPort support (SSH)</label>
           </div>
@@ -188,9 +188,6 @@ export default {
   width: 100%;
   line-height: 30px;
 }
-.disabled-row {
-  opacity: 0.2;
-}
 .row-label {
   flex-basis: 280px;
   display: flex;
@@ -198,6 +195,9 @@ export default {
 }
 .row-value {
   display: flex;
+}
+#sshAccess {
+  cursor: not-allowed;
 }
 .factory-reset-link {
   text-decoration-line: underline;
