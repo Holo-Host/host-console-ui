@@ -43,7 +43,7 @@
             <label for='sshAccess'>Access for HoloPort support (SSH)</label>
           </div>
           <div class='row-value'>
-            <input type='checkbox' id='sshAccess' v-model='sshAccess' disabled="true">
+            <input type='checkbox' id='sshAccess' :checked="true" disabled="true">
           </div>
         </div>
       </section>
