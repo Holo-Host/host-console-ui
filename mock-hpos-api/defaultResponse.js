@@ -3,15 +3,49 @@ const _ = require('lodash')
 // mock of normal hpos api responses
 
 const happs = [{
-  id: 1,
-  name: 'HoloFuel'
+  id: '1',
+  name: 'HoloFuel',
+  enabled: true,
+  sourceChains: 110,
+  storage: 3902834,
+  usage: {
+    bandwidth: 349082,
+    cpu: 49083408432
+  }
 }, {
-  id: 2,
-  name: 'Community'
+  id: '2',
+  name: 'Community',
+  enabled: true,
+  sourceChains: 79,
+  storage: 709049842834,
+  usage: {
+    bandwidth: 59084358,
+    cpu: 83408432
+  }
 }, {
-  id: 3,
-  name: 'Elemental Chat'
+  id: '3',
+  name: 'Elemental Chat',
+  enabled: true,
+  sourceChains: 34,
+  storage: 50949882,
+  usage: {
+    bandwidth: 98559083,
+    cpu: 595430
+  }
+}, {
+  id: '4',
+  name: 'A disabled happ you should never see',
+  enabled: false
 }]
+
+const dashboard = {
+  totalSourceChains: 387,
+  currentTotalStorage: 590348543805,
+  usage: {
+    cpu: 39084998,
+    bandwidth: 5094853480509
+  }
+}
 
 // NB: both /api and /holochain-api calls are mocked here
 const data = {
@@ -26,7 +60,8 @@ const data = {
     '/api/v1/profiles/development/features/ssh': {
       enabled: true
     },
-    '/holochain-api/v1/hosted_happs': happs
+    '/holochain-api/v1/hosted_happs': happs,
+    '/holochain-api/v1/dashboard': dashboard
   },
   put: {
     '/api/v1/config': args => args,
@@ -42,7 +77,7 @@ const data = {
 }
 
 
-function defaultResponse (method, path, body) {  
+function defaultResponse (method, path, body) {
   const pathsForMethod = data[method]
   if (pathsForMethod) {
     const response = pathsForMethod[path]

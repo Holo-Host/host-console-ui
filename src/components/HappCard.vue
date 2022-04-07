@@ -1,27 +1,32 @@
 <template>
   <router-link :to="pathToHapp" class='happ-card'>
-    <HappImage :happ="happ" />
+    <HappImage :happ="happ" class="desktop-happ-image" />
     <div class='details'>
-      <div class="name-row">
-        <h2 class="name">{{ happ.name }}</h2>
-        <ArrowIcon class="arrow-icon" />
-      </div>
-      <div class="duration-row">
-        <ClockIcon class="clock-icon" /> Hosted for&nbsp;<span class="days">{{ happ.hostedDays }} days</span>
-      </div>
-      <div class="snapshot-label">7 day snapshot:</div>
-      <div class="earnings-row grayed-out">
-        Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} TF</span>
+      <div class='mobile-row'>
+        <HappImage :happ="happ" :size="'80px'" class="mobile-happ-image" />
+        <div class='mobile-column'>
+          <div class="name-row">
+            <h2 class="name">{{ happ.name }}</h2>
+            <ArrowIcon class="arrow-icon" />
+          </div>
+          <div class="duration-row">
+            <ClockIcon class="clock-icon" /> Hosted for&nbsp;<span class="days">{{ happ.hostedDays }} days</span>
+          </div>
+          <div class="snapshot-label">7 day snapshot:</div>
+          <div class="earnings-row grayed-out">
+            Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} HF</span>
+          </div>
+        </div>
       </div>
       <div class="usage-row">
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
+          <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span><span class="usage-unit">CPU</span>
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.storage }}MB</span> Storage
+          <span class="usage-value">{{ presentBytes(happ.storage) }}</span><span class="usage-unit">Storage</span>
         </div>
         <div class='usage'>
-          <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
+          <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span><span class="usage-unit">Bandwidth</span>
         </div>
       </div>
     </div>
@@ -32,6 +37,8 @@
 import HappImage from 'components/HappImage.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
+import { happDetailsPath } from '../router'
+import { presentMicroSeconds, presentBytes } from 'src/utils'
 
 export default {
   name: 'HappCard',
@@ -45,8 +52,12 @@ export default {
   },
   computed: {
     pathToHapp() {
-      return `/happ/${this.happ.id}`
+      return happDetailsPath(this.happ)
     }
+  },
+  methods: {
+    presentMicroSeconds,
+    presentBytes
   }
 }
 </script>
@@ -67,11 +78,14 @@ export default {
 .details {
   display: flex;
   flex: 1;
-  flex-direction: column;  
+  flex-direction: column;
   color: #606C8B;
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
+}
+.mobile-happ-image {
+  display: none;
 }
 .name-row {
   display: flex;
@@ -108,7 +122,7 @@ export default {
   align-items: center;
   color: #313C59;
   margin-bottom: 10px;
-  margin-left: 3px;  
+  margin-left: 3px;
 }
 .earnings {
   font-weight: 700;
@@ -136,5 +150,48 @@ export default {
 }
 .grayed-out span {
   color: rgba(96, 108, 139, 0.18);
+}
+
+@media screen and (max-width: 1050px) {
+  .desktop-happ-image {
+    display: none;
+  }
+  .mobile-happ-image {
+    display: flex;
+  }
+  .happ-card {
+    margin-right: 0;
+    max-width: none;
+    flex-basis: 0;
+  }
+  .duration-row {
+     display: none;
+  }
+  .mobile-row {
+    display: flex;
+    margin-bottom: 14px;
+  }
+  .mobile-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .snapshot-label {
+    font-size: 11px;
+  }
+  .snapshot-label {
+    font-size: 11px;
+  }
+  .usage {
+    flex-direction: column;
+  }
+  .usage-value {
+    padding: 0;
+    border: none;
+  }
+  .usage-unit {
+    border-bottom: 2px solid #00CAD9;
+    margin-right: auto;
+  }
 }
 </style>

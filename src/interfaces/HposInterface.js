@@ -1,8 +1,7 @@
 require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
-import { omitBy, isUndefined } from 'lodash/fp'
 import mergeMockHappData from 'src/mergeMockHappData'
-import { signPayload, hashString } from 'src/utils/keyManagement'
+import { signRequest, hashString } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
 
 const axiosConfig = {
@@ -17,45 +16,33 @@ const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_H
 
 export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
-  : (window.location.protocol + '//' + window.location.hostname) 
+  : (window.location.protocol + '//' + window.location.host)
 
-// export const HPOS_API_URL = "https://rkbpxayrx3b9mrslvp26oz88rw36wzltxaklm00czl5u5mx1w.holohost.net"
-
-export function hposCall ({ pathPrefix = '/api/v1', method = 'get', path, headers: userHeaders = {} }) {
+function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {} }) {
   return async params => {
-    const fullPath = HPOS_API_URL + pathPrefix + path
+    const fullUrl = HPOS_API_URL + pathPrefix + path
 
-    const urlObj = new URL(fullPath)
-
-    let bodyHash
-
-    if (params) {
-      bodyHash = await hashString(stringify(params))
-    }
-
-    const signature = await signPayload(method, urlObj.pathname, bodyHash)
-
-    const headers = omitBy(isUndefined, {
+    const signature = await signRequest(method, fullUrl, params)
+    const headers = {
       ...axiosConfig.headers,
       ...userHeaders,
-      'X-Body-Hash': bodyHash,
       'X-Hpos-Admin-Signature': signature
-    })
+    }
 
     let data
 
     switch (method) {
       case 'get':
-        ({ data } = await axios.get(fullPath, { params, headers }))
+        ({ data } = await axios.get(fullUrl, { params, headers }))
         return data
       case 'post':
-        ({ data } = await axios.post(fullPath, params, { headers }))
+        ({ data } = await axios.post(fullUrl, params, { headers }))
         return data
       case 'put':
-        ({ data } = await axios.put(fullPath, params, { headers }))
+        ({ data } = await axios.put(fullUrl, params, { headers }))
         return data
       case 'delete':
-        ({ data } = await axios.delete(fullPath, { params, headers }))
+        ({ data } = await axios.delete(fullUrl, { params, headers }))
         return data
       default:
         throw new Error(`No case in hposCall for ${method} method`)
@@ -86,16 +73,32 @@ const presentHposSettings = (hposSettings) => {
     registrationEmail: admin.email,
     networkStatus: holoportos.network || 'test', // ie: 'live'
     sshAccess: holoportos.sshAccess || false,
-    deviceName: deviceName || 'Your HP'
+    deviceName: deviceName || (admin.public_key && admin.public_key.slice(-8)) || 'Your HP'
   }
 }
 
 const HposInterface = {
+  dashboard: async () => {
+    const dashboardData = await hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 })
+    dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
+    return dashboardData
+  },
+
   hostedHapps: async () => {
-    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })()
+    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({
+      duration_unit: "WEEK",
+      amount: 1
+    })
+
     if (Array.isArray(result)) {
-      return result.map(mergeMockHappData)
+      return result.filter(happ => happ.enabled)
+        .map(mergeMockHappData)
+        .map(happ => ({ // currently hiding storage value from the UI as it's mock data coming from the api
+          ...happ,
+          storage: '--'
+        }))
     } else {
+      console.error("hosted_happs didn't return an array")
       return []
     }
   },
@@ -109,7 +112,7 @@ const HposInterface = {
     try {
       await HposInterface.settings()
     } catch (error) {
-      console.log('checkAuth failed')
+      console.log('checkAuth failed', error)
       return false
     }
 

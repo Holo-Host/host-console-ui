@@ -1,26 +1,31 @@
 <template>
   <PrimaryLayout :breadcrumbs="breadcrumbs">
-    <div class='happ-details'>
-      <router-link class="back-link" to="/">
+    <div class='happ-details' :class="{ 'modal-open': hostingModalVisible }">
+      <router-link class="back-link" to="/happs">
         <LeftChevronIcon class="left-chevron" />
         Back
       </router-link>
       <div class='columns'>
-        <div class='left-column'>
+        <div class='left-column desktop'>
           <HappImage :happ="happ" size="178px" class="happ-image" />
           <div class='description-label'>Description</div>
-          <div class='description'>{{ happ.description }}</div>
+          <div class='description'>{{ happ.description }}Happ to make you more productive.</div>
         </div>
         <div class='main-column'>
-          <h2 class="name">{{ happ.name }}</h2>
+          <div class='mobile-column'>
+            <HappImage :happ="happ" size="124px" class="happ-image" />
+            <h2 class="name">{{ happ.name }}</h2>
+            <div class='description'>{{ happ.description }}Happ to make you more productive.</div>
+          </div>
+          <h2 class="name desktop">{{ happ.name }}</h2>
           <div class="info-row large-text grayed-out">
-            Total Earnings:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.earnings) }} TF</span>
+            Total Earnings:<span class="info">&nbsp;{{ presentHolofuelAmount(happ.earnings) }} HF</span>
           </div>
           <div class="info-row grayed-out">
-            Earned in last 7 days:<span class="info">&nbsp;{{ formatHolofuelAmount(happ.sevenDayEarnings) }} TF</span>
+            Earned in last 7 days:<span class="info">&nbsp;{{ presentHolofuelAmount(happ.sevenDayEarnings) }} HF</span>
           </div>
           <div class="info-row earnings-margin grayed-out">
-            Average weekly earnings:<span class="info">&nbsp;-- TF</span>
+            Average weekly earnings:<span class="info">&nbsp;-- HF</span>
           </div>
           <div class="info-row">
             <ClockIcon class="clock-icon" /> Hosted for:&nbsp;<span class="info">{{ happ.hostedDays }} days</span>
@@ -31,36 +36,37 @@
           <div class="usage-row">
             <span class='usage-label'>Total usage:</span>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.cpu }}ms</span> CPU
+              <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span> CPU
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.storage }}MB</span> Storage
+              <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
             </div>
             <div class='usage'>
-              <span class="usage-value">{{ happ.usage.bandwidth }}Mb</span> Bandwidth            
+              <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth
             </div>
           </div>
           <div class='rates-title grayed-out'>
             Rates (Default) <PencilIcon class='pencil-icon' @click="editRates" />
           </div>
           <div class="rate-row grayed-out">
-            <div class='rate-label'>CPU</div><span class="rate-value">-- TF per Min</span>
-          </div>          
-          <div class="rate-row grayed-out">
-            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- TF per Gb</span>
-          </div>          
-          <div class="rate-row rates-margin grayed-out">
-            <div class='rate-label'>Storage</div><span class="rate-value">-- TF per GB</span>
+            <div class='rate-label'>CPU</div><span class="rate-value">-- HF per Min</span>
           </div>
-          <div class="stop-hosting-row">
-            <div class="stop-hosting" @click="stopHosting">Stop hosting</div>
+          <div class="rate-row grayed-out">
+            <div class='rate-label'>Storage</div><span class="rate-value">-- HF per GB</span>
+          </div>
+          <div class="rate-row rates-margin grayed-out">
+            <div class='rate-label'>Bandwidth</div><span class="rate-value">-- HF per Gb</span>
+          </div>
+          <div class="stop-hosting-row grayed-out">
+            <div class="stop-hosting" @click="stopHostingHapp">Stop hosting</div>
             <div class="stop-hosting-warning">
-              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting will move any source chains to another host
+              <AlertCircleIcon class="alert-circle-icon" />Stopping hosting of a hApp will remove it and all associated data from your HoloPort.
             </div>
           </div>
         </div>
       </div>
     </div>
+    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" :stopHostingHapp="stopHostingHapp" :happName="happ.name" />
   </PrimaryLayout>
 </template>
 
@@ -68,12 +74,13 @@
 
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HappImage from 'components/HappImage.vue'
+import StopHostingModal from 'components/StopHostingModal.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
 import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
-import { formatHolofuelAmount } from 'src/utils'
+import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
@@ -85,19 +92,21 @@ export default {
     LeftChevronIcon,
     ChainIcon,
     PencilIcon,
-    AlertCircleIcon
+    AlertCircleIcon,
+    StopHostingModal
   },
   data() {
     return {
       happ: {
         name: '',
         usage: {}
-      }
+      },
+      hostingModalVisible: false
     }
   },
   created: async function () {
     const happs = await HposInterface.hostedHapps()
-    const happId = Number(this.$route.params.id)
+    const happId = decodeURIComponent(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
     if (!happ) {
       throw new Error(`Failed to load happ with id: ${happId}`)
@@ -108,16 +117,25 @@ export default {
     editRates () {
       alert('Editing rates is not implemented in this version')
     },
-    stopHosting () {
-      alert('Stopping hosting is not implemented in this version')
+    openHostingModal () {
+      // This function is not currently used but should replace the call to stopHostingHapp once we have implemented stopping hosting
+      this.hostingModalVisible = true
     },
-    formatHolofuelAmount
+    closeHostingModal () {
+      this.hostingModalVisible = false
+    },
+    stopHostingHapp () {
+      console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
+    },
+    presentHolofuelAmount,
+    presentMicroSeconds,
+    presentBytes
   },
   computed: {
     breadcrumbs () {
       return [{
         label: 'hApps',
-        path: '/'
+        path: '/happs'
       }, {
         label: this.happ.name || 'loading'
       }]
@@ -137,7 +155,7 @@ export default {
   background-color: white;
   box-shadow: 0px 4px 20px #ECEEF1;
   border-radius: 5px;
-  margin: 40px 10px 20px 12px;
+  margin: 0 10px 20px 12px;
   padding: 30px;
   color: #606C8B;
   font-size: 14px;
@@ -172,7 +190,12 @@ export default {
 .main-column {
   display: flex;
   flex: 1;
-  flex-direction: column;  
+  flex-direction: column;
+}
+.mobile-column {
+  display: none;
+  align-items: center;
+  flex-direction: column;
 }
 .name {
   margin: 0 0 34px 0;
@@ -247,7 +270,7 @@ export default {
 .pencil-icon {
   margin-left: 8px;
   cursor: pointer;
-  opacity: 0.3;  
+  opacity: 0.3;
 }
 .rate-row {
   display: flex;
@@ -274,10 +297,12 @@ export default {
   text-decoration-line: underline;
   color: #313C59;
   margin-right: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 .stop-hosting-warning {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   background: #F3F5F8;
   border-radius: 4px;
   color: #313C59;
@@ -286,6 +311,7 @@ export default {
   padding: 4px 12px;
 }
 .alert-circle-icon {
+  flex-shrink: 0;
   margin-right: 12px;
 }
 /* Temporary, remove once we have all live data */
@@ -297,5 +323,62 @@ export default {
 }
 .grayed-out span {
   color: rgba(96, 108, 139, 0.18);
+}
+
+@media screen and (max-width: 1050px) {
+  .happ-details {
+    margin: 0 0 20px 0;
+    padding: 18px;
+  }
+  .mobile-column {
+    display: flex;
+  }
+  .main-column {
+    margin: 0 4px;
+  }
+  .back-link {
+    margin-bottom: 4px;
+  }
+  .desktop {
+    display: none;
+  }
+  .happ-image {
+    margin-bottom: 10px;
+  }
+  .name {
+    margin-bottom: 8px;
+  }
+  .description {
+    font-size: 11px;
+    margin-bottom: 46px;
+  }
+  .info-row {
+    font-size: 14px;
+  }
+  .earnings-margin {
+    margin-bottom: 40px;
+  }
+  .usage-row {
+    flex-direction: column;
+    margin-bottom: 24px;;
+  }
+  .usage-label {
+    margin-bottom: 10px;
+  }
+  .usage {
+    margin: 0 0 10px 0;
+  }
+  .rate-row {
+    margin-bottom: 11px;
+  }
+  .rates-margin {
+    margin-bottom: 70px;
+  }
+  .stop-hosting-row {
+    align-items: flex-start;
+  }
+  .modal-open {
+    display: none;
+  }
 }
 </style>

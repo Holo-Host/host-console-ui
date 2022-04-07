@@ -5,8 +5,8 @@
         Filter by:
       </div>
       <div class='filter'>
-        <input v-model="filter" class="filter-input" />
-        <ExIcon v-if="filter.length > 0" @click="clearFilter" class='ex-icon' />
+        <input v-model="filter" class="filter-input" placeholder="Filter by" />
+        <ExIcon v-if="filter.length > 0" @click="clearFilter" size='15' class='ex-icon' />
       </div>
       <div class="label">
         Sort by:&nbsp;
@@ -42,7 +42,7 @@ export default {
   },
   data () {
     return {
-      happs: [], 
+      happs: [],
       filter: '',
       sort: SORT_EARNINGS
     }
@@ -94,11 +94,18 @@ export default {
 .filter-input {
   border: 1px solid #E5E5E5;
   border-radius: 5px;
+  padding: 5px;
+}
+.filter-input:focus {
+  outline-color: #313C59;
+}
+.filter-input::placeholder {
+  color: #BCBFC6;
 }
 .ex-icon {
   position: absolute;
-  top: 5px;
-  right: -7px;
+  top: 8px;
+  right: 6px;
 }
 .sort {
   appearance: none;
@@ -110,12 +117,35 @@ export default {
   padding: 4px 16px 4px 4px;
   background-image: url(/images/chevron.svg);
   background-repeat: no-repeat;
-  background-position: right;  
+  background-position: right;
 }
 .happ-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-right: -18px;
+}
+
+@media screen and (max-width: 1050px) {
+  .controls {
+    justify-content: center;
+  }
+  .filter {
+    flex-basis: 100%;
+  }
+  .filter-input {
+    flex-basis: 100%;
+    padding: 10px;
+  }
+  .sort, .label {
+    display: none;
+  }
+  .ex-icon {
+    top: 12px;
+  }
+  .happ-list {
+    flex-direction: column;
+    margin-right: 0;
+  }
 }
 </style>
