@@ -91,7 +91,9 @@ export default {
       this.email = this.email.toLowerCase();
     },
     onEmailInput: function(e) {
-      setTimeout(this.email = this.email.toLowerCase(), 500)
+      setTimeout(() => {
+        this.email = this.email.toLowerCase()
+      }, 500)
     },
     login: async function (e) {
       this.email = this.email.toLowerCase();
