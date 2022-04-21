@@ -92,7 +92,7 @@ export default {
     },
     onEmailInput: function(e) {
       setTimeout(() => {
-        this.email = this.email.toLowerCase()
+        this.onEmailChange();
       }, 500)
     },
     login: async function (e) {
