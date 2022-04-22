@@ -12,7 +12,7 @@
             id="email"
             class="input"
             @change="onEmailChange"
-            @input="onEmailChange"
+            @input="onEmailInput"
           />
           <small v-if="!!errors.email" class="field-error">
             {{ errors.email }}
@@ -90,7 +90,13 @@ export default {
     onEmailChange: function(e) {
       this.email = this.email.toLowerCase();
     },
+    onEmailInput: function(e) {
+      setTimeout(() => {
+        this.onEmailChange();
+      }, 500)
+    },
     login: async function (e) {
+      this.email = this.email.toLowerCase();
       if (!validateEmail(this.email)) {
         this.errors.email = 'Please enter a valid email.'
       }
