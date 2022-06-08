@@ -11,8 +11,6 @@
             name="email"
             id="email"
             class="input"
-            @change="onEmailChange"
-            @input="onEmailInput"
           />
           <small v-if="!!errors.email" class="field-error">
             {{ errors.email }}
@@ -71,7 +69,7 @@ async function createKeypairAndCheckAuth (email, password) {
 }
 
 export default {
-  name: 'HappDetails',
+  name: 'Login',
   components: {
     HoloBadgeIcon,
     InvisibleEyeIcon,
@@ -87,17 +85,8 @@ export default {
     }
   },
   methods: {
-    onEmailChange: function(e) {
-      this.email = this.email.toLowerCase();
-    },
-    onEmailInput: function(e) {
-      setTimeout(() => {
-        this.onEmailChange();
-      }, 500)
-    },
     login: async function (e) {
-      this.email = this.email.toLowerCase();
-      if (!validateEmail(this.email)) {
+      if (!validateEmail(this.email.toLowerCase())) {
         this.errors.email = 'Please enter a valid email.'
       }
 
@@ -106,7 +95,7 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        const isAuthed = await createKeypairAndCheckAuth(this.email, this.password)
+        const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
         if (isAuthed) {
           localStorage.setItem('isAuthed', 'true')
           if(this.$route.params.nextUrl != null) {
