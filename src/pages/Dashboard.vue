@@ -59,7 +59,7 @@ const data = reactive({
 		usage: {},
 		holofuel: {},
 		earnings: {},
-		recentPayments: {}
+		recentPayments: []
 	},
 	topHostedHapps
 })

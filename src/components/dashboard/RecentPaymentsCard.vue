@@ -10,12 +10,12 @@
 				:key="payment.id"
 				class="payment-row"
 			>
-				<div class="payment-amount">{{ formatCurrency(payment.amount) }} HF</div>
+				<div class="payment-amount">{{ payment.amount ? formatCurrency(payment.amount) : '--' }} HF</div>
 				<div class="payment-details">
-					<div class="">{{ capitalizeWord(payment.status) }}</div>
-					<div class="payment-happ">{{ payment.happ }}</div>
+					<div class="">{{ payment.status ? capitalizeWord(payment.status) : '--' }}</div>
+					<div class="payment-happ">{{ payment ? payment.happ : '--' }}</div>
 				</div>
-				<div class="payment-time">{{ dayjs(payment.updatedAt).format('DD MMM hh:mm') }}</div>
+				<div class="payment-time">{{ payment ? dayjs(payment.updatedAt).format('DD MMM hh:mm') : '--' }}</div>
 			</div>
 		</div>
 	</BaseCard>
@@ -25,13 +25,13 @@
 import { defineProps } from 'vue'
 import dayjs from 'dayjs'
 import BaseCard from 'components/BaseCard.vue'
-import { formatCurrency } from "../../utils/numbers";
-import { capitalizeWord } from "../../utils/stringUtils";
+import { formatCurrency } from '../../utils/numbers'
+import { capitalizeWord } from '../../utils/stringUtils'
 
 const props = defineProps({
 	data: {
 		type: Array,
-		required: true
+		default: () => []
 	}
 })
 </script>

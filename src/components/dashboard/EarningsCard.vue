@@ -26,9 +26,9 @@ const props = defineProps({
 })
 
 const items = computed(() => [
-	{ label: 'Last 30 days', value: props.data.last30Days ? formatCurrency(props.data.last30Days) : '--' },
-	{ label: 'Last 7 days', value: props.data.last7Days ? formatCurrency(props.data.last7Days) : '--' },
-	{ label: 'Last day', value: props.data.lastDay ? formatCurrency(props.data.lastDay) : '--' }
+	{ label: 'Last 30 days', value: (props.data && props.data.last30Days) ? formatCurrency(props.data.last30Days) : '--' },
+	{ label: 'Last 7 days', value: (props.data && props.data.last7Days) ? formatCurrency(props.data.last7Days) : '--' },
+	{ label: 'Last day', value: (props.data && props.data.lastDay) ? formatCurrency(props.data.lastDay) : '--' }
 ])
 </script>
 

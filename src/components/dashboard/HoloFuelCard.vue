@@ -36,8 +36,8 @@ const props = defineProps({
 })
 
 const items = computed(() => [
-	{ label: 'Balance', value: props.data.balance ? formatCurrency(props.data.balance) : '--', isActive: true },
-	{ label: 'Redeemable', value: props.data.redeemable ? formatCurrency(props.data.redeemable) : '--', isActive: false },
+	{ label: 'Balance', value: (props.data && props.data.balance) ? formatCurrency(props.data.balance) : '--', isActive: true },
+	{ label: 'Redeemable', value: (props.data && props.data.redeemable) ? formatCurrency(props.data.redeemable) : '--', isActive: false },
 ])
 </script>
 

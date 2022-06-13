@@ -3,10 +3,10 @@
 		<template v-slot:left>
 			<h3 class="inner-title">hApps</h3>
 			<div class="info-row usage-row">
-				<span class="bold" data-testid='happ-no'>{{ data.totalHostedHapps }}&nbsp;</span> Total hApps hosted
+				<span class="bold" data-testid='happ-no'>{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> Total hApps hosted
 			</div>
 			<div class="info-row usage-row">
-				<span class="bold" data-testid='sc-no'>{{ data.totalSourceChains }}&nbsp;</span> Total source chains hosted
+				<span class="bold" data-testid='sc-no'>{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> Total source chains hosted
 			</div>
 			<router-link to="/preferences" class='info-row usage-row hosting-preferences' active-class="active-link">
 				<GearIcon class="gear-icon" color="#606C8B" />Hosting Preferences
@@ -17,15 +17,15 @@
 			<h3 class="inner-title">Daily Snapshot</h3>
 			<div class="info-row daily-row inactive">
 				<span class="daily-label">CPU</span>
-				<span class="bold">{{ presentMicroSeconds(data.cpu) || '--' }}</span>
+				<span class="bold">{{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}</span>
 			</div>
 			<div class="info-row daily-row inactive">
 				<span class="daily-label">Storage</span>
-				<span class="bold">{{ presentBytes(data.currentTotalStorage) || '--' }}</span>
+				<span class="bold">{{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}</span>
 			</div>
 			<div class="info-row daily-row">
 				<span class="daily-label">Bandwidth</span>
-				<span class="bold">{{ presentBytes(data.bandwidth) }}</span>
+				<span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}</span>
 			</div>
 		</template>
 	</BaseCard>
