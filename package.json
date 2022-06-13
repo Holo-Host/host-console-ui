@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "serve": "VUE_APP_UI_VERSION=$npm_package_version vue-cli-service serve",
-    "start-ui-and-mock": "npm run start-mock-hpos-api-with-auth & npm run serve",
     "build": "VUE_APP_UI_VERSION=$npm_package_version VUE_APP_USE_REAL_PUB_KEY=true vue-cli-service build",
     "build:dev": "VUE_APP_UI_VERSION=$npm_package_version VUE_APP_USE_REAL_PUB_KEY=true vue-cli-service build --mode development",
     "lint": "vue-cli-service lint",
@@ -20,12 +19,12 @@
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
+    "dayjs": "^1.11.3",
     "dotenv": "^8.2.0",
     "email-validator": "^2.0.4",
     "fast-json-stable-stringify": "^2.1.0",
     "js-sha512": "^0.8.0",
     "lodash": "^4.17.20",
-    "moment": "^2.29.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-beta.13",
     "waait": "^1.0.5"
