@@ -78,10 +78,8 @@ const presentHposSettings = (hposSettings) => {
 }
 
 const HposInterface = {
-  dashboard: async () => {
-    const dashboardData = await hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 })
-    dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
-    return dashboardData
+  dashboard:() => {
+    return hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 })
   },
 
   hostedHapps: async () => {
