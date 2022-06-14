@@ -14,7 +14,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import BaseCard from 'components/BaseCard.vue'
 import MissingLogoExIcon from 'components/icons/MissingLogoExIcon'
 

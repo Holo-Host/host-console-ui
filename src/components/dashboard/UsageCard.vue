@@ -32,7 +32,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import BaseCard from 'components/BaseCard.vue'
 import GearIcon from 'components/icons/GearIcon.vue'
 import { presentMicroSeconds, presentBytes } from 'src/utils'

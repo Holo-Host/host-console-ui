@@ -22,7 +22,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import dayjs from 'dayjs'
 import BaseCard from 'components/BaseCard.vue'
 import { formatCurrency } from '../../utils/numbers'

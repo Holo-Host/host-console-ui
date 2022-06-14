@@ -24,7 +24,7 @@
 </template>
 
 <script setup >
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 import BaseCard from 'components/BaseCard.vue'
 import { formatCurrency } from "../../utils/numbers";
 
