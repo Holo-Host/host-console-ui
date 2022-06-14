@@ -44,10 +44,10 @@
 </template>
 
 <script setup>
-import { computed, defineEmit, defineProps, useContext } from 'vue'
+import { computed, defineProps, useSlots } from 'vue'
 import RightArrowIcon from 'components/icons/RightArrowIcon.vue'
 
-const { slots } = useContext()
+const slots = useSlots()
 
 const props = defineProps({
 	title: {
@@ -66,7 +66,7 @@ const props = defineProps({
 	}
 })
 
-const emit = defineEmit(['more-clicked'])
+const emit = defineEmits(['more-clicked'])
 
 const isMultiColumn = computed(() => slots.right && slots.left)
 </script>
