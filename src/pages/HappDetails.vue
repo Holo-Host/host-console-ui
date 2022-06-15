@@ -66,7 +66,13 @@
         </div>
       </div>
     </div>
-    <StopHostingModal v-if="hostingModalVisible" :handleClose="closeHostingModal" :stopHostingHapp="stopHostingHapp" :happName="happ.name" />
+
+    <StopHostingModal
+			:is-visible="hostingModalVisible"
+			:happName="happ.name"
+			@close="closeHostingModal"
+			@stop-hosting-happ="stopHostingHapp"
+		/>
   </PrimaryLayout>
 </template>
 

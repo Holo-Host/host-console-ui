@@ -4,7 +4,7 @@
     <section class='main-column'>
       <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" :openSettingsModal="openSettingsModal" />
       <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
-      <SettingsModal v-if="settingsModalVisible" :handleClose="closeSettingsModal"  />
+      <SettingsModal :is-visible="settingsModalVisible" @close="closeSettingsModal" />
       <div v-if="kycBannerVisible" class='kyc-banner'>
         You haven't finished verifying your identity yet. Go to our <a href='https://holo.host/kyc' target="_blank">third party provider's site</a> to complete your verification.
       </div>

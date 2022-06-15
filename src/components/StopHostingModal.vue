@@ -1,27 +1,28 @@
 <template>
-  <Modal :handleClose="handleClose">
+  <BaseModal @close="$emit('close')">
     <div class='stop-hosting-modal' v-if="!confirmed">
       <ExclamationIcon class="exclamation-icon" />
       <p class='content'>Are you sure you want to stop hosting {{ happName }}?</p>
       <p class='content'>It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.</p>
-      <div class='buttons'>
-        <Button color='teal' @click="confirm">Yes, I want to stop hosting this hApp</Button>
-        <Button color='white' @click="handleClose">Cancel</Button>
-      </div>
     </div>
     <div class='stop-hosting-modal' v-if="confirmed">
       <BigCheckIcon class="exclamation-icon" />
       <p class='content'>This hApp has been removed from hosting.</p>
       <p class='content'>Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the publisher.</p>
-      <div class='buttons'>
-        <Button color='teal' @click="closeAndGoToHapps">Close</Button>
-      </div>
     </div>
-  </Modal>
+
+		<template v-if="confirmed" #buttons>
+				<Button color='teal' @click="closeAndGoToHapps">Close</Button>
+		</template>
+		<template v-else #buttons>
+				<Button color='teal' @click="confirm">Yes, I want to stop hosting this hApp</Button>
+				<Button color='white' @click="$emit('close')">Cancel</Button>
+		</template>
+	</BaseModal>
 </template>
 
 <script>
-import Modal from 'components/Modal'
+import BaseModal from 'components/BaseModal'
 import Button from 'components/Button'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
 import BigCheckIcon from 'components/icons/BigCheckIcon'
@@ -29,24 +30,16 @@ import BigCheckIcon from 'components/icons/BigCheckIcon'
 export default {
   name: 'StopHostingModal',
   components: {
-    Modal,
+		BaseModal,
     Button,
     ExclamationIcon,
     BigCheckIcon
   },
   props: {
-    handleClose: {
-      type: Function,
-      required: true
-    },
     happName: {
       type: String,
       required: true
-    },
-    stopHostingHapp: {
-      type: Function,
-      required: true
-    },
+    }
   },
   data: function () {
     return {
@@ -55,11 +48,11 @@ export default {
   },
   methods: {
     confirm () {
-      this.stopHostingHapp()
+			this.$emit('stop-hosting-happ')
       this.confirmed = true
     },
     closeAndGoToHapps () {
-      this.handleClose()
+      this.$emit('close')
       this.$router.push('/happs')
     }
   }

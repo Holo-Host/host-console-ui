@@ -1,9 +1,10 @@
 <template>
-  <Modal :handleClose="handleClose">
+  <BaseModal
+		title="HoloPort Settings"
+		:sub-title="deviceName"
+		@close="$emit('close')"
+	>
     <div class='settings-modal'>
-      <h3 class='title'>HoloPort Settings</h3>
-      <h4 class='sub-title'>{{ deviceName }}</h4>
-
       <section class='settings-rows'>
         <div class='settings-row'>
           <div class='row-label'>
@@ -47,14 +48,16 @@
           </div>
         </div>
       </section>
-
-      <Button color='teal' @click="handleClose" class='close-button'>Close</Button>
     </div>
-  </Modal>
+
+		<template #buttons>
+			<Button color='teal' @click="$emit('close')" class='close-button'>Close</Button>
+		</template>
+  </BaseModal>
 </template>
 
 <script>
-import Modal from 'components/Modal'
+import BaseModal from 'components/BaseModal'
 import Button from 'components/Button'
 import PencilIcon from 'src/components/icons/PencilIcon'
 import FilledCheckIcon from 'src/components/icons/FilledCheckIcon'
@@ -64,25 +67,19 @@ import HposInterface from 'src/interfaces/HposInterface'
 export default {
   name: 'SettingsModal',
   components: {
-    Modal,
+		BaseModal,
     Button,
     PencilIcon,
     FilledCheckIcon,
     CircledExIcon
   },
-  props: {
-    handleClose: {
-      type: Function,
-      required: true
-    }
-  },
-    data () {
-    return {
-      settings: {},
-      isLoading: true,
-      isEditingDeviceName: false,
-      editedDeviceName: ''
-    }
+	data () {
+		return {
+			settings: {},
+			isLoading: true,
+			isEditingDeviceName: false,
+			editedDeviceName: ''
+		}
   },
   async mounted () {
     const settings = await HposInterface.settings()
@@ -149,40 +146,16 @@ export default {
 
 <style scoped>
 .settings-modal {
-  display: flex;
-  align-items: center;
-  padding: 26px 98px;
-  flex-direction: column;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  text-align: center;
-  color: #313C59;
-}
-.title {
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 30px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #313C59;
-  margin: 0 0 12px 0;
-}
-.sub-title {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  color: #313C59;
-  margin: 0 0 65px 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 .settings-rows {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   min-width: 480px;
-  margin-bottom: 132px;
+  margin-bottom: 60px;
   font-weight: 600;
   font-size: 14px;
   color: #606C8B;
@@ -237,16 +210,6 @@ export default {
   justify-content: center;
 }
 @media screen and (max-width: 1050px) {
-  .settings-modal {
-    padding: 26px 0 28px;
-    margin: 0 -6px;
-  }
-  .title {
-    margin-bottom: 6px;
-  }
-  .sub-title {
-    margin-bottom: 26px
-  }
   .settings-rows {
     min-width: 0;
     width: 100%;
