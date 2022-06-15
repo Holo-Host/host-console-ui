@@ -25,9 +25,12 @@
     "fast-json-stable-stringify": "^2.1.0",
     "js-sha512": "^0.8.0",
     "lodash": "^4.17.20",
+    "mitt": "^3.0.0",
     "moment": "^2.29.1",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0-beta.13",
+    "sass": "^1.51.0",
+    "sass-loader": "^10",
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16",
     "waait": "^1.0.5"
   },
   "devDependencies": {
