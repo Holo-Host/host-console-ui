@@ -2,7 +2,7 @@ import axios from 'axios'
 import { render, waitFor } from  '@testing-library/vue'
 import EarningsInvoices from '../EarningsInvoices.vue'
 import wait from 'waait'
-import { routes } from 'src/router'
+import router from 'src/router'
 
 jest.mock('axios')
 
@@ -27,7 +27,9 @@ it('shows the earnings invoices page', async () => {
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
   })
 
-  const { getByText } = render(EarningsInvoices, {routes})
+  const { getByText } = render(EarningsInvoices, {
+		global: { plugins: [ router ]},
+	})
   await wait(0)
 
   getByText('Earnings')

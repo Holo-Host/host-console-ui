@@ -2,7 +2,7 @@ import axios from 'axios'
 import { render, waitFor } from  '@testing-library/vue'
 import Dashboard from '../Dashboard.vue'
 import wait from 'waait'
-import { routes } from 'src/router'
+import router from 'src/router'
 
 jest.mock('axios')
 
@@ -50,12 +50,11 @@ it('shows the proper data', async () => {
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
   })
 
-  const { getByText, getByTestId } = render(Dashboard, {routes})
-  await wait(0)
+  const { getByText, getByTestId } = render(Dashboard, {
+		global: { plugins: [ router ]},
+	})
 
-  await waitFor(() => getByText('39.08 s'))
-  getByText('-- GB') // once we have real api data this should go back to '549.8 GB'
-  getByText('4.63 TB')
+  await wait(0)
 
   expect(getByTestId('happ-no').textContent == hostedHappsResult.data.length)
   expect(getByTestId('sc-no').textContent == dashboardResult.data.totalSourceChains)

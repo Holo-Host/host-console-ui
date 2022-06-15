@@ -2,7 +2,7 @@ import axios from 'axios'
 import { render, within } from  '@testing-library/vue'
 import HostingPreferences from '../HostingPreferences.vue'
 import wait from 'waait'
-import { routes } from 'src/router'
+import router  from 'src/router'
 
 jest.mock('axios')
 
@@ -27,7 +27,9 @@ it('renders all card titles', async () => {
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
   })
 
-  const { getByText } = render(HostingPreferences, {routes})
+  const { getByText } = render(HostingPreferences, {
+		global: { plugins: [ router ]},
+	})
   await wait(0)
 
   getByText('Price Configuration')

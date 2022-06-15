@@ -2,7 +2,7 @@ import axios from 'axios'
 import { render } from  '@testing-library/vue'
 import HostingPreferences from '../HostingPreferences.vue'
 import wait from 'waait'
-import { routes } from 'src/router'
+import router  from 'src/router'
 
 jest.mock('axios')
 
@@ -27,7 +27,9 @@ it('sidebar renders alpha flag', async () => {
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
   })
 
-  const { getByText } = render(HostingPreferences, {routes})
+  const { getByText } = render(HostingPreferences, {
+		global: { plugins: [ router ]},
+	})
   await wait(0)
 
   getByText('ALPHA: HoloFuel = Test Fuel')

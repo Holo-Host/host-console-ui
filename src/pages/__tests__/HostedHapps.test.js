@@ -3,7 +3,7 @@ import { render } from  '@testing-library/vue'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import HostedHapps from '../HostedHapps.vue'
 import wait from 'waait'
-import { routes } from 'src/router'
+import router from 'src/router'
 
 jest.mock('axios')
 
@@ -36,7 +36,9 @@ it('calls the hosted_happs endpoint', async () => {
     throw new Error (`axios mock doesn't recognise this path: ${path}`)
   })
 
-  render(HostedHapps, {routes})
+  render(HostedHapps, {
+		global: { plugins: [ router ]},
+	})
 
   await wait(0)
 
