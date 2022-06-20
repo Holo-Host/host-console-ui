@@ -1,42 +1,42 @@
 <template>
   <teleport to="body">
-		<div
-			v-if="isVisible"
-			class="overlay-wrapper"
-			:class="[
-				{ 'light-theme': theme === EOverlayTheme.light },
-				{ 'dark-theme': theme === EOverlayTheme.dark }
-			]"
-			aria-hidden="true"
-			data-test-overlay-wrapper
-		>
-			<div
-				class="overlay-content"
-			>
-				<CircleSpinner
-					v-if="type === EOverlayType.loading"
-					:theme="theme"
-					:size="ESpinnerSize.xl"
-				/>
-				<img
-					v-else
-					:src="icon"
-					alt="busy-overlay-icon"
-					class="busy-overlay-icon"
-				/>
-				<p class="busy-overlay-message">
-					{{ message }}
-				</p>
-			</div>
-		</div>
+    <div
+      v-if="isVisible"
+      class="overlay-wrapper"
+      :class="[
+        { 'light-theme': theme === EOverlayTheme.light },
+        { 'dark-theme': theme === EOverlayTheme.dark }
+      ]"
+      aria-hidden="true"
+      data-test-overlay-wrapper
+    >
+      <div
+        class="overlay-content"
+      >
+        <CircleSpinner
+          v-if="type === EOverlayType.loading"
+          :theme="theme"
+          :size="ESpinnerSize.xl"
+        />
+        <img
+          v-else
+          :src="icon"
+          alt="busy-overlay-icon"
+          class="busy-overlay-icon"
+        />
+        <p class="busy-overlay-message">
+          {{ message }}
+        </p>
+      </div>
+    </div>
   </teleport>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import CircleSpinner from './CircleSpinner.vue'
 import { ESpinnerSize } from 'src/types/ui'
 import { EOverlayTheme, EOverlayType } from 'src/utils/notifications'
+import { ref } from 'vue'
+import CircleSpinner from './CircleSpinner.vue'
 
 const isVisible = ref(false)
 const message = ref('')
@@ -58,42 +58,42 @@ const kMinShowTime = 750 // ms
 let hideTime = 0
 
 function show(object) {
-  const delay = object?.delay ?? 0
+	const delay = object?.delay ?? 0
 
-  type.value = object?.type ?? EOverlayType.loading
-  theme.value = object?.theme ?? EOverlayTheme.light
-  message.value = object?.message ?? ''
-  icon.value = object?.icon ?? null
+	type.value = object?.type ?? EOverlayType.loading
+	theme.value = object?.theme ?? EOverlayTheme.light
+	message.value = object?.message ?? ''
+	icon.value = object?.icon ?? null
 
-  // We can hide the overlay kMinShowTime ms after it appears
-  hideTime = Date.now() + delay + kMinShowTime
-  timeout = window.setTimeout(() => {
-    isVisible.value = true
-  }, delay)
+	// We can hide the overlay kMinShowTime ms after it appears
+	hideTime = Date.now() + delay + kMinShowTime
+	timeout = window.setTimeout(() => {
+		isVisible.value = true
+	}, delay)
 }
 
 function hide() {
-  clearTimeout(timeout)
-  const timeLeft = hideTime - Date.now()
+	clearTimeout(timeout)
+	const timeLeft = hideTime - Date.now()
 
-  if (timeLeft > 0) {
-    setTimeout(() => {
-      isVisible.value = false
-    }, timeLeft)
-  } else {
-    isVisible.value = false
-  }
+	if (timeLeft > 0) {
+		setTimeout(() => {
+			isVisible.value = false
+		}, timeLeft)
+	} else {
+		isVisible.value = false
+	}
 }
 
 defineExpose({
-  show,
-  hide
+	show,
+	hide
 })
 </script>
 
 <style scoped>
 .overlay-wrapper {
-  height: 100vh;
+	height: 100vh;
 	width: calc(100% - 270px);
 	display: flex;
 	justify-content: center;

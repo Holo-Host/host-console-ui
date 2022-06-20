@@ -1,11 +1,11 @@
 <template>
-	<TheOverlay ref="theOverlay" />
-	<router-view />
+  <TheOverlay ref="theOverlay" />
+  <router-view />
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import TheOverlay from "./components/TheOverlay";
+import { ref, onMounted, onUnmounted } from 'vue'
+import TheOverlay from './components/TheOverlay'
 import { addObserver, ENotification, removeObserver } from './utils/notifications'
 
 const theOverlay = ref()
@@ -31,20 +31,21 @@ onUnmounted(() => {
 
 <style>
 html {
-  overflow-y: scroll;
+	overflow-y: scroll;
 }
 
-body, html {
-  height: 100%;
+body,
+html {
+	height: 100%;
 }
 
 #app {
-  font-family: 'Nunito Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #fafcfe;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+	font-family: 'Nunito Sans', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background-color: #fafcfe;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 </style>

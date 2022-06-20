@@ -5,6 +5,5 @@ export function mockGlobalCrypto() {
 				digest: () => Promise.resolve('unchecked string')
 			}
 		}
-	});
-
+	})
 }

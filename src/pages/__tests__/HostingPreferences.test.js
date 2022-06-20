@@ -1,10 +1,10 @@
+import { render } from '@testing-library/vue'
 import axios from 'axios'
-import { render, within } from  '@testing-library/vue'
-import HostingPreferences from '../HostingPreferences.vue'
-import wait from 'waait'
-import router  from 'src/router'
-import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
+import router from 'src/router'
+import wait from 'waait'
+import HostingPreferences from '../HostingPreferences.vue'
 
 jest.mock('axios')
 mockGlobalCrypto()
@@ -16,7 +16,7 @@ describe('hosting preferences page', () => {
 	})
 
 	it('renders all card titles', async () => {
-		axios.get.mockImplementation(path => {
+		axios.get.mockImplementation((path) => {
 			if (path.endsWith('/api/v1/config')) {
 				return Promise.resolve(defaultSettingsResult)
 			}
@@ -25,11 +25,11 @@ describe('hosting preferences page', () => {
 				return Promise.resolve(defaultSshAccessResult)
 			}
 
-			throw new Error (`axios mock doesn't recognise this path: ${path}`)
+			throw new Error(`axios mock doesn't recognise this path: ${path}`)
 		})
 
-		const {getByText} = render(HostingPreferences, {
-			global: {plugins: [router]},
+		const { getByText } = render(HostingPreferences, {
+			global: { plugins: [router] }
 		})
 		await wait(0)
 

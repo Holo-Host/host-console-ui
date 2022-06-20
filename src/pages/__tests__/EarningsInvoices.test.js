@@ -1,14 +1,13 @@
+import { render } from '@testing-library/vue'
 import axios from 'axios'
-import { render } from  '@testing-library/vue'
-import EarningsInvoices from '../EarningsInvoices.vue'
-import wait from 'waait'
-import router  from 'src/router'
-import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
+import router from 'src/router'
+import wait from 'waait'
+import EarningsInvoices from '../EarningsInvoices.vue'
 
 jest.mock('axios')
 mockGlobalCrypto()
-
 
 describe('earnings invoices page', () => {
 	beforeEach(() => {
@@ -17,7 +16,7 @@ describe('earnings invoices page', () => {
 	})
 
 	it('shows the earnings invoices page', async () => {
-		axios.get.mockImplementation(path => {
+		axios.get.mockImplementation((path) => {
 			if (path.endsWith('/api/v1/config')) {
 				return Promise.resolve(defaultSettingsResult)
 			}
@@ -29,8 +28,8 @@ describe('earnings invoices page', () => {
 			throw new Error(`axios mock doesn't recognise this path: ${path}`)
 		})
 
-		const {getByText} = render(EarningsInvoices, {
-			global: {plugins: [router]},
+		const { getByText } = render(EarningsInvoices, {
+			global: { plugins: [router] }
 		})
 
 		await wait(0)

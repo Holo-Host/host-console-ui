@@ -1,11 +1,11 @@
+import { render } from '@testing-library/vue'
 import axios from 'axios'
-import { render } from  '@testing-library/vue'
-import { HPOS_API_URL } from 'src/interfaces/HposInterface'
-import HostedHapps from '../HostedHapps.vue'
-import wait from 'waait'
-import router  from 'src/router'
-import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
+import { HPOS_API_URL } from 'src/interfaces/HposInterface'
+import router from 'src/router'
+import wait from 'waait'
+import HostedHapps from '../HostedHapps.vue'
 
 jest.mock('axios')
 mockGlobalCrypto()
@@ -21,7 +21,7 @@ describe('hosted happs page', () => {
 			data: []
 		}
 
-		axios.get.mockImplementation(path => {
+		axios.get.mockImplementation((path) => {
 			if (path.endsWith('/api/v1/config')) {
 				return Promise.resolve(defaultSettingsResult)
 			}
@@ -46,7 +46,7 @@ describe('hosted happs page', () => {
 		})
 
 		render(HostedHapps, {
-			global: {plugins: [router]},
+			global: { plugins: [router] }
 		})
 
 		await wait(0)

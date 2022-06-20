@@ -34,6 +34,7 @@
     "waait": "^1.0.5"
   },
   "devDependencies": {
+		"@babel/eslint-parser": "^7.5.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/vue": "^6.3.4",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -41,28 +42,21 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/test-utils": "^2.0.0-alpha.8",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0-0",
+		"eslint": "8.15.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-config-standard": "^17.0.0",
+		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-n": "^15.2.0",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier-vue": "^3.1.0",
+		"eslint-plugin-promise": "^6.0.0",
+		"eslint-plugin-vue": "^8.7.1",
     "express": "^4.17.1",
     "jest": "^26.5.3",
-    "typescript": "^4.0.3",
+		"prettier": "^2.6.2",
+		"typescript": "^4.0.3",
     "vue-jest": "^5.0.0-alpha.1",
     "yargs": "^16.2.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
   },
   "browserslist": [
     "> 1%",

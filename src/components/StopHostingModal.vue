@@ -1,100 +1,135 @@
 <template>
   <BaseModal @close="$emit('close')">
-    <div class='stop-hosting-modal' v-if="!confirmed">
+    <div
+      v-if="!confirmed"
+      class="stop-hosting-modal"
+    >
       <ExclamationIcon class="exclamation-icon" />
-      <p class='content'>Are you sure you want to stop hosting {{ happName }}?</p>
-      <p class='content'>It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.</p>
+      <p class="content">
+        Are you sure you want to stop hosting {{ happName }}?
+      </p>
+      <p class="content">
+        It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.
+      </p>
     </div>
-    <div class='stop-hosting-modal' v-if="confirmed">
+    <div
+      v-if="confirmed"
+      class="stop-hosting-modal"
+    >
       <BigCheckIcon class="exclamation-icon" />
-      <p class='content'>This hApp has been removed from hosting.</p>
-      <p class='content'>Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the publisher.</p>
+      <p class="content">
+        This hApp has been removed from hosting.
+      </p>
+      <p class="content">
+        Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the publisher.
+      </p>
     </div>
 
-		<template v-if="confirmed" #buttons>
-				<Button color='teal' @click="closeAndGoToHapps">Close</Button>
-		</template>
-		<template v-else #buttons>
-				<Button color='teal' @click="confirm">Yes, I want to stop hosting this hApp</Button>
-				<Button color='white' @click="$emit('close')">Cancel</Button>
-		</template>
-	</BaseModal>
+    <template
+      v-if="confirmed"
+      #buttons
+    >
+      <Button
+        color="teal"
+        @click="closeAndGoToHapps"
+      >
+        Close
+      </Button>
+    </template>
+    <template
+      v-else
+      #buttons
+    >
+      <Button
+        color="teal"
+        @click="confirm"
+      >
+        Yes, I want to stop hosting this hApp
+      </Button>
+      <Button
+        color="white"
+        @click="$emit('close')"
+      >
+        Cancel
+      </Button>
+    </template>
+  </BaseModal>
 </template>
 
 <script>
 import BaseModal from 'components/BaseModal'
 import Button from 'components/Button'
-import ExclamationIcon from 'components/icons/ExclamationIcon'
 import BigCheckIcon from 'components/icons/BigCheckIcon'
+import ExclamationIcon from 'components/icons/ExclamationIcon'
 
 export default {
-  name: 'StopHostingModal',
-  components: {
+	name: 'StopHostingModal',
+	components: {
 		BaseModal,
-    Button,
-    ExclamationIcon,
-    BigCheckIcon
-  },
-  props: {
-    happName: {
-      type: String,
-      required: true
-    }
-  },
-  data: function () {
-    return {
-      confirmed: false
-    }
-  },
-  methods: {
-    confirm () {
+		Button,
+		ExclamationIcon,
+		BigCheckIcon
+	},
+	props: {
+		happName: {
+			type: String,
+			required: true
+		}
+	},
+	data: function () {
+		return {
+			confirmed: false
+		}
+	},
+	methods: {
+		confirm() {
 			this.$emit('stop-hosting-happ')
-      this.confirmed = true
-    },
-    closeAndGoToHapps () {
-      this.$emit('close')
-      this.$router.push('/happs')
-    }
-  }
+			this.confirmed = true
+		},
+		closeAndGoToHapps() {
+			this.$emit('close')
+			this.$router.push('/happs')
+		}
+	}
 }
 </script>
 
 <style scoped>
 .stop-hosting-modal {
-  display: flex;
-  align-items: center;
-  padding-top: 26px;
-  flex-direction: column;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  text-align: center;
-  color: #313C59;
+	display: flex;
+	align-items: center;
+	padding-top: 26px;
+	flex-direction: column;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 19px;
+	text-align: center;
+	color: #313c59;
 }
 .exclamation-icon {
-  margin-bottom: 22px;
+	margin-bottom: 22px;
 }
 .content {
-  max-width: 625px;
-  margin: 0 0 20px 0;
+	max-width: 625px;
+	margin: 0 0 20px 0;
 }
 .buttons {
-  display: flex;
-  margin-top: 20px;
-  margin-bottom: 26px;
-  direction: rtl; /* this is so that we have the correct order of buttons in mobile view */
+	display: flex;
+	margin-top: 20px;
+	margin-bottom: 26px;
+	direction: rtl; /* this is so that we have the correct order of buttons in mobile view */
 }
 
 @media screen and (max-width: 1050px) {
-  .buttons {
-    flex-direction: column;
-    align-items: center;
-  }
+	.buttons {
+		flex-direction: column;
+		align-items: center;
+	}
 
-  .buttons button {
-    margin-bottom: 20px;
-    width: fit-content;
-  }
+	.buttons button {
+		margin-bottom: 20px;
+		width: fit-content;
+	}
 }
 </style>
