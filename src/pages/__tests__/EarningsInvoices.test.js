@@ -1,35 +1,41 @@
 import axios from 'axios'
-import { render, waitFor } from  '@testing-library/vue'
+import { render } from  '@testing-library/vue'
 import EarningsInvoices from '../EarningsInvoices.vue'
 import wait from 'waait'
-import { routes } from 'src/router'
+import router  from 'src/router'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
+import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 
 jest.mock('axios')
+mockGlobalCrypto()
 
-Object.defineProperty(global, 'crypto', {
-  value: {
-    subtle: {
-      digest: () => Promise.resolve('unchecked string')
-    }
-  }
-});
 
-it('shows the earnings invoices page', async () => {
-  axios.get.mockImplementation(path => {
-    if (path.endsWith('config')) {
-      return {
-        data: {
-          admin: {}
-        }
-      }
-    }
+describe('earnings invoices page', () => {
+	beforeEach(() => {
+		axios.get.mockClear()
+		axios.put.mockClear()
+	})
 
-    throw new Error (`axios mock doesn't recognise this path: ${path}`)
-  })
+	it('shows the earnings invoices page', async () => {
+		axios.get.mockImplementation(path => {
+			if (path.endsWith('/api/v1/config')) {
+				return Promise.resolve(defaultSettingsResult)
+			}
 
-  const { getByText } = render(EarningsInvoices, {routes})
-  await wait(0)
+			if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
+				return Promise.resolve(defaultSshAccessResult)
+			}
 
-  getByText('Earnings')
-  getByText('Invoices')
+			throw new Error(`axios mock doesn't recognise this path: ${path}`)
+		})
+
+		const {getByText} = render(EarningsInvoices, {
+			global: {plugins: [router]},
+		})
+
+		await wait(0)
+
+		getByText('Earnings')
+		getByText('Invoices')
+	})
 })

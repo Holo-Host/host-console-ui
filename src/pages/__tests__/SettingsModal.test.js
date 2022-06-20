@@ -3,42 +3,19 @@ import { render, waitFor, fireEvent } from '@testing-library/vue'
 import wait from 'waait'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import Earnings from '../Earnings.vue'
-import { routes } from 'src/router'
+import router  from 'src/router'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
+import { defaultSettings, defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 
 jest.mock('axios')
-
-Object.defineProperty(global, 'crypto', {
-  value: {
-    subtle: {
-      digest: () => Promise.resolve('unchecked string')
-    }
-  }
-});
-
-const defaultSettings = {
-  admin: {
-    public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
-    email: 'test@test.com'
-  },
-  holoportos: {
-    network: 'test',
-    sshAccess: true
-  },
-  deviceName: "Lana Wilson's HP"
-}
-
-const defaultSettingsResult = {
-  data: defaultSettings
-}
-
-const defaultSshAccessResult = {
-  data: { enabled: true }
-}
+mockGlobalCrypto()
 
 const renderSettingsModal = async () => {
   // using the Earnings page for the base as it doesn't have any extra api calls that need mocking
   // As that changes, feel free to use a different page, or even add an empty page for this purpose.
-  const queries = render(Earnings, {routes})
+  const queries = render(Earnings, {
+    global: { plugins: [ router ]},
+  })
   const { getAllByText } = queries
   await wait(0)
 
