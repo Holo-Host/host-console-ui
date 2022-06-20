@@ -127,308 +127,308 @@ import HposInterface from 'src/interfaces/HposInterface'
 import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 
 export default {
-	name: 'HappDetails',
-	components: {
-		PrimaryLayout,
-		HappImage,
-		ClockIcon,
-		LeftChevronIcon,
-		ChainIcon,
-		PencilIcon,
-		AlertCircleIcon,
-		StopHostingModal
-	},
-	data() {
-		return {
-			happ: {
-				name: '',
-				usage: {}
-			},
-			hostingModalVisible: false
-		}
-	},
-	computed: {
-		breadcrumbs() {
-			return [
-				{
-					label: 'hApps',
-					path: '/happs'
-				},
-				{
-					label: this.happ.name || 'loading'
-				}
-			]
-		},
-		initials() {
-			return this.happ.name
-				.replace(/[^a-z]/gi, '')
-				.slice(0, 2)
-				.toUpperCase()
-		}
-	},
-	created: async function () {
-		const happs = await HposInterface.hostedHapps()
-		const happId = decodeURIComponent(this.$route.params.id)
-		const happ = happs.find(({ id }) => id === happId)
+  name: 'HappDetails',
+  components: {
+    PrimaryLayout,
+    HappImage,
+    ClockIcon,
+    LeftChevronIcon,
+    ChainIcon,
+    PencilIcon,
+    AlertCircleIcon,
+    StopHostingModal
+  },
+  data() {
+    return {
+      happ: {
+        name: '',
+        usage: {}
+      },
+      hostingModalVisible: false
+    }
+  },
+  computed: {
+    breadcrumbs() {
+      return [
+        {
+          label: 'hApps',
+          path: '/happs'
+        },
+        {
+          label: this.happ.name || 'loading'
+        }
+      ]
+    },
+    initials() {
+      return this.happ.name
+        .replace(/[^a-z]/gi, '')
+        .slice(0, 2)
+        .toUpperCase()
+    }
+  },
+  created: async function () {
+    const happs = await HposInterface.hostedHapps()
+    const happId = decodeURIComponent(this.$route.params.id)
+    const happ = happs.find(({ id }) => id === happId)
 
-		if (!happ) {
-			throw new Error(`Failed to load happ with id: ${happId}`)
-		}
+    if (!happ) {
+      throw new Error(`Failed to load happ with id: ${happId}`)
+    }
 
-		this.happ = happ
-	},
-	methods: {
-		editRates() {
-			alert('Editing rates is not implemented in this version')
-		},
-		openHostingModal() {
-			// This function is not currently used but should replace the call to stopHostingHapp once we have implemented stopping hosting
-			this.hostingModalVisible = true
-		},
-		closeHostingModal() {
-			this.hostingModalVisible = false
-		},
-		stopHostingHapp() {
-			console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
-		},
-		presentHolofuelAmount,
-		presentMicroSeconds,
-		presentBytes
-	}
+    this.happ = happ
+  },
+  methods: {
+    editRates() {
+      alert('Editing rates is not implemented in this version')
+    },
+    openHostingModal() {
+      // This function is not currently used but should replace the call to stopHostingHapp once we have implemented stopping hosting
+      this.hostingModalVisible = true
+    },
+    closeHostingModal() {
+      this.hostingModalVisible = false
+    },
+    stopHostingHapp() {
+      console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
+    },
+    presentHolofuelAmount,
+    presentMicroSeconds,
+    presentBytes
+  }
 }
 </script>
 
 <style scoped>
 .happ-details {
-	display: flex;
-	flex-direction: column;
-	background-color: white;
-	box-shadow: 0px 4px 20px #eceef1;
-	border-radius: 5px;
-	margin: 0 10px 20px 12px;
-	padding: 30px;
-	color: #606c8b;
-	font-size: 14px;
-	line-height: 19px;
-	font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: 0px 4px 20px #eceef1;
+  border-radius: 5px;
+  margin: 0 10px 20px 12px;
+  padding: 30px;
+  color: #606c8b;
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 600;
 }
 .back-link {
-	color: #606c8b;
-	text-decoration: none;
-	font-size: 14px;
-	margin-bottom: 32px;
+  color: #606c8b;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 32px;
 }
 .columns {
-	display: flex;
+  display: flex;
 }
 .left-column {
-	display: flex;
-	flex: 0;
-	flex-direction: column;
-	margin-right: 32px;
+  display: flex;
+  flex: 0;
+  flex-direction: column;
+  margin-right: 32px;
 }
 .happ-image {
-	margin-bottom: 34px;
+  margin-bottom: 34px;
 }
 .description-label {
-	margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 .description {
-	font-weight: 700;
-	color: #313c59;
+  font-weight: 700;
+  color: #313c59;
 }
 .main-column {
-	display: flex;
-	flex: 1;
-	flex-direction: column;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 .mobile-column {
-	display: none;
-	align-items: center;
-	flex-direction: column;
+  display: none;
+  align-items: center;
+  flex-direction: column;
 }
 .name {
-	margin: 0 0 34px 0;
-	color: #313c59;
-	font-weight: bold;
-	font-size: 22px;
-	line-height: 30px;
+  margin: 0 0 34px 0;
+  color: #313c59;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 30px;
 }
 .arrow-icon {
-	margin-left: auto;
+  margin-left: auto;
 }
 .snapshot-label {
-	margin-left: 3px;
-	margin-bottom: 3px;
+  margin-left: 3px;
+  margin-bottom: 3px;
 }
 .info-row {
-	display: flex;
-	align-items: center;
-	color: #606c8b;
-	margin-bottom: 14px;
-	font-size: 14px;
+  display: flex;
+  align-items: center;
+  color: #606c8b;
+  margin-bottom: 14px;
+  font-size: 14px;
 }
 .large-text {
-	font-size: 16px;
+  font-size: 16px;
 }
 .info {
-	font-weight: 700;
-	color: #313c59;
+  font-weight: 700;
+  color: #313c59;
 }
 .earnings-margin {
-	margin-bottom: 48px;
+  margin-bottom: 48px;
 }
 .chains-margin {
-	margin-bottom: 38px;
+  margin-bottom: 38px;
 }
 .clock-icon {
-	margin-left: 2px;
-	margin-right: 10px;
+  margin-left: 2px;
+  margin-right: 10px;
 }
 .chain-icon {
-	margin-right: 8px;
+  margin-right: 8px;
 }
 .usage-row {
-	display: flex;
-	color: #313c59;
-	font-size: 12px;
-	font-weight: 600;
-	padding-right: 36px;
-	margin-bottom: 42px;
+  display: flex;
+  color: #313c59;
+  font-size: 12px;
+  font-weight: 600;
+  padding-right: 36px;
+  margin-bottom: 42px;
 }
 .usage-label {
-	font-size: 14px;
+  font-size: 14px;
 }
 .usage {
-	display: flex;
-	margin-left: 30px;
+  display: flex;
+  margin-left: 30px;
 }
 .usage-value {
-	padding: 0 5px;
-	border-bottom: 2px solid #00cad9;
-	font-size: 13px;
-	font-weight: 700;
-	margin-right: 7px;
+  padding: 0 5px;
+  border-bottom: 2px solid #00cad9;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 7px;
 }
 .rates-title {
-	display: flex;
-	color: #313c59;
-	font-size: 16px;
-	font-weight: 700;
-	margin-bottom: 12px;
+  display: flex;
+  color: #313c59;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
 .pencil-icon {
-	margin-left: 8px;
-	cursor: pointer;
-	opacity: 0.3;
+  margin-left: 8px;
+  cursor: pointer;
+  opacity: 0.3;
 }
 .rate-row {
-	display: flex;
-	margin-bottom: 14px;
+  display: flex;
+  margin-bottom: 14px;
 }
 .rate-label {
-	flex: 0 0 100px;
+  flex: 0 0 100px;
 }
 .rate-value {
-	color: #313c59;
-	font-weight: 700;
+  color: #313c59;
+  font-weight: 700;
 }
 .rates-margin {
-	margin-bottom: 120px;
+  margin-bottom: 120px;
 }
 .stop-hosting-row {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 .stop-hosting {
-	font-weight: bold;
-	font-size: 12px;
-	line-height: 16px;
-	text-decoration-line: underline;
-	color: #313c59;
-	margin-right: 10px;
-	cursor: pointer;
-	flex-shrink: 0;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  color: #313c59;
+  margin-right: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 .stop-hosting-warning {
-	display: flex;
-	align-items: flex-start;
-	background: #f3f5f8;
-	border-radius: 4px;
-	color: #313c59;
-	font-size: 12px;
-	font-weight: 400;
-	padding: 4px 12px;
+  display: flex;
+  align-items: flex-start;
+  background: #f3f5f8;
+  border-radius: 4px;
+  color: #313c59;
+  font-size: 12px;
+  font-weight: 400;
+  padding: 4px 12px;
 }
 .alert-circle-icon {
-	flex-shrink: 0;
-	margin-right: 12px;
+  flex-shrink: 0;
+  margin-right: 12px;
 }
 /* Temporary, remove once we have all live data */
 .grayed-out {
-	color: rgba(96, 108, 139, 0.18);
+  color: rgba(96, 108, 139, 0.18);
 }
 .grayed-out div {
-	color: rgba(96, 108, 139, 0.18);
+  color: rgba(96, 108, 139, 0.18);
 }
 .grayed-out span {
-	color: rgba(96, 108, 139, 0.18);
+  color: rgba(96, 108, 139, 0.18);
 }
 
 @media screen and (max-width: 1050px) {
-	.happ-details {
-		margin: 0 0 20px 0;
-		padding: 18px;
-	}
-	.mobile-column {
-		display: flex;
-	}
-	.main-column {
-		margin: 0 4px;
-	}
-	.back-link {
-		margin-bottom: 4px;
-	}
-	.desktop {
-		display: none;
-	}
-	.happ-image {
-		margin-bottom: 10px;
-	}
-	.name {
-		margin-bottom: 8px;
-	}
-	.description {
-		font-size: 11px;
-		margin-bottom: 46px;
-	}
-	.info-row {
-		font-size: 14px;
-	}
-	.earnings-margin {
-		margin-bottom: 40px;
-	}
-	.usage-row {
-		flex-direction: column;
-		margin-bottom: 24px;
-	}
-	.usage-label {
-		margin-bottom: 10px;
-	}
-	.usage {
-		margin: 0 0 10px 0;
-	}
-	.rate-row {
-		margin-bottom: 11px;
-	}
-	.rates-margin {
-		margin-bottom: 70px;
-	}
-	.stop-hosting-row {
-		align-items: flex-start;
-	}
-	.modal-open {
-		display: none;
-	}
+  .happ-details {
+    margin: 0 0 20px 0;
+    padding: 18px;
+  }
+  .mobile-column {
+    display: flex;
+  }
+  .main-column {
+    margin: 0 4px;
+  }
+  .back-link {
+    margin-bottom: 4px;
+  }
+  .desktop {
+    display: none;
+  }
+  .happ-image {
+    margin-bottom: 10px;
+  }
+  .name {
+    margin-bottom: 8px;
+  }
+  .description {
+    font-size: 11px;
+    margin-bottom: 46px;
+  }
+  .info-row {
+    font-size: 14px;
+  }
+  .earnings-margin {
+    margin-bottom: 40px;
+  }
+  .usage-row {
+    flex-direction: column;
+    margin-bottom: 24px;
+  }
+  .usage-label {
+    margin-bottom: 10px;
+  }
+  .usage {
+    margin: 0 0 10px 0;
+  }
+  .rate-row {
+    margin-bottom: 11px;
+  }
+  .rates-margin {
+    margin-bottom: 70px;
+  }
+  .stop-hosting-row {
+    align-items: flex-start;
+  }
+  .modal-open {
+    display: none;
+  }
 }
 </style>

@@ -63,73 +63,73 @@ import BigCheckIcon from 'components/icons/BigCheckIcon'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
 
 export default {
-	name: 'StopHostingModal',
-	components: {
-		BaseModal,
-		Button,
-		ExclamationIcon,
-		BigCheckIcon
-	},
-	props: {
-		happName: {
-			type: String,
-			required: true
-		}
-	},
-	data: function () {
-		return {
-			confirmed: false
-		}
-	},
-	methods: {
-		confirm() {
-			this.$emit('stop-hosting-happ')
-			this.confirmed = true
-		},
-		closeAndGoToHapps() {
-			this.$emit('close')
-			this.$router.push('/happs')
-		}
-	}
+  name: 'StopHostingModal',
+  components: {
+    BaseModal,
+    Button,
+    ExclamationIcon,
+    BigCheckIcon
+  },
+  props: {
+    happName: {
+      type: String,
+      required: true
+    }
+  },
+  data: function () {
+    return {
+      confirmed: false
+    }
+  },
+  methods: {
+    confirm() {
+      this.$emit('stop-hosting-happ')
+      this.confirmed = true
+    },
+    closeAndGoToHapps() {
+      this.$emit('close')
+      this.$router.push('/happs')
+    }
+  }
 }
 </script>
 
 <style scoped>
 .stop-hosting-modal {
-	display: flex;
-	align-items: center;
-	padding-top: 26px;
-	flex-direction: column;
-	font-style: normal;
-	font-weight: 600;
-	font-size: 14px;
-	line-height: 19px;
-	text-align: center;
-	color: #313c59;
+  display: flex;
+  align-items: center;
+  padding-top: 26px;
+  flex-direction: column;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: center;
+  color: #313c59;
 }
 .exclamation-icon {
-	margin-bottom: 22px;
+  margin-bottom: 22px;
 }
 .content {
-	max-width: 625px;
-	margin: 0 0 20px 0;
+  max-width: 625px;
+  margin: 0 0 20px 0;
 }
 .buttons {
-	display: flex;
-	margin-top: 20px;
-	margin-bottom: 26px;
-	direction: rtl; /* this is so that we have the correct order of buttons in mobile view */
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 26px;
+  direction: rtl; /* this is so that we have the correct order of buttons in mobile view */
 }
 
 @media screen and (max-width: 1050px) {
-	.buttons {
-		flex-direction: column;
-		align-items: center;
-	}
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
 
-	.buttons button {
-		margin-bottom: 20px;
-		width: fit-content;
-	}
+  .buttons button {
+    margin-bottom: 20px;
+    width: fit-content;
+  }
 }
 </style>

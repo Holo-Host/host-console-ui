@@ -11,41 +11,41 @@ import { addObserver, ENotification, removeObserver } from './utils/notification
 const theOverlay = ref()
 
 function showBusyOverlay(object) {
-	theOverlay.value?.show(object)
+  theOverlay.value?.show(object)
 }
 
 function hideBusyOverlay() {
-	theOverlay.value?.hide()
+  theOverlay.value?.hide()
 }
 
 onMounted(() => {
-	addObserver(ENotification.showBusyState, showBusyOverlay)
-	addObserver(ENotification.hideBusyState, hideBusyOverlay)
+  addObserver(ENotification.showBusyState, showBusyOverlay)
+  addObserver(ENotification.hideBusyState, hideBusyOverlay)
 })
 
 onUnmounted(() => {
-	removeObserver(ENotification.showBusyState, showBusyOverlay)
-	removeObserver(ENotification.hideBusyState, hideBusyOverlay)
+  removeObserver(ENotification.showBusyState, showBusyOverlay)
+  removeObserver(ENotification.hideBusyState, hideBusyOverlay)
 })
 </script>
 
 <style>
 html {
-	overflow-y: scroll;
+  overflow-y: scroll;
 }
 
 body,
 html {
-	height: 100%;
+  height: 100%;
 }
 
 #app {
-	font-family: 'Nunito Sans', sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	background-color: #fafcfe;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
+  font-family: 'Nunito Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fafcfe;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>

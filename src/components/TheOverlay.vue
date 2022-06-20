@@ -58,89 +58,89 @@ const kMinShowTime = 750 // ms
 let hideTime = 0
 
 function show(object) {
-	const delay = object?.delay ?? 0
+  const delay = object?.delay ?? 0
 
-	type.value = object?.type ?? EOverlayType.loading
-	theme.value = object?.theme ?? EOverlayTheme.light
-	message.value = object?.message ?? ''
-	icon.value = object?.icon ?? null
+  type.value = object?.type ?? EOverlayType.loading
+  theme.value = object?.theme ?? EOverlayTheme.light
+  message.value = object?.message ?? ''
+  icon.value = object?.icon ?? null
 
-	// We can hide the overlay kMinShowTime ms after it appears
-	hideTime = Date.now() + delay + kMinShowTime
-	timeout = window.setTimeout(() => {
-		isVisible.value = true
-	}, delay)
+  // We can hide the overlay kMinShowTime ms after it appears
+  hideTime = Date.now() + delay + kMinShowTime
+  timeout = window.setTimeout(() => {
+    isVisible.value = true
+  }, delay)
 }
 
 function hide() {
-	clearTimeout(timeout)
-	const timeLeft = hideTime - Date.now()
+  clearTimeout(timeout)
+  const timeLeft = hideTime - Date.now()
 
-	if (timeLeft > 0) {
-		setTimeout(() => {
-			isVisible.value = false
-		}, timeLeft)
-	} else {
-		isVisible.value = false
-	}
+  if (timeLeft > 0) {
+    setTimeout(() => {
+      isVisible.value = false
+    }, timeLeft)
+  } else {
+    isVisible.value = false
+  }
 }
 
 defineExpose({
-	show,
-	hide
+  show,
+  hide
 })
 </script>
 
 <style scoped>
 .overlay-wrapper {
-	height: 100vh;
-	width: calc(100% - 270px);
-	display: flex;
-	justify-content: center;
-	user-select: none;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	transition: opacity;
+  height: 100vh;
+  width: calc(100% - 270px);
+  display: flex;
+  justify-content: center;
+  user-select: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  transition: opacity;
 }
 
 @media screen and (max-width: 1050px) {
-	.overlay-wrapper {
-		width: 100%;
-		left: 0;
-	}
+  .overlay-wrapper {
+    width: 100%;
+    left: 0;
+  }
 }
 
 .light-theme {
-	background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
 .dark-theme {
-	background-color: rgba(15, 23, 42, 0.3);
+  background-color: rgba(15, 23, 42, 0.3);
 }
 
 .overlay-content {
-	position: absolute;
-	top: 40%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding: 24px;
+  position: absolute;
+  top: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
 }
 
 .busy-overlay-icon {
-	height: 64px;
-	width: 64px;
+  height: 64px;
+  width: 64px;
 }
 
 .busy-overlay-message {
-	margin-top: 20px;
-	color: #9ca3af;
-	font-weight: 600;
-	font-size: 1.5rem; /* 24px */
-	line-height: 2rem; /* 32px */
-	text-align: center;
+  margin-top: 20px;
+  color: #9ca3af;
+  font-weight: 600;
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem; /* 32px */
+  text-align: center;
 }
 </style>
