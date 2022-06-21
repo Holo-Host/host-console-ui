@@ -1,4 +1,3 @@
-import Dashboard from 'pages/Dashboard.vue'
 import Earnings from 'pages/Earnings.vue'
 import EarningsInvoices from 'pages/EarningsInvoices.vue'
 import HappDetails from 'pages/HappDetails.vue'
@@ -6,6 +5,7 @@ import HostedHapps from 'pages/HostedHapps.vue'
 import HostingPreferences from 'pages/HostingPreferences.vue'
 import Login from 'pages/Login.vue'
 import Settings from 'pages/Settings.vue'
+import DashboardPage from 'src/pages/DashboardPage.vue'
 import { checkHpAdminKeypair } from 'src/utils/keyManagement'
 import { createWebHistory, createRouter } from 'vue-router'
 
@@ -21,7 +21,7 @@ export const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard,
+    component: DashboardPage,
     meta: {
       requiresAuth: true
     }

@@ -1,8 +1,9 @@
-require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
+// this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
+import stringify from 'fast-json-stable-stringify'
 import mergeMockHappData from 'src/mergeMockHappData'
 import { signRequest, hashString } from 'src/utils/keyManagement'
-import stringify from 'fast-json-stable-stringify'
+require('dotenv').config()
 
 const axiosConfig = {
   headers: {
@@ -12,14 +13,17 @@ const axiosConfig = {
 }
 
 // bump port number by 1 for tests so we can run tests with the UI open
-const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_HPOS_PORT) + 1 : process.env.VUE_APP_HPOS_PORT
+const HPOS_PORT =
+  process.env.NODE_ENV === 'test'
+    ? Number(process.env.VUE_APP_HPOS_PORT) + 1
+    : process.env.VUE_APP_HPOS_PORT
 
 export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
-  : (window.location.protocol + '//' + window.location.host)
+  : `${window.location.protocol}//${window.location.host}`
 
-function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {} }) {
-  return async params => {
+function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {} }) {
+  return async (params) => {
     const fullUrl = HPOS_API_URL + pathPrefix + path
 
     const signature = await signRequest(method, fullUrl, params)
@@ -29,42 +33,44 @@ function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}
       'X-Hpos-Admin-Signature': signature
     }
 
-    let data
+    let response
 
     switch (method) {
       case 'get':
-        ({ data } = await axios.get(fullUrl, { params, headers }))
-        return data
+        response = await axios.get(fullUrl, { params, headers })
+        return response?.data
+
       case 'post':
-        ({ data } = await axios.post(fullUrl, params, { headers }))
-        return data
+        response = await axios.post(fullUrl, params, { headers })
+        return response?.data
+
       case 'put':
-        ({ data } = await axios.put(fullUrl, params, { headers }))
-        return data
+        response = await axios.put(fullUrl, params, { headers })
+        return response?.data
+
       case 'delete':
-        ({ data } = await axios.delete(fullUrl, { params, headers }))
-        return data
+        response = await axios.delete(fullUrl, { params, headers })
+        return response?.data
+
       default:
         throw new Error(`No case in hposCall for ${method} method`)
     }
   }
 }
 
-export function hposAdminCall (args) {
+export function hposAdminCall(args) {
   return hposCall({
     ...args,
     pathPrefix: '/api/v1'
   })
 }
 
-export function hposHolochainCall (args) {
+export function hposHolochainCall(args) {
   return hposCall({
     ...args,
     pathPrefix: '/holochain-api/v1'
   })
 }
-
-
 
 const presentHposSettings = (hposSettings) => {
   const { admin, holoportos = {}, deviceName } = hposSettings
@@ -73,27 +79,31 @@ const presentHposSettings = (hposSettings) => {
     registrationEmail: admin.email,
     networkStatus: holoportos.network || 'test', // ie: 'live'
     sshAccess: holoportos.sshAccess || false,
+    // eslint-disable-next-line no-magic-numbers
     deviceName: deviceName || (admin.public_key && admin.public_key.slice(-8)) || 'Your HP'
   }
 }
 
 const HposInterface = {
-  dashboard: async () => {
-    const dashboardData = await hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 })
-    dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
-    return dashboardData
+  dashboard: () => {
+    return hposHolochainCall({ method: 'get', path: '/dashboard' })({
+      duration_unit: 'DAY',
+      amount: 1
+    })
   },
 
   hostedHapps: async () => {
     const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({
-      duration_unit: "WEEK",
+      duration_unit: 'WEEK',
       amount: 1
     })
 
     if (Array.isArray(result)) {
-      return result.filter(happ => happ.enabled)
+      return result
+        .filter((happ) => happ.enabled)
         .map(mergeMockHappData)
-        .map(happ => ({ // currently hiding storage value from the UI as it's mock data coming from the api
+        .map((happ) => ({
+          // currently hiding storage value from the UI as it's mock data coming from the api
           ...happ,
           storage: '--'
         }))
@@ -130,6 +140,7 @@ const HposInterface = {
     const settingsConfig = {
       ...settingsResponse
     }
+
     if (deviceName !== undefined) {
       settingsConfig.deviceName = deviceName
     }
@@ -140,17 +151,26 @@ const HposInterface = {
   },
 
   getSshAccess: async () => {
-    const { enabled } = await hposAdminCall({ method: 'get', path: '/profiles/development/features/ssh' })()
+    const { enabled } = await hposAdminCall({
+      method: 'get',
+      path: '/profiles/development/features/ssh'
+    })()
     return enabled
   },
 
   enableSshAccess: async () => {
-    const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })()
+    const { enabled } = await hposAdminCall({
+      method: 'put',
+      path: '/profiles/development/features/ssh'
+    })()
     return enabled
   },
 
   disableSshAccess: async () => {
-    const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })()
+    const { enabled } = await hposAdminCall({
+      method: 'delete',
+      path: '/profiles/development/features/ssh'
+    })()
     return enabled
   }
 }
