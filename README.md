@@ -62,3 +62,13 @@ yarn run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Storybook
+
+This project contains Storybook stories. To run storybook in the development mode:
+
+1. Run storybook `yarn storybook`
+2. Visit `http://localhost:6006/`
+
+Storybook is automatically deployed to `https://holo-host.github.io/host-console-ui` on every merge to the
+`develop` branch.
