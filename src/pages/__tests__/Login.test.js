@@ -2,9 +2,9 @@
 // is not there. So while waiting for them, I'm using '@vue/test-utils' for routing tests.
 import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
-import Login from '../Login.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 import wait from 'waait'
+import Login from '../Login.vue'
 
 jest.mock('src/interfaces/HposInterface')
 
@@ -69,6 +69,7 @@ it.skip('sets local storage and pushes the happs route on login', async () => {
 
   loginButton.trigger('click')
 
+  // eslint-disable-next-line no-magic-numbers
   await wait(1000)
 
   expect(mockRouter.push).toHaveBeenCalledWith('/happs')

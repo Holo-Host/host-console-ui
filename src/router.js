@@ -1,74 +1,74 @@
-import { createWebHistory, createRouter } from "vue-router"
+import Dashboard from 'pages/Dashboard.vue'
+import Earnings from 'pages/Earnings.vue'
+import EarningsInvoices from 'pages/EarningsInvoices.vue'
+import HappDetails from 'pages/HappDetails.vue'
+import HostedHapps from 'pages/HostedHapps.vue'
+import HostingPreferences from 'pages/HostingPreferences.vue'
+import Login from 'pages/Login.vue'
+import Settings from 'pages/Settings.vue'
 import { checkHpAdminKeypair } from 'src/utils/keyManagement'
-import Login from "pages/Login.vue"
-import Dashboard from "pages/Dashboard.vue"
-import HostedHapps from "pages/HostedHapps.vue"
-import HappDetails from "pages/HappDetails.vue"
-import Settings from "pages/Settings.vue"
-import Earnings from "pages/Earnings.vue"
-import EarningsInvoices from "pages/EarningsInvoices.vue"
-import HostingPreferences from "pages/HostingPreferences.vue"
+import { createWebHistory, createRouter } from 'vue-router'
 
 export const routes = [
   {
-    path: "/login",
-    name: "Login",
+    path: '/login',
+    name: 'Login',
     component: Login,
     meta: {
       guest: true
     }
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: '/dashboard',
+    name: 'Dashboard',
     component: Dashboard,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: "/happs",
-    name: "HostedHapps",
+    path: '/happs',
+    name: 'HostedHapps',
     component: HostedHapps,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: "/happ/:id",
-    name: "HappDetails",
+    path: '/happ/:id',
+    name: 'HappDetails',
     component: HappDetails,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: "/settings",
-    name: "Settings",
+    path: '/settings',
+    name: 'Settings',
     component: Settings,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: "/earnings",
-    name: "Earnings",
+    path: '/earnings',
+    name: 'Earnings',
     component: Earnings,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: "/earnings/invoices",
-    name: "EarningsInvoices",
+    path: '/earnings/invoices',
+    name: 'EarningsInvoices',
     component: EarningsInvoices,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: "/preferences",
-    name: "HostingPreferences",
+    path: '/preferences',
+    name: 'HostingPreferences',
     component: HostingPreferences,
     meta: {
       requiresAuth: true
@@ -88,7 +88,7 @@ export const routerFactory = () => {
   })
 
   router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
       // page only visible when logged in
 
       // isAuthed is true if the last keypair we generated was good. It persists across sessions.
@@ -98,7 +98,7 @@ export const routerFactory = () => {
         localStorage.removeItem('isAuthed')
       }
 
-      if (localStorage.getItem('isAuthed') == null) {
+      if (localStorage.getItem('isAuthed') === null) {
         next({
           name: 'Login',
           params: { nextUrl: to.fullPath }
@@ -106,13 +106,12 @@ export const routerFactory = () => {
       } else {
         next()
       }
-    } else if (to.matched.some(record => record.meta.guest)) {
-
+    } else if (to.matched.some((record) => record.meta.guest)) {
       // page only visible when *not* logged in
-      if(localStorage.getItem('isAuthed') == null) {
-          next()
-      } else{
-          next({ name: 'Dashboard'})
+      if (localStorage.getItem('isAuthed') === null) {
+        next()
+      } else {
+        next({ name: 'Dashboard' })
       }
     } else {
       // publicly visible page
@@ -127,4 +126,4 @@ const router = routerFactory()
 
 export default router
 
-export const happDetailsPath = ({ id }) => '/happ/' + encodeURIComponent(id)
+export const happDetailsPath = ({ id }) => `/happ/${encodeURIComponent(id)}`

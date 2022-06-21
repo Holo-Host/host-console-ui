@@ -1,31 +1,50 @@
 <template>
-  <router-link :to="pathToHapp" class='happ-card'>
-    <HappImage :happ="happ" class="desktop-happ-image" />
-    <div class='details'>
-      <div class='mobile-row'>
-        <HappImage :happ="happ" :size="'80px'" class="mobile-happ-image" />
-        <div class='mobile-column'>
+  <router-link
+    :to="pathToHapp"
+    class="happ-card"
+  >
+    <HappImage
+      :happ="happ"
+      class="desktop-happ-image"
+    />
+
+    <div class="details">
+      <div class="mobile-row">
+        <HappImage
+          :happ="happ"
+          :size="'80px'"
+          class="mobile-happ-image"
+        />
+
+        <div class="mobile-column">
           <div class="name-row">
-            <h2 class="name">{{ happ.name }}</h2>
+            <h2 class="name">
+              {{ happ.name }}
+            </h2>
             <ArrowIcon class="arrow-icon" />
           </div>
           <div class="duration-row">
             <ClockIcon class="clock-icon" /> Hosted for&nbsp;<span class="days">{{ happ.hostedDays }} days</span>
           </div>
-          <div class="snapshot-label">7 day snapshot:</div>
+          <div class="snapshot-label">
+            7 day snapshot:
+          </div>
           <div class="earnings-row grayed-out">
             Earnings:<span class="earnings">&nbsp;{{ happ.sevenDayEarnings }} HF</span>
           </div>
         </div>
       </div>
+
       <div class="usage-row">
-        <div class='usage'>
+        <div class="usage">
           <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span><span class="usage-unit">CPU</span>
         </div>
-        <div class='usage'>
+
+        <div class="usage">
           <span class="usage-value">{{ presentBytes(happ.storage) }}</span><span class="usage-unit">Storage</span>
         </div>
-        <div class='usage'>
+
+        <div class="usage">
           <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span><span class="usage-unit">Bandwidth</span>
         </div>
       </div>
@@ -35,26 +54,30 @@
 
 <script>
 import HappImage from 'components/HappImage.vue'
-import ClockIcon from 'components/icons/ClockIcon.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
-import { happDetailsPath } from '../router'
+import ClockIcon from 'components/icons/ClockIcon.vue'
 import { presentMicroSeconds, presentBytes } from 'src/utils'
+import { happDetailsPath } from '../router'
 
 export default {
   name: 'HappCard',
+
   components: {
     HappImage,
     ClockIcon,
     ArrowIcon
   },
+
   props: {
     happ: Object
   },
+
   computed: {
     pathToHapp() {
       return happDetailsPath(this.happ)
     }
   },
+
   methods: {
     presentMicroSeconds,
     presentBytes
@@ -67,7 +90,7 @@ export default {
   display: flex;
   background-color: white;
   max-width: 546px;
-  box-shadow: 0px 4px 20px #ECEEF1;
+  box-shadow: 0 4px 20px #eceef1;
   border-radius: 12px;
   margin-right: 18px;
   margin-bottom: 20px;
@@ -79,7 +102,7 @@ export default {
   display: flex;
   flex: 1;
   flex-direction: column;
-  color: #606C8B;
+  color: #606c8b;
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
@@ -94,7 +117,7 @@ export default {
 }
 .name {
   margin: 0;
-  color: #313C59;
+  color: #313c59;
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
@@ -120,7 +143,7 @@ export default {
 .earnings-row {
   display: flex;
   align-items: center;
-  color: #313C59;
+  color: #313c59;
   margin-bottom: 10px;
   margin-left: 3px;
 }
@@ -130,7 +153,7 @@ export default {
 .usage-row {
   display: flex;
   justify-content: space-between;
-  color: #313C59;
+  color: #313c59;
   font-size: 12px;
   font-weight: 600;
   padding-right: 36px;
@@ -140,7 +163,7 @@ export default {
 }
 .usage-value {
   padding: 0 5px;
-  border-bottom: 2px solid #00CAD9;
+  border-bottom: 2px solid #00cad9;
   font-size: 14px;
   font-weight: 700;
 }
@@ -165,7 +188,7 @@ export default {
     flex-basis: 0;
   }
   .duration-row {
-     display: none;
+    display: none;
   }
   .mobile-row {
     display: flex;
@@ -190,7 +213,7 @@ export default {
     border: none;
   }
   .usage-unit {
-    border-bottom: 2px solid #00CAD9;
+    border-bottom: 2px solid #00cad9;
     margin-right: auto;
   }
 }

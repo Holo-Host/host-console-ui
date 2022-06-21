@@ -6,15 +6,17 @@
 
 <script>
 export default {
-  name: 'Button',
+  name: 'BaseButton',
+
   props: {
     color: {
       type: String,
       default: 'teal'
     }
   },
+
   computed: {
-    style () {
+    style() {
       switch (this.color) {
         case 'white':
           return {
@@ -22,13 +24,15 @@ export default {
             color: '#00CAD9',
             border: '1px solid #00CAD9'
           }
+
         case 'teal':
           return {
             backgroundColor: '#00CAD9',
             color: '#FFFFFF'
           }
+
         default:
-          throw new Error (`Unknown color option ${this.color} for button`)
+          throw new Error(`Unknown color option ${this.color} for button`)
       }
     }
   }

@@ -1,82 +1,125 @@
 <template>
-  <Modal :handleClose="handleClose">
-    <div class='settings-modal'>
-      <h3 class='title'>HoloPort Settings</h3>
-      <h4 class='sub-title'>{{ deviceName }}</h4>
-
-      <section class='settings-rows'>
-        <div class='settings-row'>
-          <div class='row-label'>
+  <BaseModal
+    title="HoloPort Settings"
+    :sub-title="deviceName"
+    @close="$emit('close')"
+  >
+    <div class="settings-modal">
+      <section class="settings-rows">
+        <div class="settings-row">
+          <div class="row-label">
             HPOS Version
           </div>
-          <div class='row-value'>
+
+          <div class="row-value">
             {{ hposVersion }}
           </div>
         </div>
 
-        <div class='settings-row'>
-          <div class='row-label'>
-            <label for='device-name'>Device Name</label>
+        <div class="settings-row">
+          <div class="row-label">
+            <label for="device-name">Device Name</label>
           </div>
-          <div v-if='!isEditingDeviceName' class='row-value'>
+
+          <div
+            v-if="!isEditingDeviceName"
+            class="row-value"
+          >
             {{ deviceName }}
-            <PencilIcon v-if='!isLoading' @click="editDeviceName" class='pencil' data-testid='edit-button' />
+            <PencilIcon
+              v-if="!isLoading"
+              class="pencil"
+              data-testid="edit-button"
+              @click="editDeviceName"
+            />
           </div>
-          <div v-if='isEditingDeviceName' class='row-value' style="position: relative; top: -2px; margin-left: -2px">
-            <input v-model='editedDeviceName' class='device-input' id='device-name'>
-            <FilledCheckIcon @click="saveDeviceName" class='filled-check' data-testid='save-button' />
-            <CircledExIcon @click="cancelEditDeviceName" class='circled-ex' data-testid='cancel-button' />
+
+          <div
+            v-if="isEditingDeviceName"
+            class="row-value"
+            style="position: relative; top: -2px; margin-left: -2px"
+          >
+            <input
+              id="device-name"
+              v-model="editedDeviceName"
+              class="device-input"
+            />
+
+            <FilledCheckIcon
+              class="filled-check"
+              data-testid="save-button"
+              @click="saveDeviceName"
+            />
+
+            <CircledExIcon
+              class="circled-ex"
+              data-testid="cancel-button"
+              @click="cancelEditDeviceName"
+            />
           </div>
         </div>
 
-        <div class='settings-row'>
-          <div class='row-label'>
+        <div class="settings-row">
+          <div class="row-label">
             Network
           </div>
-          <div class='row-value'>
+
+          <div class="row-value">
             {{ networkStatus }}
           </div>
         </div>
 
-        <div class='settings-row'>
-          <div class='row-label'>
-            <label for='sshAccess'>Access for HoloPort support (SSH)</label>
+        <div class="settings-row">
+          <div class="row-label">
+            <label for="sshAccess">Access for HoloPort support (SSH)</label>
           </div>
-          <div class='row-value'>
-            <input type='checkbox' id='sshAccess' :checked="true" disabled="true">
+
+          <div class="row-value">
+            <input
+              id="sshAccess"
+              type="checkbox"
+              :checked="true"
+              disabled
+            />
           </div>
         </div>
       </section>
-
-      <Button color='teal' @click="handleClose" class='close-button'>Close</Button>
     </div>
-  </Modal>
+
+    <template #buttons>
+      <Button
+        color="teal"
+        class="close-button"
+        @click="$emit('close')"
+      >
+        Close
+      </Button>
+    </template>
+  </BaseModal>
 </template>
 
 <script>
-import Modal from 'components/Modal'
+import BaseModal from 'components/BaseModal'
 import Button from 'components/Button'
-import PencilIcon from 'src/components/icons/PencilIcon'
-import FilledCheckIcon from 'src/components/icons/FilledCheckIcon'
 import CircledExIcon from 'src/components/icons/CircledExIcon'
+import FilledCheckIcon from 'src/components/icons/FilledCheckIcon'
+import PencilIcon from 'src/components/icons/PencilIcon'
 import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
   name: 'SettingsModal',
+
   components: {
-    Modal,
+    BaseModal,
     Button,
     PencilIcon,
     FilledCheckIcon,
     CircledExIcon
   },
-  props: {
-    handleClose: {
-      type: Function,
-      required: true
-    }
-  },
-    data () {
+
+  emits: ['close'],
+
+  data() {
     return {
       settings: {},
       isLoading: true,
@@ -84,7 +127,38 @@ export default {
       editedDeviceName: ''
     }
   },
-  async mounted () {
+
+  computed: {
+    hposVersion() {
+      return '70791b'
+    },
+
+    deviceName() {
+      return this.isLoading ? 'Loading...' : this.settings.deviceName
+    },
+
+    networkStatus() {
+      return this.isLoading ? 'Loading...' : this.settings.networkStatus
+    },
+
+    sshAccess: {
+      // The checkbox is currently disabled in the html, so this code won't run. Pending a fix to a holo-nixpkgs bug
+      get() {
+        return this.settings.sshAccess
+      },
+      set(newValue) {
+        if (newValue) {
+          HposInterface.enableSshAccess()
+        } else {
+          HposInterface.disableSshAccess()
+        }
+
+        this.settings.sshAccess = newValue
+      }
+    }
+  },
+
+  async mounted() {
     const settings = await HposInterface.settings()
     this.settings = settings
     const sshAccess = await HposInterface.getSshAccess()
@@ -96,8 +170,9 @@ export default {
     }
     this.isLoading = false
   },
+
   methods: {
-    editDeviceName () {
+    editDeviceName() {
       // BUG: hpos-admin-api does not properly save config due to permissions issue. [1]
       //      Disable editing device name until bug is fixed
       //
@@ -108,40 +183,17 @@ export default {
       // this.editedDeviceName = this.settings.deviceName
       // this.isEditingDeviceName = true
     },
-    saveDeviceName () {
+
+    saveDeviceName() {
       HposInterface.updateSettings({
         deviceName: this.editedDeviceName
       })
       this.settings.deviceName = this.editedDeviceName
       this.isEditingDeviceName = false
     },
-    cancelEditDeviceName () {
+
+    cancelEditDeviceName() {
       this.isEditingDeviceName = false
-    },
-  },
-  computed: {
-    hposVersion () {
-      return '70791b'
-    },
-    deviceName () {
-      return this.isLoading ? 'Loading...' : this.settings.deviceName
-    },
-    networkStatus () {
-      return this.isLoading ? 'Loading...' : this.settings.networkStatus
-    },
-    sshAccess: {
-      // The checkbox is currently disabled in the html, so this code won't run. Pending a fix to a holo-nixpkgs bug
-      get () {
-        return this.settings.sshAccess
-      },
-      set (newValue) {
-        if (newValue) {
-          HposInterface.enableSshAccess()
-        } else {
-          HposInterface.disableSshAccess()
-        }
-        this.settings.sshAccess = newValue
-      }
     }
   }
 }
@@ -150,42 +202,18 @@ export default {
 <style scoped>
 .settings-modal {
   display: flex;
-  align-items: center;
-  padding: 26px 98px;
   flex-direction: column;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  text-align: center;
-  color: #313C59;
-}
-.title {
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 30px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #313C59;
-  margin: 0 0 12px 0;
-}
-.sub-title {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  color: #313C59;
-  margin: 0 0 65px 0;
+  justify-content: center;
 }
 .settings-rows {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   min-width: 480px;
-  margin-bottom: 132px;
+  margin-bottom: 60px;
   font-weight: 600;
   font-size: 14px;
-  color: #606C8B;
+  color: #606c8b;
 }
 .settings-row {
   display: flex;
@@ -205,13 +233,6 @@ export default {
 #sshAccess {
   cursor: not-allowed;
 }
-.factory-reset-link {
-  text-decoration-line: underline;
-  color: #606C8B;
-}
-.question-mark {
-  margin-left: 8px;
-}
 .pencil {
   margin-left: 5px;
   margin-top: 3px;
@@ -229,28 +250,18 @@ export default {
   cursor: pointer;
 }
 .device-input {
-  border: 0.5px solid #606C8B;
-  color: #313C59;
+  border: 0.5px solid #606c8b;
+  color: #313c59;
 }
 .close-button {
   min-width: 110px;
   justify-content: center;
 }
 @media screen and (max-width: 1050px) {
-  .settings-modal {
-    padding: 26px 0 28px;
-    margin: 0 -6px;
-  }
-  .title {
-    margin-bottom: 6px;
-  }
-  .sub-title {
-    margin-bottom: 26px
-  }
   .settings-rows {
     min-width: 0;
     width: 100%;
-    margin-bottom: 40px
+    margin-bottom: 40px;
   }
   .row-label {
     flex-basis: initial;

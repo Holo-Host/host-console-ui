@@ -1,38 +1,40 @@
+import { render } from '@testing-library/vue'
 import axios from 'axios'
-import { render, within } from  '@testing-library/vue'
-import HostingPreferences from '../HostingPreferences.vue'
+import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
+import router from 'src/router'
 import wait from 'waait'
-import router  from 'src/router'
+import HostingPreferences from '../HostingPreferences.vue'
 
 jest.mock('axios')
+mockGlobalCrypto()
 
-Object.defineProperty(global, 'crypto', {
-  value: {
-    subtle: {
-      digest: () => Promise.resolve('unchecked string')
-    }
-  }
-});
-
-it('renders all card titles', async () => {
-  axios.get.mockImplementation(path => {
-    if (path.endsWith('config')) {
-      return {
-        data: {
-          admin: {}
-        }
-      }
-    }
-
-    throw new Error (`axios mock doesn't recognise this path: ${path}`)
+describe('hosting preferences page', () => {
+  beforeEach(() => {
+    axios.get.mockClear()
+    axios.put.mockClear()
   })
 
-  const { getByText } = render(HostingPreferences, {
-		global: { plugins: [ router ]},
-	})
-  await wait(0)
+  it('renders all card titles', async () => {
+    axios.get.mockImplementation((path) => {
+      if (path.endsWith('/api/v1/config')) {
+        return Promise.resolve(defaultSettingsResult)
+      }
 
-  getByText('Price Configuration')
-  getByText('Invoice & Payment Terms')
-  getByText('hApp Selection')
+      if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
+        return Promise.resolve(defaultSshAccessResult)
+      }
+
+      throw new Error(`axios mock doesn't recognise this path: ${path}`)
+    })
+
+    const { getByText } = render(HostingPreferences, {
+      global: { plugins: [router] }
+    })
+    await wait(0)
+
+    getByText('Price Configuration')
+    getByText('Invoice & Payment Terms')
+    getByText('hApp Selection')
+  })
 })
