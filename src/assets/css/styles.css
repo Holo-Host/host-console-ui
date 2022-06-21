@@ -16,3 +16,11 @@ html {
     display: flex;
     flex-direction: column;
 }
+
+.inactive {
+    opacity: 0.2;
+}
+
+.bold {
+    font-weight: bold;
+}
