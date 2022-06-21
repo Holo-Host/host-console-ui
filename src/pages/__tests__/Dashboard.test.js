@@ -4,7 +4,7 @@ import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/con
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from 'src/router'
 import wait from 'waait'
-import Dashboard from '../Dashboard.vue'
+import DashboardPage from '../DashboardPage.vue'
 
 jest.mock('axios')
 mockGlobalCrypto()
@@ -59,7 +59,7 @@ describe('dashboard page', () => {
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
-    const { getByTestId } = render(Dashboard, {
+    const { getByTestId } = render(DashboardPage, {
       global: { plugins: [router] }
     })
 

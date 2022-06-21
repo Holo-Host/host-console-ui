@@ -1,3 +1,5 @@
+const kCurrencyDecimals = 2
+
 export function formatCurrency(value) {
-  return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+  return value.toFixed(kCurrencyDecimals).replace(/\d(?=(\d{3})+\.)/gu, '$&,')
 }
