@@ -1,0 +1,30 @@
+name: Push to develop
+
+on:
+  push:
+    branches:
+      - develop
+      - feature/holo-fuel
+      - chore/setup-storybook
+
+jobs:
+  deploy-storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: yarn
+      - name: Deploy storybook to GitHub Pages
+        run: |
+          cat <<EOF >".env"
+            VUE_APP_HPOS_PORT: 4567
+          EOF
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          yarn deploy-storybook
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
