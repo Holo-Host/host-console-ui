@@ -232,7 +232,9 @@ module.exports = {
     describe: 'readonly',
     before: 'readonly',
     after: 'readonly',
-    beforeEach: 'readonly'
+    beforeEach: 'readonly',
+    beforeAll: 'readonly',
+    afterAll: 'readonly'
   },
   parserOptions: {
     parser: '@babel/eslint-parser'

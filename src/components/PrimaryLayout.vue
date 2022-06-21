@@ -1,6 +1,7 @@
 <template>
   <section class="layout">
     <Sidebar />
+
     <section class="main-column">
       <MobileBanner
         :device-name="deviceName"
@@ -8,15 +9,18 @@
         :mobile-sidebar-visible="mobileSidebarVisible"
         :open-settings-modal="openSettingsModal"
       />
+
       <TopNav
         :breadcrumbs="breadcrumbsOrTitle"
         :device-name="deviceName"
         :open-settings-modal="openSettingsModal"
       />
+
       <SettingsModal
         :is-visible="settingsModalVisible"
         @close="closeSettingsModal"
       />
+
       <div
         v-if="kycBannerVisible"
         class="kyc-banner"
@@ -28,6 +32,7 @@
         >third party provider's site</a> to complete
         your verification.
       </div>
+
       <section class="content">
         <slot />
       </section>
@@ -44,16 +49,26 @@ import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
   name: 'PrimaryLayout',
+
   components: {
     Sidebar,
     TopNav,
     MobileBanner,
     SettingsModal
   },
+
   props: {
-    title: String,
-    breadcrumbs: Array
+    title: {
+      type: String,
+      required: true
+    },
+
+    breadcrumbs: {
+      type: Array,
+      default: () => []
+    }
   },
+
   data() {
     return {
       deviceName: 'Loading...',
@@ -62,9 +77,10 @@ export default {
       kycBannerVisible: false
     }
   },
+
   computed: {
     breadcrumbsOrTitle() {
-      if (this.breadcrumbs) {
+      if (this.breadcrumbs.length) {
         return this.breadcrumbs
       } else {
         return [
@@ -75,6 +91,7 @@ export default {
       }
     }
   },
+
   async mounted() {
     const { deviceName } = await HposInterface.settings()
 
@@ -82,13 +99,16 @@ export default {
       this.deviceName = deviceName
     }
   },
+
   methods: {
     showMobileSidebar(shouldShow = false) {
       this.mobileSidebarVisible = shouldShow
     },
+
     openSettingsModal() {
       this.settingsModalVisible = true
     },
+
     closeSettingsModal() {
       this.settingsModalVisible = false
     }

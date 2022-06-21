@@ -1,14 +1,19 @@
-const express = require('express')
-const cors = require('cors')
-const bodyParser = require('body-parser')
-const _ = require('lodash')
 const HpAdminKeypair = require('@holo-host/hp-admin-keypair').HpAdminKeypair
-const defaultResponse = require('./defaultResponse')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const express = require('express')
+const _ = require('lodash')
 const { verifySignedRequest } = require('./authUtils')
+const defaultResponse = require('./defaultResponse')
+
+const kHttpStatuses = {
+  UNAUTHORISED: 401,
+  SERVER_ERROR: 500
+}
 
 const HC_PUBKEY = '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
 
-function generateResponseKey (method, path, data) {
+function generateResponseKey(method, path, data) {
   return `${method}:${path}:${JSON.stringify(data)}`
 }
 
@@ -27,7 +32,7 @@ class MockHposApi {
     this.initializeResponses()
   }
 
-  static async start (port, authEmail, authPassword) {
+  static async start(port, authEmail, authPassword) {
     const mockHposApi = new MockHposApi(port, authEmail, authPassword)
 
     const app = express()
@@ -43,16 +48,18 @@ class MockHposApi {
   }
 
   // this is more convoluted than I'd like because I want init to be a blocking call, so have to uncallback app.listen
-  startServer (app) {
+  startServer(app) {
     return new Promise((resolve, reject) => {
-      this.server = app.listen(this.port, () => {
-        console.log(`Mock hpos-admin-api listening at http://localhost:${this.port}`)
-        resolve()
-      }).on('error', reject)
+      this.server = app
+        .listen(this.port, () => {
+          console.log(`Mock hpos-admin-api listening at http://localhost:${this.port}`)
+          resolve()
+        })
+        .on('error', reject)
     })
   }
 
-  checkAuth (req, res, next) {
+  checkAuth(req, res, next) {
     if (!this.shouldCheckAuth) {
       next()
     } else {
@@ -61,23 +68,24 @@ class MockHposApi {
       const keypair = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
       const signature = req.header('x-hpos-admin-signature')
       const valid = verifySignedRequest(signature, method, originalUrl, body, keypair)
+
       if (valid) {
         next()
       } else {
-        res.status(401).end()
+        res.status(kHttpStatuses.UNAUTHORISED).end()
       }
     }
   }
 
-  any (response) {
+  any(response) {
     this.anyResponse = response
   }
 
-  next (response) {
+  next(response) {
     this.once('', NEXT_PATH, {}, response)
   }
 
-  once (method, path, body, response) {
+  once(method, path, body, response) {
     const responseKey = generateResponseKey(method, path, body)
 
     if (!this.responseQueues[responseKey]) {
@@ -87,7 +95,7 @@ class MockHposApi {
     this.responseQueues[responseKey].push(response)
   }
 
-  getSavedResponse (method, type, data) {
+  getSavedResponse(method, type, data) {
     let responseKey
 
     // if there are responses in the 'next' queue, we use those and ignore the specific type and data of the request
@@ -98,7 +106,9 @@ class MockHposApi {
     }
 
     if (!this.responseQueues[responseKey]) {
-      if (this.anyResponse) return this.anyResponse
+      if (this.anyResponse) {
+        return this.anyResponse
+      }
 
       throw new Error(`No more responses for: ${responseKey}`)
     }
@@ -106,29 +116,32 @@ class MockHposApi {
     return this.responseQueues[responseKey].shift()
   }
 
-  initializeResponses () {
+  initializeResponses() {
     this.responseQueues = {}
     // sets the `any` response which is called as a fallback when no other response has been specified.
     // In this case, defaultResponse is a mock of normal behavior of the hpos apis
     this.anyResponse = defaultResponse
   }
 
-  handleRequest (req, res) {
+  handleRequest(req, res) {
     const { method, path, body } = req
 
     let responseOrResponseFunc
+
     try {
       responseOrResponseFunc = this.getSavedResponse(method, path, body)
     } catch (e) {
-      res.status(500).send(e.message)
+      res.status(kHttpStatuses.SERVER_ERROR).send(e.message)
     }
 
-    const response = _.isFunction(responseOrResponseFunc) ? responseOrResponseFunc(method.toLowerCase(), path, body) : responseOrResponseFunc
+    const response = _.isFunction(responseOrResponseFunc)
+      ? responseOrResponseFunc(method.toLowerCase(), path, body)
+      : responseOrResponseFunc
 
     res.send(response)
   }
 
-  close () {
+  close() {
     this.server.close()
   }
 }

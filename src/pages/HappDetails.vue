@@ -126,8 +126,11 @@ import StopHostingModal from 'components/StopHostingModal.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 
+const kInitialsLength = 2
+
 export default {
   name: 'HappDetails',
+
   components: {
     PrimaryLayout,
     HappImage,
@@ -138,6 +141,7 @@ export default {
     AlertCircleIcon,
     StopHostingModal
   },
+
   data() {
     return {
       happ: {
@@ -147,6 +151,7 @@ export default {
       hostingModalVisible: false
     }
   },
+
   computed: {
     breadcrumbs() {
       return [
@@ -159,14 +164,16 @@ export default {
         }
       ]
     },
+
     initials() {
       return this.happ.name
-        .replace(/[^a-z]/gi, '')
-        .slice(0, 2)
+        .replace(/[^a-z]/giu, '')
+        .slice(0, kInitialsLength)
         .toUpperCase()
     }
   },
-  created: async function () {
+
+  async created() {
     const happs = await HposInterface.hostedHapps()
     const happId = decodeURIComponent(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
@@ -177,20 +184,25 @@ export default {
 
     this.happ = happ
   },
+
   methods: {
     editRates() {
-      alert('Editing rates is not implemented in this version')
+      console.error('Editing rates is not implemented in this version')
     },
+
     openHostingModal() {
       // This function is not currently used but should replace the call to stopHostingHapp once we have implemented stopping hosting
       this.hostingModalVisible = true
     },
+
     closeHostingModal() {
       this.hostingModalVisible = false
     },
+
     stopHostingHapp() {
       console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
+
     presentHolofuelAmount,
     presentMicroSeconds,
     presentBytes
@@ -203,7 +215,7 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: white;
-  box-shadow: 0px 4px 20px #eceef1;
+  box-shadow: 0 4px 20px #eceef1;
   border-radius: 5px;
   margin: 0 10px 20px 12px;
   padding: 30px;
@@ -253,13 +265,6 @@ export default {
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
-}
-.arrow-icon {
-  margin-left: auto;
-}
-.snapshot-label {
-  margin-left: 3px;
-  margin-bottom: 3px;
 }
 .info-row {
   display: flex;

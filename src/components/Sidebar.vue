@@ -1,51 +1,100 @@
 <template>
   <section class="sidebar">
-    <h1 class="banner">Host Console</h1>
+    <h1 class="banner">
+      Host Console
+    </h1>
+
     <section class="menu">
-      <router-link to="/dashboard" class='menu-row' active-class="active-link">
-        <HomeIcon class="home-icon" :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'" />Dashboard
+      <router-link
+        to="/dashboard"
+        class="menu-row"
+        active-class="active-link"
+      >
+        <HomeIcon
+          class="home-icon"
+          :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'"
+        />Dashboard
       </router-link>
-      <router-link to="/happs" class='menu-row' active-class="active-link">
-        <HappsIcon class="home-icon" :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'" />hApps
+
+      <router-link
+        to="/happs"
+        class="menu-row"
+        active-class="active-link"
+      >
+        <HappsIcon
+          class="home-icon"
+          :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'"
+        />hApps
       </router-link>
-      <router-link to="/preferences" class='menu-row' active-class="active-link">
-        <GearIcon class="gear-icon" :color="$route.path.match('/preferences') ? '#00CAD9' : '#313C59'" />Hosting Preferences
+
+      <router-link
+        to="/preferences"
+        class="menu-row"
+        active-class="active-link"
+      >
+        <GearIcon
+          class="gear-icon"
+          :color="$route.path.match('/preferences') ? '#00CAD9' : '#313C59'"
+        />Hosting Preferences
       </router-link>
-      <div class='alpha-banner'>
-        <div class='flag'>ALPHA: HoloFuel = Test Fuel<div class='triangle' /></div>
+
+      <div class="alpha-banner">
+        <div class="flag">
+          ALPHA: HoloFuel = Test Fuel<div class="triangle" />
+        </div>
         <p>
           Host Console is in Alpha testing. All references to HF should be interpreted as Test Fuel.
         </p>
         <p>
-          <a href='https://forum.holo.host/c/alpha-testing-holoports/31' target="_blank">Learn more</a>
+          <a
+            href="https://forum.holo.host/c/alpha-testing-holoports/31"
+            target="_blank"
+          >Learn more</a>
         </p>
       </div>
+
       <div class="footer">
-        <a class='holo-brand' href="https://holo.host/" target="_blank">
-          <img src='/images/holo-logo.png' class='holo-logo'/>
+        <a
+          class="holo-brand"
+          href="https://holo.host/"
+          target="_blank"
+        >
+          <img
+            src="/images/holo-logo.png"
+            class="holo-logo"
+            alt="holo-logo"
+          />
           HOLO
         </a>
-        <a class='footer-link' href='https://forum.holo.host/t/alpha-testnet-terms-conditions/193' target="_blank">View Terms of Service</a>
-        <div class='ui-version'>Host Console version {{ uiVersion }}</div>
+        <a
+          class="footer-link"
+          href="https://forum.holo.host/t/alpha-testnet-terms-conditions/193"
+          target="_blank"
+        >View Terms of Service</a>
+        <div class="ui-version">
+          Host Console version {{ uiVersion }}
+        </div>
       </div>
     </section>
   </section>
 </template>
 
 <script>
-import HomeIcon from 'components/icons/HomeIcon.vue'
-import HappsIcon from 'components/icons/HappsIcon.vue'
 import GearIcon from 'components/icons/GearIcon.vue'
+import HappsIcon from 'components/icons/HappsIcon.vue'
+import HomeIcon from 'components/icons/HomeIcon.vue'
 
 export default {
-  name: 'Sidebar',
+  name: 'TheSidebar',
+
   components: {
     HomeIcon,
     HappsIcon,
     GearIcon
   },
+
   computed: {
-    uiVersion () {
+    uiVersion() {
       return process.env.VUE_APP_UI_VERSION
     }
   }
@@ -62,82 +111,94 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 0 0 270px;
-  background: #FFFFFF;
-  box-shadow: 0px 4px 4px rgba(54, 59, 71, 0.1);
+  background: #ffffff;
+  box-shadow: 0 4px 4px rgba(54, 59, 71, 0.1);
   z-index: 100;
 }
+
 .mobile-banner .sidebar {
   display: none;
 }
+
 .banner {
   background-color: rgba(0, 202, 217, 0.06);
-  color: #00CAD9;
+  color: #00cad9;
   font-weight: bold;
   font-size: 24px;
   text-align: center;
   padding: 44px 0;
   margin: 0;
 }
+
 .menu {
   padding: 30px 24px 30px 18px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
+
 .menu-row {
   display: flex;
   align-items: center;
   font-size: 14px;
   text-decoration: none;
-  color: #313C59;
+  color: #313c59;
   margin-bottom: 20px;
   padding: 3px 0 3px 24px;
 }
+
 .menu-row:hover {
   background: rgba(0, 202, 217, 0.06);
   border-radius: 2px;
 }
+
 .active-link {
-  color: #00CAD9;
+  color: #00cad9;
 }
+
 .home-icon {
   margin-right: 10px;
 }
+
 .gear-icon {
   margin-left: 3px;
   margin-right: 15px;
 }
+
 .alpha-banner {
   position: relative;
   margin: auto -24px auto -18px;
   padding: 35px 40px 18px 32px;
-  background-color: #F0FCFD;
+  background-color: #f0fcfd;
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.02em;
-  color: #313C59;
+  color: #313c59;
 }
+
 .alpha-banner a {
   font-weight: 600;
-  color: #313C59;
+  color: #313c59;
 }
+
 .flag {
   position: absolute;
   top: -17px;
   height: 40px;
   margin-left: -32px;
   padding: 0 6px 0 10px;
-  background: #E339FF;
+  background: #e339ff;
   font-weight: bold;
   font-size: 14px;
   line-height: 40px;
   letter-spacing: 0.02em;
   color: white;
 }
+
 .triangle {
   position: absolute;
-  top: 0px;
+  top: 0;
   right: -18px;
   width: 0;
   height: 0;
@@ -145,11 +206,13 @@ export default {
   border-width: 20px 0 20px 18px;
   border-color: transparent transparent transparent #e539ff;
 }
+
 .footer {
   margin-top: auto;
   padding-bottom: 8px;
   padding-left: 24px;
 }
+
 .holo-brand {
   display: flex;
   margin-bottom: 25px;
@@ -161,11 +224,13 @@ export default {
   color: black;
   text-decoration: none;
 }
+
 .holo-logo {
   width: 30px;
   margin-right: 8px;
   margin-left: -6px;
 }
+
 .footer-link {
   display: block;
   margin-bottom: 6px;
@@ -173,6 +238,7 @@ export default {
   font-weight: 600;
   font-size: 14px;
 }
+
 .ui-version {
   line-height: 14px;
   font-size: 10px;
@@ -185,18 +251,19 @@ export default {
   .sidebar {
     display: none;
   }
+
   .mobile-banner .sidebar {
     display: flex;
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     height: 100%;
     min-width: 272px;
     max-width: 72vw;
   }
+
   .banner {
     padding: 50px 0 51px;
   }
 }
-
 </style>

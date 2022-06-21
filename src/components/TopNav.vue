@@ -1,17 +1,46 @@
 <template>
   <section class="top-nav">
-    <h1 v-if="!path" class="main-title">{{ mainTitle }}</h1>
-    <router-link v-if="!!path" class="main-title" :to="path">{{ mainTitle }}</router-link>
-    <RightChevronIcon v-if="showSubtitle" class="chevron" />
-    <div v-if="showSubtitle" class="sub-title">{{ subTitle }}</div>
-    <TopNavMenu :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
-    <div class='alpha-flag'>HF = Test Fuel</div>
+    <h1
+      v-if="!path"
+      class="main-title"
+    >
+      {{ mainTitle }}
+    </h1>
+
+    <router-link
+      v-if="!!path"
+      class="main-title"
+      :to="path"
+    >
+      {{ mainTitle }}
+    </router-link>
+
+    <RightChevronIcon
+      v-if="showSubtitle"
+      class="chevron"
+    />
+
+    <div
+      v-if="showSubtitle"
+      class="sub-title"
+    >
+      {{ subTitle }}
+    </div>
+
+    <TopNavMenu
+      :device-name="deviceName"
+      :open-settings-modal="openSettingsModal"
+    />
+
+    <div class="alpha-flag">
+      HF = Test Fuel
+    </div>
   </section>
 </template>
 
 <script>
-import TopNavMenu from 'components/TopNavMenu.vue'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
+import TopNavMenu from 'components/TopNavMenu.vue'
 
 export default {
   name: 'TopNav',
@@ -19,25 +48,38 @@ export default {
     TopNavMenu,
     RightChevronIcon
   },
+
   props: {
     breadcrumbs: {
       type: Array,
-      default: [{}, {}]
+      default: () => [{}, {}]
     },
-    deviceName: String,
-    openSettingsModal: Function
+
+    deviceName: {
+      type: String,
+      required: true
+    },
+
+    openSettingsModal: {
+      type: Function,
+      required: true
+    }
   },
+
   computed: {
-    mainTitle () {
+    mainTitle() {
       return this.breadcrumbs[0].label
     },
-    path () {
+
+    path() {
       return this.breadcrumbs[0].path
     },
-    subTitle () {
+
+    subTitle() {
       return this.breadcrumbs[1].label
     },
-    showSubtitle () {
+
+    showSubtitle() {
       return this.breadcrumbs.length > 1 && !!this.breadcrumbs[1].label
     }
   }
@@ -64,7 +106,7 @@ export default {
   font-size: 14px;
   font-weight: 600;
   margin: 0;
-  color: #606C8B;
+  color: #606c8b;
   text-decoration: none;
   margin-top: 9px;
 }
@@ -79,11 +121,11 @@ export default {
   .alpha-flag {
     display: block;
     height: 22px;
-    background-color: #E339FF;
+    background-color: #e339ff;
     font-weight: 600;
     font-size: 11px;
     line-height: 22px;
-    color: #FFFFFF;
+    color: #ffffff;
     position: absolute;
     right: -2px;
     padding: 0 7px;

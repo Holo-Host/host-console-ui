@@ -1,46 +1,87 @@
 <template>
   <div class="top-nav-menu">
-    <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' :white="white" /></div>
-    <div class="verification-status">Unverified</div>
-    <div v-if="menuOpen" class="menu">
-      <div @click="openSettingsAndCloseMenu" class="menu-item">
+    <div
+      class="owner"
+      @click="toggleMenu"
+    >
+      {{ deviceName }} <DownTriangleIcon
+        class="down-triangle"
+        :white="white"
+      />
+    </div>
+
+    <div class="verification-status">
+      Unverified
+    </div>
+
+    <div
+      v-if="menuOpen"
+      class="menu"
+    >
+      <div
+        class="menu-item"
+        @click="openSettingsAndCloseMenu"
+      >
         HoloPort Settings
       </div>
-      <div @click="logout" class="menu-item">Logout</div>
+
+      <div
+        class="menu-item"
+        @click="logout"
+      >
+        Logout
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
+import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 
 export default {
   name: 'TopNav',
+
   components: {
     DownTriangleIcon
   },
+
   props: {
-    deviceName: String,
-    white: Boolean,
-    openSettingsModal: Function
+    deviceName: {
+      type: String,
+      required: true
+    },
+
+    white: {
+      type: Boolean,
+      default: false
+    },
+
+    openSettingsModal: {
+      type: Function,
+      required: true
+    }
   },
-  data () {
+
+  data() {
     return {
       menuOpen: false
     }
   },
+
   methods: {
-    toggleMenu () {
+    toggleMenu() {
       this.menuOpen = !this.menuOpen
     },
-    logout () {
+
+    logout() {
       eraseHpAdminKeypair()
       // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
       localStorage.removeItem('isAuthed')
       this.$router.push('/login')
     },
-    openSettingsAndCloseMenu () {
+
+    openSettingsAndCloseMenu() {
       this.menuOpen = false
       this.openSettingsModal()
     }
@@ -54,7 +95,7 @@ export default {
   position: relative;
   margin-left: auto;
   margin-right: -3px;
-  color: #313C59;
+  color: #313c59;
 }
 .mobile-banner .top-nav-menu {
   display: none;
@@ -84,15 +125,15 @@ export default {
   z-index: 50;
   right: 12px;
   top: 20px;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 2px;
   font-size: 14px;
   line-height: 19px;
-  color: #606C8B;
+  color: #606c8b;
   margin-top: 1px;
-  padding: 5px 0px;
+  padding: 5px 0;
   cursor: pointer;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 .mobile-banner .menu {
   right: -2px;
@@ -111,7 +152,7 @@ export default {
   border-color: transparent transparent white transparent;
 }
 .menu-item {
-  padding: 0px 16px;
+  padding: 0 16px;
   margin: 7px 0;
 }
 .menu-item:hover {

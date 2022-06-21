@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs')
 const argv = yargs(hideBin(process.argv)).argv
 const MockHposApi = require('./index')
 require('dotenv').config()
@@ -14,7 +14,9 @@ if (argv.port) {
 }
 
 if (!port) {
-  throw new Error ('no port provided. Please pass in a port arg with --port or define a VUE_APP_HPOS_PORT env variable')
+  throw new Error(
+    'no port provided. Please pass in a port arg with --port or define a VUE_APP_HPOS_PORT env variable'
+  )
 }
 
 MockHposApi.start(port, argv.email, argv.password)

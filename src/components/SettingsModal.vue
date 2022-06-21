@@ -10,6 +10,7 @@
           <div class="row-label">
             HPOS Version
           </div>
+
           <div class="row-value">
             {{ hposVersion }}
           </div>
@@ -19,6 +20,7 @@
           <div class="row-label">
             <label for="device-name">Device Name</label>
           </div>
+
           <div
             v-if="!isEditingDeviceName"
             class="row-value"
@@ -31,6 +33,7 @@
               @click="editDeviceName"
             />
           </div>
+
           <div
             v-if="isEditingDeviceName"
             class="row-value"
@@ -41,11 +44,13 @@
               v-model="editedDeviceName"
               class="device-input"
             />
+
             <FilledCheckIcon
               class="filled-check"
               data-testid="save-button"
               @click="saveDeviceName"
             />
+
             <CircledExIcon
               class="circled-ex"
               data-testid="cancel-button"
@@ -58,6 +63,7 @@
           <div class="row-label">
             Network
           </div>
+
           <div class="row-value">
             {{ networkStatus }}
           </div>
@@ -67,12 +73,13 @@
           <div class="row-label">
             <label for="sshAccess">Access for HoloPort support (SSH)</label>
           </div>
+
           <div class="row-value">
             <input
               id="sshAccess"
               type="checkbox"
               :checked="true"
-              disabled="true"
+              disabled
             />
           </div>
         </div>
@@ -101,6 +108,7 @@ import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
   name: 'SettingsModal',
+
   components: {
     BaseModal,
     Button,
@@ -108,6 +116,9 @@ export default {
     FilledCheckIcon,
     CircledExIcon
   },
+
+  emits: ['close'],
+
   data() {
     return {
       settings: {},
@@ -116,16 +127,20 @@ export default {
       editedDeviceName: ''
     }
   },
+
   computed: {
     hposVersion() {
       return '70791b'
     },
+
     deviceName() {
       return this.isLoading ? 'Loading...' : this.settings.deviceName
     },
+
     networkStatus() {
       return this.isLoading ? 'Loading...' : this.settings.networkStatus
     },
+
     sshAccess: {
       // The checkbox is currently disabled in the html, so this code won't run. Pending a fix to a holo-nixpkgs bug
       get() {
@@ -142,6 +157,7 @@ export default {
       }
     }
   },
+
   async mounted() {
     const settings = await HposInterface.settings()
     this.settings = settings
@@ -154,6 +170,7 @@ export default {
     }
     this.isLoading = false
   },
+
   methods: {
     editDeviceName() {
       // BUG: hpos-admin-api does not properly save config due to permissions issue. [1]
@@ -166,6 +183,7 @@ export default {
       // this.editedDeviceName = this.settings.deviceName
       // this.isEditingDeviceName = true
     },
+
     saveDeviceName() {
       HposInterface.updateSettings({
         deviceName: this.editedDeviceName
@@ -173,6 +191,7 @@ export default {
       this.settings.deviceName = this.editedDeviceName
       this.isEditingDeviceName = false
     },
+
     cancelEditDeviceName() {
       this.isEditingDeviceName = false
     }
@@ -213,13 +232,6 @@ export default {
 }
 #sshAccess {
   cursor: not-allowed;
-}
-.factory-reset-link {
-  text-decoration-line: underline;
-  color: #606c8b;
-}
-.question-mark {
-  margin-left: 8px;
 }
 .pencil {
   margin-left: 5px;

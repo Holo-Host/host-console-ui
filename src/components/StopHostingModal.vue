@@ -64,28 +64,35 @@ import ExclamationIcon from 'components/icons/ExclamationIcon'
 
 export default {
   name: 'StopHostingModal',
+
   components: {
     BaseModal,
     Button,
     ExclamationIcon,
     BigCheckIcon
   },
+
   props: {
     happName: {
       type: String,
       required: true
     }
   },
-  data: function () {
+
+  emits: ['close', 'stop-hosting-happ'],
+
+  data() {
     return {
       confirmed: false
     }
   },
+
   methods: {
     confirm() {
       this.$emit('stop-hosting-happ')
       this.confirmed = true
     },
+
     closeAndGoToHapps() {
       this.$emit('close')
       this.$router.push('/happs')
@@ -113,23 +120,5 @@ export default {
 .content {
   max-width: 625px;
   margin: 0 0 20px 0;
-}
-.buttons {
-  display: flex;
-  margin-top: 20px;
-  margin-bottom: 26px;
-  direction: rtl; /* this is so that we have the correct order of buttons in mobile view */
-}
-
-@media screen and (max-width: 1050px) {
-  .buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .buttons button {
-    margin-bottom: 20px;
-    width: fit-content;
-  }
 }
 </style>

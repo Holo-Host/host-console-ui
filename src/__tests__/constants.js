@@ -17,3 +17,5 @@ export const defaultSettingsResult = {
 export const defaultSshAccessResult = {
   data: { enabled: true }
 }
+
+export const kDefaultWaitTime = 750
