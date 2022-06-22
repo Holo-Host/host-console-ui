@@ -15,7 +15,7 @@
       data-test-base-button-spinner-wrapper
     >
       <FlatSpinner
-        scale="0.5"
+        :scale="0.5"
         :color="type === EButtonType.secondary && isDisabled ? 'secondary' : 'white'"
         class="-ml-4 mb-4"
         data-test-base-button-spinner
@@ -93,50 +93,51 @@ function onClick() {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 32px;
-  border-radius: 1.5rem;
+  padding: 8px 32px;
+  border-radius: 100px;
   overflow: hidden;
   line-height: 1;
   font-weight: 400;
-  transition: all 200ms;
+  cursor: pointer;
+  transition: transform 200ms;
+  font-weight: 700;
+
+  &.disabled {
+    pointer-events: hover;
+    cursor: not-allowed;
+  }
 
   &.primary {
     color: #fff;
-    font-weight: 600;
     border: 1px #00cad9;
     background-color: #00cad9;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 4px #606c8b;
+      box-shadow: 0 0 0 2px #606c8b;
     }
 
     &.disabled {
-      opacity: 0.4;
-      pointer-events: none;
       cursor: not-allowed;
     }
   }
 
   &.secondary {
     color: #fff;
-    font-weight: 600;
     border: solid 1px #606c8b;
     background-color: #606c8b;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:focus {
       outline: none;
-      box-shadow: 0 0 0 4px #00cad9;
+      box-shadow: 0 0 0 2px #00cad9;
     }
 
     &.disabled {
       background-color: #fff;
       color: #606c8b;
       border: solid 1px #606c8b;
-      pointer-events: none;
-      cursor: not-allowed;
     }
   }
 
@@ -149,7 +150,7 @@ function onClick() {
     transition: transform 200ms;
 
     &.visible {
-      transform: translateY(0.7rem);
+      transform: translateY(0.4rem);
     }
 
     &.hidden {

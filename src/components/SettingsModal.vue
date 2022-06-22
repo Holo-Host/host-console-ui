@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import BaseModal from 'components/BaseModal'
-import Button from 'components/Button'
+import Button from 'src/components/BaseButton'
+import BaseModal from 'src/components/BaseModal'
 import CircledExIcon from 'src/components/icons/CircledExIcon'
 import FilledCheckIcon from 'src/components/icons/FilledCheckIcon'
 import PencilIcon from 'src/components/icons/PencilIcon'

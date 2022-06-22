@@ -15,8 +15,12 @@
           Host Console Login
         </h1>
 
+        <span class="subtitle">
+          published by Holo
+        </span>
+
         <label
-          class="label"
+          class="label login-input"
           htmlFor="email"
         >
           Email:
@@ -30,11 +34,8 @@
           class="input"
         />
 
-        <small
-          v-if="!!errors.email"
-          class="field-error"
-        >
-          {{ errors.email }}
+        <small class="field-error">
+          {{ errors.email || '&nbsp;' }}
         </small>
 
         <label
@@ -64,19 +65,19 @@
           />
         </div>
 
-        <small
-          v-if="!!errors.password"
-          class="field-error"
-        >
-          {{ errors.password }}
+        <small class="field-error">
+          {{ errors.password || '&nbsp;' }}
         </small>
 
-        <button
+        <BaseButton
+          :is-disabled="!email || !password || isLoading"
+          :is-busy="isLoading"
+          :type="buttonType"
           class="login-button"
           @click="login"
         >
           Login
-        </Button>
+        </BaseButton>
       </div>
     </form>
 
@@ -108,11 +109,13 @@
 </template>
 
 <script>
+import BaseButton from 'components/BaseButton'
 import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import validator from 'email-validator'
 import HposInterface from 'src/interfaces/HposInterface'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
+import { EButtonType } from '../types/ui'
 
 const kMinPasswordLength = 5
 
@@ -132,6 +135,7 @@ export default {
   name: 'LoginPage',
 
   components: {
+    BaseButton,
     InvisibleEyeIcon,
     VisibleEyeIcon
   },
@@ -142,11 +146,16 @@ export default {
       password: '',
       errors: {},
       banner: '',
-      isPasswordVisible: false
+      isPasswordVisible: false,
+      isLoading: false
     }
   },
 
   computed: {
+    buttonType() {
+      return EButtonType.secondary
+    },
+
     uiVersion() {
       return process.env.VUE_APP_UI_VERSION
     },
@@ -176,7 +185,7 @@ export default {
   },
 
   methods: {
-    async login(e) {
+    async login() {
       if (!validateEmail(this.email.toLowerCase())) {
         this.errors.email = 'Please enter a valid email.'
       }
@@ -186,24 +195,30 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
+        this.isLoading = true
 
-        if (isAuthed) {
-          localStorage.setItem('isAuthed', 'true')
+        try {
+          const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
 
-          if (this.$route.params.nextUrl !== null) {
-            this.$router.push(this.$route.params.nextUrl)
+          if (isAuthed) {
+            localStorage.setItem('isAuthed', 'true')
+
+            if (this.$route.params.nextUrl !== null) {
+              await this.$router.push(this.$route.params.nextUrl)
+            } else {
+              await this.$router.push('/dashboard')
+            }
           } else {
-            this.$router.push('/dashboard')
+            this.banner =
+              'There was a problem logging you in. Please check your credentials and try again.'
           }
-        } else {
+        } catch (e) {
           this.banner =
             'There was a problem logging you in. Please check your credentials and try again.'
+        } finally {
+          this.isLoading = false
         }
       }
-
-      e.preventDefault()
-      return false
     },
 
     showPassword() {
@@ -256,7 +271,17 @@ export default {
   align-self: center;
   font-weight: 600;
   font-size: 28px;
-  margin: 0 0 50px 0;
+  margin: 0;
+}
+.subtitle {
+  margin-top: 16px;
+  color: #606c8b;
+  align-self: center;
+  font-weight: 400;
+  font-size: 12px;
+}
+.login-input {
+  margin-top: 45px;
 }
 .label {
   font-weight: 600;
@@ -287,23 +312,14 @@ export default {
 }
 .login-button {
   align-self: center;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 22px;
-  height: 34px;
   width: 192px;
-  margin-top: 26px;
-  color: #606c8b;
-  border: 1px solid #606c8b;
-  background: white;
-  border-radius: 100px;
-  cursor: pointer;
+  margin-top: 20px;
 }
 .field-error {
   font-size: 12px;
   font-weight: 500;
   color: #a00;
-  margin: -10px 0 15px;
+  margin: -15px 0 10px;
 }
 
 .footer {

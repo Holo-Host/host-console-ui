@@ -40,25 +40,20 @@
       v-else
       #buttons
     >
-      <Button
-        color="teal"
-        @click="confirm"
-      >
+      <BaseButton @click="confirm">
         Yes, I want to stop hosting this hApp
-      </Button>
-      <Button
-        color="white"
-        @click="$emit('close')"
-      >
+      </BaseButton>
+
+      <BaseButton @click="$emit('close')">
         Cancel
-      </Button>
+      </BaseButton>
     </template>
   </BaseModal>
 </template>
 
 <script>
+import BaseButton from 'components/BaseButton'
 import BaseModal from 'components/BaseModal'
-import Button from 'components/Button'
 import BigCheckIcon from 'components/icons/BigCheckIcon'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
 
@@ -67,7 +62,7 @@ export default {
 
   components: {
     BaseModal,
-    Button,
+    BaseButton,
     ExclamationIcon,
     BigCheckIcon
   },
