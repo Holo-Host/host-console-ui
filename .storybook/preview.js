@@ -2,7 +2,7 @@ import { app } from '@storybook/vue3'
 import messages from '../src/locales'
 import { createI18n } from 'vue-i18n'
 
-import '../src/assets/css/styles.css'
+import '../src/assets/css/index.scss'
 
 const i18n = createI18n({
   locale: 'en',
