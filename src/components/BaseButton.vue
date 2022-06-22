@@ -97,7 +97,6 @@ function onClick() {
   border-radius: 100px;
   overflow: hidden;
   line-height: 1;
-  font-weight: 400;
   cursor: pointer;
   transition: transform 200ms;
   font-weight: 700;
@@ -109,7 +108,7 @@ function onClick() {
 
   &.primary {
     color: #fff;
-    border: 1px #00cad9;
+    border: solid 1px #00cad9;
     background-color: #00cad9;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
@@ -119,7 +118,7 @@ function onClick() {
     }
 
     &.disabled {
-      cursor: not-allowed;
+      opacity: 0.4;
     }
   }
 
