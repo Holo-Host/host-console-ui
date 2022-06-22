@@ -19,55 +19,26 @@
           published by Holo
         </span>
 
-        <label
-          class="label login-input"
-          htmlFor="email"
-        >
-          Email:
-        </label>
-
-        <input
-          id="email"
+        <BaseInput
           v-model="email"
-          type="email"
+          :input-type="inputTypes.email"
+          :is-valid="!errors.email"
+          has-errors
+          label="Email:"
           name="email"
-          class="input"
+          :message="errors.email"
+          class="login-input"
         />
 
-        <small class="field-error">
-          {{ errors.email || '&nbsp;' }}
-        </small>
-
-        <label
-          class="label"
-          htmlFor="password"
-        >
-          Password:
-        </label>
-
-        <div class="password-input">
-          <input
-            id="password"
-            v-model="password"
-            :type="passwordFieldType"
-            name="password"
-            class="input"
-          />
-          <VisibleEyeIcon
-            v-if="isPasswordVisible"
-            class="eye-icon"
-            @click="hidePassword"
-          />
-          <InvisibleEyeIcon
-            v-else
-            class="eye-icon"
-            @click="showPassword"
-          />
-        </div>
-
-        <small class="field-error">
-          {{ errors.password || '&nbsp;' }}
-        </small>
+        <BaseInput
+          v-model="password"
+          :input-type="inputTypes.password"
+          :is-valid="!errors.password"
+          has-errors
+          label="Password:"
+          name="password"
+          :message="errors.password"
+        />
 
         <BaseButton
           :is-disabled="!email || !password || isLoading"
@@ -110,12 +81,11 @@
 
 <script>
 import BaseButton from 'components/BaseButton'
-import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
-import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
+import BaseInput from 'components/BaseInput'
 import validator from 'email-validator'
 import HposInterface from 'src/interfaces/HposInterface'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
-import { EButtonType } from '../types/ui'
+import { EButtonType, EInputType } from '../types/ui'
 
 const kMinPasswordLength = 5
 
@@ -136,8 +106,7 @@ export default {
 
   components: {
     BaseButton,
-    InvisibleEyeIcon,
-    VisibleEyeIcon
+    BaseInput
   },
 
   data() {
@@ -154,6 +123,10 @@ export default {
   computed: {
     buttonType() {
       return EButtonType.secondary
+    },
+
+    inputTypes() {
+      return EInputType
     },
 
     uiVersion() {
@@ -219,14 +192,6 @@ export default {
           this.isLoading = false
         }
       }
-    },
-
-    showPassword() {
-      this.isPasswordVisible = true
-    },
-
-    hidePassword() {
-      this.isPasswordVisible = false
     }
   }
 }
@@ -239,6 +204,7 @@ export default {
   margin-right: 78px;
   align-self: center;
 }
+
 .banner {
   position: absolute;
   top: 0;
@@ -252,10 +218,12 @@ export default {
   z-index: 30;
   color: white;
 }
+
 .form {
   display: flex;
   flex-direction: column;
 }
+
 .form-box {
   background: #ffffff;
   box-shadow: 0 2.5px 10px rgba(0, 0, 0, 0.25);
@@ -266,6 +234,7 @@ export default {
   margin-bottom: 32px;
   padding: 58px 62px 54px 62px;
 }
+
 .title {
   color: #606c8b;
   align-self: center;
@@ -273,6 +242,7 @@ export default {
   font-size: 28px;
   margin: 0;
 }
+
 .subtitle {
   margin-top: 16px;
   color: #606c8b;
@@ -280,46 +250,15 @@ export default {
   font-weight: 400;
   font-size: 12px;
 }
+
 .login-input {
   margin-top: 45px;
 }
-.label {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 16px;
-  color: #606c8b;
-  text-transform: uppercase;
-}
-.input {
-  border: none;
-  outline: none;
-  border-bottom: 1px solid rgba(44, 63, 89, 0.5);
-  padding: 5px 5px;
-  margin-bottom: 20px;
-  color: rgba(44, 63, 89, 1);
-}
-.password-input {
-  position: relative;
-  display: flex;
-}
-.password-input input {
-  flex-grow: 1;
-}
-.eye-icon {
-  position: absolute;
-  right: 0;
-  cursor: pointer;
-}
+
 .login-button {
   align-self: center;
   width: 192px;
-  margin-top: 20px;
-}
-.field-error {
-  font-size: 12px;
-  font-weight: 500;
-  color: #a00;
-  margin: -15px 0 10px;
+  margin-top: 24px;
 }
 
 .footer {

@@ -87,7 +87,7 @@ function onClick() {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .base-button {
   position: relative;
   display: inline-flex;
