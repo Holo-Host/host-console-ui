@@ -19,7 +19,7 @@
           published by Holo
         </span>
 
-        <BaseInput
+        <BaseLoginInput
           v-model="email"
           :input-type="inputTypes.email"
           :is-valid="!errors.email"
@@ -30,7 +30,7 @@
           class="login-input"
         />
 
-        <BaseInput
+        <BaseLoginInput
           v-model="password"
           :input-type="inputTypes.password"
           :is-valid="!errors.password"
@@ -81,7 +81,7 @@
 
 <script>
 import BaseButton from 'components/BaseButton'
-import BaseInput from 'components/BaseInput'
+import BaseLoginInput from 'components/BaseLoginInput'
 import validator from 'email-validator'
 import HposInterface from 'src/interfaces/HposInterface'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
@@ -106,7 +106,7 @@ export default {
 
   components: {
     BaseButton,
-    BaseInput
+    BaseLoginInput
   },
 
   data() {
