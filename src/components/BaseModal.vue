@@ -20,12 +20,12 @@
       </button>
 
       <div class="base-modal-content">
-        <h3
+        <span
           v-if="title"
           class="base-modal-title"
         >
           {{ title }}
-        </h3>
+        </span>
 
         <h4
           v-if="subTitle"
@@ -83,6 +83,8 @@ const emit = defineEmits(['close'])
 .base-modal-overlay {
   position: fixed;
   display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0;
   left: 0;
   z-index: 200;
@@ -155,7 +157,6 @@ const emit = defineEmits(['close'])
 @media screen and (max-width: 1050px) {
   .base-modal {
     pointer-events: all;
-    margin: 210px 10px;
     flex-basis: 100%;
     height: fit-content;
   }
@@ -171,6 +172,21 @@ const emit = defineEmits(['close'])
 
   .base-modal-sub-title {
     margin-bottom: 26px;
+  }
+}
+
+@media screen and (max-width: 568px) {
+  .base-modal {
+    margin: 10px;
+  }
+
+  .base-modal-content {
+    padding: 0;
+    margin: 0 -6px;
+  }
+
+  .base-modal-buttons {
+    padding-bottom: 10px;
   }
 }
 </style>
