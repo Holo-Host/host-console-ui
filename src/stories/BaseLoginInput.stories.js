@@ -1,9 +1,9 @@
-import BaseInput from '@/components/BaseInput.vue'
+import BaseLoginInput from '@/components/BaseLoginInput.vue'
 import { EInputType } from '@/types/ui'
 
 export default {
-  title: 'BaseInput',
-  component: BaseInput,
+  title: 'BaseLoginInput',
+  component: BaseLoginInput,
 
   argTypes: {
     autocomplete: '',
@@ -25,7 +25,6 @@ export default {
     placeholder: '',
     modelValue: '',
     label: '',
-    iconClass: '',
     hasErrors: false,
     message: '',
     messageClasses: ''
@@ -33,12 +32,12 @@ export default {
 }
 
 const kTemplate = (args) => ({
-  components: { BaseInput },
+  components: { BaseLoginInput },
   setup() {
     return { args }
   },
   // And then the `args` are bound to your component with `v-bind="args"`
-  template: '<BaseInput v-bind="args" />'
+  template: '<BaseLoginInput v-bind="args" />'
 })
 
 export const Default = kTemplate.bind({})
@@ -53,7 +52,6 @@ Default.args = {
   placeholder: '',
   modelValue: '',
   label: '',
-  iconClass: '',
   hasErrors: false,
   message: '',
   messageClasses: ''

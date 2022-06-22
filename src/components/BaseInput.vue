@@ -4,21 +4,7 @@
     :class="{ 'disabled' : isDisabled }"
     data-test-base-input-wrapper
   >
-    <slot
-      v-if="label"
-      name="label"
-      :input-id="inputId"
-    >
-      <label
-        :for="inputId"
-        class="base-input__label"
-        data-test-base-input-label
-      >
-        {{ label }}
-      </label>
-    </slot>
-
-    <div class="base-input__content">
+    <div>
       <input
         :id="inputId"
         ref="inputRef"
@@ -107,18 +93,6 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  label: {
-    type: String,
-    default: ''
-  },
-  icon: {
-    type: String,
-    default: null
-  },
-  iconClass: {
-    type: String,
-    default: ''
-  },
   hasErrors: {
     type: Boolean,
     default: false
@@ -150,39 +124,31 @@ const {
 <style scoped lang="scss">
 .base-input {
   position: relative;
-  font-weight: 600;
 
   &.disabled {
-    opacity: 0.4;
+    opacity: 0.6;
     pointer-events: hover;
     cursor: not-allowed;
-  }
-
-  &__label {
-    display: block;
-    font-size: 12px;
-    line-height: 16px;
-    color: #606c8b;
-    text-transform: uppercase;
-  }
-
-  &__content {
-    position: relative;
-    margin-top: 12px;
   }
 
   &__input {
     display: block;
     width: 100%;
     margin-top: 0;
-    padding: 1px 1px 0;
-    border: 0;
-    border-bottom: solid 0.5px #000;
+    border: 1px solid #606c8b;
+    border-radius: 5px;
+    padding: 9px 14px;
     font-size: 14px;
     font-weight: 600;
 
     &:focus {
       outline: none;
+      border: 1px solid #00cad9;
+    }
+
+    &::placeholder {
+      font-weight: 400;
+      color: #acafbc;
     }
 
     &.disabled {
@@ -201,6 +167,7 @@ const {
     margin: 5px 0 4px 1px;
     font-size: 12px;
     color: #ff5f5f;
+    font-weight: 600;
   }
 
   .eye-icon {

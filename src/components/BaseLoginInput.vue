@@ -111,14 +111,6 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  icon: {
-    type: String,
-    default: null
-  },
-  iconClass: {
-    type: String,
-    default: ''
-  },
   hasErrors: {
     type: Boolean,
     default: false
