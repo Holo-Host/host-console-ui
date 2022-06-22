@@ -7,7 +7,7 @@ export default {
   argTypes: {
     scale: '0.5',
     color: {
-      options: ['primary', 'white'],
+      options: ['primary', 'secondary', 'white'],
       control: {
         type: 'select'
       }

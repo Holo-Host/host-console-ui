@@ -11,3 +11,8 @@ export const EAlertType = {
   warning: 1,
   danger: 2
 }
+
+export const EButtonType = {
+  primary: 0,
+  secondary: 1
+}

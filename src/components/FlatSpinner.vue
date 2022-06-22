@@ -33,7 +33,7 @@ const props = defineProps({
     type: String,
     default: 'primary',
     validator(value) {
-      return ['primary', 'white'].includes(value)
+      return ['primary', 'secondary', 'white'].includes(value)
     }
   }
 })
@@ -86,7 +86,11 @@ const computedScale = computed(() => ({
 }
 
 .loader-dot.primary {
-  background-color: rgb(0, 202, 217);
+  background-color: #00cad9;
+}
+
+.loader-dot.secondary {
+  background-color: #606c8b;
 }
 
 .loader-dot.white {
