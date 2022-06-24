@@ -15,6 +15,7 @@
 
         <BaseInput
           v-model="displayName"
+          autofocus
           placeholder="Enter Account Display Name"
           name="displayName"
           class="welcome-modal__display-name-input"
@@ -102,7 +103,7 @@ function handleSubmit() {
       isLoading.value = false
       step.value = 2
       // eslint-disable-next-line no-magic-numbers
-    }, 0)
+    }, 2000)
   } else {
     emit('close')
   }
