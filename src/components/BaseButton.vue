@@ -51,14 +51,17 @@ const props = defineProps({
       return [EButtonType.primary, EButtonType.secondary].includes(value)
     }
   },
+
   isDisabled: {
     type: Boolean,
     default: false
   },
+
   isBusy: {
     type: Boolean,
     default: false
   },
+
   spinnerSize: {
     type: Number,
     default: ESpinnerSize.small,
@@ -66,6 +69,7 @@ const props = defineProps({
       return [ESpinnerSize.none, ESpinnerSize.small].includes(value)
     }
   },
+
   title: {
     type: String,
     default: ''

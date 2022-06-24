@@ -1,5 +1,9 @@
 <template>
-  <div class="base-input" :class="{ 'disabled' : isDisabled }">
+  <div
+    class="base-input"
+    :class="{ 'disabled' : isDisabled }"
+    data-test-base-input-wrapper
+  >
     <div>
       <input
         :id="inputId"
@@ -26,7 +30,11 @@
       </div>
     </div>
 
-    <p v-if="hasErrors" class="base-input__error">
+    <p
+      v-if="hasErrors"
+      class="base-input__error"
+      data-test-base-input-errors
+    >
       <!-- If there is no message, put a non-breaking space to prevent collapse -->
       {{ message || '&nbsp;' }}
     </p>
