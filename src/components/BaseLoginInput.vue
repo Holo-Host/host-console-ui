@@ -75,51 +75,68 @@ const props = defineProps({
     type: String,
     default: ''
   },
+
   autofocus: {
     type: Boolean,
     default: false
   },
+
   isDisabled: {
     type: Boolean,
     default: false
   },
+
   isValid: {
     type: Boolean,
     default: true
   },
+
   inputType: {
     type: String,
-    default: EInputType.text
+    default: EInputType.text,
+    validator(value) {
+      return [
+        EInputType.text,
+        EInputType.password,
+        EInputType.url,
+        EInputType.tel,
+        EInputType.email,
+        EInputType.number
+      ].includes(value)
+    }
   },
+
   id: {
     type: String,
     default: ''
   },
+
   name: {
     type: String,
     default: ''
   },
+
   placeholder: {
     type: String,
     default: ''
   },
+
   modelValue: {
     type: String,
     default: ''
   },
+
   label: {
     type: String,
     default: ''
   },
+
   hasErrors: {
     type: Boolean,
     default: false
   },
+
   message: {
-    type: String,
-    default: ''
-  },
-  messageClasses: {
     type: String,
     default: ''
   }

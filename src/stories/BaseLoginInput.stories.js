@@ -26,8 +26,7 @@ export default {
     modelValue: '',
     label: '',
     hasErrors: false,
-    message: '',
-    messageClasses: ''
+    message: ''
   }
 }
 
@@ -53,8 +52,7 @@ Default.args = {
   modelValue: '',
   label: '',
   hasErrors: false,
-  message: '',
-  messageClasses: ''
+  message: ''
 }
 
 export const WithPlaceholder = kTemplate.bind({})

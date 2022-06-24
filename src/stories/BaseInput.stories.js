@@ -27,8 +27,7 @@ export default {
     label: '',
     iconClass: '',
     hasErrors: false,
-    message: '',
-    messageClasses: ''
+    message: ''
   }
 }
 
@@ -55,8 +54,7 @@ Default.args = {
   label: '',
   iconClass: '',
   hasErrors: false,
-  message: '',
-  messageClasses: ''
+  message: ''
 }
 
 export const WithPlaceholder = kTemplate.bind({})
