@@ -61,7 +61,7 @@ const props = defineProps({
   },
   spinnerSize: {
     type: Number,
-    default: ESpinnerSize.none,
+    default: ESpinnerSize.small,
     validator(value) {
       return [ESpinnerSize.none, ESpinnerSize.small].includes(value)
     }
