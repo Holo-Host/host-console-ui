@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="base-input"
-    :class="{ 'disabled' : isDisabled }"
-    data-test-base-input-wrapper
-  >
+  <div class="base-input" :class="{ 'disabled' : isDisabled }">
     <div>
       <input
         :id="inputId"
@@ -24,26 +20,13 @@
         @keydown="$emit('keydown', $event)"
       />
 
-      <div
-        v-if="inputType === EInputType.password"
-        class="eye-icon"
-      >
-        <VisibleEyeIcon
-          v-if="isPasswordVisible"
-          @click="hidePassword"
-        />
-        <InvisibleEyeIcon
-          v-else
-          @click="showPassword"
-        />
+      <div v-if="inputType === EInputType.password" class="eye-icon">
+        <VisibleEyeIcon v-if="isPasswordVisible" @click="hidePassword" />
+        <InvisibleEyeIcon v-else @click="showPassword" />
       </div>
     </div>
 
-    <p
-      v-if="hasErrors"
-      class="base-input__error"
-      data-test-base-input-errors
-    >
+    <p v-if="hasErrors" class="base-input__error">
       <!-- If there is no message, put a non-breaking space to prevent collapse -->
       {{ message || '&nbsp;' }}
     </p>
@@ -51,9 +34,9 @@
 </template>
 
 <script setup>
-import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
-import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
-import { useInput } from '../composables/useInput'
+import InvisibleEyeIcon from '@/components/icons/InvisibleEyeIcon.vue'
+import VisibleEyeIcon from '@/components/icons/VisibleEyeIcon.vue'
+import { useInput } from '@/composables/useInput'
 import { EInputType } from '@/types/ui'
 
 const props = defineProps({

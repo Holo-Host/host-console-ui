@@ -20,6 +20,7 @@
         </span>
 
         <BaseLoginInput
+          id="email"
           v-model="email"
           :input-type="inputTypes.email"
           :is-valid="!errors.email"
@@ -31,6 +32,7 @@
         />
 
         <BaseLoginInput
+          id="password"
           v-model="password"
           :input-type="inputTypes.password"
           :is-valid="!errors.password"
@@ -80,12 +82,12 @@
 </template>
 
 <script>
-import BaseButton from 'components/BaseButton'
-import BaseLoginInput from 'components/BaseLoginInput'
 import validator from 'email-validator'
-import HposInterface from 'src/interfaces/HposInterface'
-import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
-import { EButtonType, EInputType } from '../types/ui'
+import BaseButton from '@/components/BaseButton.vue'
+import BaseLoginInput from '@/components/BaseLoginInput.vue'
+import HposInterface from '@/interfaces/HposInterface'
+import { EButtonType, EInputType } from '@/types/ui'
+import { getHpAdminKeypair, eraseHpAdminKeypair } from '@/utils/keyManagement'
 
 const kMinPasswordLength = 5
 

@@ -26,6 +26,7 @@
         <p class="welcome-modal__address-paragraph">
           This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.
         </p>
+
         <p class="welcome-modal__display-name">
           {{ displayName }}
         </p>

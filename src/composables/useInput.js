@@ -1,6 +1,6 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { EInputType } from '@/types/ui'
-import { getUniqueId } from '@/utils/domUtils'
+import { EInputType } from '../types/ui'
+import { getUniqueId } from '../utils/domUtils'
 
 export function useInput({ props, emit }) {
   const inputRef = ref()

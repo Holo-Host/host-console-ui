@@ -29,6 +29,8 @@ module.exports = {
       src: resolve('../src'),
       components: resolve('../src/components'),
       pages: resolve('../src/pages'),
+      utils: path.resolve('../src/utils'),
+      types: path.resolve('../src/types')
     };
 
     return config;

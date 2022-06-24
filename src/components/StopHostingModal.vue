@@ -1,9 +1,6 @@
 <template>
   <BaseModal @close="$emit('close')">
-    <div
-      v-if="!confirmed"
-      class="stop-hosting-modal"
-    >
+    <div v-if="!confirmed" class="stop-hosting-modal">
       <ExclamationIcon class="exclamation-icon" />
       <p class="content">
         Are you sure you want to stop hosting {{ happName }}?
@@ -12,10 +9,7 @@
         It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.
       </p>
     </div>
-    <div
-      v-if="confirmed"
-      class="stop-hosting-modal"
-    >
+    <div v-if="confirmed" class="stop-hosting-modal">
       <BigCheckIcon class="exclamation-icon" />
       <p class="content">
         This hApp has been removed from hosting.
@@ -29,12 +23,9 @@
       v-if="confirmed"
       #buttons
     >
-      <Button
-        color="teal"
-        @click="closeAndGoToHapps"
-      >
+      <BaseButton @click="closeAndGoToHapps">
         Close
-      </Button>
+      </BaseButton>
     </template>
     <template
       v-else

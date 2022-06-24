@@ -1,86 +1,32 @@
 const kIndent = 2
 
-const kBaseBlankLineBetweenStatementsConfig = [
-  {
-    blankLine: 'always',
-    prev: 'block-like',
-    next: '*'
-  },
-  {
-    blankLine: 'always',
-    prev: 'break',
-    next: '*'
-  },
-  {
-    blankLine: 'always',
-    prev: ['case', 'default'],
-    next: '*'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'class'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'default'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'do'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'for'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'function'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'if'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'iife'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'switch'
-  },
-  {
-    blankLine: 'always',
-    prev: 'case',
-    next: 'case'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'try'
-  },
-  {
-    blankLine: 'always',
-    prev: '*',
-    next: 'while'
-  }
-]
 const kBaseRules = {
-  'accessor-pairs': 'error',
+  // error-prevention
   'array-callback-return': [
     'error',
     {
       checkForEach: true
     }
   ],
-  curly: ['error', 'all'],
+  'consistent-return': 'error',
+  'no-array-constructor': 'error',
+  'no-await-in-loop': 'error',
+  'no-eval': 'error',
+  'no-param-reassign': [
+    'error',
+    {
+      props: false
+    }
+  ],
+  'no-unused-vars': [
+    'error',
+    {
+      varsIgnorePattern: 'exhaustiveCheck'
+    }
+  ],
+  'require-await': 'error',
+
+  // style-consistency / readability
   'comma-spacing': [
     'error',
     {
@@ -88,20 +34,6 @@ const kBaseRules = {
       after: true
     }
   ],
-  'consistent-return': 'error',
-  'consistent-this': ['error', '$this'],
-  'default-case': 'error',
-  'default-param-last': 'error',
-  'dot-notation': 'error',
-  'func-style': [
-    'error',
-    'declaration',
-    {
-      allowArrowFunctions: true
-    }
-  ],
-  'grouped-accessor-pairs': ['error', 'getBeforeSet'],
-  'guard-for-in': 'error',
   'import/order': [
     'error',
     {
@@ -113,30 +45,15 @@ const kBaseRules = {
     }
   ],
   'import/first': 'error',
-  'import/no-mutable-exports': 'error',
-  'import/no-unresolved': 'off',
   'max-depth': [
     'error',
     {
       max: 5
     }
   ],
-  'no-alert': 'error',
-  'no-array-constructor': 'error',
-  'no-await-in-loop': 'error',
-  'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  'no-constructor-return': 'error',
-  'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   'no-duplicate-imports': 'error',
-  'no-eq-null': 'error',
-  'no-eval': 'error',
-  'no-extra-bind': 'error',
   'no-floating-decimal': 'error',
-  'no-implied-eval': 'error',
-  'no-invalid-this': 'error',
   'no-lone-blocks': 'error',
-  'no-lonely-if': 'error',
-  'no-loop-func': 'error',
   'no-magic-numbers': [
     'error',
     {
@@ -146,55 +63,12 @@ const kBaseRules = {
   'no-mixed-operators': 'error',
   'no-multi-assign': 'error',
   'no-multi-spaces': 'error',
-  'no-multi-str': 'error',
   'no-nested-ternary': 'error',
-  'no-new': 'error',
-  'no-param-reassign': [
-    'error',
-    {
-      props: false
-    }
-  ],
-  'no-promise-executor-return': 'error',
-  'no-return-assign': ['error', 'always'],
-  'no-return-await': 'error',
-  'no-self-compare': 'error',
   'no-sequences': 'error',
-  'no-shadow': 'error',
-  'no-throw-literal': 'error',
-  'no-unmodified-loop-condition': 'error',
   'no-unneeded-ternary': 'error',
-  'no-unreachable-loop': 'error',
-  'no-unused-expressions': 'error',
-  'no-unused-private-class-members': 'error',
-  'no-unused-vars': [
-    'error',
-    {
-      varsIgnorePattern: 'exhaustiveCheck'
-    }
-  ],
   'no-use-before-define': 'error',
-  'no-useless-call': 'error',
-  'no-useless-computed-key': 'error',
-  'no-useless-concat': 'error',
-  'no-useless-constructor': 'error',
-  'no-useless-rename': 'error',
-  'no-useless-return': 'error',
   'no-var': 'error',
-  'no-void': 'error',
-  'object-shorthand': 'error',
-  'padding-line-between-statements': ['error', ...kBaseBlankLineBetweenStatementsConfig],
-  'prefer-arrow-callback': 'error',
   'prefer-const': 'error',
-  'prefer-numeric-literals': 'error',
-  'prefer-regex-literals': [
-    'error',
-    {
-      disallowRedundantWrapping: true
-    }
-  ],
-  'prefer-rest-params': 'error',
-  'prefer-spread': 'error',
   'prefer-template': 'error',
   quotes: [
     'error',
@@ -203,11 +77,9 @@ const kBaseRules = {
       avoidEscape: true
     }
   ],
-  'require-await': 'error',
-  'require-unicode-regexp': 'error',
-  'spaced-comment': ['error', 'always'],
-  'symbol-description': 'error',
-  yoda: 'error'
+  // good-practice
+  'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+  'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
 }
 
 module.exports = {
@@ -232,9 +104,7 @@ module.exports = {
     describe: 'readonly',
     before: 'readonly',
     after: 'readonly',
-    beforeEach: 'readonly',
-    beforeAll: 'readonly',
-    afterAll: 'readonly'
+    beforeEach: 'readonly'
   },
   parserOptions: {
     parser: '@babel/eslint-parser'
@@ -307,10 +177,10 @@ module.exports = {
           'error',
           {
             singleline: {
-              max: 1
+              max: 3
             },
             multiline: {
-              max: 1
+              max: 3
             }
           }
         ],

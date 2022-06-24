@@ -4,33 +4,21 @@
     class="base-modal-overlay"
     @click="isDismissible ? emit('close') : () => {}"
   >
-    <div
-      class="base-modal"
-      @click.stop
-    >
+    <div class="base-modal" @click.stop>
       <button
         v-if="isDismissible && hasCloseButton"
         class="base-modal-close-button"
         @click="emit('close')"
       >
-        <ExIcon
-          class="ex-icon"
-          size="16"
-        />
+        <ExIcon class="ex-icon" size="16" />
       </button>
 
       <div class="base-modal-content">
-        <span
-          v-if="title"
-          class="base-modal-title"
-        >
+        <span v-if="title" class="base-modal-title">
           {{ title }}
         </span>
 
-        <h4
-          v-if="subTitle"
-          class="base-modal-sub-title"
-        >
+        <h4 v-if="subTitle" class="base-modal-sub-title">
           {{ subTitle }}
         </h4>
 

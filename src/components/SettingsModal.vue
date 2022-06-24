@@ -99,11 +99,11 @@
 </template>
 
 <script>
-import Button from 'src/components/BaseButton'
-import BaseModal from 'src/components/BaseModal'
-import CircledExIcon from 'src/components/icons/CircledExIcon'
-import FilledCheckIcon from 'src/components/icons/FilledCheckIcon'
-import PencilIcon from 'src/components/icons/PencilIcon'
+import Button from 'components/BaseButton'
+import BaseModal from 'components/BaseModal'
+import CircledExIcon from 'components/icons/CircledExIcon'
+import FilledCheckIcon from 'components/icons/FilledCheckIcon'
+import PencilIcon from 'components/icons/PencilIcon'
 import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
