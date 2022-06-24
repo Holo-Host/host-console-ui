@@ -16,10 +16,19 @@ export default {
         }
       }
     },
+    spinnerSize: {
+      options: [ESpinnerSize.none, ESpinnerSize.small],
+      control: {
+        type: 'select',
+        labels: {
+          [ESpinnerSize.none]: 'none',
+          [ESpinnerSize.small]: 'small'
+        }
+      }
+    },
     isDisabled: false,
     isBusy: false,
     title: 'Button',
-    tag: 'button',
     onClick: {}
   }
 }

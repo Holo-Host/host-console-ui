@@ -1,6 +1,5 @@
 <template>
-  <component
-    :is="tag"
+  <button
     :disabled="isDisabled"
     class="base-button"
     :class="[{ 'disabled' : isDisabled }, kButtonTypeClass[type] ]"
@@ -8,7 +7,8 @@
     @click="onClick"
   >
     <!-- loading spinner -->
-    <div
+    <span
+      v-if="spinnerSize !== ESpinnerSize.none"
       ref="spinner"
       class="base-button__spinner-wrapper"
       :class="[ isBusy ? 'visible' : 'hidden']"
@@ -20,13 +20,13 @@
         class="-ml-4 mb-4"
         data-test-base-button-spinner
       />
-    </div>
+    </span>
 
     <!-- button content -->
-    <div
+    <span
       ref="content"
       class="base-button__content"
-      :class="[ isBusy ? 'hidden' : 'visible']"
+      :class="[ spinnerSize !== ESpinnerSize.none && isBusy ? 'hidden' : 'visible']"
       data-test-base-button-content-wrapper
     >
       <slot>
@@ -34,8 +34,8 @@
           {{ title }}
         </span>
       </slot>
-    </div>
-  </component>
+    </span>
+  </button>
 </template>
 
 <script setup>
@@ -46,7 +46,10 @@ import { EButtonType, ESpinnerSize } from '@/types/ui'
 const props = defineProps({
   type: {
     type: Number,
-    default: EButtonType.primary
+    default: EButtonType.primary,
+    validator(value) {
+      return [EButtonType.primary, EButtonType.secondary].includes(value)
+    }
   },
   isDisabled: {
     type: Boolean,
@@ -58,15 +61,14 @@ const props = defineProps({
   },
   spinnerSize: {
     type: Number,
-    default: ESpinnerSize.none
+    default: ESpinnerSize.none,
+    validator(value) {
+      return [ESpinnerSize.none, ESpinnerSize.small].includes(value)
+    }
   },
   title: {
     type: String,
     default: ''
-  },
-  tag: {
-    type: String,
-    default: 'button'
   }
 })
 
