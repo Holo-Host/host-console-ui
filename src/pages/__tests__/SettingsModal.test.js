@@ -1,44 +1,25 @@
-import axios from 'axios'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
-import wait from 'waait'
+import axios from 'axios'
+import {
+  defaultSettings,
+  defaultSettingsResult,
+  defaultSshAccessResult
+} from 'src/__tests__/constants'
+import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
+import router from 'src/router'
+import wait from 'waait'
 import Earnings from '../Earnings.vue'
-import { routes } from 'src/router'
 
 jest.mock('axios')
-
-Object.defineProperty(global, 'crypto', {
-  value: {
-    subtle: {
-      digest: () => Promise.resolve('unchecked string')
-    }
-  }
-});
-
-const defaultSettings = {
-  admin: {
-    public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
-    email: 'test@test.com'
-  },
-  holoportos: {
-    network: 'test',
-    sshAccess: true
-  },
-  deviceName: "Lana Wilson's HP"
-}
-
-const defaultSettingsResult = {
-  data: defaultSettings
-}
-
-const defaultSshAccessResult = {
-  data: { enabled: true }
-}
+mockGlobalCrypto()
 
 const renderSettingsModal = async () => {
   // using the Earnings page for the base as it doesn't have any extra api calls that need mocking
   // As that changes, feel free to use a different page, or even add an empty page for this purpose.
-  const queries = render(Earnings, {routes})
+  const queries = render(Earnings, {
+    global: { plugins: [router] }
+  })
   const { getAllByText } = queries
   await wait(0)
 
@@ -46,7 +27,7 @@ const renderSettingsModal = async () => {
   fireEvent.click(menu)
   await wait(0)
 
-  const settingsLink = getAllByText("HoloPort Settings")[0]
+  const settingsLink = getAllByText('HoloPort Settings')[0]
   fireEvent.click(settingsLink)
 
   return queries
@@ -56,8 +37,7 @@ describe('Settings page', () => {
   beforeEach(() => {
     axios.get.mockClear()
     axios.put.mockClear()
-    axios.get
-    .mockImplementation(path => {
+    axios.get.mockImplementation((path) => {
       if (path.endsWith('/api/v1/config')) {
         return Promise.resolve(defaultSettingsResult)
       } else if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
@@ -118,11 +98,9 @@ describe('Settings page', () => {
 
   // this is skipped until the hpos ssh update issue is fixed. See also SettingsModal.vue
   it.skip('saves changes to ssh access', async () => {
-    axios.put
-      .mockImplementationOnce(() => Promise.resolve({ data: { enabled: true } }))
+    axios.put.mockImplementationOnce(() => Promise.resolve({ data: { enabled: true } }))
 
-    axios.delete
-      .mockImplementationOnce(() => Promise.resolve({ data: { enabled: false } }))
+    axios.delete.mockImplementationOnce(() => Promise.resolve({ data: { enabled: false } }))
 
     const { getByLabelText, getByTestId } = await renderSettingsModal()
 
@@ -136,13 +114,17 @@ describe('Settings page', () => {
     await wait(0)
 
     // toggles off
-    expect(axios.delete.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/api/v1/profiles/development/features/ssh`)
+    expect(axios.delete.mock.calls[0][0]).toEqual(
+      `${HPOS_API_URL}/api/v1/profiles/development/features/ssh`
+    )
     expect(axios.put.mock.calls.length).toEqual(0)
 
     fireEvent.click(sshButton)
     await wait(0)
 
     // toggles back on
-    expect(axios.put.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/api/v1/profiles/development/features/ssh`)
+    expect(axios.put.mock.calls[0][0]).toEqual(
+      `${HPOS_API_URL}/api/v1/profiles/development/features/ssh`
+    )
   })
 })

@@ -1,14 +1,34 @@
 <template>
-  <section class='layout'>
+  <section class="layout">
     <Sidebar />
-    <section class='main-column'>
-      <MobileBanner :deviceName="deviceName" :showMobileSidebar="showMobileSidebar" :mobileSidebarVisible="mobileSidebarVisible" :openSettingsModal="openSettingsModal" />
-      <TopNav :breadcrumbs="breadcrumbsOrTitle" :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
-      <SettingsModal v-if="settingsModalVisible" :handleClose="closeSettingsModal"  />
-      <div v-if="kycBannerVisible" class='kyc-banner'>
-        You haven't finished verifying your identity yet. Go to our <a href='https://holo.host/kyc' target="_blank">third party provider's site</a> to complete your verification.
+    <section class="main-column">
+      <MobileBanner
+        :device-name="deviceName"
+        :show-mobile-sidebar="showMobileSidebar"
+        :mobile-sidebar-visible="mobileSidebarVisible"
+        :open-settings-modal="openSettingsModal"
+      />
+      <TopNav
+        :breadcrumbs="breadcrumbsOrTitle"
+        :device-name="deviceName"
+        :open-settings-modal="openSettingsModal"
+      />
+      <SettingsModal
+        :is-visible="settingsModalVisible"
+        @close="closeSettingsModal"
+      />
+      <div
+        v-if="kycBannerVisible"
+        class="kyc-banner"
+      >
+        You haven't finished verifying your identity yet. Go to our
+        <a
+          href="https://holo.host/kyc"
+          target="_blank"
+        >third party provider's site</a> to complete
+        your verification.
       </div>
-      <section class='content'>
+      <section class="content">
         <slot />
       </section>
     </section>
@@ -16,11 +36,10 @@
 </template>
 
 <script>
-
-import Sidebar from 'components/Sidebar.vue'
-import TopNav from 'components/TopNav.vue'
 import MobileBanner from 'components/MobileBanner.vue'
 import SettingsModal from 'components/SettingsModal.vue'
+import Sidebar from 'components/Sidebar.vue'
+import TopNav from 'components/TopNav.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 
 export default {
@@ -35,7 +54,7 @@ export default {
     title: String,
     breadcrumbs: Array
   },
-  data () {
+  data() {
     return {
       deviceName: 'Loading...',
       mobileSidebarVisible: false,
@@ -43,32 +62,35 @@ export default {
       kycBannerVisible: false
     }
   },
-  async mounted () {
+  computed: {
+    breadcrumbsOrTitle() {
+      if (this.breadcrumbs) {
+        return this.breadcrumbs
+      } else {
+        return [
+          {
+            label: this.title
+          }
+        ]
+      }
+    }
+  },
+  async mounted() {
     const { deviceName } = await HposInterface.settings()
+
     if (deviceName) {
       this.deviceName = deviceName
     }
   },
   methods: {
-    showMobileSidebar (shouldShow = false) {
+    showMobileSidebar(shouldShow = false) {
       this.mobileSidebarVisible = shouldShow
     },
-    openSettingsModal () {
+    openSettingsModal() {
       this.settingsModalVisible = true
     },
-    closeSettingsModal () {
+    closeSettingsModal() {
       this.settingsModalVisible = false
-    }
-  },
-  computed: {
-    breadcrumbsOrTitle() {
-      if (!!this.breadcrumbs) {
-        return this.breadcrumbs
-      } else {
-        return [{
-          label: this.title
-        }]
-      }
     }
   }
 }
@@ -89,7 +111,7 @@ export default {
 }
 .kyc-banner {
   margin: -30px -20px 28px -20px;
-  background-color: #FFE871;
+  background-color: #ffe871;
   text-align: center;
   font-weight: 600;
   font-size: 12px;
@@ -101,7 +123,7 @@ export default {
   cursor: pointer;
   color: #000000;
 }
-.content{
+.content {
   display: flex;
   flex-direction: column;
 }
