@@ -4,7 +4,7 @@ import App from './App.vue'
 import messages from './locales'
 import router from './router'
 
-import './assets/css/styles.css'
+import './assets/css/index.scss'
 
 const i18n = createI18n({
   locale: 'en',

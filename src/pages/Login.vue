@@ -15,68 +15,42 @@
           Host Console Login
         </h1>
 
-        <label
-          class="label"
-          htmlFor="email"
-        >
-          Email:
-        </label>
+        <span class="subtitle">
+          published by Holo
+        </span>
 
-        <input
+        <BaseLoginInput
           id="email"
           v-model="email"
-          type="email"
+          :input-type="inputTypes.email"
+          :is-valid="!errors.email"
+          has-errors
+          label="Email:"
           name="email"
-          class="input"
+          :message="errors.email"
+          class="login-input"
         />
 
-        <small
-          v-if="!!errors.email"
-          class="field-error"
-        >
-          {{ errors.email }}
-        </small>
+        <BaseLoginInput
+          id="password"
+          v-model="password"
+          :input-type="inputTypes.password"
+          :is-valid="!errors.password"
+          has-errors
+          label="Password:"
+          name="password"
+          :message="errors.password"
+        />
 
-        <label
-          class="label"
-          htmlFor="password"
-        >
-          Password:
-        </label>
-
-        <div class="password-input">
-          <input
-            id="password"
-            v-model="password"
-            :type="passwordFieldType"
-            name="password"
-            class="input"
-          />
-          <VisibleEyeIcon
-            v-if="isPasswordVisible"
-            class="eye-icon"
-            @click="hidePassword"
-          />
-          <InvisibleEyeIcon
-            v-else
-            class="eye-icon"
-            @click="showPassword"
-          />
-        </div>
-
-        <small
-          v-if="!!errors.password"
-          class="field-error"
-        >
-          {{ errors.password }}
-        </small>
-
-        <button
+        <BaseButton
+          :is-disabled="!email || !password || isLoading"
+          :is-busy="isLoading"
+          :type="buttonType"
           class="login-button"
           @click="login"
         >
           Login
-        </Button>
+        </BaseButton>
       </div>
     </form>
 
@@ -108,11 +82,12 @@
 </template>
 
 <script>
-import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
-import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import validator from 'email-validator'
-import HposInterface from 'src/interfaces/HposInterface'
-import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
+import BaseButton from '@/components/BaseButton.vue'
+import BaseLoginInput from '@/components/BaseLoginInput.vue'
+import HposInterface from '@/interfaces/HposInterface'
+import { EButtonType, EInputType } from '@/types/ui'
+import { getHpAdminKeypair, eraseHpAdminKeypair } from '@/utils/keyManagement'
 
 const kMinPasswordLength = 5
 
@@ -132,8 +107,8 @@ export default {
   name: 'LoginPage',
 
   components: {
-    InvisibleEyeIcon,
-    VisibleEyeIcon
+    BaseButton,
+    BaseLoginInput
   },
 
   data() {
@@ -142,11 +117,20 @@ export default {
       password: '',
       errors: {},
       banner: '',
-      isPasswordVisible: false
+      isPasswordVisible: false,
+      isLoading: false
     }
   },
 
   computed: {
+    buttonType() {
+      return EButtonType.secondary
+    },
+
+    inputTypes() {
+      return EInputType
+    },
+
     uiVersion() {
       return process.env.VUE_APP_UI_VERSION
     },
@@ -176,7 +160,7 @@ export default {
   },
 
   methods: {
-    async login(e) {
+    async login() {
       if (!validateEmail(this.email.toLowerCase())) {
         this.errors.email = 'Please enter a valid email.'
       }
@@ -186,32 +170,30 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
+        this.isLoading = true
 
-        if (isAuthed) {
-          localStorage.setItem('isAuthed', 'true')
+        try {
+          const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
 
-          if (this.$route.params.nextUrl !== null) {
-            this.$router.push(this.$route.params.nextUrl)
+          if (isAuthed) {
+            localStorage.setItem('isAuthed', 'true')
+
+            if (this.$route.params.nextUrl !== null) {
+              await this.$router.push(this.$route.params.nextUrl)
+            } else {
+              await this.$router.push('/dashboard')
+            }
           } else {
-            this.$router.push('/dashboard')
+            this.banner =
+              'There was a problem logging you in. Please check your credentials and try again.'
           }
-        } else {
+        } catch (e) {
           this.banner =
             'There was a problem logging you in. Please check your credentials and try again.'
+        } finally {
+          this.isLoading = false
         }
       }
-
-      e.preventDefault()
-      return false
-    },
-
-    showPassword() {
-      this.isPasswordVisible = true
-    },
-
-    hidePassword() {
-      this.isPasswordVisible = false
     }
   }
 }
@@ -224,6 +206,7 @@ export default {
   margin-right: 78px;
   align-self: center;
 }
+
 .banner {
   position: absolute;
   top: 0;
@@ -237,10 +220,12 @@ export default {
   z-index: 30;
   color: white;
 }
+
 .form {
   display: flex;
   flex-direction: column;
 }
+
 .form-box {
   background: #ffffff;
   box-shadow: 0 2.5px 10px rgba(0, 0, 0, 0.25);
@@ -251,59 +236,31 @@ export default {
   margin-bottom: 32px;
   padding: 58px 62px 54px 62px;
 }
+
 .title {
   color: #606c8b;
   align-self: center;
   font-weight: 600;
   font-size: 28px;
-  margin: 0 0 50px 0;
+  margin: 0;
 }
-.label {
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 16px;
+
+.subtitle {
+  margin-top: 16px;
   color: #606c8b;
-  text-transform: uppercase;
+  align-self: center;
+  font-weight: 400;
+  font-size: 12px;
 }
-.input {
-  border: none;
-  outline: none;
-  border-bottom: 1px solid rgba(44, 63, 89, 0.5);
-  padding: 5px 5px;
-  margin-bottom: 20px;
-  color: rgba(44, 63, 89, 1);
+
+.login-input {
+  margin-top: 45px;
 }
-.password-input {
-  position: relative;
-  display: flex;
-}
-.password-input input {
-  flex-grow: 1;
-}
-.eye-icon {
-  position: absolute;
-  right: 0;
-  cursor: pointer;
-}
+
 .login-button {
   align-self: center;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 22px;
-  height: 34px;
   width: 192px;
-  margin-top: 26px;
-  color: #606c8b;
-  border: 1px solid #606c8b;
-  background: white;
-  border-radius: 100px;
-  cursor: pointer;
-}
-.field-error {
-  font-size: 12px;
-  font-weight: 500;
-  color: #a00;
-  margin: -10px 0 15px;
+  margin-top: 24px;
 }
 
 .footer {

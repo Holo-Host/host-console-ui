@@ -104,9 +104,7 @@ module.exports = {
     describe: 'readonly',
     before: 'readonly',
     after: 'readonly',
-    beforeEach: 'readonly',
-    beforeAll: 'readonly',
-    afterAll: 'readonly'
+    beforeEach: 'readonly'
   },
   parserOptions: {
     parser: '@babel/eslint-parser'

@@ -1,9 +1,6 @@
 <template>
   <BaseModal @close="$emit('close')">
-    <div
-      v-if="!confirmed"
-      class="stop-hosting-modal"
-    >
+    <div v-if="!confirmed" class="stop-hosting-modal">
       <ExclamationIcon class="exclamation-icon" />
       <p class="content">
         Are you sure you want to stop hosting {{ happName }}?
@@ -12,10 +9,7 @@
         It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.
       </p>
     </div>
-    <div
-      v-if="confirmed"
-      class="stop-hosting-modal"
-    >
+    <div v-if="confirmed" class="stop-hosting-modal">
       <BigCheckIcon class="exclamation-icon" />
       <p class="content">
         This hApp has been removed from hosting.
@@ -29,36 +23,28 @@
       v-if="confirmed"
       #buttons
     >
-      <Button
-        color="teal"
-        @click="closeAndGoToHapps"
-      >
+      <BaseButton @click="closeAndGoToHapps">
         Close
-      </Button>
+      </BaseButton>
     </template>
     <template
       v-else
       #buttons
     >
-      <Button
-        color="teal"
-        @click="confirm"
-      >
+      <BaseButton @click="confirm">
         Yes, I want to stop hosting this hApp
-      </Button>
-      <Button
-        color="white"
-        @click="$emit('close')"
-      >
+      </BaseButton>
+
+      <BaseButton @click="$emit('close')">
         Cancel
-      </Button>
+      </BaseButton>
     </template>
   </BaseModal>
 </template>
 
 <script>
+import BaseButton from 'components/BaseButton'
 import BaseModal from 'components/BaseModal'
-import Button from 'components/Button'
 import BigCheckIcon from 'components/icons/BigCheckIcon'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
 
@@ -67,7 +53,7 @@ export default {
 
   components: {
     BaseModal,
-    Button,
+    BaseButton,
     ExclamationIcon,
     BigCheckIcon
   },
