@@ -32,11 +32,17 @@
         </p>
 
         <span class="welcome-modal__identicon">
-          Identicon
+          <IdentIcon
+            v-if="transformedPublicKey"
+            size="80"
+            :holo-hash="transformedPublicKey"
+            role="img"
+            aria-label="Agent Identity Icon"
+          />
         </span>
 
         <p class="welcome-modal__hash-id">
-          {{ hashId }}
+          {{ publicKey }}
         </p>
 
         <p class="welcome-modal__tip">
@@ -60,25 +66,31 @@
 
 <script setup>
 import { computed, ref } from 'vue'
+import { useUserStore } from '../store/user'
 import BaseButton from './BaseButton'
 import BaseInput from './BaseInput'
 import BaseModal from './BaseModal'
+import IdentIcon from './IdentIcon'
 
-defineProps({
+const props = defineProps({
   isVisible: {
     type: Boolean,
     required: true
   }
 })
 
+const userStore = useUserStore()
+
 const emit = defineEmits(['close'])
 
 const displayName = ref('')
-const hashId = ref('')
-const identicon = ref('')
 
 const step = ref(1)
 const isLoading = ref(false)
+
+const transformedPublicKey = computed(() =>
+  userStore.publicKey ? Uint8Array.from(userStore.publicKey) : null
+)
 
 const modalContent = computed(() => {
   return step.value === 1
@@ -96,12 +108,10 @@ function handleSubmit() {
   if (step.value === 1) {
     isLoading.value = true
 
-    // API call to save the display name, get the identicon and hashId
+    // API call to save the display name
     setTimeout(() => {
-      hashId.value = 'hCAkgyiI9vKwl9CW9UZio5aQdEg9SFqLTH6YorCqIAC9tOYTcPkI'
-      identicon.value = 'IdentIcon'
-
       isLoading.value = false
+      userStore.updateDisplayName(displayName.value)
       step.value = 2
       // eslint-disable-next-line no-magic-numbers
     }, 2000)
@@ -123,8 +133,15 @@ function handleSubmit() {
 
   &__display-name,
   &__hash-id {
-    margin-top: 36px;
     font-weight: 700;
+  }
+
+  &__display-name {
+    margin-top: 36px;
+  }
+
+  &__hash-id {
+    margin-top: 8px;
   }
 
   &__tip {

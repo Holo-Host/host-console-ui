@@ -5,7 +5,8 @@ export const ENotification = {
   hideBusyState: 'hideBusyState',
   showAlert: 'showAlert',
   showBanner: 'showBanner',
-  hideBanner: 'hideBanner'
+  hideBanner: 'hideBanner',
+  showSettingsModal: 'showSettingsModal'
 }
 
 export const EOverlayType = {

@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 let bytes = [0]
 let byteIndex = 0
 
@@ -107,7 +108,6 @@ export default function renderIcon(opts, canvas) {
   cc.fillRect(0, 0, canvas.width, canvas.height)
   const numShapes = value() < 0.5 ? 2 : 3
 
-  console.log('numShapes', numShapes)
   const shapes = Array.apply(null, Array(numShapes))
     .map((_, i) => {
       // guarantees one bright shape and one dark shape, hopefully helpful for color blind users
@@ -122,7 +122,6 @@ export default function renderIcon(opts, canvas) {
     })
     .sort((a, b) => (a.radius > b.radius ? -1 : 1)) // puts the small shapes in front of the large
 
-  console.log('shapes', shapes)
   for (let i = 0; i < numShapes; i++) {
     const shape = shapes[i]
     const { x, y, radius, type, color } = shape
@@ -145,6 +144,6 @@ export default function renderIcon(opts, canvas) {
     }
   }
 
-  console.log(canvas)
   return canvas
 }
+/* eslint-enable no-magic-numbers */

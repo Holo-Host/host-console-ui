@@ -1,91 +1,81 @@
 <template>
   <div class="top-nav-menu">
-    <div
-      class="owner"
-      @click="toggleMenu"
-    >
-      {{ deviceName }} <DownTriangleIcon
-        class="down-triangle"
-        :white="white"
+    <div class="owner" @click="toggleMenu">
+      <IdentIcon
+        v-if="transformedPublicKey"
+        size="42"
+        :holo-hash="transformedPublicKey"
+        role="img"
+        aria-label="Agent Identity Icon"
       />
+      <div class="display-name">
+        {{ displayName }}
+        <span class="verification-status">
+          Unverified
+        </span>
+      </div>
+      <DownTriangleIcon class="down-triangle" :white="white" />
     </div>
 
-    <div class="verification-status">
-      Unverified
-    </div>
-
-    <div
-      v-if="menuOpen"
-      class="menu"
-    >
-      <div
-        class="menu-item"
-        @click="openSettingsAndCloseMenu"
-      >
+    <div v-if="isMenuOpen" class="menu">
+      <div class="menu-item" @click="openSettingsAndCloseMenu">
         HoloPort Settings
       </div>
 
-      <div
-        class="menu-item"
-        @click="logout"
-      >
+      <div class="menu-item" @click="logout">
         Logout
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
+import IdentIcon from 'components/IdentIcon'
 import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
+import { ENotification, postNotification } from 'src/utils/notifications'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-export default {
-  name: 'TopNav',
+const router = useRouter()
 
-  components: {
-    DownTriangleIcon
+const props = defineProps({
+  displayName: {
+    type: String,
+    required: true
   },
 
-  props: {
-    deviceName: {
-      type: String,
-      required: true
-    },
-
-    white: {
-      type: Boolean,
-      default: false
-    },
-
-    openSettingsModal: {
-      type: Function,
-      required: true
-    }
+  publicKey: {
+    type: String,
+    default: ''
   },
 
-  data() {
-    return {
-      menuOpen: false
-    }
-  },
-
-  methods: {
-    toggleMenu() {
-      this.menuOpen = !this.menuOpen
-    },
-
-    logout() {
-      eraseHpAdminKeypair()
-      // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
-      localStorage.removeItem('isAuthed')
-      this.$router.push('/login')
-    },
-
-    openSettingsAndCloseMenu() {
-      this.menuOpen = false
-      this.openSettingsModal()
-    }
+  white: {
+    type: Boolean,
+    default: false
   }
+})
+
+const isMenuOpen = ref(false)
+
+const transformedPublicKey = computed(() =>
+  props.publicKey ? Uint8Array.from(props.publicKey) : null
+)
+
+function toggleMenu() {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+function logout() {
+  eraseHpAdminKeypair()
+  // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
+  localStorage.removeItem('isAuthed')
+  router.push('/login')
+}
+
+function openSettingsAndCloseMenu() {
+  isMenuOpen.value = false
+  postNotification(ENotification.showSettingsModal)
 }
 </script>
 
@@ -97,10 +87,15 @@ export default {
   margin-right: -3px;
   color: #313c59;
 }
+
 .mobile-banner .top-nav-menu {
   display: none;
 }
+
 .owner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
@@ -109,17 +104,26 @@ export default {
   text-align: end;
   padding-right: 20px;
 }
+
+.display-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  margin-left: 12px;
+}
+
 .verification-status {
   font-style: italic;
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
-  text-align: right;
-  margin-right: 38px;
 }
+
 .down-triangle {
-  margin-left: 3px;
+  margin-left: 12px;
 }
+
 .menu {
   position: absolute;
   z-index: 50;
@@ -135,11 +139,13 @@ export default {
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
+
 .mobile-banner .menu {
   right: -2px;
   top: 20px;
   z-index: 10;
 }
+
 .menu::before {
   position: absolute;
   right: 7px;
@@ -151,10 +157,12 @@ export default {
   border-width: 0 6px 6px 6px;
   border-color: transparent transparent white transparent;
 }
+
 .menu-item {
   padding: 0 16px;
   margin: 7px 0;
 }
+
 .menu-item:hover {
   background-color: rgba(176, 236, 240, 0.72);
 }
@@ -172,9 +180,6 @@ export default {
 
   .owner {
     padding-right: 6px;
-  }
-  .verification-status {
-    margin-right: 24px;
   }
 }
 </style>

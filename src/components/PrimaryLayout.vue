@@ -4,25 +4,28 @@
 
     <section class="main-column">
       <MobileBanner
-        :device-name="deviceName"
-        :show-mobile-sidebar="showMobileSidebar"
-        :mobile-sidebar-visible="mobileSidebarVisible"
-        :open-settings-modal="openSettingsModal"
+        :display-name="displayName"
+        :public-key="publicKey"
       />
 
       <TopNav
         :breadcrumbs="breadcrumbsOrTitle"
-        :device-name="deviceName"
-        :open-settings-modal="openSettingsModal"
+        :display-name="displayName"
+        :public-key="publicKey"
       />
 
       <SettingsModal
-        :is-visible="settingsModalVisible"
-        @close="closeSettingsModal"
+        :is-visible="isSettingsModalVisible"
+        @close="isSettingsModalVisible = false"
+      />
+
+      <WelcomeModal
+        :is-visible="isWelcomeModalVisible"
+        @close="isWelcomeModalVisible = false"
       />
 
       <div
-        v-if="kycBannerVisible"
+        v-if="isKycBannerVisible"
         class="kyc-banner"
       >
         You haven't finished verifying your identity yet. Go to our
@@ -40,79 +43,65 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import MobileBanner from 'components/MobileBanner.vue'
 import SettingsModal from 'components/SettingsModal.vue'
 import Sidebar from 'components/Sidebar.vue'
 import TopNav from 'components/TopNav.vue'
-import HposInterface from 'src/interfaces/HposInterface'
+import WelcomeModal from 'components/WelcomeModal.vue'
+import { useUserStore } from 'src/store/user'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { addObserver, ENotification, removeObserver } from '../utils/notifications'
 
-export default {
-  name: 'PrimaryLayout',
+const userStore = useUserStore()
 
-  components: {
-    Sidebar,
-    TopNav,
-    MobileBanner,
-    SettingsModal
+const props = defineProps({
+  title: {
+    type: String,
+    required: true
   },
 
-  props: {
-    title: {
-      type: String,
-      required: true
-    },
-
-    breadcrumbs: {
-      type: Array,
-      default: () => []
-    }
-  },
-
-  data() {
-    return {
-      deviceName: 'Loading...',
-      mobileSidebarVisible: false,
-      settingsModalVisible: false,
-      kycBannerVisible: false
-    }
-  },
-
-  computed: {
-    breadcrumbsOrTitle() {
-      if (this.breadcrumbs.length) {
-        return this.breadcrumbs
-      } else {
-        return [
-          {
-            label: this.title
-          }
-        ]
-      }
-    }
-  },
-
-  async mounted() {
-    const { deviceName } = await HposInterface.settings()
-
-    if (deviceName) {
-      this.deviceName = deviceName
-    }
-  },
-
-  methods: {
-    showMobileSidebar(shouldShow = false) {
-      this.mobileSidebarVisible = shouldShow
-    },
-
-    openSettingsModal() {
-      this.settingsModalVisible = true
-    },
-
-    closeSettingsModal() {
-      this.settingsModalVisible = false
-    }
+  breadcrumbs: {
+    type: Array,
+    default: () => []
   }
+})
+
+const isSettingsModalVisible = ref(false)
+const isKycBannerVisible = ref(false)
+const isWelcomeModalVisible = ref(false)
+
+const displayName = computed(() => userStore.displayName)
+const publicKey = computed(() => userStore.publicKey)
+
+const breadcrumbsOrTitle = computed(() => {
+  if (props.breadcrumbs.length) {
+    return props.breadcrumbs
+  } else {
+    return [
+      {
+        label: props.title
+      }
+    ]
+  }
+})
+
+onMounted(async () => {
+  addObserver(ENotification.showSettingsModal, handleShowSettingsModal)
+
+  await userStore.getUser()
+
+  await nextTick(() => {
+    isWelcomeModalVisible.value = !userStore.displayName
+  })
+})
+
+onUnmounted(() => {
+  removeObserver(ENotification.showSettingsModal, handleShowSettingsModal)
+})
+
+function handleShowSettingsModal() {
+  isSettingsModalVisible.value = true
 }
 </script>
 

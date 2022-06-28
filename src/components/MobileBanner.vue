@@ -1,59 +1,42 @@
 <template>
   <section class="mobile-banner">
-    <MenuIcon @click="showMobileSidebar(true)" />
+    <MenuIcon @click="isMobileSidebarVisible = !isMobileSidebarVisible" />
 
     <TopNavMenu
-      :device-name="deviceName"
+      :display-name="displayName"
       :white="true"
-      :open-settings-modal="openSettingsModal"
+      :public-key="publicKey"
     />
 
-    <Sidebar v-if="mobileSidebarVisible" />
+    <Sidebar v-if="isMobileSidebarVisible" />
 
     <div
-      v-if="mobileSidebarVisible"
+      v-if="isMobileSidebarVisible"
       class="sidebar-backdrop"
-      @click="showMobileSidebar(false)"
+      @click="isMobileSidebarVisible = false"
     />
   </section>
 </template>
 
-<script>
+<script setup>
 import MenuIcon from 'components/icons/MenuIcon.vue'
 import Sidebar from 'components/Sidebar.vue'
 import TopNavMenu from 'components/TopNavMenu.vue'
+import { ref } from 'vue'
 
-export default {
-  name: 'MobileBanner',
-
-  components: {
-    MenuIcon,
-    TopNavMenu,
-    Sidebar
+defineProps({
+  displayName: {
+    type: String,
+    required: true
   },
 
-  props: {
-    deviceName: {
-      type: String,
-      required: true
-    },
-
-    showMobileSidebar: {
-      type: Function,
-      required: true
-    },
-
-    mobileSidebarVisible: {
-      type: Boolean,
-      default: false
-    },
-
-    openSettingsModal: {
-      type: Function,
-      required: true
-    }
+  publicKey: {
+    type: String,
+    required: true
   }
-}
+})
+
+const isMobileSidebarVisible = ref(false)
 </script>
 
 <style scoped>

@@ -2,6 +2,7 @@
   <BaseModal
     title="HoloPort Settings"
     :sub-title="deviceName"
+    :is-visible="isVisible"
     @close="$emit('close')"
   >
     <div class="settings-modal">
@@ -115,6 +116,13 @@ export default {
     PencilIcon,
     FilledCheckIcon,
     CircledExIcon
+  },
+
+  props: {
+    isVisible: {
+      type: Boolean,
+      required: true
+    }
   },
 
   emits: ['close'],
