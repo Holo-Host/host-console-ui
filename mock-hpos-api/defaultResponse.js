@@ -90,7 +90,7 @@ const data = {
         public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
         email: 'test@test.com'
       },
-      deviceName: "Lana Wilson's HP"
+      deviceName: ''
     },
     '/api/v1/profiles/development/features/ssh': {
       enabled: true
