@@ -8,7 +8,7 @@
       :public-key="publicKey"
     />
 
-    <Sidebar v-if="isMobileSidebarVisible" />
+    <TheSidebar v-if="isMobileSidebarVisible" />
 
     <div
       v-if="isMobileSidebarVisible"
@@ -20,7 +20,7 @@
 
 <script setup>
 import MenuIcon from 'components/icons/MenuIcon.vue'
-import Sidebar from 'components/Sidebar.vue'
+import TheSidebar from 'components/TheSidebar.vue'
 import TopNavMenu from 'components/TopNavMenu.vue'
 import { ref } from 'vue'
 
@@ -32,7 +32,7 @@ defineProps({
 
   publicKey: {
     type: String,
-    required: true
+    default: null
   }
 })
 

@@ -1,10 +1,11 @@
+import { createTestingPinia } from '@pinia/testing'
 import { render } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from 'src/router'
 import wait from 'waait'
-import HostingPreferences from '../HostingPreferences.vue'
+import TheSidebar from '../TheSidebar'
 
 jest.mock('axios')
 mockGlobalCrypto()
@@ -28,8 +29,8 @@ describe('earnings page', () => {
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
-    const { getByText } = render(HostingPreferences, {
-      global: { plugins: [router] }
+    const { getByText } = render(TheSidebar, {
+      global: { plugins: [router, createTestingPinia()] }
     })
     await wait(0)
 

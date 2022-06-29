@@ -42,6 +42,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/eslint-parser": "^7.5.4",
+    "@pinia/testing": "^0.0.12",
     "@storybook/addon-a11y": "^6.5.6",
     "@storybook/addon-actions": "^6.5.6",
     "@storybook/addon-essentials": "^6.5.6",
@@ -74,6 +75,7 @@
     "express": "^4.18.1",
     "gh-pages": "^4.0.0",
     "jest": "^26.5.3",
+    "jest-canvas-mock": "^2.4.0",
     "prettier": "^2.6.2",
     "storybook-addon-mock": "^2.4.0",
     "storybook-i18n": "^1.0.11",

@@ -1,3 +1,4 @@
+import { createTestingPinia } from '@pinia/testing'
 import { render } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
@@ -29,7 +30,7 @@ describe('earnings invoices page', () => {
     })
 
     const { getByText } = render(EarningsInvoices, {
-      global: { plugins: [router] }
+      global: { plugins: [router, createTestingPinia()] }
     })
 
     await wait(0)

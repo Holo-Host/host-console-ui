@@ -1,5 +1,8 @@
 <template>
-  <PrimaryLayout :breadcrumbs="breadcrumbs">
+  <PrimaryLayout
+    title="Earnings"
+    :breadcrumbs="breadcrumbs"
+  >
     <div class="controls">
       <div class="label">
         Filter:&nbsp;

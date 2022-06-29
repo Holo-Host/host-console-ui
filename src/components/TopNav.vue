@@ -47,7 +47,7 @@ const props = defineProps({
 
   publicKey: {
     type: String,
-    required: true
+    default: null
   }
 })
 

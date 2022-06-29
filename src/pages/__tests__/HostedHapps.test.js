@@ -1,3 +1,4 @@
+import { createTestingPinia } from '@pinia/testing'
 import { render } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
@@ -34,19 +35,11 @@ describe('hosted happs page', () => {
         return hostedHappsResult
       }
 
-      if (path.endsWith('config')) {
-        return {
-          data: {
-            admin: {}
-          }
-        }
-      }
-
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
     render(HostedHapps, {
-      global: { plugins: [router] }
+      global: { plugins: [router, createTestingPinia()] }
     })
 
     await wait(0)

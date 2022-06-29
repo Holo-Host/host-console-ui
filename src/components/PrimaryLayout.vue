@@ -1,6 +1,6 @@
 <template>
   <section class="layout">
-    <Sidebar />
+    <TheSidebar />
 
     <section class="main-column">
       <MobileBanner
@@ -46,7 +46,7 @@
 <script setup>
 import MobileBanner from 'components/MobileBanner.vue'
 import SettingsModal from 'components/SettingsModal.vue'
-import Sidebar from 'components/Sidebar.vue'
+import TheSidebar from 'components/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
 import WelcomeModal from 'components/WelcomeModal.vue'
 import { useUserStore } from 'src/store/user'
