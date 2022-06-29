@@ -1,7 +1,8 @@
 <template>
   <BaseModal
     :title="modalContent.title"
-    :is-dismissible="false"
+    :is-dismissible="step === 2"
+    :has-close-button="false"
     :is-visible="isVisible"
   >
     <div class="welcome-modal">
@@ -33,9 +34,9 @@
 
         <span class="welcome-modal__identicon">
           <IdentIcon
-            v-if="transformedPublicKey"
+            v-if="publicKey"
             size="80"
-            :holo-hash="transformedPublicKey"
+            :hash="publicKey"
             role="img"
             aria-label="Agent Identity Icon"
           />
@@ -72,7 +73,7 @@ import BaseInput from './BaseInput'
 import BaseModal from './BaseModal'
 import IdentIcon from './IdentIcon'
 
-const props = defineProps({
+defineProps({
   isVisible: {
     type: Boolean,
     required: true
@@ -88,9 +89,7 @@ const displayName = ref('')
 const step = ref(1)
 const isLoading = ref(false)
 
-const transformedPublicKey = computed(() =>
-  userStore.publicKey ? Uint8Array.from(userStore.publicKey) : null
-)
+const publicKey = computed(() => userStore.publicKey || null)
 
 const modalContent = computed(() => {
   return step.value === 1

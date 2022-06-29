@@ -1,14 +1,14 @@
 <template>
   <div class="top-nav-menu">
-    <div class="owner" @click="toggleMenu">
+    <div class="owner">
       <IdentIcon
-        v-if="transformedPublicKey"
+        v-if="props.publicKey"
         size="42"
-        :holo-hash="transformedPublicKey"
+        :hash="props.publicKey"
         role="img"
         aria-label="Agent Identity Icon"
       />
-      <div class="display-name">
+      <div class="display-name" @click="toggleMenu">
         {{ displayName }}
         <span class="verification-status">
           Unverified
@@ -57,10 +57,6 @@ const props = defineProps({
 })
 
 const isMenuOpen = ref(false)
-
-const transformedPublicKey = computed(() =>
-  props.publicKey ? Uint8Array.from(props.publicKey) : null
-)
 
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value

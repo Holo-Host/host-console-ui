@@ -2,16 +2,19 @@
   <canvas
     ref="canvas" width="1" height="1"
     :style="style"
+    class="identicon"
+    @click="copyToClipboard(hash)"
   />
 </template>
 
 <script setup>
+import { copyToClipboard } from 'src/utils/clipboardUtils'
 import renderIcon from 'src/utils/identicon'
 import { computed, onMounted, ref } from 'vue'
 
 const props = defineProps({
-  holoHash: {
-    type: Uint8Array,
+  hash: {
+    type: String,
     required: true
   },
 
@@ -34,7 +37,7 @@ const props = defineProps({
 const canvas = ref()
 
 const options = computed(() => ({
-  hash: props.holoHash,
+  hash: props.hash ? Uint8Array.from(props.hash) : null,
   size: props.size,
   backgroundColor: props.backgroundColor,
   gridSize: 8
@@ -53,3 +56,9 @@ onMounted(() => {
   doRenderIcon()
 })
 </script>
+
+<style scoped>
+.identicon {
+  cursor: pointer;
+}
+</style>
