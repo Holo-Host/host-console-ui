@@ -3,7 +3,7 @@
     <TheSidebar />
 
     <section class="main-column">
-      <MobileBanner
+      <MobileTopNav
         :display-name="displayName"
         :public-key="publicKey"
       />
@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import MobileBanner from 'components/MobileBanner.vue'
+import MobileTopNav from 'components/MobileTopNav.vue'
 import SettingsModal from 'components/SettingsModal.vue'
 import TheSidebar from 'components/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
