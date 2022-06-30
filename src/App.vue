@@ -4,9 +4,9 @@
 </template>
 
 <script setup>
+import { addObserver, ENotification, removeObserver } from '@uicommon/utils/notifications'
 import { ref, onMounted, onUnmounted } from 'vue'
 import TheOverlay from './components/TheOverlay'
-import { addObserver, ENotification, removeObserver } from './utils/notifications'
 
 const theOverlay = ref()
 

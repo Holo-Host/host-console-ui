@@ -66,11 +66,11 @@
 </template>
 
 <script setup>
+import BaseButton from '@uicommon/components/BaseButton'
+import BaseInput from '@uicommon/components/BaseInput'
+import BaseModal from '@uicommon/components/BaseModal'
 import { computed, ref } from 'vue'
 import { useUserStore } from '../store/user'
-import BaseButton from './BaseButton'
-import BaseInput from './BaseInput'
-import BaseModal from './BaseModal'
 import IdentIcon from './IdentIcon'
 
 defineProps({

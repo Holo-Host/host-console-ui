@@ -82,11 +82,11 @@
 </template>
 
 <script>
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
+import { EButtonType, EInputType } from '@uicommon/types/ui'
 import validator from 'email-validator'
-import BaseButton from '@/components/BaseButton.vue'
-import BaseLoginInput from '@/components/BaseLoginInput.vue'
-import HposInterface from '@/interfaces/HposInterface'
-import { EButtonType, EInputType } from '@/types/ui'
+import HposInterface from '../interfaces/HposInterface'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from '@/utils/keyManagement'
 
 const kMinPasswordLength = 5

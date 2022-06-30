@@ -100,8 +100,8 @@
 </template>
 
 <script>
-import Button from 'components/BaseButton'
-import BaseModal from 'components/BaseModal'
+import Button from '@uicommon/components/BaseButton'
+import BaseModal from '@uicommon/components/BaseModal'
 import CircledExIcon from 'components/icons/CircledExIcon'
 import FilledCheckIcon from 'components/icons/FilledCheckIcon'
 import PencilIcon from 'components/icons/PencilIcon'

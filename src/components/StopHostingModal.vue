@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import BaseButton from 'components/BaseButton'
-import BaseModal from 'components/BaseModal'
+import BaseButton from '@uicommon/components/BaseButton'
+import BaseModal from '@uicommon/components/BaseModal'
 import BigCheckIcon from 'components/icons/BigCheckIcon'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
 

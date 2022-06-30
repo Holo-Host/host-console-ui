@@ -30,10 +30,10 @@
 </template>
 
 <script setup>
-import BaseCard from 'components/BaseCard.vue'
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import { formatCurrency } from '@uicommon/utils/numbers'
+import { capitalizeWord } from '@uicommon/utils/stringUtils'
 import dayjs from 'dayjs'
-import { formatCurrency } from '../../utils/numbers'
-import { capitalizeWord } from '../../utils/stringUtils'
 
 defineProps({
   data: {

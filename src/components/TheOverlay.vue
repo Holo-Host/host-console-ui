@@ -33,10 +33,10 @@
 </template>
 
 <script setup>
-import { ESpinnerSize } from 'src/types/ui'
-import { EOverlayTheme, EOverlayType } from 'src/utils/notifications'
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
+import { ESpinnerSize } from '@uicommon/types/ui'
+import { EOverlayTheme, EOverlayType } from '@uicommon/utils/notifications'
 import { ref } from 'vue'
-import CircleSpinner from './CircleSpinner.vue'
 
 const isVisible = ref(false)
 const message = ref('')

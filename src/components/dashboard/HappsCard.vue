@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import BaseCard from 'components/BaseCard.vue'
+import BaseCard from '@uicommon/components/BaseCard.vue'
 import MissingLogoExIcon from 'components/icons/MissingLogoExIcon'
 
 defineProps({

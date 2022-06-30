@@ -49,8 +49,8 @@
 </template>
 
 <script setup>
-import BaseCard from 'components/BaseCard.vue'
-import GearIcon from 'components/icons/GearIcon.vue'
+import BaseCard from '@uicommon/components/BaseCard'
+import GearIcon from 'components/icons/GearIcon'
 import { presentMicroSeconds, presentBytes } from 'src/utils'
 
 defineProps({

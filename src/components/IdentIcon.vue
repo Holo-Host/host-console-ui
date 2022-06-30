@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import { copyToClipboard } from 'src/utils/clipboardUtils'
-import renderIcon from 'src/utils/identicon'
+import { copyToClipboard } from '@uicommon/utils/clipboardUtils'
+import renderIcon from '@uicommon/utils/identicon'
 import { computed, onMounted, ref } from 'vue'
 
 const props = defineProps({

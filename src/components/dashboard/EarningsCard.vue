@@ -14,9 +14,9 @@
 </template>
 
 <script setup>
-import BaseCard from 'components/BaseCard.vue'
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
-import { formatCurrency } from '../../utils/numbers'
 
 const props = defineProps({
   data: {

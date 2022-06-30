@@ -44,6 +44,7 @@
 </template>
 
 <script setup>
+import { addObserver, ENotification, removeObserver } from '@uicommon/utils/notifications'
 import MobileTopNav from 'components/MobileTopNav.vue'
 import SettingsModal from 'components/SettingsModal.vue'
 import TheSidebar from 'components/TheSidebar.vue'
@@ -51,7 +52,6 @@ import TopNav from 'components/TopNav.vue'
 import WelcomeModal from 'components/WelcomeModal.vue'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { addObserver, ENotification, removeObserver } from '../utils/notifications'
 
 const userStore = useUserStore()
 

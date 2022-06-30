@@ -7,6 +7,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
+        '@uicommon': path.resolve(__dirname, '/ui-common-library/src'),
         '@': path.resolve(__dirname, 'src'),
         src: path.resolve(__dirname, 'src'),
         components: path.resolve(__dirname, 'src/components'),
