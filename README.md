@@ -1,5 +1,20 @@
 # host-console-ui
 
+## Git Submodules
+This project contains git submodules. By default when fetching or cloaning git will NOT include submodules (unless you include the --recurse-submodules parameters for example.
+
+```
+git clone --recurse-submodules https://github.com/Holo-Host/publisher-portal.git
+```
+
+To fetch the submodules for an existing branch you can execute:
+
+```
+git submodule update --init --recursive
+```
+
+The submodules default to the develop branch.
+
 ## Project setup
 ```
 yarn install
