@@ -1,37 +1,39 @@
 <template>
-  <div
-    v-if="isVisible"
-    class="base-modal-overlay"
-    @click="isDismissible ? emit('close') : () => {}"
-  >
-    <div class="base-modal" @click.stop>
-      <button
-        v-if="isDismissible && hasCloseButton"
-        class="base-modal-close-button"
-        @click="emit('close')"
-      >
-        <ExIcon class="ex-icon" size="16" />
-      </button>
+  <Transition>
+    <div
+      v-if="isVisible"
+      class="base-modal-overlay"
+      @click="isDismissible ? emit('close') : () => {}"
+    >
+      <div class="base-modal" @click.stop>
+        <button
+          v-if="isDismissible && hasCloseButton"
+          class="base-modal-close-button"
+          @click="emit('close')"
+        >
+          <ExIcon class="ex-icon" size="16" />
+        </button>
 
-      <div class="base-modal-content">
-        <span v-if="title" class="base-modal-title">
-          {{ title }}
-        </span>
+        <div class="base-modal-content">
+          <span v-if="title" class="base-modal-title">
+            {{ title }}
+          </span>
 
-        <h4 v-if="subTitle" class="base-modal-sub-title">
-          {{ subTitle }}
-        </h4>
+          <h4 v-if="subTitle" class="base-modal-sub-title">
+            {{ subTitle }}
+          </h4>
 
-        <div class="base-modal-message-content">
-          <slot></slot>
+          <div class="base-modal-message-content">
+            <slot></slot>
+          </div>
+        </div>
+
+        <div class="base-modal-buttons">
+          <slot name="buttons"></slot>
         </div>
       </div>
-
-      <div class="base-modal-buttons">
-        <slot name="buttons"></slot>
-      </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -176,5 +178,15 @@ const emit = defineEmits(['close'])
   .base-modal-buttons {
     padding-bottom: 10px;
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

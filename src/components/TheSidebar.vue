@@ -79,26 +79,13 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import GearIcon from 'components/icons/GearIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
 import HomeIcon from 'components/icons/HomeIcon.vue'
+import { computed } from 'vue'
 
-export default {
-  name: 'TheSidebar',
-
-  components: {
-    HomeIcon,
-    HappsIcon,
-    GearIcon
-  },
-
-  computed: {
-    uiVersion() {
-      return process.env.VUE_APP_UI_VERSION
-    }
-  }
-}
+const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
 </script>
 
 <style scoped>

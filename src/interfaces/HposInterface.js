@@ -1,4 +1,5 @@
-// this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
+// this is necessary for testing.
+// Otherwise the process.env does not get set up before constants are defined.
 import axios from 'axios'
 import stringify from 'fast-json-stable-stringify'
 import mergeMockHappData from 'src/mergeMockHappData'

@@ -1,9 +1,6 @@
 <template>
   <section class="top-nav">
-    <h1
-      v-if="!path"
-      class="main-title"
-    >
+    <h1 v-if="!path" class="main-title">
       {{ mainTitle }}
     </h1>
 
@@ -15,21 +12,15 @@
       {{ mainTitle }}
     </router-link>
 
-    <RightChevronIcon
-      v-if="showSubtitle"
-      class="chevron"
-    />
+    <RightChevronIcon v-if="isSubtitleVisible" class="chevron" />
 
-    <div
-      v-if="showSubtitle"
-      class="sub-title"
-    >
+    <div v-if="isSubtitleVisible" class="sub-title">
       {{ subTitle }}
     </div>
 
     <TopNavMenu
-      :device-name="deviceName"
-      :open-settings-modal="openSettingsModal"
+      :display-name="displayName"
+      :public-key="publicKey"
     />
 
     <div class="alpha-flag">
@@ -38,52 +29,35 @@
   </section>
 </template>
 
-<script>
+<script setup>
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
 import TopNavMenu from 'components/TopNavMenu.vue'
+import { computed } from 'vue'
 
-export default {
-  name: 'TopNav',
-  components: {
-    TopNavMenu,
-    RightChevronIcon
+const props = defineProps({
+  breadcrumbs: {
+    type: Array,
+    default: () => [{}, {}]
   },
 
-  props: {
-    breadcrumbs: {
-      type: Array,
-      default: () => [{}, {}]
-    },
-
-    deviceName: {
-      type: String,
-      required: true
-    },
-
-    openSettingsModal: {
-      type: Function,
-      required: true
-    }
+  displayName: {
+    type: String,
+    required: true
   },
 
-  computed: {
-    mainTitle() {
-      return this.breadcrumbs[0].label
-    },
-
-    path() {
-      return this.breadcrumbs[0].path
-    },
-
-    subTitle() {
-      return this.breadcrumbs[1].label
-    },
-
-    showSubtitle() {
-      return this.breadcrumbs.length > 1 && !!this.breadcrumbs[1].label
-    }
+  publicKey: {
+    type: String,
+    default: null
   }
-}
+})
+
+const mainTitle = computed(() => props.breadcrumbs[0].label)
+const subTitle = computed(() => props.breadcrumbs[1].label)
+const path = computed(() => props.breadcrumbs[0].path)
+
+const isSubtitleVisible = computed(
+  () => props.breadcrumbs.length > 1 && !!props.breadcrumbs[1].label
+)
 </script>
 
 <style scoped>
@@ -105,10 +79,9 @@ export default {
 .sub-title {
   font-size: 14px;
   font-weight: 600;
-  margin: 0;
+  margin: 9px 0 0;
   color: #606c8b;
   text-decoration: none;
-  margin-top: 9px;
 }
 .alpha-flag {
   display: none;

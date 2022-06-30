@@ -1,3 +1,4 @@
+import { createTestingPinia } from '@pinia/testing'
 import { render } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
@@ -29,8 +30,9 @@ describe('hosting preferences page', () => {
     })
 
     const { getByText } = render(HostingPreferences, {
-      global: { plugins: [router] }
+      global: { plugins: [router, createTestingPinia()] }
     })
+
     await wait(0)
 
     getByText('Price Configuration')

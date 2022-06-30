@@ -14,6 +14,7 @@ module.exports = {
     '^utils/(.*)$': '<rootDir>/src/utils/$1',
     '^types/(.*)$': '<rootDir>/src/types/$1'
   },
+  setupFiles: ['jest-canvas-mock'],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/src/__tests__/constants.js',
