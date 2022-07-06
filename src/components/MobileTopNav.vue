@@ -44,7 +44,7 @@ const isMobileSidebarVisible = ref(false)
   display: none;
   flex: 0 0 88px;
   align-items: flex-end;
-  background-color: #00cad9;
+  background-color: var(--primary-color);
   padding: 20px;
   margin: 0 -18px;
 }

@@ -10,7 +10,7 @@ git clone --recurse-submodules https://github.com/Holo-Host/publisher-portal.git
 To fetch the submodules for an existing branch you can execute:
 
 ```
-git submodule update --init --recursive
+git submodule update --remote
 ```
 
 The submodules default to the develop branch.

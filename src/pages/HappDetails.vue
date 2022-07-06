@@ -214,18 +214,18 @@ export default {
 .happ-details {
   display: flex;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--white-color);
   box-shadow: 0 4px 20px #eceef1;
   border-radius: 5px;
   margin: 0 10px 20px 12px;
   padding: 30px;
-  color: #606c8b;
+  color: var(--grey-color);
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
 }
 .back-link {
-  color: #606c8b;
+  color: var(--grey-color);
   text-decoration: none;
   font-size: 14px;
   margin-bottom: 32px;
@@ -247,7 +247,7 @@ export default {
 }
 .description {
   font-weight: 700;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .main-column {
   display: flex;
@@ -261,7 +261,7 @@ export default {
 }
 .name {
   margin: 0 0 34px 0;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
@@ -269,7 +269,7 @@ export default {
 .info-row {
   display: flex;
   align-items: center;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-bottom: 14px;
   font-size: 14px;
 }
@@ -278,7 +278,7 @@ export default {
 }
 .info {
   font-weight: 700;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .earnings-margin {
   margin-bottom: 48px;
@@ -295,7 +295,7 @@ export default {
 }
 .usage-row {
   display: flex;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 12px;
   font-weight: 600;
   padding-right: 36px;
@@ -310,14 +310,14 @@ export default {
 }
 .usage-value {
   padding: 0 5px;
-  border-bottom: 2px solid #00cad9;
+  border-bottom: 2px solid var(--primary-color);
   font-size: 13px;
   font-weight: 700;
   margin-right: 7px;
 }
 .rates-title {
   display: flex;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 12px;
@@ -335,7 +335,7 @@ export default {
   flex: 0 0 100px;
 }
 .rate-value {
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-weight: 700;
 }
 .rates-margin {
@@ -350,7 +350,7 @@ export default {
   font-size: 12px;
   line-height: 16px;
   text-decoration-line: underline;
-  color: #313c59;
+  color: var(--grey-dark-color);
   margin-right: 10px;
   cursor: pointer;
   flex-shrink: 0;
@@ -360,7 +360,7 @@ export default {
   align-items: flex-start;
   background: #f3f5f8;
   border-radius: 4px;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 12px;
   font-weight: 400;
   padding: 4px 12px;

@@ -88,7 +88,7 @@ export default {
 <style scoped>
 .happ-card {
   display: flex;
-  background-color: white;
+  background-color: var(--white-color);
   max-width: 546px;
   box-shadow: 0 4px 20px #eceef1;
   border-radius: 12px;
@@ -102,7 +102,7 @@ export default {
   display: flex;
   flex: 1;
   flex-direction: column;
-  color: #606c8b;
+  color: var(--grey-color);
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
@@ -117,7 +117,7 @@ export default {
 }
 .name {
   margin: 0;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
@@ -143,7 +143,7 @@ export default {
 .earnings-row {
   display: flex;
   align-items: center;
-  color: #313c59;
+  color: var(--grey-dark-color);
   margin-bottom: 10px;
   margin-left: 3px;
 }
@@ -153,7 +153,7 @@ export default {
 .usage-row {
   display: flex;
   justify-content: space-between;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 12px;
   font-weight: 600;
   padding-right: 36px;
@@ -163,7 +163,7 @@ export default {
 }
 .usage-value {
   padding: 0 5px;
-  border-bottom: 2px solid #00cad9;
+  border-bottom: 2px solid var(--primary-color);
   font-size: 14px;
   font-weight: 700;
 }
@@ -213,7 +213,7 @@ export default {
     border: none;
   }
   .usage-unit {
-    border-bottom: 2px solid #00cad9;
+    border-bottom: 2px solid var(--primary-color);
     margin-right: auto;
   }
 }

@@ -98,7 +98,7 @@ export default {
   font-size: 14px;
   line-height: 19px;
   text-align: center;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .exclamation-icon {
   margin-bottom: 22px;

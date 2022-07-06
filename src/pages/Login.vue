@@ -211,7 +211,7 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-  background-color: #00cad9;
+  background-color: var(--primary-color);
   opacity: 0.9;
   padding: 20px;
   margin: 0 -78px;
@@ -238,7 +238,7 @@ export default {
 }
 
 .title {
-  color: #606c8b;
+  color: var(--grey-color);
   align-self: center;
   font-weight: 600;
   font-size: 28px;
@@ -247,7 +247,7 @@ export default {
 
 .subtitle {
   margin-top: 16px;
-  color: #606c8b;
+  color: var(--grey-color);
   align-self: center;
   font-weight: 400;
   font-size: 12px;

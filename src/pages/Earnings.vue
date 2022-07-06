@@ -132,14 +132,14 @@ export default {
   font-weight: bold;
   font-size: 18px;
   line-height: 25px;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-right: 10px;
 }
 .available-hf {
   font-weight: bold;
   font-size: 18px;
   line-height: 25px;
-  color: #313c59;
+  color: var(--grey-dark-color);
   margin-right: 52px;
 }
 .holofuel-link {
@@ -149,13 +149,13 @@ export default {
   font-size: 14px;
   line-height: 19px;
   text-decoration-line: underline;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .leave-site-icon {
   margin-right: 10px;
 }
 .card {
-  background: #ffffff;
+  background: var(--white-color);
   box-shadow: 0 4px 20px #eceef1;
   border-radius: 12px;
   margin-bottom: 55px;
@@ -181,13 +181,13 @@ export default {
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .hf-amount {
   font-weight: bold;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-bottom: 40px;
 }
 .main-link {
@@ -199,7 +199,7 @@ export default {
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
-  color: #313c59;
+  color: var(--grey-dark-color);
   display: flex;
   align-items: center;
   text-decoration: none;

@@ -48,7 +48,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border: 1px solid #606c8b;
+  border: 1px solid var(--grey-color);
   border-radius: 12px;
   font-weight: bold;
   color: rgba(96, 108, 139, 0.46);

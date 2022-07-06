@@ -128,7 +128,7 @@ export default {
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .card-content {
   padding: 0 90px 35px 90px;
@@ -139,13 +139,13 @@ export default {
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .card-subtitle {
   font-weight: bold;
   font-size: 14px;
   line-height: 19px;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .rate-row {
   line-height: 46px;
@@ -190,7 +190,7 @@ export default {
   font-weight: 800;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
   border: 1px solid rgba(96, 108, 139, 0.18);
   box-sizing: border-box;
   border-radius: 5px;
@@ -205,7 +205,7 @@ export default {
 }
 .invoice-limit-amount {
   font-weight: 700;
-  border-bottom: 1px solid #313c59;
+  border-bottom: 1px solid var(--grey-dark-color);
   height: 24px;
   margin-bottom: 5px;
 }
@@ -213,7 +213,7 @@ export default {
   line-height: 24px;
   font-weight: 400;
   font-size: 12px;
-  color: #606c8b;
+  color: var(--grey-color);
 }
 .num-days {
   font-weight: 700;

@@ -221,7 +221,7 @@ export default {
   margin-bottom: 60px;
   font-weight: 600;
   font-size: 14px;
-  color: #606c8b;
+  color: var(--grey-color);
 }
 .settings-row {
   display: flex;
@@ -258,8 +258,8 @@ export default {
   cursor: pointer;
 }
 .device-input {
-  border: 0.5px solid #606c8b;
-  color: #313c59;
+  border: 0.5px solid var(--grey-color);
+  color: var(--grey-dark-color);
 }
 .close-button {
   min-width: 110px;

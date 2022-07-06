@@ -81,7 +81,7 @@ function openSettingsAndCloseMenu() {
   position: relative;
   margin-left: auto;
   margin-right: -3px;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 
 .mobile-banner .top-nav-menu {
@@ -125,11 +125,11 @@ function openSettingsAndCloseMenu() {
   z-index: 50;
   right: 12px;
   top: 20px;
-  background: #ffffff;
+  background: var(--white-color);
   border-radius: 2px;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-top: 1px;
   padding: 5px 0;
   cursor: pointer;

@@ -80,7 +80,7 @@ const isSubtitleVisible = computed(
   font-size: 14px;
   font-weight: 600;
   margin: 9px 0 0;
-  color: #606c8b;
+  color: var(--grey-color);
   text-decoration: none;
 }
 .alpha-flag {
@@ -94,11 +94,11 @@ const isSubtitleVisible = computed(
   .alpha-flag {
     display: block;
     height: 22px;
-    background-color: #e339ff;
+    background-color: var(--violet-color);
     font-weight: 600;
     font-size: 11px;
     line-height: 22px;
-    color: #ffffff;
+    color: var(--white-color);
     position: absolute;
     right: -2px;
     padding: 0 7px;

@@ -109,7 +109,7 @@ const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
 
 .banner {
   background-color: rgba(0, 202, 217, 0.06);
-  color: #00cad9;
+  color: var(--primary-color);
   font-weight: bold;
   font-size: 24px;
   text-align: center;
@@ -129,7 +129,7 @@ const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
   align-items: center;
   font-size: 14px;
   text-decoration: none;
-  color: #313c59;
+  color: var(--grey-dark-color);
   margin-bottom: 20px;
   padding: 3px 0 3px 24px;
 }
@@ -140,7 +140,7 @@ const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
 }
 
 .active-link {
-  color: #00cad9;
+  color: var(--primary-color);
 }
 
 .home-icon {
@@ -161,12 +161,12 @@ const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.02em;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 
 .alpha-banner a {
   font-weight: 600;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 
 .flag {

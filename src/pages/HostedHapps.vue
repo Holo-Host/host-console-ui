@@ -113,7 +113,7 @@ export default {
   padding: 9px 0;
 }
 .label {
-  color: #606c8b;
+  color: var(--grey-color);
   font-size: 12px;
   margin-left: 30px;
   margin-right: 2px;
@@ -128,7 +128,7 @@ export default {
   padding: 5px;
 }
 .filter-input:focus {
-  outline-color: #313c59;
+  outline-color: var(--grey-dark-color);
 }
 .filter-input::placeholder {
   color: #bcbfc6;
@@ -144,7 +144,7 @@ export default {
   background-color: transparent;
   font-size: 12px;
   font-weight: 600;
-  color: #313c59;
+  color: var(--grey-dark-color);
   padding: 4px 16px 4px 4px;
   background-image: url(/images/chevron.svg);
   background-repeat: no-repeat;

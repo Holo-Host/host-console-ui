@@ -50,7 +50,7 @@ defineProps({
   font-size: 14px;
   line-height: 19px;
   margin-bottom: 16px;
-  color: #606c8b;
+  color: var(--grey-color);
 }
 
 .payment-amount {

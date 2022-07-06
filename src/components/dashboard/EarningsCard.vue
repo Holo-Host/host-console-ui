@@ -47,7 +47,7 @@ const items = computed(() => [
   justify-content: space-between;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-bottom: 20px;
   margin-right: 50px;
 }

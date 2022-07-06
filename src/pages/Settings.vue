@@ -191,14 +191,14 @@ export default {
   border-radius: 5px;
   margin: 40px 10px 20px 12px;
   padding: 30px;
-  color: #606c8b;
+  color: var(--grey-color);
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
   min-width: 300px;
 }
 .heading {
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .settings-row {
   display: flex;
@@ -215,7 +215,7 @@ export default {
 }
 .factory-reset-link {
   text-decoration-line: underline;
-  color: #606c8b;
+  color: var(--grey-color);
 }
 .question-mark {
   margin-left: 8px;
@@ -234,7 +234,7 @@ export default {
   cursor: pointer;
 }
 .device-input {
-  border: 0.5px solid #606c8b;
-  color: #313c59;
+  border: 0.5px solid var(--grey-color);
+  color: var(--grey-dark-color);
 }
 </style>

@@ -67,7 +67,7 @@ defineProps({
   align-items: center;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-bottom: 10px;
 }
 

@@ -410,7 +410,7 @@ export default {
   padding: 9px 0;
 }
 .controls .label {
-  color: #606c8b;
+  color: var(--grey-color);
   font-size: 12px;
   margin-left: 30px;
   margin-right: 2px;
@@ -421,7 +421,7 @@ export default {
   background-color: transparent;
   font-size: 12px;
   font-weight: 600;
-  color: #313c59;
+  color: var(--grey-dark-color);
   padding: 4px 16px 4px 4px;
   background-image: url(/images/chevron.svg);
   background-repeat: no-repeat;
@@ -438,14 +438,14 @@ export default {
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
-  color: #606c8b;
+  color: var(--grey-color);
   border-collapse: collapse;
   width: 100%;
 }
 .header-row {
   font-size: 16px;
   line-height: 22px;
-  color: #313c59;
+  color: var(--grey-dark-color);
   border-bottom: 0.5px solid #bcbfc6;
 }
 .header-row th {
@@ -502,7 +502,7 @@ th::after {
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
-  color: #313c59;
+  color: var(--grey-dark-color);
   margin-bottom: 20px;
 }
 .pagination {
@@ -578,14 +578,14 @@ th::after {
     flex-basis: 50%;
     font-weight: 600;
     font-size: 16px;
-    color: #313c59;
+    color: var(--grey-dark-color);
   }
 
   .expanded-invoice .inner-row .data {
     flex-basis: 50%;
     font-weight: 600;
     font-size: 14px;
-    color: #606c8b;
+    color: var(--grey-color);
   }
 
   .header-row th {
