@@ -19,7 +19,7 @@
 
     <div v-if="isMenuOpen" class="menu">
       <div class="menu-item" @click="openSettingsAndCloseMenu">
-        HoloPort Settings
+        Account Settings
       </div>
 
       <div class="menu-item" @click="logout">
@@ -66,12 +66,12 @@ function logout() {
   eraseHpAdminKeypair()
   // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
   localStorage.removeItem('isAuthed')
-  router.push('/login')
+  router.push({ name: 'Login' })
 }
 
 function openSettingsAndCloseMenu() {
   isMenuOpen.value = false
-  postNotification(ENotification.showSettingsModal)
+  router.push({ name: 'Settings' })
 }
 </script>
 

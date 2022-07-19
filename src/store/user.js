@@ -8,7 +8,8 @@ export const useUserStore = defineStore('user', {
     networkStatus: '',
     sshAccess: '',
     deviceName: '',
-    displayName: ''
+    displayName: '',
+    hposVersion: ''
   }),
 
   actions: {
@@ -24,6 +25,7 @@ export const useUserStore = defineStore('user', {
         this.networkStatus = user.networkStatus
         this.sshAccess = user.sshAccess
         this.deviceName = user.deviceName
+        this.hposVersion = user.hposVersion
         this.displayName = displayName
       }
     },
