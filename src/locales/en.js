@@ -20,6 +20,7 @@ const translations = {
     },
     hosted_by: 'Hosted by',
     holo: 'HOLO',
+    holoport: 'Holoport',
     go: 'Go',
     language: {
       en: 'English',

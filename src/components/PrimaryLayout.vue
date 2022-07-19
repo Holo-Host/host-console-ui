@@ -14,14 +14,9 @@
         :public-key="publicKey"
       />
 
-      <SettingsModal
-        :is-visible="isSettingsModalVisible"
-        @close="isSettingsModalVisible = false"
-      />
-
       <WelcomeModal
         :is-visible="isWelcomeModalVisible"
-        @close="isWelcomeModalVisible = false"
+        @close="closeWelcomeModal"
       />
 
       <div
@@ -44,14 +39,12 @@
 </template>
 
 <script setup>
-import { addObserver, ENotification, removeObserver } from '@uicommon/utils/notifications'
 import MobileTopNav from 'components/MobileTopNav.vue'
-import SettingsModal from 'components/SettingsModal.vue'
 import TheSidebar from 'components/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
 import WelcomeModal from 'components/WelcomeModal.vue'
 import { useUserStore } from 'src/store/user'
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
 const userStore = useUserStore()
 
@@ -67,7 +60,6 @@ const props = defineProps({
   }
 })
 
-const isSettingsModalVisible = ref(false)
 const isKycBannerVisible = ref(false)
 const isWelcomeModalVisible = ref(false)
 
@@ -86,23 +78,17 @@ const breadcrumbsOrTitle = computed(() => {
   }
 })
 
-onMounted(async () => {
-  addObserver(ENotification.showSettingsModal, handleShowSettingsModal)
+function closeWelcomeModal() {
+  isWelcomeModalVisible.value = false
+}
 
+onMounted(async () => {
   await userStore.getUser()
 
   await nextTick(() => {
     isWelcomeModalVisible.value = !userStore.displayName
   })
 })
-
-onUnmounted(() => {
-  removeObserver(ENotification.showSettingsModal, handleShowSettingsModal)
-})
-
-function handleShowSettingsModal() {
-  isSettingsModalVisible.value = true
-}
 </script>
 
 <style scoped>
@@ -112,12 +98,14 @@ function handleShowSettingsModal() {
   /* Making room for the sidebar */
   padding-left: 270px;
 }
+
 .main-column {
   display: flex;
   flex-direction: column;
   flex: 1;
   padding: 0 20px;
 }
+
 .kyc-banner {
   margin: -30px -20px 28px -20px;
   background-color: #ffe871;
@@ -127,11 +115,13 @@ function handleShowSettingsModal() {
   line-height: 28px;
   color: #000000;
 }
+
 .kyc-banner a {
   text-decoration: underline;
   cursor: pointer;
   color: #000000;
 }
+
 .content {
   display: flex;
   flex-direction: column;
