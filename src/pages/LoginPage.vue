@@ -1,10 +1,4 @@
 <template>
-  <div
-    v-if="banner"
-    class="banner"
-  >
-    {{ banner }}
-  </div>
   <div class="container">
     <form
       class="form"
@@ -12,20 +6,20 @@
     >
       <div class="form-box">
         <h1 class="title">
-          Host Console Login
+          {{ $t('login.title') }}
         </h1>
 
         <span class="subtitle">
-          published by Holo
+          {{ $t('login.subtitle') }}
         </span>
 
         <BaseLoginInput
           id="email"
           v-model="email"
-          :input-type="inputTypes.email"
+          :input-type="EInputType.email"
           :is-valid="!errors.email"
           has-errors
-          label="Email:"
+          :label="$t('login.email')"
           name="email"
           :message="errors.email"
           class="login-input"
@@ -34,10 +28,10 @@
         <BaseLoginInput
           id="password"
           v-model="password"
-          :input-type="inputTypes.password"
+          :input-type="EInputType.password"
           :is-valid="!errors.password"
           has-errors
-          label="Password:"
+          :label="$t('login.password')"
           name="password"
           :message="errors.password"
         />
@@ -45,25 +39,25 @@
         <BaseButton
           :is-disabled="!email || !password || isLoading"
           :is-busy="isLoading"
-          :type="buttonType"
+          :type="EButtonType.secondary"
           class="login-button"
           @click="login"
         >
-          Login
+          {{ $t('$.login') }}
         </BaseButton>
       </div>
     </form>
 
     <div class="footer">
-      <div>Hosted by</div>
+      <div>{{ $t('$.hosted_by') }}</div>
       <div class="logo-row">
         <img
           src="/images/holo-logo-bw.png"
           alt="holo logo"
-        /> HOLO
+        /> {{ $t('$.holo') }}
       </div>
       <div>
-        *Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!
+        {{ $t('login.password_reminder') }}
       </div>
       <div>
         <a
@@ -71,22 +65,27 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn more
-        </a> about controlling your own data.
+          {{ $t('$.learn_more') }}
+        </a> {{ $t('login.controlling_your_data') }}
       </div>
       <div class="version">
-        Host Console version {{ uiVersion }}
+        {{ $t('$.app_version', { app: 'Host Console', version }) }}
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
+import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import validator from 'email-validator'
+import { reactive, ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter, useRoute } from 'vue-router'
 import HposInterface from '../interfaces/HposInterface'
+import { kRoutes } from '../router'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from '@/utils/keyManagement'
 
 const kMinPasswordLength = 5
@@ -103,97 +102,72 @@ async function createKeypairAndCheckAuth(email, password) {
   return HposInterface.checkAuth()
 }
 
-export default {
-  name: 'LoginPage',
+const route = useRoute()
+const router = useRouter()
+const { t } = useI18n()
 
-  components: {
-    BaseButton,
-    BaseLoginInput
-  },
+const email = ref('')
+const password = ref('')
+const errors = reactive({ email: '', password: '' })
+const isLoading = ref(false)
 
-  data() {
-    return {
-      email: '',
-      password: '',
-      errors: {},
-      banner: '',
-      isPasswordVisible: false,
-      isLoading: false
+const version = computed(() => process.env.VUE_APP_UI_VERSION)
+
+watch(
+  () => email.value,
+  (value) => {
+    postNotification(ENotification.hideBanner)
+
+    if (errors.email && validateEmail(value)) {
+      errors.email = ''
     }
-  },
+  }
+)
 
-  computed: {
-    buttonType() {
-      return EButtonType.secondary
-    },
+watch(
+  () => password.value,
+  (value) => {
+    postNotification(ENotification.hideBanner)
 
-    inputTypes() {
-      return EInputType
-    },
-
-    uiVersion() {
-      return process.env.VUE_APP_UI_VERSION
-    },
-
-    passwordFieldType() {
-      return this.isPasswordVisible ? 'text' : 'password'
+    if (errors.password && validatePassword(value)) {
+      errors.password = ''
     }
-  },
+  }
+)
 
-  watch: {
-    email(email) {
-      this.banner = ''
+async function login() {
+  if (!validateEmail(email.value.toLowerCase())) {
+    errors.email = t('$.errors.email')
+  }
 
-      if (this.errors.email && validateEmail(email)) {
-        this.errors.email = null
-      }
-    },
+  if (!validatePassword(password.value)) {
+    errors.password = t('$.errors.password')
+  }
 
-    password(password) {
-      this.banner = ''
+  if (!errors.email && !errors.password) {
+    isLoading.value = true
 
-      if (this.errors.password && validatePassword(password)) {
-        this.errors.password = null
-        this.banner = ''
-      }
-    }
-  },
+    try {
+      const isAuthenticated = await createKeypairAndCheckAuth(
+        email.value.toLowerCase(),
+        password.value
+      )
 
-  methods: {
-    async login() {
-      if (!validateEmail(this.email.toLowerCase())) {
-        this.errors.email = 'Please enter a valid email.'
-      }
+      if (isAuthenticated) {
+        localStorage.setItem('isAuthed', 'true')
 
-      if (!validatePassword(this.password)) {
-        this.errors.password = 'Password must have at least 6 characters.'
-      }
-
-      if (!this.errors.email && !this.errors.password) {
-        this.isLoading = true
-
-        try {
-          const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
-
-          if (isAuthed) {
-            localStorage.setItem('isAuthed', 'true')
-
-            if (this.$route.params.nextUrl !== null) {
-              await this.$router.push(this.$route.params.nextUrl)
-            } else {
-              await this.$router.push('/dashboard')
-            }
-          } else {
-            this.banner =
-              'There was a problem logging you in. Please check your credentials and try again.'
-          }
-        } catch (e) {
-          this.banner =
-            'There was a problem logging you in. Please check your credentials and try again.'
-        } finally {
-          this.isLoading = false
+        if (route.params.nextUrl !== null) {
+          await router.push(route.params.nextUrl)
+        } else {
+          await router.push({ name: kRoutes.dashboard.name })
         }
+      } else {
+        postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
       }
+    } catch (e) {
+      postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
+    } finally {
+      isLoading.value = false
     }
   }
 }
@@ -205,20 +179,6 @@ export default {
   margin-left: 78px;
   margin-right: 78px;
   align-self: center;
-}
-
-.banner {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  background-color: var(--primary-color);
-  opacity: 0.9;
-  padding: 20px;
-  margin: 0 -78px;
-  text-align: center;
-  align-self: center;
-  z-index: 30;
-  color: white;
 }
 
 .form {

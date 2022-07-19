@@ -3,7 +3,7 @@
 import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import wait from 'waait'
-import Login from '../Login.vue'
+import Login from '../LoginPage.vue'
 import HposInterface from '@/interfaces/HposInterface'
 
 const validPassword = 'password'

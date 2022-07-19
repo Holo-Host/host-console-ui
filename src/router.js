@@ -3,22 +3,23 @@ import EarningsInvoices from 'pages/EarningsInvoices.vue'
 import HappDetails from 'pages/HappDetails.vue'
 import HostedHapps from 'pages/HostedHapps.vue'
 import HostingPreferences from 'pages/HostingPreferences.vue'
-import Login from 'pages/Login.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
+import LoginPage from 'src/pages/LoginPage.vue'
 import SettingsPage from 'src/pages/SettingsPage.vue'
 import { checkHpAdminKeypair } from 'src/utils/keyManagement'
 import { createWebHistory, createRouter } from 'vue-router'
 
-export const routes = [
-  {
+export const kRoutes = {
+  login: {
     path: '/login',
     name: 'Login',
-    component: Login,
+    component: LoginPage,
     meta: {
       guest: true
     }
   },
-  {
+
+  dashboard: {
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardPage,
@@ -26,7 +27,8 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  happs: {
     path: '/happs',
     name: 'HostedHapps',
     component: HostedHapps,
@@ -34,7 +36,8 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  happ: {
     path: '/happ/:id',
     name: 'HappDetails',
     component: HappDetails,
@@ -42,7 +45,8 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  accountSettings: {
     path: '/settings',
     name: 'Settings',
     component: SettingsPage,
@@ -50,7 +54,8 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  earnings: {
     path: '/earnings',
     name: 'Earnings',
     component: Earnings,
@@ -58,7 +63,8 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  invoices: {
     path: '/earnings/invoices',
     name: 'EarningsInvoices',
     component: EarningsInvoices,
@@ -66,7 +72,8 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  hostingPreferences: {
     path: '/preferences',
     name: 'HostingPreferences',
     component: HostingPreferences,
@@ -74,17 +81,28 @@ export const routes = [
       requiresAuth: true
     }
   },
-  {
+
+  default: {
     path: '/',
     redirect: '/dashboard'
   }
-]
+}
 
 // used in loginFlow.integration.test.js
 export const routerFactory = () => {
   const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes: [
+      kRoutes.accountSettings,
+      kRoutes.dashboard,
+      kRoutes.default,
+      kRoutes.earnings,
+      kRoutes.happ,
+      kRoutes.happs,
+      kRoutes.hostingPreferences,
+      kRoutes.invoices,
+      kRoutes.login
+    ]
   })
 
   router.beforeEach((to, from, next) => {

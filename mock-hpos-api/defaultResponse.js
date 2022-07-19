@@ -82,16 +82,18 @@ const dashboard = {
   }
 }
 
+const userConfig = {
+  admin: {
+    public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
+    email: 'test@test.com'
+  },
+  deviceName: '...3s4sxqr5'
+}
+
 // NB: both /api and /holochain-api calls are mocked here
 const data = {
   get: {
-    '/api/v1/config': {
-      admin: {
-        public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
-        email: 'test@test.com'
-      },
-      deviceName: '...3s4sxqr5'
-    },
+    '/api/v1/config': userConfig,
     '/api/v1/profiles/development/features/ssh': {
       enabled: true
     },
