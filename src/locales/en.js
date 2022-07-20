@@ -30,6 +30,7 @@ const translations = {
     login: 'Login',
     logging_out: 'Logging out...',
     logout: 'Logout',
+    network: 'Network',
     page_not_found: "Hmm... We're unable to find that page.",
     try_again: 'Try again',
     your_email: 'Your email'
@@ -42,6 +43,11 @@ const translations = {
       '*Remember, Holo doesn’t store your password so we can’t recover it for you. Please save your password securely!',
     subtitle: 'published by Holo',
     title: 'Host Console Login'
+  },
+  settings: {
+    device_name: 'Device Name',
+    hpos_version: 'HPOS Version',
+    ssh_access: 'Access for HoloPort support (SSH)'
   }
 }
 
