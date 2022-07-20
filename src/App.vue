@@ -6,9 +6,9 @@
 
 <script setup>
 import { addObserver, ENotification, removeObserver } from '@uicommon/utils/notifications'
+import TheBanner from 'components/TheBanner'
+import TheOverlay from 'components/TheOverlay'
 import { ref, onMounted, onUnmounted } from 'vue'
-import TheBanner from './components/TheBanner'
-import TheOverlay from './components/TheOverlay'
 
 const theOverlay = ref()
 const theBanner = ref()

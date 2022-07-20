@@ -21,7 +21,7 @@
         <span>{{ message }}</span>
 
         <div class="notification-banner__slot-content">
-          <slot />
+          <component :is="contentComponent" />
         </div>
       </div>
     </div>
@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import ExIcon from './icons/ExIcon'
+import { ref, shallowRef } from 'vue'
+import ExIcon from './icons/ExIcon.vue'
 
 const kTypes = {
   error: 'error',
@@ -45,12 +45,14 @@ const isVisible = ref(false)
 const message = ref('')
 const type = ref(kTypes.error)
 const hasCloseButton = ref(false)
+const contentComponent = shallowRef()
 
-function show(object) {
+function show(props) {
   clearTimeout(timeout)
-  type.value = object?.type ?? kTypes.error
-  message.value = object?.message ?? ''
-  hasCloseButton.value = object?.hasCloseButton ?? false
+  type.value = props?.type ?? kTypes.error
+  message.value = props?.message ?? ''
+  hasCloseButton.value = props?.hasCloseButton ?? false
+  contentComponent.value = props?.contentComponent ?? ''
   isVisible.value = true
 
   timeout = window.setTimeout(() => {

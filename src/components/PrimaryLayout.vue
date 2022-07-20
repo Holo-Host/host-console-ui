@@ -19,18 +19,6 @@
         @close="closeWelcomeModal"
       />
 
-      <div
-        v-if="isKycBannerVisible"
-        class="kyc-banner"
-      >
-        You haven't finished verifying your identity yet. Go to our
-        <a
-          href="https://holo.host/kyc"
-          target="_blank"
-        >third party provider's site</a> to complete
-        your verification.
-      </div>
-
       <section class="content">
         <slot />
       </section>
@@ -60,7 +48,6 @@ const props = defineProps({
   }
 })
 
-const isKycBannerVisible = ref(false)
 const isWelcomeModalVisible = ref(false)
 
 const displayName = computed(() => userStore.displayName)
@@ -83,7 +70,9 @@ function closeWelcomeModal() {
 }
 
 onMounted(async () => {
-  await userStore.getUser()
+  if (!userStore?.publicKey) {
+    await userStore.getUser()
+  }
 
   await nextTick(() => {
     isWelcomeModalVisible.value = !userStore.displayName
@@ -106,22 +95,6 @@ onMounted(async () => {
   padding: 0 20px;
 }
 
-.kyc-banner {
-  margin: -30px -20px 28px -20px;
-  background-color: #ffe871;
-  text-align: center;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 28px;
-  color: #000000;
-}
-
-.kyc-banner a {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #000000;
-}
-
 .content {
   display: flex;
   flex-direction: column;
@@ -133,11 +106,6 @@ onMounted(async () => {
   }
   .layout {
     padding-left: 0;
-  }
-  .kyc-banner {
-    margin-top: 0;
-    padding: 10px 30px;
-    line-height: 20px;
   }
 }
 </style>
