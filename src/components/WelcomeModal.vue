@@ -8,47 +8,26 @@
     <div class="welcome-modal">
       <section v-if="step === 1">
         <p class="welcome-modal__first-paragraph">
-          When you registered and configured your HoloPort, that included coupling it with an associated HoloFuel account.
+          {{ $t('welcome_modal.first_paragraph') }}
         </p>
         <p class="welcome-modal__second-paragraph">
-          Give these associated accounts an Account Display Name. This will show up on invoices and transactions between you and other HoloFuel users. You will NOT be able to change the name once saved.
+          {{ $t('welcome_modal.second_paragraph') }}
         </p>
 
         <BaseInput
           v-model="displayName"
           autofocus
-          placeholder="Enter Account Display Name"
+          :placeholder="$t('welcome_modal.input_placeholder')"
           name="displayName"
           class="welcome-modal__display-name-input"
         />
       </section>
 
       <section v-else>
-        <p class="welcome-modal__address-paragraph">
-          This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.
-        </p>
-
-        <p class="welcome-modal__display-name">
-          {{ displayName }}
-        </p>
-
-        <span class="welcome-modal__identicon">
-          <IdentIcon
-            v-if="publicKey"
-            size="80"
-            :hash="publicKey"
-            role="img"
-            aria-label="Agent Identity Icon"
-          />
-        </span>
-
-        <p class="welcome-modal__hash-id">
-          {{ publicKey }}
-        </p>
-
-        <p class="welcome-modal__tip">
-          <b>TIP:</b> Clicking on an identicon will copy the associated address for easy transacting in HoloFuel.
-        </p>
+        <HoloFuelAddress
+          :display-name="displayName"
+          :public-key="publicKey"
+        />
       </section>
     </div>
 
@@ -66,12 +45,15 @@
 </template>
 
 <script setup>
-import BaseButton from '@uicommon/components/BaseButton'
-import BaseInput from '@uicommon/components/BaseInput'
-import BaseModal from '@uicommon/components/BaseModal'
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import BaseInput from '@uicommon/components/BaseInput.vue'
+import BaseModal from '@uicommon/components/BaseModal.vue'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../store/user'
-import IdentIcon from './IdentIcon'
+import HoloFuelAddress from './HoloFuelAddress.vue'
+
+const { t } = useI18n()
 
 defineProps({
   isVisible: {
@@ -94,12 +76,12 @@ const publicKey = computed(() => userStore.publicKey || null)
 const modalContent = computed(() => {
   return step.value === 1
     ? {
-        title: 'Welcome to Host Console',
-        buttonLabel: 'Save'
+        title: t('welcome_modal.step_one_title'),
+        buttonLabel: t('welcome_modal.step_one_button_label')
       }
     : {
-        title: 'Your Address & Identity',
-        buttonLabel: 'I understand'
+        title: t('welcome_modal.step_two_title'),
+        buttonLabel: t('welcome_modal.step_two_button_label')
       }
 })
 

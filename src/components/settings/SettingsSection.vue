@@ -4,7 +4,9 @@
       {{ title }}
     </h3>
 
-    <slot />
+    <div class="settings-section__content">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -35,6 +37,10 @@ defineProps({
   &__title {
     color: var(--grey-dark-color);
     margin-bottom: 12px;
+  }
+
+  &__content {
+    margin-top: 10px;
   }
 }
 </style>

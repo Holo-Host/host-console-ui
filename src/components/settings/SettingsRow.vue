@@ -28,17 +28,15 @@ defineProps({
 <style lang="scss" scoped>
 .settings-row {
   min-height: 40px;
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 280px auto;
 
   &__label {
-    flex-basis: 280px;
-    display: flex;
-    align-items: center;
   }
 
   &__value {
     display: flex;
+    align-items: start;
   }
 }
 </style>

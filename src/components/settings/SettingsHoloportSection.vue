@@ -1,5 +1,8 @@
 <template>
-  <SettingsSection :title="$t('$.holoport')">
+  <SettingsSection
+    :title="$t('$.holoport')"
+    class="holoport-settings"
+  >
     <SettingsRow
       :label="$t('settings.hpos_version')"
       :value="settings.hposVersion"
@@ -11,7 +14,7 @@
     >
       <PencilIcon
         v-if="!isEditingDeviceName"
-        class="settings__editable-value-icon"
+        class="holoport-settings__editable-value-icon"
         @click="editDeviceName"
       />
       <div
@@ -113,7 +116,7 @@ function cancelEditDeviceName() {
 </script>
 
 <style lang="scss" scoped>
-.settings {
+.holoport-settings {
   &__editable-value {
     display: flex;
     align-items: center;

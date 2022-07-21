@@ -18,10 +18,15 @@ const translations = {
       try_refreshing: 'Try refreshing the page.',
       unexpected: 'An unexpected error occurred{error}'
     },
+    go: 'Go',
     hosted_by: 'Hosted by',
     holo: 'HOLO',
-    holoport: 'Holoport',
-    go: 'Go',
+    holoport: 'HoloPort',
+    holofuel: 'HoloFuel',
+    identicon_click:
+      'Clicking on an identicon will copy the associated address for easy transacting in HoloFuel.',
+    identicon_explanation:
+      'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
     language: {
       en: 'English',
       pl: 'Polski'
@@ -32,6 +37,7 @@ const translations = {
     logout: 'Logout',
     network: 'Network',
     page_not_found: "Hmm... We're unable to find that page.",
+    tip: 'TIP:',
     try_again: 'Try again',
     your_email: 'Your email'
   },
@@ -45,9 +51,23 @@ const translations = {
     title: 'Host Console Login'
   },
   settings: {
+    account_display_name: 'Account Display Name',
     device_name: 'Device Name',
+    device_name_placeholder: 'Enter Account Device Name',
+    holofuel_address: 'HoloFuel Address',
     hpos_version: 'HPOS Version',
     ssh_access: 'Access for HoloPort support (SSH)'
+  },
+  welcome_modal: {
+    first_paragraph:
+      'When you registered and configured your HoloPort, that included coupling it with an associated HoloFuel account.',
+    input_placeholder: 'Enter Account Display Name',
+    second_paragraph:
+      'Give these associated accounts an Account Display Name. This will show up on invoices and transactions between you and other HoloFuel users. You will NOT be able to change the name once saved.',
+    step_one_button_label: 'Save',
+    step_one_title: 'Welcome to Host Console',
+    step_two_button_label: 'I understand',
+    step_two_title: 'Your Address & Identity'
   }
 }
 
