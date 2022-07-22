@@ -5,8 +5,16 @@ import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/con
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import router from 'src/router'
+import { createI18n } from 'vue-i18n'
 import wait from 'waait'
 import HostedHapps from '../HostedHapps.vue'
+import locales from '@/locales'
+
+const i18n = createI18n({
+  legacy: true,
+  locale: 'en',
+  messages: locales
+})
 
 jest.mock('axios')
 mockGlobalCrypto()
@@ -39,7 +47,7 @@ describe('hosted happs page', () => {
     })
 
     render(HostedHapps, {
-      global: { plugins: [router, createTestingPinia()] }
+      global: { plugins: [router, createTestingPinia(), i18n] }
     })
 
     await wait(0)

@@ -1,5 +1,11 @@
 module.exports = {
-  globals: {},
+  globals: {
+    'vue-jest': {
+      transform: {
+        i18n: 'vue-i18n-jest'
+      }
+    }
+  },
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.vue$': 'vue-jest',
@@ -7,6 +13,7 @@ module.exports = {
   },
   moduleFileExtensions: ['vue', 'js', 'json', 'jsx'],
   moduleNameMapper: {
+    '@uicommon/(.*)$': '<rootDir>/ui-common-library/src/$1',
     '@/(.*)$': '<rootDir>/src/$1',
     'src/(.*)$': '<rootDir>/src/$1',
     'pages/(.*)$': '<rootDir>/src/pages/$1',
