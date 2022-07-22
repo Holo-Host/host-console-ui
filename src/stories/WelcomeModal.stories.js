@@ -1,4 +1,4 @@
-import WelcomeModal from '@/components/WelcomeModal.vue'
+import WelcomeModal from '@/components/modals/WelcomeModal.vue'
 
 export default {
   title: 'WelcomeModal',

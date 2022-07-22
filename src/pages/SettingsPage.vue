@@ -9,7 +9,6 @@
       :display-name="settings.displayName"
       :public-key="settings.publicKey"
       class="settings__holofuel-section"
-      @update:device-name="onDeviceNameUpdate"
     />
   </PrimaryLayout>
 </template>

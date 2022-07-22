@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', {
       const user = await HposInterface.settings()
 
       // Mocked until we have holofuel API running here
-      const displayName = 'Mateusz'
+      const displayName = ''
 
       if (user) {
         this.publicKey = user.hostPubKey

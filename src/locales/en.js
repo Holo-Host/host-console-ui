@@ -5,6 +5,7 @@ const translations = {
     confirm: 'Confirm',
     continue: 'Continue',
     close: 'Close',
+    dont_show_this_message_again: "Don't show this message again",
     error: 'Error',
     errors: {
       email: 'Please enter a valid email.',
@@ -42,6 +43,10 @@ const translations = {
     tip: 'TIP:',
     try_again: 'Try again',
     your_email: 'Your email'
+  },
+  holofuel_modal: {
+    description:
+      'HoloFuel will open in another tab, and you will already be logged in since it uses your same hash ID as Host Console. If you log out of one, you log out of both.'
   },
   login: {
     controlling_your_data: 'about controlling your own data.',

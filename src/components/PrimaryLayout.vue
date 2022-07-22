@@ -19,6 +19,11 @@
         @close="closeWelcomeModal"
       />
 
+      <GoToHolofuelModal
+        :is-visible="isGoToHolofuelModalVisible"
+        @close="hideGoToHolofuelModal"
+      />
+
       <section class="content">
         <slot />
       </section>
@@ -27,12 +32,15 @@
 </template>
 
 <script setup>
+import { addObserver, removeObserver } from '@uicommon/utils/notifications'
 import MobileTopNav from 'components/MobileTopNav.vue'
+import GoToHolofuelModal from 'components/modals/GoToHolofuelModal.vue'
+import WelcomeModal from 'components/modals/WelcomeModal.vue'
 import TheSidebar from 'components/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
-import WelcomeModal from 'components/WelcomeModal.vue'
 import { useUserStore } from 'src/store/user'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { EProjectNotification } from '../utils/notifications'
 
 const userStore = useUserStore()
 
@@ -49,6 +57,7 @@ const props = defineProps({
 })
 
 const isWelcomeModalVisible = ref(false)
+const isGoToHolofuelModalVisible = ref(false)
 
 const displayName = computed(() => userStore.displayName)
 const publicKey = computed(() => userStore.publicKey)
@@ -70,6 +79,9 @@ function closeWelcomeModal() {
 }
 
 onMounted(async () => {
+  addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
+  addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
+
   if (!userStore?.publicKey) {
     await userStore.getUser()
   }
@@ -78,6 +90,19 @@ onMounted(async () => {
     isWelcomeModalVisible.value = !userStore.displayName
   })
 })
+
+onUnmounted(() => {
+  removeObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
+  removeObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
+})
+
+function showGoToHolofuelModal() {
+  isGoToHolofuelModalVisible.value = true
+}
+
+function hideGoToHolofuelModal() {
+  isGoToHolofuelModalVisible.value = false
+}
 </script>
 
 <style scoped>

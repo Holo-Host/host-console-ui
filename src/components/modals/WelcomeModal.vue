@@ -75,7 +75,7 @@ import BaseModal from '@uicommon/components/BaseModal.vue'
 import IdentIcon from '@uicommon/components/IdentIcon2.vue'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUserStore } from '../store/user'
+import { useUserStore } from '../../store/user'
 
 const { t } = useI18n()
 

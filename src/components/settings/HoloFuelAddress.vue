@@ -24,7 +24,10 @@
       <b>{{ $t('$.tip') }}</b> {{ $t('$.identicon_click') }}
     </p>
 
-    <p class="holofuel-address__link">
+    <p
+      class="holofuel-address__link"
+      @click="showGoToHolofuelModal"
+    >
       <LeaveSiteIcon />
       <span class="holofuel-address__link-label">
         {{ $t('$.go_to_holofuel') }}
@@ -35,6 +38,8 @@
 
 <script setup>
 import IdentIcon from '@uicommon/components/IdentIcon2.vue'
+import { postNotification, ENotification } from '@uicommon/utils/notifications'
+import { EProjectNotification } from '../../utils/notifications'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
 
 defineProps({
@@ -43,6 +48,23 @@ defineProps({
     required: true
   }
 })
+
+function showGoToHolofuelModal() {
+  const isModalDisabled =
+    localStorage.getItem('host-console-ui-dont-show-go-to-holofuel-modal-again') === 'true'
+
+  if (isModalDisabled) {
+    postNotification(ENotification.showBusyState)
+    // TODO: Implement login logic
+
+    setTimeout(() => {
+      postNotification(ENotification.hideBusyState)
+      // eslint-disable-next-line no-magic-numbers
+    }, 2000)
+  } else {
+    postNotification(EProjectNotification.showGoToHolofuelModal)
+  }
+}
 </script>
 
 <style lang="scss">

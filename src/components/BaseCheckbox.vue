@@ -12,12 +12,18 @@
         :class="{
           'base-checkbox__input--disabled': isDisabled
         }"
+        :style="[customColor ? { accentColor: customColor } : {}]"
         data-test-base-checkbox-input
         @input="(event) => $emit('update:checked', event.target.checked)"
       >
-      <div class="ml-3 text-lg">
+
+      <div
+        class="base-checkbox__label-wrapper"
+        :class="{ 'base-checkbox__label-wrapper--small': labelSize==='small' }"
+      >
         <label
           :for="id"
+          class="base-checkbox__label"
           data-test-base-checkbox-label
         >
           {{ label }}
@@ -48,6 +54,19 @@ defineProps({
   id: {
     type: String,
     required: true
+  },
+
+  labelSize: {
+    type: String,
+    default: 'medium',
+    validator(value) {
+      return ['small', 'medium'].includes(value)
+    }
+  },
+
+  customColor: {
+    type: String,
+    default: ''
   }
 })
 
@@ -73,10 +92,7 @@ defineEmits(['update:checked'])
     accent-color: var(--primary-color);
     border: solid var(--grey-color);
     border-radius: 4px;
-
-    &:checked:before {
-      color: red;
-    }
+    cursor: pointer;
 
     &:focus {
       outline: none;
@@ -86,6 +102,18 @@ defineEmits(['update:checked'])
     &.disabled {
       opacity: 0.4;
     }
+  }
+
+  &__label-wrapper {
+    margin-left: 8px;
+
+    &--small {
+      font-size: 12px;
+    }
+  }
+
+  &__label {
+    cursor: pointer;
   }
 }
 </style>
