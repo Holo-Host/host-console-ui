@@ -31,12 +31,10 @@ defineProps({
   display: grid;
   grid-template-columns: 280px auto;
 
-  &__label {
-  }
-
   &__value {
     display: flex;
     align-items: start;
+    color: var(--grey-dark-color);
   }
 }
 </style>

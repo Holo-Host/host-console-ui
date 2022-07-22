@@ -19,23 +19,23 @@
       />
       <div
         v-else
-        class="settings__editable-value"
+        class="holoport-settings__editable-value"
       >
         <BaseInput
           v-model="editedDeviceName"
           :placeholder="$t('settings.device_name_placeholder')"
           name="edited-device-name"
-          class="settings__editable-value-input"
+          class="holoport-settings__editable-value-input"
         />
 
         <FilledCheckIcon
-          class="filled-check"
+          class="holoport-settings__save-button"
           data-testid="save-button"
           @click="saveDeviceName"
         />
 
         <CircledExIcon
-          class="circled-ex"
+          class="holoport-settings__cancel-button"
           data-testid="cancel-button"
           @click="cancelEditDeviceName"
         />
@@ -60,9 +60,10 @@
         <a
           href="https://forum.holo.host/t/usb-reset-step-by-step/4782"
           target="_blank"
-          class="factory-reset-link"
-        >Factory Reset</a>
-        <QuestionMarkIcon class="question-mark" />
+          class="holoport-settings__factory-reset-link"
+        >
+          {{ $t('settings.factory_reset') }}
+        </a>
       </template>
     </SettingsRow>
   </SettingsSection>
@@ -75,7 +76,6 @@ import BaseCheckbox from '../BaseCheckbox.vue'
 import CircledExIcon from '../icons/CircledExIcon.vue'
 import FilledCheckIcon from '../icons/FilledCheckIcon.vue'
 import PencilIcon from '../icons/PencilIcon.vue'
-import QuestionMarkIcon from '../icons/QuestionMarkIcon.vue'
 import SettingsRow from './SettingsRow.vue'
 import SettingsSection from './SettingsSection.vue'
 
@@ -130,24 +130,24 @@ function cancelEditDeviceName() {
     margin-left: 5px;
     cursor: pointer;
   }
-}
 
-.factory-reset-link {
-  text-decoration-line: underline;
-  color: var(--grey-color);
-}
+  &__factory-reset-link {
+    text-decoration-line: underline;
+    color: var(--grey-color);
+  }
 
-.question-mark {
-  margin-left: 8px;
-}
+  &__question-mark {
+    margin-left: 8px;
+  }
 
-.filled-check {
-  margin-left: 5px;
-  cursor: pointer;
-}
+  &__save-button {
+    margin-left: 5px;
+    cursor: pointer;
+  }
 
-.circled-ex {
-  margin-left: 5px;
-  cursor: pointer;
+  &__cancel-button {
+    margin-left: 5px;
+    cursor: pointer;
+  }
 }
 </style>

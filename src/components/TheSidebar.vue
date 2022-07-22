@@ -1,44 +1,47 @@
 <template>
   <section class="sidebar">
-    <h1 class="banner">
-      Host Console
+    <h1 class="sidebar__header">
+      {{ $t('$.host_console') }}
     </h1>
 
-    <section class="menu">
+    <section class="sidebar__menu">
       <router-link
         to="/dashboard"
-        class="menu-row"
+        class="sidebar__menu-item"
         active-class="active-link"
       >
         <HomeIcon
           class="home-icon"
           :color="$route.path.match('/dashboard') ? '#00CAD9' : '#313C59'"
-        />Dashboard
+        />
+        Dashboard
       </router-link>
 
       <router-link
         to="/happs"
-        class="menu-row"
+        class="sidebar__menu-item"
         active-class="active-link"
       >
         <HappsIcon
           class="home-icon"
           :color="$route.path.match('/happs') ? '#00CAD9' : '#313C59'"
-        />hApps
+        />
+        hApps
       </router-link>
 
       <router-link
         to="/preferences"
-        class="menu-row"
+        class="sidebar__menu-item"
         active-class="active-link"
       >
         <GearIcon
           class="gear-icon"
           :color="$route.path.match('/preferences') ? '#00CAD9' : '#313C59'"
-        />Hosting Preferences
+        />
+        Hosting Preferences
       </router-link>
 
-      <div class="alpha-banner">
+      <div class="sidebar__alpha-banner">
         <div class="flag">
           ALPHA: HoloFuel = Test Fuel<div class="triangle" />
         </div>
@@ -70,7 +73,7 @@
           class="footer-link"
           href="https://forum.holo.host/t/alpha-testnet-terms-conditions/193"
           target="_blank"
-        >View Terms of Service</a>
+        >Terms of Service</a>
         <div class="ui-version">
           Host Console version {{ uiVersion }}
         </div>
@@ -88,7 +91,7 @@ import { computed } from 'vue'
 const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .sidebar {
   position: fixed;
   top: 0;
@@ -101,42 +104,58 @@ const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
   background: #ffffff;
   box-shadow: 0 4px 4px rgba(54, 59, 71, 0.1);
   z-index: 100;
+
+  &__header {
+    background-color: rgba(0, 202, 217, 0.06);
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 26px;
+    padding: 44px 0 44px 44px;
+    margin: 0;
+  }
+
+  &__menu {
+    padding: 30px 24px 30px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--grey-dark-color);
+    margin-bottom: 20px;
+    padding: 3px 0 3px 24px;
+
+    &:hover {
+      background: rgba(0, 202, 217, 0.06);
+      border-radius: 2px;
+    }
+  }
+
+  &__alpha-banner {
+    position: relative;
+    margin: auto -24px auto -18px;
+    padding: 35px 40px 18px 32px;
+    background-color: #f0fcfd;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    color: var(--grey-dark-color);
+
+    a {
+      font-weight: 700;
+      color: var(--grey-dark-color);
+    }
+  }
 }
 
 .mobile-banner .sidebar {
   display: none;
-}
-
-.banner {
-  background-color: rgba(0, 202, 217, 0.06);
-  color: var(--primary-color);
-  font-weight: bold;
-  font-size: 24px;
-  text-align: center;
-  padding: 44px 0;
-  margin: 0;
-}
-
-.menu {
-  padding: 30px 24px 30px 18px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.menu-row {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  text-decoration: none;
-  color: var(--grey-dark-color);
-  margin-bottom: 20px;
-  padding: 3px 0 3px 24px;
-}
-
-.menu-row:hover {
-  background: rgba(0, 202, 217, 0.06);
-  border-radius: 2px;
 }
 
 .active-link {
@@ -150,23 +169,6 @@ const uiVersion = computed(() => process.env.VUE_APP_UI_VERSION)
 .gear-icon {
   margin-left: 3px;
   margin-right: 15px;
-}
-
-.alpha-banner {
-  position: relative;
-  margin: auto -24px auto -18px;
-  padding: 35px 40px 18px 32px;
-  background-color: #f0fcfd;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.02em;
-  color: var(--grey-dark-color);
-}
-
-.alpha-banner a {
-  font-weight: 600;
-  color: var(--grey-dark-color);
 }
 
 .flag {

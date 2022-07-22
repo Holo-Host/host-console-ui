@@ -30,9 +30,8 @@
 </template>
 
 <script setup>
-import { ENotification, postNotification } from '@uicommon/utils/notifications'
+import IdentIcon from '@uicommon/components/IdentIcon2.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
-import IdentIcon from 'components/IdentIcon'
 import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'

@@ -19,6 +19,8 @@ const translations = {
       unexpected: 'An unexpected error occurred{error}'
     },
     go: 'Go',
+    go_to_holofuel: 'Go to HoloFuel',
+    host_console: 'Host Console',
     hosted_by: 'Hosted by',
     holo: 'HOLO',
     holoport: 'HoloPort',
@@ -54,6 +56,7 @@ const translations = {
     account_display_name: 'Account Display Name',
     device_name: 'Device Name',
     device_name_placeholder: 'Enter Account Device Name',
+    factory_reset: 'Factory Reset',
     holofuel_address: 'HoloFuel Address',
     hpos_version: 'HPOS Version',
     ssh_access: 'Access for HoloPort support (SSH)'

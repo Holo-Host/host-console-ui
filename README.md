@@ -1,10 +1,10 @@
 # host-console-ui
 
 ## Git Submodules
-This project contains git submodules. By default when fetching or cloaning git will NOT include submodules (unless you include the --recurse-submodules parameters for example.
+This project contains git submodules. By default when fetching or cloning git will NOT include submodules (unless you include the --recurse-submodules parameters for example.
 
 ```
-git clone --recurse-submodules https://github.com/Holo-Host/publisher-portal.git
+git clone --recurse-submodules https://github.com/Holo-Host/host-console-ui.git
 ```
 
 To fetch the submodules for an existing branch you can execute:
@@ -17,7 +17,7 @@ The submodules default to the develop branch.
 
 ## Project setup
 ```
-yarn install
+yarn
 ```
 
 Copy the .env.example file to .env, and modify values to taste.
@@ -37,14 +37,14 @@ Using this command, all requests to `localhost:8080/api/` and `localhost:8080/ho
 
 ### Start UI server for development
 ```
-yarn run serve
+yarn serve
 ```
 
 You will mostly want to run this along with the next command
 
 ### Start mock HPOS API server for development
 ```
-yarn run start-mock-hpos-api
+yarn start-mock-hpos-api
 ```
 
 The login email and password for this server are in the package.json script
@@ -52,27 +52,21 @@ The login email and password for this server are in the package.json script
 and
 `asasasas`
 
-### Start both UI server and mock API server with one command
-```
-yarn run start-ui-and-mock
-```
-
-
 ### Run tests
 ```
-yarn run test
+yarn test
 ```
 
 Note: you must have a .env file with `VUE_APP_HPOS_PORT` for tests to pass.
 
 ### Compiles and minifies for production
 ```
-yarn run build
+yarn build
 ```
 
 ### Lints and fixes files
 ```
-yarn run lint
+yarn lint
 ```
 
 ### Customize configuration

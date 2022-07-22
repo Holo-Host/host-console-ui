@@ -39,7 +39,7 @@
         <BaseButton
           :is-disabled="!email || !password || isLoading"
           :is-busy="isLoading"
-          :type="EButtonType.secondary"
+          :type="EButtonType.gray"
           class="login-button"
           @click="login"
         >

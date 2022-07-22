@@ -8,6 +8,7 @@
     <SettingsHolofuelSection
       :display-name="settings.displayName"
       :public-key="settings.publicKey"
+      class="settings__holofuel-section"
       @update:device-name="onDeviceNameUpdate"
     />
   </PrimaryLayout>
@@ -28,3 +29,9 @@ function onDeviceNameUpdate(deviceName) {
   userStore.updateDeviceName(deviceName)
 }
 </script>
+
+<style lang="scss">
+.settings__holofuel-section {
+  margin-top: 18px;
+}
+</style>

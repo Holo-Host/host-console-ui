@@ -24,10 +24,34 @@
       </section>
 
       <section v-else>
-        <HoloFuelAddress
-          :display-name="displayName"
-          :public-key="publicKey"
-        />
+        <span class="welcome-modal__explanation">
+          {{ $t('$.identicon_explanation') }}
+        </span>
+
+        <p
+          v-if="displayName"
+          class="welcome-modal__display-name"
+        >
+          {{ displayName }}
+        </p>
+
+        <span class="welcome-modal__identicon">
+          <IdentIcon
+            v-if="publicKey"
+            size="80"
+            :hash="publicKey"
+            role="img"
+            aria-label="Agent Identity Icon"
+          />
+        </span>
+
+        <p class="welcome-modal__hash-id">
+          {{ publicKey }}
+        </p>
+
+        <p class="welcome-modal__tip">
+          <b>{{ $t('$.tip') }}</b> {{ $t('$.identicon_click') }}
+        </p>
       </section>
     </div>
 
@@ -48,10 +72,10 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseInput from '@uicommon/components/BaseInput.vue'
 import BaseModal from '@uicommon/components/BaseModal.vue'
+import IdentIcon from '@uicommon/components/IdentIcon2.vue'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../store/user'
-import HoloFuelAddress from './HoloFuelAddress.vue'
 
 const { t } = useI18n()
 
@@ -141,6 +165,23 @@ function handleSubmit() {
 
   &__close-button {
     margin-top: 24px;
+  }
+
+  &__hash-id {
+    font-weight: 700;
+  }
+
+  &__display-name {
+    margin-top: 36px;
+  }
+
+  &__hash-id {
+    margin-top: 8px;
+  }
+
+  &__tip {
+    margin-top: 32px;
+    padding: 0 40px;
   }
 }
 

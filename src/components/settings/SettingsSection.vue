@@ -25,8 +25,7 @@ defineProps({
   flex-direction: column;
   background-color: white;
   box-shadow: 0 4px 20px #eceef1;
-  border-radius: 5px;
-  margin: 0 10px 20px 12px;
+  border-radius: 12px;
   padding: 20px 90px;
   color: var(--grey-color);
   font-size: 14px;
