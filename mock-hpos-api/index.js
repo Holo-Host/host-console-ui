@@ -57,7 +57,7 @@ class MockHposApi {
       next()
     } else {
       const { method, originalUrl, body } = req
-
+// TODO: start here updating this test to new auth method
       const keypair = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
       const signature = req.header('x-hpos-admin-signature')
       const valid = verifySignedRequest(signature, method, originalUrl, body, keypair)

@@ -45,45 +45,6 @@ export const getHpAdminKeypair = async (email, password) => {
 
 export const checkHpAdminKeypair = () => !!HpAdminKeypairInstance
 
-export const signRequest = async (method, url, params) => {
-  const keypair = await getHpAdminKeypair()
-
-  // Workaround to allow making requests within unit tests
-  if (keypair === null) {
-    return ''
-  }
-
-  let path_to_sign = (new URL(url)).pathname
-  let body = ''
-  if (params) {
-    switch (method) {
-      case 'get':
-      case 'delete':
-        path_to_sign = `${path_to_sign}?${new URLSearchParams(params)}`
-        break
-      case 'post':
-      case 'put':
-        // BUG: real server (hp-admin-crypto) does not properly check the body when
-        //      verifying signature [1]. pass empty string so that it validates
-        //      successfully
-        //
-        // [1]: https://github.com/Holo-Host/hp-admin-crypto/issues/25
-        //
-        // correct code:
-        //
-        // body = stringify(params)
-        break
-      default:
-        throw new Error(`No case in hposCall for ${method} method`)
-    }
-  }
-
-  const payload = { method: method.toLowerCase(), request: path_to_sign, body }
-  const signature = keypair.sign(payload)
-
-  return signature
-}
-
 export const hashString = async (string) => {
   const dataBytes = Buffer.from(string)
   const hashBytes = await crypto.subtle.digest('SHA-512', dataBytes)

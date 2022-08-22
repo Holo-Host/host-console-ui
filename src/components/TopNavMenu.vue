@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
 
 export default {
@@ -35,9 +34,8 @@ export default {
       this.menuOpen = !this.menuOpen
     },
     logout () {
-      eraseHpAdminKeypair()
-      // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
-      localStorage.removeItem('isAuthed')
+      localStorage.removeItem('authToken')
+      // TODO: is this enough to forward to login page?
       this.$router.push('/login')
     },
     openSettingsAndCloseMenu () {

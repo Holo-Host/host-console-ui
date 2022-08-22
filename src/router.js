@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from "vue-router"
-import { checkHpAdminKeypair } from 'src/utils/keyManagement'
 import Login from "pages/Login.vue"
 import Dashboard from "pages/Dashboard.vue"
 import HostedHapps from "pages/HostedHapps.vue"
@@ -91,14 +90,8 @@ export const routerFactory = () => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // page only visible when logged in
 
-      // isAuthed is true if the last keypair we generated was good. It persists across sessions.
-      // checkHpAdminKeypair checks if we have a keypair in *this* session. If we don't, then we remove isAuthed
-      // another way to handle this would be to store isAuthed in app state not local storage. Then we wouldn't need this line.
-      if (!checkHpAdminKeypair()) {
-        localStorage.removeItem('isAuthed')
-      }
-
-      if (localStorage.getItem('isAuthed') == null) {
+      // Existence of AuthToken in localStorage is equal to being logged in
+      if (localStorage.getItem('authToken') == null) {
         next({
           name: 'Login',
           params: { nextUrl: to.fullPath }
@@ -109,9 +102,9 @@ export const routerFactory = () => {
     } else if (to.matched.some(record => record.meta.guest)) {
 
       // page only visible when *not* logged in
-      if(localStorage.getItem('isAuthed') == null) {
+      if(localStorage.getItem('authToken') == null) {
           next()
-      } else{
+      } else {
           next({ name: 'Dashboard'})
       }
     } else {
