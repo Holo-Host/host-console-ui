@@ -5,7 +5,7 @@ import { signRequest, hashString } from 'src/utils/keyManagement'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
 import router from 'src/router'
-// import { response } from 'express'
+import { response } from 'express'
 
 const axiosConfig = {
   headers: {
@@ -27,10 +27,7 @@ async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeader
   const authToken = localStorage.getItem('authToken')
   // If localStorage.getItem('authToken') == null then hposCall should return error 401
   if (localStorage.getItem('authToken') == null) {
-    return new Response(null, {
-      status: 401
-    });
-    return new Response({status: 401})
+    return Promise.reject({response: { status: 401}})
   }
 
   const headers = {
@@ -60,42 +57,36 @@ async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeader
 }
 
 const hposAdminCall = async (args) => {
-  let response;
   // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
   try {
-    const response = await hposCall({
+    return await hposCall({
       ...args,
       pathPrefix: '/api/v1'
     })
   } catch (err) {
-    console.log(err)
     if (err.response && err.response.status === 401) {
-      localStorage.setItem('authToken')
+      localStorage.removeItem('authToken')
       router.push('/login')
     }
+    return Promise.reject(err)
   }
-  return response
 }
 
 const hposHolochainCall = async (args) => {
-  let response;
   // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
   try {
-    const response = await hposCall({
+    return await hposCall({
       ...args,
       pathPrefix: '/holochain-api/v1'
     })
   } catch (err) {
-    console.log(err)
     if (err.response && err.response.status === 401) {
-      localStorage.setItem('authToken')
+      localStorage.removeItem('authToken')
       router.push('/login')
     }
+    return Promise.reject(err)
   }
-  return response
 }
-
-
 
 const presentHposSettings = (hposSettings) => {
   const { admin, holoportos = {}, deviceName } = hposSettings
@@ -110,44 +101,59 @@ const presentHposSettings = (hposSettings) => {
 
 const HposInterface = {
   dashboard: async () => {
-    const dashboardData = await hposHolochainCall({
-      method: 'get',
-      path: '/dashboard' ,
-      params: {
-        duration_unit: 'DAY',
-        amount: 1
-      }
-    })
-    dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
-    return dashboardData
+    try {
+      const dashboardData = await hposHolochainCall({
+        method: 'get',
+        path: '/dashboard' ,
+        params: {
+          duration_unit: 'DAY',
+          amount: 1
+        }
+      })
+      dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
+      return dashboardData
+    } catch (err) {
+      console.log(err)
+      return {}
+    }
   },
 
   hostedHapps: async () => {
-    const result = await hposHolochainCall({
-      method: 'get',
-      path: '/hosted_happs',
-      params: {
-        duration_unit: "WEEK",
-        amount: 1
-      }
-    })
+    try {
+      const result = await hposHolochainCall({
+        method: 'get',
+        path: '/hosted_happs',
+        params: {
+          duration_unit: "WEEK",
+          amount: 1
+        }
+      })
 
-    if (Array.isArray(result)) {
-      return result.filter(happ => happ.enabled)
-        .map(mergeMockHappData)
-        .map(happ => ({ // currently hiding storage value from the UI as it's mock data coming from the api
-          ...happ,
-          storage: '--'
-        }))
-    } else {
-      console.error("hosted_happs didn't return an array")
+      if (Array.isArray(result)) {
+        return result.filter(happ => happ.enabled)
+          .map(mergeMockHappData)
+          .map(happ => ({ // currently hiding storage value from the UI as it's mock data coming from the api
+            ...happ,
+            storage: '--'
+          }))
+      } else {
+        console.error("hosted_happs didn't return an array")
+        return []
+      }
+    } catch (err) {
+      console.log(err)
       return []
     }
   },
 
   settings: async () => {
-    const result = await hposAdminCall({ method: 'get', path: '/config' })
-    return presentHposSettings(result)
+    try {
+      const result = await hposAdminCall({ method: 'get', path: '/config' })
+      return presentHposSettings(result)
+    } catch (err) {
+      console.log(err)
+      return {}
+    }
   },
 
   checkAuth: async (email, password, authToken) => {
@@ -180,23 +186,28 @@ const HposInterface = {
   },
 
   updateSettings: async ({ deviceName }) => {
-    const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })
+    try {
+      const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })
 
-    // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
-    const headers = {
-      'X-Hpos-Admin-CAS': await hashString(stringify(settingsResponse))
-    }
+      // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
+      const headers = {
+        'X-Hpos-Admin-CAS': await hashString(stringify(settingsResponse))
+      }
 
-    const settingsConfig = {
-      ...settingsResponse
-    }
-    if (deviceName !== undefined) {
-      settingsConfig.deviceName = deviceName
-    }
+      const settingsConfig = {
+        ...settingsResponse
+      }
+      if (deviceName !== undefined) {
+        settingsConfig.deviceName = deviceName
+      }
 
-    await hposAdminCall({ method: 'put', path: '/config', headers, params: settingsConfig })
-    // We don't assume the successful PUT /api/v1/config returns the current config
-    return presentHposSettings(settingsConfig)
+      await hposAdminCall({ method: 'put', path: '/config', headers, params: settingsConfig })
+      // We don't assume the successful PUT /api/v1/config returns the current config
+      return presentHposSettings(settingsConfig)
+    } catch (err) {
+      console.log(err)
+      return {}
+    }
   },
 
   getSshAccess: async () => {
@@ -205,13 +216,23 @@ const HposInterface = {
   },
 
   enableSshAccess: async () => {
-    const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })
-    return enabled
+    try {
+      const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })
+      return enabled
+    } catch (err) {
+      console.log(err)
+      return null
+    }
   },
 
   disableSshAccess: async () => {
-    const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })
-    return enabled
+    try {
+      const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })
+      return enabled
+    } catch (err) {
+      console.log(err)
+      return null
+    }
   }
 }
 
