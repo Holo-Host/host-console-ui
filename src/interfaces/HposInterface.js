@@ -4,6 +4,8 @@ import mergeMockHappData from 'src/mergeMockHappData'
 import { signRequest, hashString } from 'src/utils/keyManagement'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
+import router from 'src/router'
+// import { response } from 'express'
 
 const axiosConfig = {
   headers: {
@@ -24,7 +26,14 @@ function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}
     const fullUrl = HPOS_API_URL + pathPrefix + path
 
     const authToken = localStorage.getItem('authToken')
-    // TODO: If localStorage.getItem('authToken') == null then redirect to login page
+    // If localStorage.getItem('authToken') == null then hposCall should return error 401
+    if (localStorage.getItem('authToken') == null) {
+      return new Response(null, {
+        status: 401
+      });
+      return new Response({status: 401})
+    }
+
     const headers = {
       ...axiosConfig.headers,
       ...userHeaders,
@@ -53,20 +62,35 @@ function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}
 }
 
 export function hposAdminCall (args) {
-  // TODO: Check for 401 and redirect to login page if it happens
-  return hposCall({
-    ...args,
-    pathPrefix: '/api/v1'
-  })
+  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
+  try {
+    const response = await hposCall({
+      ...args,
+      pathPrefix: '/api/v1'
+    })
+  } catch (err) {
+    if (err.response.status === 401) {
+      localStorage.setItem('authToken')
+      router.push('/login')
+    }
+  }
+  return response
 }
 
 export function hposHolochainCall (args) {
-  // TODO: Check for 401 and redirect to login page if it happens
-  // if (error.response.status === 401) ...
-  return hposCall({
-    ...args,
-    pathPrefix: '/holochain-api/v1'
-  })
+  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
+  try {
+    const response = await hposCall({
+      ...args,
+      pathPrefix: '/holochain-api/v1'
+    })
+  } catch (err) {
+    if (err.response.status === 401) {
+      localStorage.setItem('authToken')
+      router.push('/login')
+    }
+  }
+  return response
 }
 
 

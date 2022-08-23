@@ -35,7 +35,6 @@ export default {
     },
     logout () {
       localStorage.removeItem('authToken')
-      // TODO: is this enough to forward to login page?
       this.$router.push('/login')
     },
     openSettingsAndCloseMenu () {

@@ -54,6 +54,7 @@ import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
 import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import HposInterface from 'src/interfaces/HposInterface'
+import cryptoRandomString from 'crypto-random-string'
 
 const validateEmail = email => validator.validate(email)
 const validatePassword = password => password.length > 5
@@ -61,8 +62,7 @@ const validatePassword = password => password.length > 5
 async function createAuthToken (email, password) {
   email = email.toLowerCase()
 
-  // TODO: create random token
-  const authToken = "abba"
+  const authToken = cryptoRandomString({length: 43, type: 'base64'}) // entorpy 2^258
 
   // make a call to API to check if it passes auth
   const isAuthorised = await HposInterface.checkAuth(email, password, authToken)
@@ -76,6 +76,18 @@ async function createAuthToken (email, password) {
 
 export default {
   name: 'Login',
+  beforeMount() {
+    // redirect from login page if user already logged in
+    // To prevent infinite loop of redirects code will erase authToken
+    // from localStorage whenever 401 from server is detected
+    if (localStorage.getItem('authToken') !== null) {
+      if(this.$route.params.nextUrl != null) {
+        this.$router.push(this.$route.params.nextUrl)
+      } else {
+        this.$router.push('/dashboard')
+      }
+    }
+  },
   components: {
     HoloBadgeIcon,
     InvisibleEyeIcon,
@@ -90,15 +102,6 @@ export default {
       isPasswordVisible: false
     }
   },
-  // TODO: onload:
-    // // redirect from login page if user already logged in
-    // if (localStorage.getItem('authToken') !== null) {
-    //   if(this.$route.params.nextUrl != null) {
-    //     this.$router.push(this.$route.params.nextUrl)
-    //   } else {
-    //     this.$router.push('/dashboard')
-    //   }
-    // }
   methods: {
     login: async function (e) {
       if (!validateEmail(this.email.toLowerCase())) {
