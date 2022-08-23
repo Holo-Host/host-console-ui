@@ -54,7 +54,7 @@ import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
 import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import HposInterface from 'src/interfaces/HposInterface'
-import cryptoRandomString from 'crypto-random-string'
+import generateToken from 'src/utils'
 
 const validateEmail = email => validator.validate(email)
 const validatePassword = password => password.length > 5
@@ -62,7 +62,7 @@ const validatePassword = password => password.length > 5
 async function createAuthToken (email, password) {
   email = email.toLowerCase()
 
-  const authToken = cryptoRandomString({length: 43, type: 'base64'}) // entorpy 2^258
+  const authToken = generateToken()
 
   // make a call to API to check if it passes auth
   const isAuthorised = await HposInterface.checkAuth(email, password, authToken)

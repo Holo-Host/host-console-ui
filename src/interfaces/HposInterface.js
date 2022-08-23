@@ -21,47 +21,46 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : (window.location.protocol + '//' + window.location.host)
 
-function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {} }) {
-  return async params => {
-    const fullUrl = HPOS_API_URL + pathPrefix + path
+async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
+  const fullUrl = HPOS_API_URL + pathPrefix + path
 
-    const authToken = localStorage.getItem('authToken')
-    // If localStorage.getItem('authToken') == null then hposCall should return error 401
-    if (localStorage.getItem('authToken') == null) {
-      return new Response(null, {
-        status: 401
-      });
-      return new Response({status: 401})
-    }
+  const authToken = localStorage.getItem('authToken')
+  // If localStorage.getItem('authToken') == null then hposCall should return error 401
+  if (localStorage.getItem('authToken') == null) {
+    return new Response(null, {
+      status: 401
+    });
+    return new Response({status: 401})
+  }
 
-    const headers = {
-      ...axiosConfig.headers,
-      ...userHeaders,
-      'X-Hpos-Auth-Token': authToken
-    }
+  const headers = {
+    ...axiosConfig.headers,
+    ...userHeaders,
+    'X-Hpos-Auth-Token': authToken
+  }
 
-    let data
+  let data
 
-    switch (method) {
-      case 'get':
-        ({ data } = await axios.get(fullUrl, { params, headers }))
-        return data
-      case 'post':
-        ({ data } = await axios.post(fullUrl, params, { headers }))
-        return data
-      case 'put':
-        ({ data } = await axios.put(fullUrl, params, { headers }))
-        return data
-      case 'delete':
-        ({ data } = await axios.delete(fullUrl, { params, headers }))
-        return data
-      default:
-        throw new Error(`No case in hposCall for ${method} method`)
-    }
+  switch (method) {
+    case 'get':
+      ({ data } = await axios.get(fullUrl, { params, headers }))
+      return data
+    case 'post':
+      ({ data } = await axios.post(fullUrl, params, { headers }))
+      return data
+    case 'put':
+      ({ data } = await axios.put(fullUrl, params, { headers }))
+      return data
+    case 'delete':
+      ({ data } = await axios.delete(fullUrl, { params, headers }))
+      return data
+    default:
+      throw new Error(`No case in hposCall for ${method} method`)
   }
 }
 
-export function hposAdminCall (args) {
+const hposAdminCall = async (args) => {
+  let response;
   // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
   try {
     const response = await hposCall({
@@ -69,7 +68,8 @@ export function hposAdminCall (args) {
       pathPrefix: '/api/v1'
     })
   } catch (err) {
-    if (err.response.status === 401) {
+    console.log(err)
+    if (err.response && err.response.status === 401) {
       localStorage.setItem('authToken')
       router.push('/login')
     }
@@ -77,7 +77,8 @@ export function hposAdminCall (args) {
   return response
 }
 
-export function hposHolochainCall (args) {
+const hposHolochainCall = async (args) => {
+  let response;
   // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
   try {
     const response = await hposCall({
@@ -85,7 +86,8 @@ export function hposHolochainCall (args) {
       pathPrefix: '/holochain-api/v1'
     })
   } catch (err) {
-    if (err.response.status === 401) {
+    console.log(err)
+    if (err.response && err.response.status === 401) {
       localStorage.setItem('authToken')
       router.push('/login')
     }
@@ -108,15 +110,26 @@ const presentHposSettings = (hposSettings) => {
 
 const HposInterface = {
   dashboard: async () => {
-    const dashboardData = await hposHolochainCall({ method: 'get', path: '/dashboard' })({ duration_unit: 'DAY', amount: 1 })
+    const dashboardData = await hposHolochainCall({
+      method: 'get',
+      path: '/dashboard' ,
+      params: {
+        duration_unit: 'DAY',
+        amount: 1
+      }
+    })
     dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
     return dashboardData
   },
 
   hostedHapps: async () => {
-    const result = await hposHolochainCall({ method: 'get', path: '/hosted_happs' })({
-      duration_unit: "WEEK",
-      amount: 1
+    const result = await hposHolochainCall({
+      method: 'get',
+      path: '/hosted_happs',
+      params: {
+        duration_unit: "WEEK",
+        amount: 1
+      }
     })
 
     if (Array.isArray(result)) {
@@ -133,7 +146,7 @@ const HposInterface = {
   },
 
   settings: async () => {
-    const result = await hposAdminCall({ method: 'get', path: '/config' })()
+    const result = await hposAdminCall({ method: 'get', path: '/config' })
     return presentHposSettings(result)
   },
 
@@ -167,7 +180,7 @@ const HposInterface = {
   },
 
   updateSettings: async ({ deviceName }) => {
-    const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })()
+    const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })
 
     // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
     const headers = {
@@ -181,23 +194,23 @@ const HposInterface = {
       settingsConfig.deviceName = deviceName
     }
 
-    await hposAdminCall({ method: 'put', path: '/config', headers })(settingsConfig)
+    await hposAdminCall({ method: 'put', path: '/config', headers, params: settingsConfig })
     // We don't assume the successful PUT /api/v1/config returns the current config
     return presentHposSettings(settingsConfig)
   },
 
   getSshAccess: async () => {
-    const { enabled } = await hposAdminCall({ method: 'get', path: '/profiles/development/features/ssh' })()
+    const { enabled } = await hposAdminCall({ method: 'get', path: '/profiles/development/features/ssh' })
     return enabled
   },
 
   enableSshAccess: async () => {
-    const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })()
+    const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })
     return enabled
   },
 
   disableSshAccess: async () => {
-    const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })()
+    const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })
     return enabled
   }
 }
