@@ -45,5 +45,5 @@ export const presentPublisherHash = hash => `...${hash.slice(-5)}`
 export const generateToken = () => {
   // TODO: generate random token
 
-  return 'abba'// cryptoRandomString({length: 43, type: 'base64'}) // entorpy 2^258
+  return 'abba-abba'// cryptoRandomString({length: 43, type: 'base64'}) // entorpy 2^258
 }

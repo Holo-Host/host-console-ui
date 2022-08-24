@@ -1,7 +1,8 @@
 require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
 import mergeMockHappData from 'src/mergeMockHappData'
-import { signRequest, hashString } from 'src/utils/keyManagement'
+import { hashString } from 'src/utils/keyManagement'
+import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
 
 const axiosConfig = {
@@ -22,11 +23,12 @@ function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}
   return async params => {
     const fullUrl = HPOS_API_URL + pathPrefix + path
 
-    const signature = await signRequest(method, fullUrl, params)
+    const authToken = localStorage.getItem('authToken')
+
     const headers = {
+      'X-Hpos-Auth-Token': authToken,
       ...axiosConfig.headers,
       ...userHeaders,
-      'X-Hpos-Admin-Signature': signature
     }
 
     let data
@@ -63,8 +65,6 @@ export function hposHolochainCall (args) {
     pathPrefix: '/holochain-api/v1'
   })
 }
-
-
 
 const presentHposSettings = (hposSettings) => {
   const { admin, holoportos = {}, deviceName } = hposSettings
@@ -108,11 +108,32 @@ const HposInterface = {
     return presentHposSettings(result)
   },
 
-  checkAuth: async () => {
+  checkAuth: async (email, password, authToken) => {
+    const keypair = await getHpAdminKeypair(email, password)
+    if (keypair === null) {
+      return false
+    }
+
+    // crate signature header
+    const signatureHeader = {
+      "X-Hpos-Admin-Signature": keypair.sign(authToken),
+      // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
+      // but authToken is not recorded yet in localStorage so we have to set this header manually
+      'X-Hpos-Auth-Token': authToken
+    }
+
+    // there is no need to keep keypair
+    eraseHpAdminKeypair()
+
     try {
-      await HposInterface.settings()
+      // Make a call to some endpoint and only in case of 200 return true
+     let res = await hposCall({
+        method: 'get', path: '/config', headers: signatureHeader,
+        pathPrefix: '/api/v1'
+      })()
     } catch (error) {
-      console.log('checkAuth failed', error)
+      // This will be executed if error.response.status === 401
+      console.log('User authentication failed')
       return false
     }
 
