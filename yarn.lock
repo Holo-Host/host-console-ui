@@ -1026,10 +1026,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@holo-host/hp-admin-keypair@^0.2.6":
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@holo-host/hp-admin-keypair/-/hp-admin-keypair-0.2.6.tgz#c9c421550fd4295ddf8e55481d4b65b4db184134"
-  integrity sha512-uPftqjiRS8DNCCKWtiwhWS744KHS+Q8Jk3mjRF0UA8uBsX+bzHrwzzx/boQeMQeBSR1rI2sphhXcAhh104qxhA==
+"@holo-host/hp-admin-keypair@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@holo-host/hp-admin-keypair/-/hp-admin-keypair-0.3.0.tgz#7906bc39167a5f9714fd02ca304007ed9a70b491"
+  integrity sha512-MUKAgho8IF5p/LsxQ98MSbfQ6BEwxvYH9RBsrSDHjDg9FUeVjtuzRV0kFvcJ9FTaC/GTgfQq9cDzwf/0pocEvA==
 
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
