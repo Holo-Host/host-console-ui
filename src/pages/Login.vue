@@ -54,7 +54,7 @@ import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
 import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
 import HposInterface from 'src/interfaces/HposInterface'
-import generateToken from 'src/utils'
+import { generateToken } from 'src/utils'
 
 const validateEmail = email => validator.validate(email)
 const validatePassword = password => password.length > 5

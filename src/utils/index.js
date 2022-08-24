@@ -43,7 +43,7 @@ export const presentMicroSeconds = ms => {
 export const presentPublisherHash = hash => `...${hash.slice(-5)}`
 
 export const generateToken = () => {
-  const wasm = import('@holo-host/hp-admin-keypair')//crypto-random-string
+  // TODO: generate random token
 
-  return cryptoRandomString({length: 43, type: 'base64'}) // entorpy 2^258
+  return 'abba'// cryptoRandomString({length: 43, type: 'base64'}) // entorpy 2^258
 }
