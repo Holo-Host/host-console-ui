@@ -4,6 +4,7 @@ import mergeMockHappData from 'src/mergeMockHappData'
 import { hashString } from 'src/utils/keyManagement'
 import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
+import router from 'src/router'
 
 const axiosConfig = {
   headers: {
@@ -50,18 +51,36 @@ async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeader
   }
 }
 
-export function hposAdminCall (args) {
-  return hposCall({
-    ...args,
-    pathPrefix: '/api/v1'
-  })
+const hposAdminCall = async (args) => {
+  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
+  try {
+    return await hposCall({
+      ...args,
+      pathPrefix: '/api/v1'
+    })
+  } catch (err) {
+    if (err.response && err.response.status === 401) {
+      localStorage.removeItem('authToken')
+      router.push('/login')
+    }
+    return Promise.reject(err)
+  }
 }
 
-export function hposHolochainCall (args) {
-  return hposCall({
-    ...args,
-    pathPrefix: '/holochain-api/v1'
-  })
+const hposHolochainCall = async (args) => {
+  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
+  try {
+    return await hposCall({
+      ...args,
+      pathPrefix: '/holochain-api/v1'
+    })
+  } catch (err) {
+    if (err.response && err.response.status === 401) {
+      localStorage.removeItem('authToken')
+      router.push('/login')
+    }
+    return Promise.reject(err)
+  }
 }
 
 const presentHposSettings = (hposSettings) => {
