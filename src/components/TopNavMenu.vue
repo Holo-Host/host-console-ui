@@ -6,6 +6,7 @@
       <div @click="openSettingsAndCloseMenu" class="menu-item">
         HoloPort Settings
       </div>
+      <div @click="holofuel" class="menu-item">Holo Fuel</div>
       <div @click="logout" class="menu-item">Logout</div>
     </div>
   </div>
@@ -36,6 +37,9 @@ export default {
     logout () {
       localStorage.removeItem('authToken')
       this.$router.push('/login')
+    },
+    holofuel () {
+      location.replace(`https://${location.host}/holofuel`)
     },
     openSettingsAndCloseMenu () {
       this.menuOpen = false
