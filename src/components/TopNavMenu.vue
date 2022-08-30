@@ -6,7 +6,7 @@
       <div @click="openSettingsAndCloseMenu" class="menu-item">
         HoloPort Settings
       </div>
-      <div @click="holofuel" class="menu-item">Holo Fuel</div>
+      <div @click="holofuel" class="menu-item">HoloFuel</div>
       <div @click="logout" class="menu-item">Logout</div>
     </div>
   </div>
