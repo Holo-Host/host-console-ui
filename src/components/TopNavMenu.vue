@@ -6,13 +6,13 @@
       <div @click="openSettingsAndCloseMenu" class="menu-item">
         HoloPort Settings
       </div>
+      <div @click="holofuel" class="menu-item">HoloFuel</div>
       <div @click="logout" class="menu-item">Logout</div>
     </div>
   </div>
 </template>
 
 <script>
-import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
 
 export default {
@@ -35,10 +35,11 @@ export default {
       this.menuOpen = !this.menuOpen
     },
     logout () {
-      eraseHpAdminKeypair()
-      // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
-      localStorage.removeItem('isAuthed')
+      localStorage.removeItem('authToken')
       this.$router.push('/login')
+    },
+    holofuel () {
+      location.replace(`https://${location.host}/holofuel`)
     },
     openSettingsAndCloseMenu () {
       this.menuOpen = false

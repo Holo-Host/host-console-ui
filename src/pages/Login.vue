@@ -53,23 +53,40 @@ import validator from 'email-validator'
 import HoloBadgeIcon from 'components/icons/HoloBadgeIcon.vue'
 import InvisibleEyeIcon from 'components/icons/InvisibleEyeIcon.vue'
 import VisibleEyeIcon from 'components/icons/VisibleEyeIcon.vue'
-import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import HposInterface from 'src/interfaces/HposInterface'
+import { generateToken } from 'src/utils'
 
 const validateEmail = email => validator.validate(email)
 const validatePassword = password => password.length > 5
 
-async function createKeypairAndCheckAuth (email, password) {
-  eraseHpAdminKeypair()
+async function createAuthToken (email, password) {
+  email = email.toLowerCase()
 
-  // we call this to SET the singleton value of HpAdminKeypair
-  await getHpAdminKeypair(email, password)
+  const authToken = generateToken()
 
-  return HposInterface.checkAuth()
+  // make a call to API to check if it passes auth
+  const isAuthorised = await HposInterface.checkAuth(email, password, authToken)
+  if (isAuthorised) {
+    return authToken
+  } else {
+    return null
+  }
 }
 
 export default {
   name: 'Login',
+  beforeMount() {
+    // redirect from login page if user already logged in
+    // To prevent infinite loop of redirects code will erase authToken
+    // from localStorage whenever 401 from server is detected
+    if (localStorage.getItem('authToken') !== null) {
+      if(this.$route.params.nextUrl != null) {
+        this.$router.push(this.$route.params.nextUrl)
+      } else {
+        this.$router.push('/dashboard')
+      }
+    }
+  },
   components: {
     HoloBadgeIcon,
     InvisibleEyeIcon,
@@ -95,20 +112,26 @@ export default {
       }
 
       if (!this.errors.email && !this.errors.password) {
-        const isAuthed = await createKeypairAndCheckAuth(this.email.toLowerCase(), this.password)
-        if (isAuthed) {
-          localStorage.setItem('isAuthed', 'true')
-          if(this.$route.params.nextUrl != null) {
-            this.$router.push(this.$route.params.nextUrl)
+        // this logical test is probably obsolete, because onLoad of this page
+        // redirects out of this page if token already exists in localStorage
+        if (localStorage.getItem('authToken') === null) {
+          const authToken = await createAuthToken(this.email, this.password)
+          if (authToken) {
+            localStorage.setItem('authToken', authToken);
           } else {
-            this.$router.push('/dashboard')
+            this.banner = 'There was a problem logging you in. Please check your credentials and try again.'
           }
-        } else {
-          this.banner = 'There was a problem logging you in. Please check your credentials and try again.'
         }
       }
 
-      e.preventDefault();
+      // navigate away
+      if(this.$route.params.nextUrl != null) {
+        this.$router.push(this.$route.params.nextUrl)
+      } else {
+        this.$router.push('/dashboard')
+      }
+
+      e.preventDefault()
       return false
     },
     showPassword () {
