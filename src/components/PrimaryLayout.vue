@@ -4,14 +4,14 @@
 
     <section class="main-column">
       <MobileTopNav
-        :display-name="displayName"
-        :public-key="publicKey"
+        :nickname="nickname"
+        :agent-address="agentAddress"
       />
 
       <TopNav
         :breadcrumbs="breadcrumbsOrTitle"
-        :display-name="displayName"
-        :public-key="publicKey"
+        :nickname="nickname"
+        :agent-address="agentAddress"
       />
 
       <WelcomeModal
@@ -59,8 +59,8 @@ const props = defineProps({
 const isWelcomeModalVisible = ref(false)
 const isGoToHolofuelModalVisible = ref(false)
 
-const displayName = computed(() => userStore.displayName)
-const publicKey = computed(() => userStore.publicKey)
+const nickname = computed(() => userStore.holoFuel.nickname)
+const agentAddress = computed(() => userStore.holoFuel.agentAddress)
 
 const breadcrumbsOrTitle = computed(() => {
   if (props.breadcrumbs.length) {
@@ -82,12 +82,8 @@ onMounted(async () => {
   addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
   addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
 
-  if (!userStore?.publicKey) {
-    await userStore.getUser()
-  }
-
   await nextTick(() => {
-    isWelcomeModalVisible.value = !userStore.displayName
+    isWelcomeModalVisible.value = !userStore.holoFuel.nickname
   })
 })
 

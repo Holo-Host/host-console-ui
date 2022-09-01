@@ -84,7 +84,7 @@ const dashboard = {
 
 const userConfig = {
   admin: {
-    public_key: '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5',
+    public_key: 'bWuOwXKMboemNR6uthGfmqew1ZsVcz2IJXt1lp+ANWY',
     email: 'test@test.com'
   },
   deviceName: '...3s4sxqr5'

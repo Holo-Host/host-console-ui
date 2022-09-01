@@ -75,7 +75,8 @@ const translations = {
     step_one_button_label: 'Save',
     step_one_title: 'Welcome to Host Console',
     step_two_button_label: 'I understand',
-    step_two_title: 'Your Address & Identity'
+    step_two_title: 'Your Address & Identity',
+    error: 'Oops, looks like we could not update the display name. Please try again.'
   }
 }
 

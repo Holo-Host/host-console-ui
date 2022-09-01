@@ -84,27 +84,19 @@ import validator from 'email-validator'
 import { reactive, ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
-import HposInterface from '../interfaces/HposInterface'
 import { kRoutes } from '../router'
-import { getHpAdminKeypair, eraseHpAdminKeypair } from '@/utils/keyManagement'
+import { useUserStore } from '../store/user'
 
 const kMinPasswordLength = 5
 
 const validateEmail = (email) => validator.validate(email)
 const validatePassword = (password) => password.length > kMinPasswordLength
 
-async function createKeypairAndCheckAuth(email, password) {
-  eraseHpAdminKeypair()
-
-  // we call this to SET the singleton value of HpAdminKeypair
-  await getHpAdminKeypair(email, password)
-
-  return HposInterface.checkAuth()
-}
-
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+
+const userStore = useUserStore()
 
 const email = ref('')
 const password = ref('')
@@ -148,10 +140,7 @@ async function login() {
     isLoading.value = true
 
     try {
-      const isAuthenticated = await createKeypairAndCheckAuth(
-        email.value.toLowerCase(),
-        password.value
-      )
+      const isAuthenticated = await userStore.login(email.value.toLowerCase(), password.value)
 
       if (isAuthenticated) {
         localStorage.setItem('isAuthed', 'true')

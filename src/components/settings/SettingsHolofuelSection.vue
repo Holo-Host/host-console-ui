@@ -2,13 +2,13 @@
   <SettingsSection :title="$t('$.holofuel')">
     <SettingsRow
       :label="$t('settings.account_display_name')"
-      :value="displayName"
+      :value="nickname"
     />
 
     <SettingsRow
       :label="$t('settings.holofuel_address')"
     >
-      <HoloFuelAddress :public-key="publicKey" />
+      <HoloFuelAddress :agent-address="agentAddress" />
     </SettingsRow>
   </SettingsSection>
 </template>
@@ -19,14 +19,14 @@ import SettingsRow from './SettingsRow.vue'
 import SettingsSection from './SettingsSection.vue'
 
 defineProps({
-  displayName: {
+  nickname: {
     type: String,
     required: true
   },
 
-  publicKey: {
-    type: String,
-    required: true
+	agentAddress: {
+    type: Uint8Array,
+    default: []
   }
 })
 </script>

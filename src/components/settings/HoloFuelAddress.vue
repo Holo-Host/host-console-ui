@@ -6,17 +6,17 @@
 
     <div class="holofuel-address__address">
       <span class="holofuel-address__identicon">
-        <IdentIcon
-          v-if="publicKey"
+        <Identicon
+          v-if="agentAddress"
           size="40"
-          :hash="publicKey"
+          :agent-key="agentAddress"
           role="img"
           aria-label="Agent Identity Icon"
         />
       </span>
 
       <span class="holofuel-address__hash-id">
-        {{ publicKey }}
+        {{ agentAddress }}
       </span>
     </div>
 
@@ -37,15 +37,15 @@
 </template>
 
 <script setup>
-import IdentIcon from '@uicommon/components/IdentIcon2.vue'
+import Identicon from '@uicommon/components/Identicon.vue'
 import { postNotification, ENotification } from '@uicommon/utils/notifications'
 import { EProjectNotification } from '../../utils/notifications'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
 
 defineProps({
-  publicKey: {
-    type: String,
-    required: true
+	agentAddress: {
+    type: Uint8Array,
+    default: []
   }
 })
 

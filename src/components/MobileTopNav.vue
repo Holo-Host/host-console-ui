@@ -3,9 +3,9 @@
     <MenuIcon @click="isMobileSidebarVisible = !isMobileSidebarVisible" />
 
     <TopNavMenu
-      :display-name="displayName"
+      :nickname="nickname"
       :white="true"
-      :public-key="publicKey"
+      :agent-address="agentAddress"
     />
 
     <TheSidebar v-if="isMobileSidebarVisible" />
@@ -25,14 +25,14 @@ import TopNavMenu from 'components/TopNavMenu.vue'
 import { ref } from 'vue'
 
 defineProps({
-  displayName: {
+  nickname: {
     type: String,
     required: true
   },
 
-  publicKey: {
-    type: String,
-    default: null
+	agentAddress: {
+    type: Uint8Array,
+    default: []
   }
 })
 

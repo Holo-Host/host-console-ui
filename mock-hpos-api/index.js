@@ -39,7 +39,7 @@ class MockHposApi {
 
     app.use(cors())
     app.use(bodyParser.json())
-    app.use(mockHposApi.checkAuth.bind(mockHposApi))
+    app.use(mockHposApi.getUser.bind(mockHposApi))
     app.use(mockHposApi.handleRequest.bind(mockHposApi))
 
     await mockHposApi.startServer(app)
@@ -59,7 +59,7 @@ class MockHposApi {
     })
   }
 
-  checkAuth(req, res, next) {
+  getUser(req, res, next) {
     if (!this.shouldCheckAuth) {
       next()
     } else {

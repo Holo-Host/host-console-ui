@@ -2,9 +2,12 @@
 // Otherwise the process.env does not get set up before constants are defined.
 import axios from 'axios'
 import stringify from 'fast-json-stable-stringify'
+import { omitBy, isUndefined } from 'lodash/fp'
 import mergeMockHappData from 'src/mergeMockHappData'
 import { signRequest, hashString } from 'src/utils/keyManagement'
 require('dotenv').config()
+
+const CORE_APP_ID = 'core-app:0_3_1_alpha0::7f83bac1-fb97-4e0d-98d6-7888ef616de3'
 
 const axiosConfig = {
   headers: {
@@ -28,11 +31,19 @@ function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {} 
     const fullUrl = HPOS_API_URL + pathPrefix + path
 
     const signature = await signRequest(method, fullUrl, params)
-    const headers = {
+
+    let bodyHash
+
+    if (params) {
+      bodyHash = await hashString(stringify(params))
+    }
+
+    const headers = omitBy(isUndefined, {
       ...axiosConfig.headers,
       ...userHeaders,
+      'X-Body-Hash': bodyHash,
       'X-Hpos-Admin-Signature': signature
-    }
+    })
 
     let response
 
@@ -74,20 +85,21 @@ export function hposHolochainCall(args) {
 }
 
 const presentHposSettings = (hposSettings) => {
-  const { admin, holoportos = {}, deviceName } = hposSettings
+  const { admin, holoportOs = {}, deviceName } = hposSettings
   return {
     hostPubKey: admin.public_key,
     registrationEmail: admin.email,
-    networkStatus: holoportos.network || 'test', // ie: 'live'
-    sshAccess: holoportos.sshAccess || false,
+    networkStatus: holoportOs.network, // ie: 'live'
+    sshAccess: holoportOs.sshAccess || false,
+    hposVersion: holoportOs.hposVersion,
     // eslint-disable-next-line no-magic-numbers
-    deviceName: deviceName || (admin.public_key && admin.public_key.slice(-8)) || 'Your HP'
+    deviceName: deviceName || (admin.public_key && `...${admin.public_key.slice(-8)}`) || 'Your HP'
   }
 }
 
 const HposInterface = {
-  dashboard: () => {
-    return hposHolochainCall({ method: 'get', path: '/dashboard' })({
+  usage: () => {
+    return hposHolochainCall({ method: 'get', path: '/usage' })({
       duration_unit: 'DAY',
       amount: 1
     })
@@ -119,15 +131,16 @@ const HposInterface = {
     return presentHposSettings(result)
   },
 
-  checkAuth: async () => {
+  getUser: async () => {
     try {
-      await HposInterface.settings()
+      const user = await HposInterface.settings()
+      const holoFuelProfile = await HposInterface.getHoloFuelProfile()
+
+      return { user, holoFuelProfile }
     } catch (error) {
-      console.log('checkAuth failed', error)
+      console.error('getUser failed', error)
       return false
     }
-
-    return true
   },
 
   updateSettings: async ({ deviceName }) => {
@@ -149,6 +162,44 @@ const HposInterface = {
     await hposAdminCall({ method: 'put', path: '/config', headers })(settingsConfig)
     // We don't assume the successful PUT /api/v1/config returns the current config
     return presentHposSettings(settingsConfig)
+  },
+
+  getHoloFuelProfile: async () => {
+    const {
+      agent_address: agentAddress,
+      nickname,
+      avatar_url: avatarUrl
+    } = await hposHolochainCall({
+      method: 'post',
+      path: '/zome_call'
+    })({
+      appId: CORE_APP_ID,
+      roleId: 'holofuel',
+      zomeName: 'profile',
+      fnName: 'get_my_profile',
+      payload: null
+    })
+
+    return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+  },
+
+  async updateHoloFuelProfile({ nickname, avatarUrl }) {
+    try {
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call'
+      })({
+        appId: CORE_APP_ID,
+        roleId: 'holofuel',
+        zomeName: 'profile',
+        fnName: 'update_my_profile',
+        payload: { nickname, avatarUrl }
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
   },
 
   getSshAccess: async () => {

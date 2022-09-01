@@ -19,8 +19,8 @@
     </div>
 
     <TopNavMenu
-      :display-name="displayName"
-      :public-key="publicKey"
+      :nickname="nickname"
+      :agent-address="agentAddress"
     />
 
     <div class="alpha-flag">
@@ -40,14 +40,14 @@ const props = defineProps({
     default: () => [{}, {}]
   },
 
-  displayName: {
+  nickname: {
     type: String,
     required: true
   },
 
-  publicKey: {
-    type: String,
-    default: null
+	agentAddress: {
+    type: Uint8Array,
+    default: []
   }
 })
 

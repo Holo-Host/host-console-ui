@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import HposInterface from 'src/interfaces/HposInterface'
+import { eraseHpAdminKeypair, getHpAdminKeypair } from '../utils/keyManagement'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -8,36 +9,59 @@ export const useUserStore = defineStore('user', {
     networkStatus: '',
     sshAccess: '',
     deviceName: '',
-    displayName: '',
-    hposVersion: ''
+    hposVersion: '',
+    holoFuel: {
+      agentAddress: '',
+      nickname: '',
+      avatarUrl: ''
+    }
   }),
 
   actions: {
-    async getUser() {
-      const user = await HposInterface.settings()
+    async login(email, password) {
+      eraseHpAdminKeypair()
 
-      // Mocked until we have holofuel API running here
-      const displayName = ''
+      await getHpAdminKeypair(email, password)
+      const { user, holoFuelProfile } = await HposInterface.getUser(email, password)
 
-      if (user) {
-        this.publicKey = user.hostPubKey
-        this.email = user.registrationEmail
+      if (user && holoFuelProfile) {
+        this.publicKey = user.public_key
+        this.email = user.email
         this.networkStatus = user.networkStatus
         this.sshAccess = true
         this.deviceName = user.deviceName
         this.hposVersion = user.hposVersion
-        this.displayName = displayName
+        this.holoFuel = holoFuelProfile
+
+        return true
+      } else {
+        return false
       }
     },
 
-    updateDisplayName(value) {
-      // TODO: API call to save the displayName in holofuel
-      this.displayName = value
+    async updateHoloFuelProfile({
+      nickname = this.holoFuel.nickname,
+      avatarUrl = this.holoFuel.avatarUrl
+    }) {
+      const isSuccess = await HposInterface.updateHoloFuelProfile({
+        nickname,
+        avatarUrl
+      })
+
+      if (isSuccess) {
+        this.holoFuel.nickname = nickname
+        this.holoFuel.avatarUrl = avatarUrl
+      }
+
+      return isSuccess
     },
 
-    updateDeviceName(value) {
-      // TODO: API call to save the deviceName in holofuel
+    async updateDeviceName(value) {
       this.deviceName = value
+
+      await HposInterface.updateSettings({
+        deviceName: value
+      })
     }
   }
 })

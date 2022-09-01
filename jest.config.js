@@ -19,12 +19,14 @@ module.exports = {
     'pages/(.*)$': '<rootDir>/src/pages/$1',
     'components/(.*)$': '<rootDir>/src/components/$1',
     '^utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^types/(.*)$': '<rootDir>/src/types/$1'
+    '^types/(.*)$': '<rootDir>/src/types/$1',
+    '^vue$': '<rootDir>/node_modules/vue'
   },
   setupFiles: ['jest-canvas-mock'],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/src/__tests__/constants.js',
-    '/src/__tests__/utils.js'
+    '/src/__tests__/utils.js',
+    '/ui-common-library/'
   ]
 }

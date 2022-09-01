@@ -1,15 +1,15 @@
 <template>
   <div class="top-nav-menu">
     <div class="owner">
-      <IdentIcon
-        v-if="props.publicKey"
+      <Identicon
+        v-if="props.agentAddress"
         size="42"
-        :hash="props.publicKey"
+        :agent-key="props.agentAddress"
         role="img"
         aria-label="Agent Identity Icon"
       />
       <div class="display-name" @click="toggleMenu">
-        {{ displayName }}
+        {{ nickname }}
         <span class="verification-status">
           Unverified
         </span>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import IdentIcon from '@uicommon/components/IdentIcon2.vue'
+import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
 import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import { ref } from 'vue'
@@ -39,14 +39,14 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const props = defineProps({
-  displayName: {
+  nickname: {
     type: String,
     required: true
   },
 
-  publicKey: {
-    type: String,
-    default: ''
+	agentAddress: {
+    type: Uint8Array,
+    default: []
   },
 
   white: {

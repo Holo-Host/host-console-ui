@@ -25,6 +25,7 @@ module.exports = {
   webpackFinal: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
+      "@uicommon": path.resolve(__dirname, '../ui-common-library/src'),
       "@": resolve('../src'),
       src: resolve('../src'),
       components: resolve('../src/components'),

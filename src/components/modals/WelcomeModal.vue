@@ -15,12 +15,16 @@
         </p>
 
         <BaseInput
-          v-model="displayName"
+          v-model="nickname"
           autofocus
           :placeholder="$t('welcome_modal.input_placeholder')"
-          name="displayName"
+          name="nickname"
           class="welcome-modal__display-name-input"
         />
+
+        <p class="welcome-modal__error">
+          {{ isError ? $t('welcome_modal.error'): '&nbsp;' }}
+        </p>
       </section>
 
       <section v-else>
@@ -29,24 +33,24 @@
         </span>
 
         <p
-          v-if="displayName"
+          v-if="nickname"
           class="welcome-modal__display-name"
         >
-          {{ displayName }}
+          {{ nickname }}
         </p>
 
         <span class="welcome-modal__identicon">
-          <IdentIcon
-            v-if="publicKey"
+          <Identicon
+            v-if="agentAddress"
             size="80"
-            :hash="publicKey"
+            :agent-key="agentAddress"
             role="img"
             aria-label="Agent Identity Icon"
           />
         </span>
 
         <p class="welcome-modal__hash-id">
-          {{ publicKey }}
+          {{ encodeAgentId(agentAddress) }}
         </p>
 
         <p class="welcome-modal__tip">
@@ -57,7 +61,7 @@
 
     <template #buttons>
       <BaseButton
-        :is-disabled="!displayName"
+        :is-disabled="!nickname"
         :is-busy="isLoading"
         :class="[step === 1 ?'welcome-modal__save-button' :'welcome-modal__close-button']"
         @click="handleSubmit"
@@ -72,7 +76,8 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseInput from '@uicommon/components/BaseInput.vue'
 import BaseModal from '@uicommon/components/BaseModal.vue'
-import IdentIcon from '@uicommon/components/IdentIcon2.vue'
+import Identicon from '@uicommon/components/Identicon.vue'
+import { encodeAgentId } from '@uicommon/utils/agent'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../../store/user'
@@ -90,12 +95,13 @@ const userStore = useUserStore()
 
 const emit = defineEmits(['close'])
 
-const displayName = ref('')
+const nickname = ref('')
 
 const step = ref(1)
 const isLoading = ref(false)
+const isError = ref(false)
 
-const publicKey = computed(() => userStore.publicKey || null)
+const agentAddress = computed(() => userStore.holoFuel.agentAddress || null)
 
 const modalContent = computed(() => {
   return step.value === 1
@@ -109,17 +115,23 @@ const modalContent = computed(() => {
       }
 })
 
-function handleSubmit() {
+async function handleSubmit() {
   if (step.value === 1) {
+    if (isError.value) {
+      isError.value = false
+    }
+
     isLoading.value = true
 
-    // API call to save the display name
-    setTimeout(() => {
-      isLoading.value = false
-      userStore.updateDisplayName(displayName.value)
+    const isSuccess = await userStore.updateHoloFuelProfile({ nickname: nickname.value })
+
+    isLoading.value = false
+
+    if (isSuccess) {
       step.value = 2
-      // eslint-disable-next-line no-magic-numbers
-    }, 2000)
+    } else {
+      isError.value = true
+    }
   } else {
     emit('close')
   }
@@ -134,6 +146,11 @@ function handleSubmit() {
 
   &__second-paragraph {
     margin-top: 36px;
+  }
+
+  &__error {
+    color: var(--red-color);
+    margin-bottom: 0;
   }
 
   &__display-name,
@@ -157,10 +174,6 @@ function handleSubmit() {
   &__display-name-input {
     margin-top: 50px;
     padding: 0 32px 0 12px;
-  }
-
-  &__save-button {
-    margin-top: 40px;
   }
 
   &__close-button {

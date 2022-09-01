@@ -119,7 +119,7 @@ it.skip('sets local storage and pushes the happs route on login', async () => {
     push: jest.fn()
   }
 
-  HposInterface.checkAuth.mockImplementationOnce(() => Promise.resolve(true))
+  HposInterface.getUser.mockImplementationOnce(() => Promise.resolve(true))
 
   const wrapper = mount(Login, {
     global: {
