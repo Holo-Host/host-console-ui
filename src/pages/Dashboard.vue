@@ -165,7 +165,7 @@ export default {
     }
   },
   created: async function () {
-    this.dashboard = await HposInterface.dashboard()
+    this.dashboard = await HposInterface.usage()
     this.totalHostedHapps = (await HposInterface.hostedHapps()).length
   },
   methods: {

@@ -20,7 +20,7 @@ describe('dashboard page', () => {
       data: [{ enabled: true }, { enabled: true }, { enabled: true }] // this page just cares about length
     }
 
-    const dashboardResult = {
+    const usageResult = {
       data: {
         totalSourceChains: 387,
         currentTotalStorage: 590348543805,
@@ -53,7 +53,7 @@ describe('dashboard page', () => {
       }
 
       if (path.endsWith('dashboard')) {
-        return dashboardResult
+        return usageResult
       }
 
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
@@ -66,6 +66,6 @@ describe('dashboard page', () => {
     await wait(0)
 
     expect(getByTestId('happ-no').textContent === hostedHappsResult.data.length)
-    expect(getByTestId('sc-no').textContent === dashboardResult.data.totalSourceChains)
+    expect(getByTestId('sc-no').textContent === usageResult.data.totalSourceChains)
   })
 })
