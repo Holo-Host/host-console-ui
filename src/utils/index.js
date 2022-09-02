@@ -41,3 +41,11 @@ export const presentMicroSeconds = ms => {
 }
 
 export const presentPublisherHash = hash => `...${hash.slice(-5)}`
+
+// Create random string with 128 bit entropy
+// String has to be url safe because token is passed in url as query param
+export const generateToken = () => {
+  const randomArrayBuffer = crypto.getRandomValues(new Uint8Array(128)) // entorpy 2^128
+  const base64String = btoa(String.fromCharCode(...new Uint8Array(randomArrayBuffer)))
+  return base64String.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
