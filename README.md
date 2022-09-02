@@ -62,3 +62,6 @@ yarn run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### User authentication mechanism
+See [Token authentication](https://hackmd.io/Evi5CVFqTI22UD8_OrDgYA?view) description.
