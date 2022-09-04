@@ -41,7 +41,7 @@ const happs = [{
 const usage = {
   totalSourceChains: 387,
   currentTotalStorage: 590348543805,
-  usage: {
+  totalUsage: {
     cpu: 39084998,
     bandwidth: 5094853480509
   }
