@@ -52,7 +52,7 @@ describe('dashboard page', () => {
         }
       }
 
-      if (path.endsWith('dashboard')) {
+      if (path.endsWith('usage')) {
         return usageResult
       }
 

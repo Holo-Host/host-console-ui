@@ -107,6 +107,7 @@ const HposInterface = {
       })
       return usageData
     } catch (err) {
+      console.error("usage encountered an error: ", err)
       return {}
     }
   },
@@ -170,9 +171,9 @@ const HposInterface = {
         method: 'get', path: '/config', headers: signatureHeader,
         pathPrefix: '/api/v1'
       })
-    } catch (error) {
-      // This will be executed if error.response.status === 401
-      console.log('User authentication failed ', error)
+    } catch (err) {
+      // This will be executed if response.status === 401
+      console.log('User authentication failed', error)
       return false
     }
 
