@@ -173,7 +173,7 @@ const HposInterface = {
       })
     } catch (err) {
       // This will be executed if response.status === 401
-      console.log('User authentication failed', error)
+      console.log('User authentication failed', err)
       return false
     }
 
