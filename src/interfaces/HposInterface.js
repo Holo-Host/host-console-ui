@@ -95,19 +95,19 @@ const presentHposSettings = (hposSettings) => {
 }
 
 const HposInterface = {
-  dashboard: async () => {
+  usage: async () => {
     try {
-      const dashboardData = await hposHolochainCall({
+      const usageData = await hposHolochainCall({
         method: 'get',
-        path: '/dashboard' ,
+        path: '/usage' ,
         params: {
           duration_unit: 'DAY',
           amount: 1
         }
       })
-      dashboardData.currentTotalStorage = '--' // currently hiding this value from the UI as it's mock data coming from the api
-      return dashboardData
+      return usageData
     } catch (err) {
+      console.error("usage encountered an error: ", err)
       return {}
     }
   },
@@ -171,9 +171,9 @@ const HposInterface = {
         method: 'get', path: '/config', headers: signatureHeader,
         pathPrefix: '/api/v1'
       })
-    } catch (error) {
-      // This will be executed if error.response.status === 401
-      console.log('User authentication failed')
+    } catch (err) {
+      // This will be executed if response.status === 401
+      console.log('User authentication failed', err)
       return false
     }
 

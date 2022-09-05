@@ -38,10 +38,10 @@ const happs = [{
   enabled: false
 }]
 
-const dashboard = {
+const usage = {
   totalSourceChains: 387,
   currentTotalStorage: 590348543805,
-  usage: {
+  totalUsage: {
     cpu: 39084998,
     bandwidth: 5094853480509
   }
@@ -61,7 +61,7 @@ const data = {
       enabled: true
     },
     '/holochain-api/v1/hosted_happs': happs,
-    '/holochain-api/v1/dashboard': dashboard
+    '/holochain-api/v1/usage': usage
   },
   put: {
     '/api/v1/config': args => args,

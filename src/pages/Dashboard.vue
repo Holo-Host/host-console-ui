@@ -7,7 +7,7 @@
           <div class="inner-column">
             <h3 class="inner-title">hApps</h3>
             <div class="info-row">
-              <span class="bold" data-testid='happ-no'>{{ totalHostedHapps }}&nbsp;</span> Total hApps hosted
+              <span class="bold" data-testid='happ-no'>{{ dashboard.totalHostedHapps ||  "--" }}&nbsp;</span> Total hApps hosted
             </div>
             <div class="info-row">
               <span class="bold" data-testid='sc-no'>{{ dashboard.totalSourceChains }}&nbsp;</span> Total source chains hosted
@@ -20,7 +20,7 @@
             <h3 class="inner-title">Daily Snapshot</h3>
             <div class="info-row">
               <span class="daily-label">CPU</span>
-              <span class="bold">{{ presentMicroSeconds(dashboard.usage.cpu) }}</span>
+              <span class="bold">{{ presentMicroSeconds(dashboard.totalUsage.cpu) }}</span>
             </div>
             <div class="info-row">
               <span class="daily-label">Storage</span>
@@ -28,7 +28,7 @@
             </div>
             <div class="info-row">
               <span class="daily-label">Bandwidth</span>
-              <span class="bold">{{ presentBytes(dashboard.usage.bandwidth) }}</span>
+              <span class="bold">{{ presentBytes(dashboard.totalUsage.bandwidth) }}</span>
             </div>
           </div>
         </div>
@@ -157,16 +157,14 @@ export default {
   data () {
     return {
       dashboard: {
-        usage: {}
+        totalUsage: {},
       },
-      totalHostedHapps: '--',
       topHostedHapps,
       recentPayments
     }
   },
   created: async function () {
-    this.dashboard = await HposInterface.dashboard()
-    this.totalHostedHapps = (await HposInterface.hostedHapps()).length
+    this.dashboard = await HposInterface.usage()
   },
   methods: {
     presentMicroSeconds,
