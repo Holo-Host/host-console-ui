@@ -72,7 +72,7 @@ const data = reactive({
 
 onMounted(async () => {
   isLoading.value = true
-  data.dashboardData.usage = await HposInterface.usage()
+  // data.dashboardData.usage = await HposInterface.usage()
   isLoading.value = false
 })
 </script>

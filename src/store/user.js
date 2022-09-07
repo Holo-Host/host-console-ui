@@ -18,6 +18,20 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
+    async getUser(email, password) {
+      const { user, holoFuelProfile } = await HposInterface.getUser(email, password)
+
+      if (user && holoFuelProfile) {
+        this.publicKey = user.public_key
+        this.email = user.email
+        this.networkStatus = user.networkStatus
+        this.sshAccess = true
+        this.deviceName = user.deviceName
+        this.hposVersion = user.hposVersion
+        this.holoFuel = holoFuelProfile
+      }
+    },
+
     async login(email, password) {
       eraseHpAdminKeypair()
 

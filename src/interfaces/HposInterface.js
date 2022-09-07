@@ -1,10 +1,10 @@
-require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
-import mergeMockHappData from 'src/mergeMockHappData'
-import { hashString } from 'src/utils/keyManagement'
-import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
+import mergeMockHappData from 'src/mergeMockHappData'
 import router from 'src/router'
+import { hashString, getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
+
+require('dotenv').config()
 
 const CORE_APP_ID = 'core-app:0_3_1_alpha0::7f83bac1-fb97-4e0d-98d6-7888ef616de3'
 
@@ -25,7 +25,7 @@ export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
   : `${window.location.protocol}//${window.location.host}`
 
-async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
+async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
   const fullUrl = HPOS_API_URL + pathPrefix + path
 
   const authToken = localStorage.getItem('authToken')
@@ -33,23 +33,23 @@ async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeader
   const headers = {
     'X-Hpos-Auth-Token': authToken,
     ...axiosConfig.headers,
-    ...userHeaders,
+    ...userHeaders
   }
 
   let data
 
   switch (method) {
     case 'get':
-      ({ data } = await axios.get(fullUrl, { params, headers }))
+      ;({ data } = await axios.get(fullUrl, { params, headers }))
       return data
     case 'post':
-      ({ data } = await axios.post(fullUrl, params, { headers }))
+      ;({ data } = await axios.post(fullUrl, params, { headers }))
       return data
     case 'put':
-      ({ data } = await axios.put(fullUrl, params, { headers }))
+      ;({ data } = await axios.put(fullUrl, params, { headers }))
       return data
     case 'delete':
-      ({ data } = await axios.delete(fullUrl, { params, headers }))
+      ;({ data } = await axios.delete(fullUrl, { params, headers }))
       return data
     default:
       throw new Error(`No case in hposCall for ${method} method`)
@@ -57,11 +57,25 @@ async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeader
 }
 
 const hposAdminCall = async (args) => {
-  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
+  const authToken = localStorage.getItem('authToken')
+  const adminSignature = localStorage.getItem('adminSignature')
+
+  // create signature header
+  const signatureHeader = {
+    'X-Hpos-Admin-Signature': adminSignature,
+    // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
+    // but authToken is not recorded yet in localStorage so we have to set this header manually
+    'X-Hpos-Auth-Token': authToken
+  }
+
+  // there is no need to keep keypair
+  eraseHpAdminKeypair()
+
   try {
     return await hposCall({
       ...args,
-      pathPrefix: '/api/v1'
+      pathPrefix: '/api/v1',
+      headers: signatureHeader
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
@@ -106,7 +120,7 @@ const HposInterface = {
     try {
       const usageData = await hposHolochainCall({
         method: 'get',
-        path: '/usage' ,
+        path: '/usage',
         params: {
           duration_unit: 'DAY',
           amount: 1
@@ -114,7 +128,7 @@ const HposInterface = {
       })
       return usageData
     } catch (err) {
-      console.error("usage encountered an error: ", err)
+      console.error('usage encountered an error: ', err)
       return {}
     }
   },
@@ -125,15 +139,17 @@ const HposInterface = {
         method: 'get',
         path: '/hosted_happs',
         params: {
-          duration_unit: "WEEK",
+          duration_unit: 'WEEK',
           amount: 1
         }
       })
 
       if (Array.isArray(result)) {
-        return result.filter(happ => happ.enabled)
+        return result
+          .filter((happ) => happ.enabled)
           .map(mergeMockHappData)
-          .map(happ => ({ // currently hiding storage value from the UI as it's mock data coming from the api
+          .map((happ) => ({
+            // currently hiding storage value from the UI as it's mock data coming from the api
             ...happ,
             storage: '--'
           }))
@@ -157,13 +173,16 @@ const HposInterface = {
 
   checkAuth: async (email, password, authToken) => {
     const keypair = await getHpAdminKeypair(email, password)
+
     if (keypair === null) {
       return false
     }
 
-    // crate signature header
+    const adminSignature = keypair.sign(authToken)
+
+    // create signature header
     const signatureHeader = {
-      "X-Hpos-Admin-Signature": keypair.sign(authToken),
+      'X-Hpos-Admin-Signature': adminSignature,
       // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
       // but authToken is not recorded yet in localStorage so we have to set this header manually
       'X-Hpos-Auth-Token': authToken
@@ -174,17 +193,19 @@ const HposInterface = {
 
     try {
       // Make a call to some endpoint and only in case of 200 return true
-     let res = await hposCall({
-        method: 'get', path: '/config', headers: signatureHeader,
+      await hposCall({
+        method: 'get',
+        path: '/config',
+        headers: signatureHeader,
         pathPrefix: '/api/v1'
       })
+
+      return { adminSignature }
     } catch (err) {
       // This will be executed if response.status === 401
       console.log('User authentication failed', err)
-      return false
+      return null
     }
-
-    return true
   },
 
   getUser: async () => {
@@ -211,6 +232,7 @@ const HposInterface = {
       const settingsConfig = {
         ...settingsResponse
       }
+
       if (deviceName !== undefined) {
         settingsConfig.deviceName = deviceName
       }
@@ -263,7 +285,10 @@ const HposInterface = {
 
   getSshAccess: async () => {
     try {
-      const { enabled } = await hposAdminCall({ method: 'get', path: '/profiles/development/features/ssh' })
+      const { enabled } = await hposAdminCall({
+        method: 'get',
+        path: '/profiles/development/features/ssh'
+      })
       return enabled
     } catch (err) {
       return null
@@ -272,7 +297,10 @@ const HposInterface = {
 
   enableSshAccess: async () => {
     try {
-      const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })
+      const { enabled } = await hposAdminCall({
+        method: 'put',
+        path: '/profiles/development/features/ssh'
+      })
       return enabled
     } catch (err) {
       return null
@@ -281,7 +309,10 @@ const HposInterface = {
 
   disableSshAccess: async () => {
     try {
-      const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })
+      const { enabled } = hposAdminCall({
+        method: 'delete',
+        path: '/profiles/development/features/ssh'
+      })
       return enabled
     } catch (err) {
       return null

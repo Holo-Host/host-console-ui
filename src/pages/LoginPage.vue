@@ -81,11 +81,13 @@ import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
 import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import validator from 'email-validator'
-import { reactive, ref, computed, watch } from 'vue'
+import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
+import HposInterface from '../interfaces/HposInterface'
 import { kRoutes } from '../router'
 import { useUserStore } from '../store/user'
+import { generateToken } from '../utils'
 
 const kMinPasswordLength = 5
 
@@ -104,6 +106,15 @@ const errors = reactive({ email: '', password: '' })
 const isLoading = ref(false)
 
 const version = computed(() => process.env.VUE_APP_UI_VERSION)
+
+onMounted(async () => {
+  // redirect from login page if user already logged in
+  // To prevent infinite loop of redirects code will erase authToken
+  // from localStorage whenever 401 from server is detected
+  if (localStorage.getItem('authToken') !== null) {
+    await router.push({ name: kRoutes.dashboard.name })
+  }
+})
 
 watch(
   () => email.value,
@@ -127,6 +138,19 @@ watch(
   }
 )
 
+async function createAuthHeaders(email, password) {
+  const authToken = generateToken()
+
+  // make a call to API to check if it passes auth
+  const { adminSignature } = await HposInterface.checkAuth(email.toLowerCase(), password, authToken)
+
+  if (adminSignature) {
+    return { authToken, adminSignature }
+  } else {
+    return null
+  }
+}
+
 async function login() {
   if (!validateEmail(email.value.toLowerCase())) {
     errors.email = t('$.errors.email')
@@ -140,18 +164,23 @@ async function login() {
     isLoading.value = true
 
     try {
-      const isAuthenticated = await userStore.login(email.value.toLowerCase(), password.value)
+      // const isAuthenticated = await userStore.login(email.value.toLowerCase(), password.value)
 
-      if (isAuthenticated) {
-        localStorage.setItem('isAuthed', 'true')
+      if (localStorage.getItem('authToken') === null) {
+        const authHeaders = await createAuthHeaders(email.value, password.value)
 
-        if (route.params.nextUrl !== null) {
-          await router.push(route.params.nextUrl)
-        } else {
+        if (authHeaders) {
+          localStorage.setItem('authToken', authHeaders.authToken)
+          localStorage.setItem('adminSignature', authHeaders.adminSignature)
+
+          await userStore.getUser()
+
           await router.push({ name: kRoutes.dashboard.name })
+        } else {
+          postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
         }
       } else {
-        postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
+        await router.push({ name: kRoutes.dashboard.name })
       }
     } catch (e) {
       postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
