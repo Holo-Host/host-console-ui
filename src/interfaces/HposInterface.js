@@ -40,16 +40,16 @@ async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders
 
   switch (method) {
     case 'get':
-      ;({ data } = await axios.get(fullUrl, { params, headers }))
+      ({ data } = await axios.get(fullUrl, { params, headers }))
       return data
     case 'post':
-      ;({ data } = await axios.post(fullUrl, params, { headers }))
+      ({ data } = await axios.post(fullUrl, params, { headers }))
       return data
     case 'put':
-      ;({ data } = await axios.put(fullUrl, params, { headers }))
+      ({ data } = await axios.put(fullUrl, params, { headers }))
       return data
     case 'delete':
-      ;({ data } = await axios.delete(fullUrl, { params, headers }))
+      ({ data } = await axios.delete(fullUrl, { params, headers }))
       return data
     default:
       throw new Error(`No case in hposCall for ${method} method`)
@@ -57,25 +57,10 @@ async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders
 }
 
 const hposAdminCall = async (args) => {
-  const authToken = localStorage.getItem('authToken')
-  const adminSignature = localStorage.getItem('adminSignature')
-
-  // create signature header
-  const signatureHeader = {
-    'X-Hpos-Admin-Signature': adminSignature,
-    // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
-    // but authToken is not recorded yet in localStorage so we have to set this header manually
-    'X-Hpos-Auth-Token': authToken
-  }
-
-  // there is no need to keep keypair
-  eraseHpAdminKeypair()
-
   try {
     return await hposCall({
       ...args,
       pathPrefix: '/api/v1',
-      headers: signatureHeader
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
@@ -246,35 +231,48 @@ const HposInterface = {
   },
 
   getHoloFuelProfile: async () => {
-    const {
-      agent_address: agentAddress,
-      nickname,
-      avatar_url: avatarUrl
-    } = await hposHolochainCall({
-      method: 'post',
-      path: '/zome_call'
-    })({
-      appId: CORE_APP_ID,
-      roleId: 'holofuel',
-      zomeName: 'profile',
-      fnName: 'get_my_profile',
-      payload: null
-    })
+    try {
+      const params = {
+        appId: CORE_APP_ID,
+        roleId: 'holofuel',
+        zomeName: 'profile',
+        fnName: 'get_my_profile',
+        payload: null
+      }
 
-    return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+      const {
+        agent_address: agentAddress,
+        nickname,
+        avatar_url: avatarUrl
+      } = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+    } catch (error) {
+      return {
+        nickname: null,
+        avatarUrl: null
+      }
+    }
   },
 
   async updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
-      await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call'
-      })({
+      const params = {
         appId: CORE_APP_ID,
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'update_my_profile',
         payload: { nickname, avatarUrl }
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
       })
 
       return true
