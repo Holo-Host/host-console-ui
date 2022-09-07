@@ -50,7 +50,7 @@ yarn start-mock-hpos-api
 The login email and password for this server are in the package.json script
 `test@test.com`
 and
-`asasasas`
+`asasas`
 
 ### Run tests
 ```
@@ -81,3 +81,6 @@ This project contains Storybook stories. To run storybook in the development mod
 
 Storybook is automatically deployed to `https://holo-host.github.io/host-console-ui` on every merge to the
 `develop` branch.
+
+### User authentication mechanism
+See [Token authentication](https://hackmd.io/Evi5CVFqTI22UD8_OrDgYA?view) description.

@@ -22,7 +22,11 @@
         Account Settings
       </div>
 
-      <div class="menu-item" @click="logout">
+			<div class="menu-item" @click="holofuel">
+				HoloFuel
+			</div>
+
+			<div class="menu-item" @click="logout">
         Logout
       </div>
     </div>
@@ -62,10 +66,12 @@ function toggleMenu() {
 }
 
 function logout() {
-  eraseHpAdminKeypair()
-  // the next two lines are redundant because they will both happen automatically in router.js once keypair is removed.
-  localStorage.removeItem('isAuthed')
+  localStorage.removeItem('authToken')
   router.push({ name: 'Login' })
+}
+
+function holofuel() {
+	location.replace(`https://${location.host}/holofuel`)
 }
 
 function openSettingsAndCloseMenu() {
