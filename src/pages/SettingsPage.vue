@@ -6,8 +6,8 @@
     />
 
     <SettingsHolofuelSection
-      :nickname="settings.holofuel?.nickname || ''"
-      :agent-key="settings.holofuel?.agentAddress || null"
+      :nickname="settings.holofuel?.nickname"
+      :agent-key="settings.holofuel?.agentAddress"
       class="settings__holofuel-section"
     />
   </PrimaryLayout>

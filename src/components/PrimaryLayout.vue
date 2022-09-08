@@ -38,6 +38,7 @@ import GoToHolofuelModal from 'components/modals/GoToHolofuelModal.vue'
 import WelcomeModal from 'components/modals/WelcomeModal.vue'
 import TheSidebar from 'components/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
+import { async } from 'q'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { EProjectNotification } from '../utils/notifications'
@@ -82,8 +83,9 @@ onMounted(async () => {
   addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
   addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
 
-  await nextTick(() => {
-    isWelcomeModalVisible.value = !userStore.holoFuel.nickname
+  await nextTick(async() => {
+    const profile = await userStore.getUser()
+    isWelcomeModalVisible.value = !profile.nickname
   })
 })
 

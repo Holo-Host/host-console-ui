@@ -29,7 +29,7 @@ function hideBanner() {
   theBanner.value?.hide()
 }
 
-onMounted(() => {
+onMounted(async() => {
   addObserver(ENotification.showBusyState, showBusyOverlay)
   addObserver(ENotification.hideBusyState, hideBusyOverlay)
 
