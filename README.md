@@ -4,7 +4,13 @@
 This project contains git submodules. By default when fetching or cloning git will NOT include submodules (unless you include the --recurse-submodules parameters for example.
 
 ```
-git clone --recurse-submodules https://github.com/Holo-Host/host-console-ui.git
+git clone https://github.com/Holo-Host/host-console-ui.git
+```
+
+Initialize submodules:
+
+```
+git submodule init
 ```
 
 To fetch the submodules for an existing branch you can execute:

@@ -1,6 +1,7 @@
 <template>
   <BaseCard title="Top Hosted hApps">
-    <div class="body grayed-out">
+    <CircleSpinner v-if="isLoading" class="card-spinner" />
+    <div v-else class="body">
       <div v-if="!data || data.length === 0">
         Currently no hApps to display
       </div>
@@ -13,10 +14,10 @@
           <MissingLogoExIcon class="ex-icon" />
         </div>
         <div class="top-happ-details">
-          <div class="card-info-row grayed-out">
+          <div class="card-info-row">
             {{ happ.name }}
           </div>
-          <div class="card-info-row margin-bottom grayed-out">
+          <div class="card-info-row margin-bottom">
             -- HF
           </div>
         </div>
@@ -26,12 +27,18 @@
 </template>
 
 <script setup>
-import BaseCard from '@uicommon/components/BaseCard.vue'
+import BaseCard from '@uicommon/components/BaseCard'
+import CircleSpinner from '@uicommon/components/CircleSpinner'
 import MissingLogoExIcon from 'components/icons/MissingLogoExIcon'
 
 defineProps({
   data: {
     type: Object,
+    required: true
+  },
+
+  isLoading: {
+    type: Boolean,
     required: true
   }
 })
@@ -47,10 +54,6 @@ defineProps({
   margin-bottom: 10px;
 }
 
-.grayed-out {
-  color: rgba(96, 108, 139, 0.18);
-}
-
 .logo {
   border: 1px solid #e7e9ed;
   box-sizing: border-box;
@@ -58,5 +61,9 @@ defineProps({
   width: 37px;
   height: 37px;
   margin: 0 16px;
+}
+
+.card-spinner {
+  height: 156px;
 }
 </style>

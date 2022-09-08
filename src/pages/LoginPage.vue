@@ -83,7 +83,7 @@ import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import validator from 'email-validator'
 import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import HposInterface from '../interfaces/HposInterface'
 import { kRoutes } from '../router'
 import { useUserStore } from '../store/user'
@@ -94,7 +94,6 @@ const kMinPasswordLength = 5
 const validateEmail = (email) => validator.validate(email)
 const validatePassword = (password) => password.length > kMinPasswordLength
 
-const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
 

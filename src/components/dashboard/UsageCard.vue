@@ -1,48 +1,53 @@
 <template>
   <BaseCard title="Usage">
+    <CircleSpinner v-if="isLoading" class="card-spinner" />
     <template #left>
-      <h3 class="inner-title">
-        hApps
-      </h3>
-      <div class="info-row usage-row">
-        <span
-          class="bold"
-          data-testid="happ-no"
-        >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> Total hApps hosted
+      <div v-if="!isLoading">
+        <h3 class="inner-title">
+          hApps
+        </h3>
+        <div class="info-row usage-row">
+          <span
+            class="bold"
+            data-testid="happ-no"
+          >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> Total hApps hosted
+        </div>
+        <div class="info-row usage-row">
+          <span
+            class="bold"
+            data-testid="sc-no"
+          >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> Total source chains hosted
+        </div>
+        <router-link
+          to="/preferences"
+          class="info-row usage-row hosting-preferences"
+          active-class="active-link"
+        >
+          <GearIcon
+            class="gear-icon"
+            color="#606C8B"
+          />Hosting Preferences
+        </router-link>
       </div>
-      <div class="info-row usage-row">
-        <span
-          class="bold"
-          data-testid="sc-no"
-        >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> Total source chains hosted
-      </div>
-      <router-link
-        to="/preferences"
-        class="info-row usage-row hosting-preferences"
-        active-class="active-link"
-      >
-        <GearIcon
-          class="gear-icon"
-          color="#606C8B"
-        />Hosting Preferences
-      </router-link>
     </template>
 
     <template #right>
-      <h3 class="inner-title">
-        Daily Snapshot
-      </h3>
-      <div class="info-row daily-row inactive">
-        <span class="daily-label">CPU</span>
-        <span class="bold">{{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}</span>
-      </div>
-      <div class="info-row daily-row inactive">
-        <span class="daily-label">Storage</span>
-        <span class="bold">{{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}</span>
-      </div>
-      <div class="info-row daily-row">
-        <span class="daily-label">Bandwidth</span>
-        <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}</span>
+      <div v-if="!isLoading">
+        <h3 class="inner-title">
+          Daily Snapshot
+        </h3>
+        <div class="info-row daily-row inactive">
+          <span class="daily-label">CPU</span>
+          <span class="bold">{{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}</span>
+        </div>
+        <div class="info-row daily-row inactive">
+          <span class="daily-label">Storage</span>
+          <span class="bold">{{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}</span>
+        </div>
+        <div class="info-row daily-row">
+          <span class="daily-label">Bandwidth</span>
+          <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}</span>
+        </div>
       </div>
     </template>
   </BaseCard>
@@ -50,12 +55,18 @@
 
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
+import CircleSpinner from '@uicommon/components/CircleSpinner'
 import GearIcon from 'components/icons/GearIcon'
 import { presentMicroSeconds, presentBytes } from 'src/utils'
 
 defineProps({
   data: {
     type: Object,
+    required: true
+  },
+
+  isLoading: {
+    type: Boolean,
     required: true
   }
 })
@@ -100,5 +111,9 @@ defineProps({
   .hosting-preferences {
     display: none;
   }
+}
+
+.card-spinner {
+  height: 138px;
 }
 </style>

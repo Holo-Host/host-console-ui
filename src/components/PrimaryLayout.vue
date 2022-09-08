@@ -1,5 +1,5 @@
 <template>
-  <section class="layout">
+  <section v-if="!isLoading" class="layout">
     <TheSidebar />
 
     <section class="main-column">
@@ -56,11 +56,13 @@ const props = defineProps({
   }
 })
 
+const isLoading = ref(false)
+
 const isWelcomeModalVisible = ref(false)
 const isGoToHolofuelModalVisible = ref(false)
 
-const nickname = computed(() => userStore.holoFuel.nickname)
-const agentAddress = computed(() => userStore.holoFuel.agentAddress)
+const nickname = computed(() => userStore.holoFuel?.nickname)
+const agentAddress = computed(() => userStore.holoFuel?.agentAddress)
 
 const breadcrumbsOrTitle = computed(() => {
   if (props.breadcrumbs.length) {
@@ -82,7 +84,15 @@ onMounted(async () => {
   addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
   addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
 
-  await nextTick(() => {
+  await nextTick(async () => {
+    if (!userStore.publicKey) {
+      isLoading.value = true
+
+      await userStore.getUser()
+
+      isLoading.value = false
+    }
+
     isWelcomeModalVisible.value = !userStore.holoFuel.nickname
   })
 })

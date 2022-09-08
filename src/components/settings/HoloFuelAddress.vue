@@ -16,7 +16,7 @@
       </span>
 
       <span class="holofuel-address__hash-id">
-        {{ agentAddress }}
+        {{ encodeAgentId(agentAddress) }}
       </span>
     </div>
 
@@ -38,14 +38,15 @@
 
 <script setup>
 import Identicon from '@uicommon/components/Identicon.vue'
+import { encodeAgentId } from '@uicommon/utils/agent'
 import { postNotification, ENotification } from '@uicommon/utils/notifications'
 import { EProjectNotification } from '../../utils/notifications'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
 
 defineProps({
-	agentAddress: {
-    type: Uint8Array,
-    default: []
+  agentAddress: {
+    type: [Uint8Array, null],
+    default: null
   }
 })
 

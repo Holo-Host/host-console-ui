@@ -2,7 +2,7 @@ import axios from 'axios'
 import stringify from 'fast-json-stable-stringify'
 import mergeMockHappData from 'src/mergeMockHappData'
 import router from 'src/router'
-import { hashString, getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
+import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/keyManagement'
 
 require('dotenv').config()
 
@@ -36,46 +36,32 @@ async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders
     ...userHeaders
   }
 
-  let data
+  let response
 
   switch (method) {
     case 'get':
-      ;({ data } = await axios.get(fullUrl, { params, headers }))
-      return data
+      response = await axios.get(fullUrl, { params, headers })
+      return response.data
     case 'post':
-      ;({ data } = await axios.post(fullUrl, params, { headers }))
-      return data
+      response = await axios.post(fullUrl, params, { headers })
+      return response.data
     case 'put':
-      ;({ data } = await axios.put(fullUrl, params, { headers }))
-      return data
+      response = await axios.put(fullUrl, params, { headers })
+      return response.data
     case 'delete':
-      ;({ data } = await axios.delete(fullUrl, { params, headers }))
-      return data
+      response = await axios.delete(fullUrl, { params, headers })
+      return response.data
     default:
       throw new Error(`No case in hposCall for ${method} method`)
   }
 }
 
 const hposAdminCall = async (args) => {
-  const authToken = localStorage.getItem('authToken')
-  const adminSignature = localStorage.getItem('adminSignature')
-
-  // create signature header
-  const signatureHeader = {
-    'X-Hpos-Admin-Signature': adminSignature,
-    // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
-    // but authToken is not recorded yet in localStorage so we have to set this header manually
-    'X-Hpos-Auth-Token': authToken
-  }
-
-  // there is no need to keep keypair
-  eraseHpAdminKeypair()
-
+  console.log(args)
   try {
     return await hposCall({
       ...args,
-      pathPrefix: '/api/v1',
-      headers: signatureHeader
+      pathPrefix: '/api/v1'
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
@@ -116,9 +102,9 @@ const presentHposSettings = (hposSettings) => {
 }
 
 const HposInterface = {
-  usage: async () => {
+  getUsage: async () => {
     try {
-      const usageData = await hposHolochainCall({
+      return await hposHolochainCall({
         method: 'get',
         path: '/usage',
         params: {
@@ -126,14 +112,13 @@ const HposInterface = {
           amount: 1
         }
       })
-      return usageData
-    } catch (err) {
-      console.error('usage encountered an error: ', err)
+    } catch (error) {
+      console.error('usage encountered an error: ', error)
       return {}
     }
   },
 
-  hostedHapps: async () => {
+  getHostedHapps: async () => {
     try {
       const result = await hposHolochainCall({
         method: 'get',
@@ -162,11 +147,14 @@ const HposInterface = {
     }
   },
 
-  settings: async () => {
+  getHostEarnings: async () => {
     try {
-      const result = await hposAdminCall({ method: 'get', path: '/config' })
-      return presentHposSettings(result)
-    } catch (err) {
+      return await hposHolochainCall({
+        method: 'get',
+        path: '/host_earnings'
+      })
+    } catch (error) {
+      console.error('getHostEarnings encountered an error: ', error)
       return {}
     }
   },
@@ -210,7 +198,7 @@ const HposInterface = {
 
   getUser: async () => {
     try {
-      const user = await HposInterface.settings()
+      const user = await HposInterface.getSettings()
       const holoFuelProfile = await HposInterface.getHoloFuelProfile()
 
       return { user, holoFuelProfile }
@@ -220,9 +208,25 @@ const HposInterface = {
     }
   },
 
+  getSettings: async () => {
+    try {
+      const result = await hposAdminCall({
+        method: 'get',
+        path: '/config'
+      })
+
+      return presentHposSettings(result)
+    } catch (err) {
+      return {}
+    }
+  },
+
   updateSettings: async ({ deviceName }) => {
     try {
-      const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })
+      const settingsResponse = await hposAdminCall({
+        method: 'get',
+        path: '/config'
+      })
 
       // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
       const headers = {
@@ -237,7 +241,12 @@ const HposInterface = {
         settingsConfig.deviceName = deviceName
       }
 
-      await hposAdminCall({ method: 'put', path: '/config', headers, params: settingsConfig })
+      await hposAdminCall({
+        method: 'put',
+        path: '/config',
+        headers,
+        params: settingsConfig
+      })
       // We don't assume the successful PUT /api/v1/config returns the current config
       return presentHposSettings(settingsConfig)
     } catch (err) {
@@ -246,35 +255,63 @@ const HposInterface = {
   },
 
   getHoloFuelProfile: async () => {
-    const {
-      agent_address: agentAddress,
-      nickname,
-      avatar_url: avatarUrl
-    } = await hposHolochainCall({
-      method: 'post',
-      path: '/zome_call'
-    })({
-      appId: CORE_APP_ID,
-      roleId: 'holofuel',
-      zomeName: 'profile',
-      fnName: 'get_my_profile',
-      payload: null
-    })
+    try {
+      const params = {
+        appId: CORE_APP_ID,
+        roleId: 'holofuel',
+        zomeName: 'profile',
+        fnName: 'get_my_profile',
+        payload: null
+      }
 
-    return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+      const {
+        agent_address: agentAddress,
+        nickname,
+        avatar_url: avatarUrl
+      } = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+    } catch (error) {
+      return {
+        nickname: null,
+        avatarUrl: null
+      }
+    }
+  },
+
+  getCoreAppVersion: async () => {
+    try {
+      const { version: coreAppVersion } = await hposHolochainCall({
+        method: 'get',
+        path: '/core_app_version'
+      })
+
+      return { coreAppVersion }
+    } catch (error) {
+      return {
+        coreAppVersion: null
+      }
+    }
   },
 
   async updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
-      await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call'
-      })({
+      const params = {
         appId: CORE_APP_ID,
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'update_my_profile',
         payload: { nickname, avatarUrl }
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
       })
 
       return true

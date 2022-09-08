@@ -24,9 +24,9 @@ defineProps({
     required: true
   },
 
-	agentAddress: {
-    type: Uint8Array,
-    default: []
+  agentAddress: {
+    type: [Uint8Array, null],
+    default: null
   }
 })
 </script>

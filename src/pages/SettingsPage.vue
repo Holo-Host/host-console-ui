@@ -1,13 +1,13 @@
 <template>
   <PrimaryLayout title="Account Settings">
     <SettingsHoloportSection
-      :settings="settings"
+      :settings="user"
       @update:device-name="onDeviceNameUpdate"
     />
 
     <SettingsHolofuelSection
-      :nickname="settings.holofuel.nickname"
-      :agent-key="settings.holofuel.agentAddress"
+      :nickname="user.holoFuel.nickname"
+      :agent-address="user.holoFuel.agentAddress"
       class="settings__holofuel-section"
     />
   </PrimaryLayout>
@@ -22,7 +22,7 @@ import { useUserStore } from '../store/user'
 
 const userStore = useUserStore()
 
-const settings = computed(() => userStore)
+const user = computed(() => userStore)
 
 function onDeviceNameUpdate(deviceName) {
   userStore.updateDeviceName(deviceName)

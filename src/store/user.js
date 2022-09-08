@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import HposInterface from 'src/interfaces/HposInterface'
-import { eraseHpAdminKeypair, getHpAdminKeypair } from '../utils/keyManagement'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -14,42 +13,24 @@ export const useUserStore = defineStore('user', {
       agentAddress: '',
       nickname: '',
       avatarUrl: ''
-    }
+    },
+    coreAppVersion: ''
   }),
 
   actions: {
-    async getUser(email, password) {
-      const { user, holoFuelProfile } = await HposInterface.getUser(email, password)
+    async getUser() {
+      const { user, holoFuelProfile } = await HposInterface.getUser()
+      const { coreAppVersion } = await HposInterface.getCoreAppVersion()
 
-      if (user && holoFuelProfile) {
-        this.publicKey = user.public_key
-        this.email = user.email
+      if (user && holoFuelProfile && coreAppVersion) {
+        this.publicKey = user.hostPubKey
+        this.email = user.registrationEmail
         this.networkStatus = user.networkStatus
         this.sshAccess = true
         this.deviceName = user.deviceName
         this.hposVersion = user.hposVersion
         this.holoFuel = holoFuelProfile
-      }
-    },
-
-    async login(email, password) {
-      eraseHpAdminKeypair()
-
-      await getHpAdminKeypair(email, password)
-      const { user, holoFuelProfile } = await HposInterface.getUser(email, password)
-
-      if (user && holoFuelProfile) {
-        this.publicKey = user.public_key
-        this.email = user.email
-        this.networkStatus = user.networkStatus
-        this.sshAccess = true
-        this.deviceName = user.deviceName
-        this.hposVersion = user.hposVersion
-        this.holoFuel = holoFuelProfile
-
-        return true
-      } else {
-        return false
+        this.coreAppVersion = coreAppVersion
       }
     },
 

@@ -1,7 +1,9 @@
 <template>
   <BaseCard title="HoloFuel">
+    <CircleSpinner v-if="isLoading" class="card-spinner" />
     <div
       v-for="{ label, value, isActive } in items"
+      v-else
       :key="label"
       class="margin-bottom"
     >
@@ -19,20 +21,26 @@
       </span>
     </div>
 
-    <button class="redeem-button">
+    <button v-if="!isLoading" class="redeem-button">
       Redeem HoloFuel
     </button>
   </BaseCard>
 </template>
 
 <script setup >
-import BaseCard from '@uicommon/components/BaseCard.vue'
-import { computed } from 'vue'
+import BaseCard from '@uicommon/components/BaseCard'
+import CircleSpinner from '@uicommon/components/CircleSpinner'
 import { formatCurrency } from '@uicommon/utils/numbers'
+import { computed } from 'vue'
 
 const props = defineProps({
   data: {
     type: Object,
+    required: true
+  },
+
+  isLoading: {
+    type: Boolean,
     required: true
   }
 })
@@ -40,12 +48,13 @@ const props = defineProps({
 const items = computed(() => [
   {
     label: 'Balance',
-    value: props.data && props.data.balance ? formatCurrency(props.data.balance) : '--',
+    value: props.data && props.data.balance ? formatCurrency(Number(props.data.balance)) : '--',
     isActive: true
   },
   {
     label: 'Redeemable',
-    value: props.data && props.data.redeemable ? formatCurrency(props.data.redeemable) : '--',
+    value:
+      props.data && props.data.redeemable ? formatCurrency(Number(props.data.redeemable)) : '--',
     isActive: false
   }
 ])
@@ -69,5 +78,9 @@ const items = computed(() => [
 
 .margin-bottom {
   margin-bottom: 10px;
+}
+
+.card-spinner {
+  height: 130px;
 }
 </style>

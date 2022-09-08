@@ -1,6 +1,7 @@
 <template>
   <BaseCard title="Earnings">
-    <div class="body">
+    <CircleSpinner v-if="isLoading" class="card-spinner" />
+    <div v-else class="body">
       <div
         v-for="{ label, value } in items"
         :key="label"
@@ -14,7 +15,8 @@
 </template>
 
 <script setup>
-import BaseCard from '@uicommon/components/BaseCard.vue'
+import BaseCard from '@uicommon/components/BaseCard'
+import CircleSpinner from '@uicommon/components/CircleSpinner'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 
@@ -22,21 +24,27 @@ const props = defineProps({
   data: {
     type: Object,
     required: true
+  },
+
+  isLoading: {
+    type: Boolean,
+    required: true
   }
 })
 
 const items = computed(() => [
   {
     label: 'Last 30 days',
-    value: props.data && props.data.last30Days ? formatCurrency(props.data.last30Days) : '--'
+    value:
+      props.data && props.data.last30days ? formatCurrency(Number(props.data.last30days)) : '--'
   },
   {
     label: 'Last 7 days',
-    value: props.data && props.data.last7Days ? formatCurrency(props.data.last7Days) : '--'
+    value: props.data && props.data.last7days ? formatCurrency(Number(props.data.last7days)) : '--'
   },
   {
     label: 'Last day',
-    value: props.data && props.data.lastDay ? formatCurrency(props.data.lastDay) : '--'
+    value: props.data && props.data.lastday ? formatCurrency(Number(props.data.lastday)) : '--'
   }
 ])
 </script>
@@ -50,5 +58,9 @@ const items = computed(() => [
   color: var(--grey-color);
   margin-bottom: 20px;
   margin-right: 50px;
+}
+
+.card-spinner {
+  height: 156px;
 }
 </style>

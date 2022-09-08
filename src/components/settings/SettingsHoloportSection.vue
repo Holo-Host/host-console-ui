@@ -102,9 +102,6 @@ function editDeviceName() {
 }
 
 function saveDeviceName() {
-  HposInterface.updateSettings({
-    deviceName: this.editedDeviceName
-  })
   emit('update:device-name', editedDeviceName.value)
   isEditingDeviceName.value = false
 }
