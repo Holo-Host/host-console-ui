@@ -19,8 +19,8 @@ export const useUserStore = defineStore('user', {
 
   actions: {
     async getUser() {
-      const { user, holoFuelProfile } = await HposInterface.getUser()
       const { coreAppVersion } = await HposInterface.getCoreAppVersion()
+      const { user, holoFuelProfile } = await HposInterface.getUser()
 
       if (user && holoFuelProfile && coreAppVersion) {
         this.publicKey = user.hostPubKey
