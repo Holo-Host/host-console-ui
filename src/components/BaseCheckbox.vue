@@ -99,8 +99,8 @@ defineEmits(['update:checked'])
       box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary-color);
     }
 
-    &.disabled {
-      opacity: 0.4;
+    &--disabled {
+      cursor: not-allowed;
     }
   }
 
