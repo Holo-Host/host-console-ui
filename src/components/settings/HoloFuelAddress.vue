@@ -37,11 +37,11 @@
 </template>
 
 <script setup>
-import Identicon from '@uicommon/components/Identicon.vue'
+import Identicon from '@uicommon/components/Identicon'
 import { encodeAgentId } from '@uicommon/utils/agent'
 import { postNotification, ENotification } from '@uicommon/utils/notifications'
 import { EProjectNotification } from '../../utils/notifications'
-import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
+import LeaveSiteIcon from '../icons/LeaveSiteIcon'
 
 defineProps({
   agentAddress: {
@@ -55,13 +55,7 @@ function showGoToHolofuelModal() {
     localStorage.getItem('host-console-ui-dont-show-go-to-holofuel-modal-again') === 'true'
 
   if (isModalDisabled) {
-    postNotification(ENotification.showBusyState)
-    // TODO: Implement login logic
-
-    setTimeout(() => {
-      postNotification(ENotification.hideBusyState)
-      // eslint-disable-next-line no-magic-numbers
-    }, 2000)
+    location.replace(`https://${location.host}/holofuel`)
   } else {
     postNotification(EProjectNotification.showGoToHolofuelModal)
   }

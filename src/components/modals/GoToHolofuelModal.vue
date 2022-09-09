@@ -37,7 +37,7 @@
           label-size="small"
           custom-color="#21BE98"
           class="go-to-holofuel-modal__checkbox"
-          @update:checked="setDontShowGoToGolofuelModalAgain"
+          @update:checked="setDontShowGoToHoloFuelModalAgain"
         />
       </div>
     </template>
@@ -48,7 +48,8 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseModal from '@uicommon/components/BaseModal.vue'
 import { EButtonType } from '@uicommon/types/ui'
-import { postNotification, ENotification } from '@uicommon/utils/notifications'
+import { postNotification } from '@uicommon/utils/notifications'
+import { ref } from 'vue'
 import { EProjectNotification } from '../../utils/notifications'
 import BaseCheckbox from '../BaseCheckbox.vue'
 
@@ -59,21 +60,24 @@ defineProps({
   }
 })
 
+const dontShowGoToHoloFuelModalAgain = ref(
+  localStorage.getItem('host-console-ui-dont-show-go-to-holofuel-modal-again')
+)
+
 const emit = defineEmits(['close'])
 
 function handleHolofuelLogin() {
-  postNotification(ENotification.showBusyState)
   postNotification(EProjectNotification.hideGoToHolofuelModal)
-  // TODO: Implement login logic
 
-  setTimeout(() => {
-    postNotification(ENotification.hideBusyState)
-    // eslint-disable-next-line no-magic-numbers
-  }, 2000)
+  if (dontShowGoToHoloFuelModalAgain.value) {
+    localStorage.setItem('host-console-ui-dont-show-go-to-holofuel-modal-again', 'true')
+  }
+
+  location.replace(`https://${location.host}/holofuel`)
 }
 
-function setDontShowGoToGolofuelModalAgain() {
-  localStorage.setItem('host-console-ui-dont-show-go-to-holofuel-modal-again', 'true')
+function setDontShowGoToHoloFuelModalAgain(value) {
+  dontShowGoToHoloFuelModalAgain.value = value
 }
 </script>
 
