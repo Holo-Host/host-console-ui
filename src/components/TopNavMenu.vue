@@ -22,11 +22,7 @@
         Account Settings
       </div>
 
-			<div class="menu-item" @click="holofuel">
-				HoloFuel
-			</div>
-
-			<div class="menu-item" @click="logout">
+      <div class="menu-item" @click="logout">
         Logout
       </div>
     </div>
@@ -36,7 +32,6 @@
 <script setup>
 import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
-import { eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -48,7 +43,7 @@ const props = defineProps({
     required: true
   },
 
-	agentAddress: {
+  agentAddress: {
     type: Uint8Array,
     default: []
   },
@@ -67,11 +62,7 @@ function toggleMenu() {
 
 function logout() {
   localStorage.removeItem('authToken')
-  router.push({ name: 'Login' })
-}
-
-function holofuel() {
-	location.replace(`https://${location.host}/holofuel`)
+  router.push({ name: kRoutes.login.name })
 }
 
 function openSettingsAndCloseMenu() {

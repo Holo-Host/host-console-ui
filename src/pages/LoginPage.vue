@@ -170,7 +170,6 @@ async function login() {
 
         if (authHeaders) {
           localStorage.setItem('authToken', authHeaders.authToken)
-          localStorage.setItem('adminSignature', authHeaders.adminSignature)
 
           await userStore.getUser()
 

@@ -19,9 +19,9 @@
 </template>
 
 <script setup>
-import MenuIcon from 'components/icons/MenuIcon.vue'
-import TheSidebar from 'components/TheSidebar.vue'
-import TopNavMenu from 'components/TopNavMenu.vue'
+import MenuIcon from 'components/icons/MenuIcon'
+import TheSidebar from 'components/TheSidebar'
+import TopNavMenu from 'components/TopNavMenu'
 import { ref } from 'vue'
 
 defineProps({
@@ -30,7 +30,7 @@ defineProps({
     required: true
   },
 
-	agentAddress: {
+  agentAddress: {
     type: Uint8Array,
     default: []
   }

@@ -45,7 +45,7 @@ const props = defineProps({
     required: true
   },
 
-	agentAddress: {
+  agentAddress: {
     type: Uint8Array,
     default: []
   }
