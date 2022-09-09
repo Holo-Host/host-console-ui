@@ -15,7 +15,7 @@
       <PencilIcon
         v-if="!isEditingDeviceName"
         class="holoport-settings__editable-value-icon"
-        @click="editDeviceName"
+        @click="() => {}"
       />
       <div
         v-else
@@ -62,7 +62,11 @@
           target="_blank"
           class="holoport-settings__factory-reset-link"
         >
-          {{ $t('settings.factory_reset') }}
+          <LeaveSiteIcon />
+          <span class="holoport-settings__factory-reset-link-label">
+            {{ $t('settings.factory_reset') }}
+          </span>
+
         </a>
       </template>
     </SettingsRow>
@@ -70,14 +74,15 @@
 </template>
 
 <script setup >
-import BaseInput from '@uicommon/components/BaseInput.vue'
+import BaseInput from '@uicommon/components/BaseInput'
 import { ref } from 'vue'
-import BaseCheckbox from '../BaseCheckbox.vue'
-import CircledExIcon from '../icons/CircledExIcon.vue'
-import FilledCheckIcon from '../icons/FilledCheckIcon.vue'
-import PencilIcon from '../icons/PencilIcon.vue'
-import SettingsRow from './SettingsRow.vue'
-import SettingsSection from './SettingsSection.vue'
+import BaseCheckbox from '../BaseCheckbox'
+import CircledExIcon from '../icons/CircledExIcon'
+import FilledCheckIcon from '../icons/FilledCheckIcon'
+import LeaveSiteIcon from '../icons/LeaveSiteIcon'
+import PencilIcon from '../icons/PencilIcon'
+import SettingsRow from './SettingsRow'
+import SettingsSection from './SettingsSection'
 
 const props = defineProps({
   settings: {
@@ -125,12 +130,21 @@ function cancelEditDeviceName() {
 
   &__editable-value-icon {
     margin-left: 5px;
-    cursor: pointer;
+    opacity: 0.5;
+    cursor: not-allowed;
+    //cursor: pointer;
   }
 
   &__factory-reset-link {
-    text-decoration-line: underline;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
     color: var(--grey-color);
+
+    &-label {
+      margin-left: 8px;
+      text-decoration-line: underline;
+    }
   }
 
   &__question-mark {
