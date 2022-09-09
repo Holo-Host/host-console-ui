@@ -1,8 +1,8 @@
 <template>
-  <section v-if="!isLoading" class="layout">
+  <section class="layout">
     <TheSidebar />
 
-    <section class="main-column">
+    <section v-if="!isLoading" class="main-column">
       <MobileTopNav
         :nickname="nickname"
         :agent-address="agentAddress"
@@ -40,6 +40,7 @@ import TheSidebar from 'components/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { ENotification, postNotification } from '../../ui-common-library/src/utils/notifications'
 import { EProjectNotification } from '../utils/notifications'
 
 const userStore = useUserStore()
@@ -62,7 +63,7 @@ const isWelcomeModalVisible = ref(false)
 const isGoToHolofuelModalVisible = ref(false)
 
 const nickname = computed(() => userStore.holoFuel?.nickname)
-const agentAddress = computed(() => userStore.holoFuel?.agentAddress)
+const agentAddress = computed(() => userStore.holoFuel?.agentAddress || null)
 
 const breadcrumbsOrTitle = computed(() => {
   if (props.breadcrumbs.length) {
@@ -88,8 +89,10 @@ onMounted(async () => {
     if (!userStore.publicKey) {
       isLoading.value = true
 
+      postNotification(ENotification.showBusyState)
       await userStore.getUser()
 
+      postNotification(ENotification.hideBusyState)
       isLoading.value = false
     }
 
