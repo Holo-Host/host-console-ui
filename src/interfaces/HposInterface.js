@@ -6,8 +6,6 @@ import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/ke
 
 require('dotenv').config()
 
-const CORE_APP_ID = 'core-app:0_3_1_alpha0::7f83bac1-fb97-4e0d-98d6-7888ef616de3'
-
 const axiosConfig = {
   headers: {
     'Content-Type': 'application/json',
@@ -57,7 +55,6 @@ async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders
 }
 
 const hposAdminCall = async (args) => {
-  console.log(args)
   try {
     return await hposCall({
       ...args,
@@ -257,7 +254,7 @@ const HposInterface = {
   getHoloFuelProfile: async () => {
     try {
       const params = {
-        appId: CORE_APP_ID,
+        appId: localStorage.getItem('host-console-ui-core-app-version'),
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'get_my_profile',
@@ -290,6 +287,8 @@ const HposInterface = {
         path: '/core_app_version'
       })
 
+      localStorage.setItem('host-console-ui-core-app-version', coreAppVersion)
+
       return { coreAppVersion }
     } catch (error) {
       return {
@@ -301,7 +300,7 @@ const HposInterface = {
   async updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
       const params = {
-        appId: CORE_APP_ID,
+        appId: localStorage.getItem('host-console-ui-core-app-version'),
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'update_my_profile',
