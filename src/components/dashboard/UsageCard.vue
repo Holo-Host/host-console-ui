@@ -1,23 +1,25 @@
 <template>
-  <BaseCard title="Usage">
+  <BaseCard :title="$t('usage.title')">
     <CircleSpinner v-if="isLoading" class="card-spinner" />
     <template #left>
       <div v-if="!isLoading">
         <h3 class="inner-title">
-          hApps
+          {{ $t('$.happs') }}
         </h3>
         <div class="info-row usage-row">
           <span
             class="bold"
             data-testid="happ-no"
-          >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> Total hApps hosted
+          >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
         </div>
+
         <div class="info-row usage-row">
           <span
             class="bold"
             data-testid="sc-no"
-          >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> Total source chains hosted
+          >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> {{ $t('usage.total_source_chains_hosted') }}
         </div>
+
         <router-link
           to="/preferences"
           class="info-row usage-row hosting-preferences"
@@ -26,7 +28,8 @@
           <GearIcon
             class="gear-icon"
             color="#606C8B"
-          />Hosting Preferences
+          />
+          {{ $t('$.hosting_preferences') }}
         </router-link>
       </div>
     </template>
@@ -34,19 +37,32 @@
     <template #right>
       <div v-if="!isLoading">
         <h3 class="inner-title">
-          Daily Snapshot
+          {{ $t('usage.daily_snapshot') }}
         </h3>
+
         <div class="info-row daily-row inactive">
-          <span class="daily-label">CPU</span>
-          <span class="bold">{{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}</span>
+          <span class="daily-label">
+            {{ $t('$.cpu') }}
+          </span>
+          <span class="bold">
+            {{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}
+          </span>
         </div>
+
         <div class="info-row daily-row inactive">
-          <span class="daily-label">Storage</span>
-          <span class="bold">{{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}</span>
+          <span class="daily-label">
+            {{ $t('$.storage') }}
+          </span>
+          <span class="bold">
+            {{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}
+          </span>
         </div>
         <div class="info-row daily-row">
-          <span class="daily-label">Bandwidth</span>
-          <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}</span>
+          <span class="daily-label">
+            {{ $t('$.bandwidth') }}
+          </span>
+          <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}
+          </span>
         </div>
       </div>
     </template>

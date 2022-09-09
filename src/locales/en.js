@@ -1,10 +1,12 @@
 const translations = {
   $: {
     app_version: '{app} version {version}',
+    bandwidth: 'Bandwidth',
     cancel: 'Cancel',
     confirm: 'Confirm',
     continue: 'Continue',
     close: 'Close',
+    cpu: 'CPU',
     dont_show_this_message_again: "Don't show this message again",
     error: 'Error',
     errors: {
@@ -21,8 +23,10 @@ const translations = {
     },
     go: 'Go',
     go_to_holofuel: 'Go to HoloFuel',
+    happs: 'hApps',
     host_console: 'Host Console',
     hosted_by: 'Hosted by',
+    hosting_preferences: 'Hosting Preferences',
     holo: 'HOLO',
     holoport: 'HoloPort',
     holofuel: 'HoloFuel',
@@ -40,6 +44,7 @@ const translations = {
     logout: 'Logout',
     network: 'Network',
     page_not_found: "Hmm... We're unable to find that page.",
+    storage: 'Storage',
     tip: 'TIP:',
     try_again: 'Try again',
     your_email: 'Your email'
@@ -65,6 +70,12 @@ const translations = {
     holofuel_address: 'HoloFuel Address',
     hpos_version: 'HPOS Version',
     ssh_access: 'Access for HoloPort support (SSH)'
+  },
+  usage: {
+    daily_snapshot: 'Daily Snapshot',
+    title: 'Usage',
+    total_happs_hosted: 'Total hApps hosted',
+    total_source_chains_hosted: 'Total source chains hosted'
   },
   welcome_modal: {
     first_paragraph:
