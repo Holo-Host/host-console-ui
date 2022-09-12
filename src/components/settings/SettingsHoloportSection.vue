@@ -76,7 +76,7 @@
 <script setup >
 import BaseInput from '@uicommon/components/BaseInput'
 import { ref } from 'vue'
-import BaseCheckbox from '../BaseCheckbox'
+import BaseCheckbox from '@uicommon/components/BaseCheckbox'
 import CircledExIcon from '../icons/CircledExIcon'
 import FilledCheckIcon from '../icons/FilledCheckIcon'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon'

@@ -39,8 +39,7 @@
 <script setup>
 import Identicon from '@uicommon/components/Identicon'
 import { encodeAgentId } from '@uicommon/utils/agent'
-import { postNotification, ENotification } from '@uicommon/utils/notifications'
-import { EProjectNotification } from '../../utils/notifications'
+import { postNotification, EProjectNotification } from '@uicommon/utils/notifications'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon'
 
 defineProps({

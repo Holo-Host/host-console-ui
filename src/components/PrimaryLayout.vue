@@ -19,8 +19,11 @@
         @close="closeWelcomeModal"
       />
 
-      <GoToHolofuelModal
+      <GoToHoloFuelModal
         :is-visible="isGoToHolofuelModalVisible"
+        :app-name="$t('$.app_name')"
+        dont-show-modal-again-local-storage-key="holo.host-console.dont-show-go-to-holoFuel-modal-again"
+        :holo-fuel-url="holoFuelUrl"
         @close="hideGoToHolofuelModal"
       />
 
@@ -32,16 +35,20 @@
 </template>
 
 <script setup>
-import { addObserver, removeObserver } from '@uicommon/utils/notifications'
-import MobileTopNav from 'components/MobileTopNav.vue'
-import GoToHolofuelModal from 'components/modals/GoToHolofuelModal.vue'
-import WelcomeModal from 'components/modals/WelcomeModal.vue'
-import TheSidebar from 'components/TheSidebar.vue'
-import TopNav from 'components/TopNav.vue'
+import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
+import {
+  addObserver,
+  removeObserver,
+  ENotification,
+  postNotification,
+  EProjectNotification
+} from '@uicommon/utils/notifications'
+import MobileTopNav from 'components/MobileTopNav'
+import WelcomeModal from 'components/modals/WelcomeModal'
+import TheSidebar from 'components/TheSidebar'
+import TopNav from 'components/TopNav'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { ENotification, postNotification } from '../../ui-common-library/src/utils/notifications'
-import { EProjectNotification } from '../utils/notifications'
 
 const userStore = useUserStore()
 
@@ -61,6 +68,8 @@ const isLoading = ref(false)
 
 const isWelcomeModalVisible = ref(false)
 const isGoToHolofuelModalVisible = ref(false)
+
+const holoFuelUrl = computed(() => `https://${location.host}/holofuel`)
 
 const nickname = computed(() => userStore.holoFuel?.nickname)
 const agentAddress = computed(() => userStore.holoFuel?.agentAddress || null)
