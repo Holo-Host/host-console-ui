@@ -1,69 +1,69 @@
 <template>
-  <BaseCard :title="$t('usage.title')">
-    <CircleSpinner v-if="isLoading" class="card-spinner" />
+  <BaseCard
+    :is-loading="isLoading"
+    :is-error="isError"
+    :title="$t('usage.title')"
+    @try-again-clicked="emit('try-again-clicked')"
+  >
     <template #left>
-      <div v-if="!isLoading">
-        <h3 class="inner-title">
-          {{ $t('$.happs') }}
-        </h3>
-        <div class="info-row usage-row">
-          <span
-            class="bold"
-            data-testid="happ-no"
-          >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
-        </div>
-
-        <div class="info-row usage-row">
-          <span
-            class="bold"
-            data-testid="sc-no"
-          >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> {{ $t('usage.total_source_chains_hosted') }}
-        </div>
-
-        <router-link
-          to="/preferences"
-          class="info-row usage-row hosting-preferences"
-          active-class="active-link"
-        >
-          <GearIcon
-            class="gear-icon"
-            color="#606C8B"
-          />
-          {{ $t('$.hosting_preferences') }}
-        </router-link>
+      <h3 class="inner-title">
+        {{ $t('$.happs') }}
+      </h3>
+      <div class="info-row usage-row">
+        <span
+          class="bold"
+          data-testid="happ-no"
+        >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
       </div>
+
+      <div class="info-row usage-row">
+        <span
+          class="bold"
+          data-testid="sc-no"
+        >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> {{ $t('usage.total_source_chains_hosted') }}
+      </div>
+
+      <router-link
+        to="/preferences"
+        class="info-row usage-row hosting-preferences"
+        active-class="active-link"
+      >
+        <GearIcon
+          class="gear-icon"
+          color="#606C8B"
+        />
+        {{ $t('$.hosting_preferences') }}
+      </router-link>
     </template>
 
     <template #right>
-      <div v-if="!isLoading">
-        <h3 class="inner-title">
-          {{ $t('usage.daily_snapshot') }}
-        </h3>
+      <h3 class="inner-title">
+        {{ $t('usage.daily_snapshot') }}
+      </h3>
 
-        <div class="info-row daily-row inactive">
-          <span class="daily-label">
-            {{ $t('$.cpu') }}
-          </span>
-          <span class="bold">
-            {{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}
-          </span>
-        </div>
+      <div class="info-row daily-row inactive">
+        <span class="daily-label">
+          {{ $t('$.cpu') }}
+        </span>
+        <span class="bold">
+          {{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}
+        </span>
+      </div>
 
-        <div class="info-row daily-row inactive">
-          <span class="daily-label">
-            {{ $t('$.storage') }}
-          </span>
-          <span class="bold">
-            {{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}
-          </span>
-        </div>
-        <div class="info-row daily-row">
-          <span class="daily-label">
-            {{ $t('$.bandwidth') }}
-          </span>
-          <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}
-          </span>
-        </div>
+      <div class="info-row daily-row inactive">
+        <span class="daily-label">
+          {{ $t('$.storage') }}
+        </span>
+        <span class="bold">
+          {{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}
+        </span>
+      </div>
+      <div class="info-row daily-row">
+        <span class="daily-label">
+          {{ $t('$.bandwidth') }}
+        </span>
+        <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}
+        </span>
       </div>
     </template>
   </BaseCard>
@@ -71,11 +71,11 @@
 
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
-import CircleSpinner from '@uicommon/components/CircleSpinner'
 import GearIcon from 'components/icons/GearIcon'
 import { presentMicroSeconds, presentBytes } from 'src/utils'
+import { computed } from 'vue'
 
-defineProps({
+const props = defineProps({
   data: {
     type: Object,
     required: true
@@ -86,6 +86,10 @@ defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['try-again-clicked'])
+
+const isError = computed(() => !!props.data.error)
 </script>
 
 <style scoped>
@@ -127,9 +131,5 @@ defineProps({
   .hosting-preferences {
     display: none;
   }
-}
-
-.card-spinner {
-  height: 138px;
 }
 </style>

@@ -112,7 +112,7 @@ const HposInterface = {
       })
     } catch (error) {
       console.error('usage encountered an error: ', error)
-      return {}
+      return { error }
     }
   },
 
@@ -137,11 +137,12 @@ const HposInterface = {
             storage: '--'
           }))
       } else {
-        console.error("hosted_happs didn't return an array")
+        console.error("getHostedHapps didn't return an array")
         return []
       }
-    } catch (err) {
-      return []
+    } catch (error) {
+      console.error('getHostedHapps encountered an error: ', error)
+      return { error }
     }
   },
 
@@ -153,7 +154,7 @@ const HposInterface = {
       })
     } catch (error) {
       console.error('getHostEarnings encountered an error: ', error)
-      return {}
+      return { error }
     }
   },
 

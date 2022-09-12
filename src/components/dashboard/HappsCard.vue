@@ -1,12 +1,17 @@
 <template>
-  <BaseCard title="Top Hosted hApps">
-    <CircleSpinner v-if="isLoading" class="card-spinner" />
-    <div v-else class="body">
+  <BaseCard
+    :is-loading="isLoading"
+    :is-error="isError"
+    title="Top Hosted hApps"
+    @try-again-clicked="emit('try-again-clicked')"
+  >
+    <div class="body">
       <div v-if="!data || data.length === 0">
         Currently no hApps to display
       </div>
       <div
         v-for="happ in data"
+        v-else
         :key="happ.id"
         class="top-happ-row"
       >
@@ -28,10 +33,10 @@
 
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
-import CircleSpinner from '@uicommon/components/CircleSpinner'
 import MissingLogoExIcon from 'components/icons/MissingLogoExIcon'
+import { computed } from 'vue'
 
-defineProps({
+const props = defineProps({
   data: {
     type: Object,
     required: true
@@ -42,6 +47,10 @@ defineProps({
     required: true
   }
 })
+
+const isError = computed(() => !!props.data.error)
+
+const emit = defineEmits(['try-again-clicked'])
 </script>
 
 <style scoped>

@@ -1,9 +1,12 @@
 <template>
-  <BaseCard title="HoloFuel">
-    <CircleSpinner v-if="isLoading" class="card-spinner" />
+  <BaseCard
+    :is-loading="isLoading"
+    :is-error="isError"
+    title="HoloFuel"
+    @try-again-clicked="emit('try-again-clicked')"
+  >
     <div
       v-for="{ label, value, isActive } in items"
-      v-else
       :key="label"
       class="margin-bottom"
     >
@@ -21,7 +24,7 @@
       </span>
     </div>
 
-    <button v-if="!isLoading" class="redeem-button">
+    <button class="redeem-button">
       Redeem HoloFuel
     </button>
   </BaseCard>
@@ -29,7 +32,6 @@
 
 <script setup >
 import BaseCard from '@uicommon/components/BaseCard'
-import CircleSpinner from '@uicommon/components/CircleSpinner'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 
@@ -44,6 +46,10 @@ const props = defineProps({
     required: true
   }
 })
+
+const isError = computed(() => !!props.data.error)
+
+const emit = defineEmits(['try-again-clicked'])
 
 const items = computed(() => [
   {

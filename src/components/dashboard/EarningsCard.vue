@@ -1,7 +1,11 @@
 <template>
-  <BaseCard title="Earnings">
-    <CircleSpinner v-if="isLoading" class="card-spinner" />
-    <div v-else class="body">
+  <BaseCard
+    :is-loading="isLoading"
+    :is-error="isError"
+    title="Earnings"
+    @try-again-clicked="emit('try-again-clicked')"
+  >
+    <div class="body">
       <div
         v-for="{ label, value } in items"
         :key="label"
@@ -16,7 +20,6 @@
 
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
-import CircleSpinner from '@uicommon/components/CircleSpinner'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 
@@ -31,6 +34,10 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['try-again-clicked'])
+
+const isError = computed(() => !!props.data.error)
 
 const items = computed(() => [
   {

@@ -1,7 +1,10 @@
 <template>
-  <BaseCard title="Recent Payments">
-    <CircleSpinner v-if="isLoading" class="card-spinner" />
-    <div v-else class="body">
+  <BaseCard
+    :is-loading="isLoading"
+    :is-error="isError"
+    title="Recent Payments"
+  >
+    <div class="body">
       <div v-if="data.length === 0">
         Currently no payments to display
       </div>
@@ -32,12 +35,12 @@
 
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
-import CircleSpinner from '@uicommon/components/CircleSpinner'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { capitalizeWord } from '@uicommon/utils/stringUtils'
 import dayjs from 'dayjs'
+import { computed } from 'vue'
 
-defineProps({
+const props = defineProps({
   data: {
     type: Array,
     default: () => []
@@ -48,6 +51,8 @@ defineProps({
     required: true
   }
 })
+
+const isError = computed(() => !!props.data.error)
 </script>
 
 <style scoped>
