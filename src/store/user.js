@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', {
     deviceName: '',
     hposVersion: '',
     holoFuel: {
-      agentAddress: '',
+      agentAddress: null,
       nickname: '',
       avatarUrl: ''
     },

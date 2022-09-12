@@ -40,6 +40,7 @@
 import Identicon from '@uicommon/components/Identicon'
 import { encodeAgentId } from '@uicommon/utils/agent'
 import { postNotification, EProjectNotification } from '@uicommon/utils/notifications'
+import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon'
 
 defineProps({
@@ -50,11 +51,10 @@ defineProps({
 })
 
 function showGoToHolofuelModal() {
-  const isModalDisabled =
-    localStorage.getItem('host-console-ui-dont-show-go-to-holofuel-modal-again') === 'true'
+  const isModalDisabled = localStorage.getItem(kDontShowGoToHoloFuelModalAgainLSKey) === 'true'
 
   if (isModalDisabled) {
-    location.replace(`https://${location.host}/holofuel`)
+    window.open(kHoloFuelUrl, '_blank').focus()
   } else {
     postNotification(EProjectNotification.showGoToHolofuelModal)
   }

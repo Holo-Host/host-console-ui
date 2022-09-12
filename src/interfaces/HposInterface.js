@@ -3,6 +3,7 @@ import stringify from 'fast-json-stable-stringify'
 import mergeMockHappData from 'src/mergeMockHappData'
 import router from 'src/router'
 import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/keyManagement'
+import { kCoreAppVersionLSKey } from '@/constants'
 
 require('dotenv').config()
 
@@ -254,7 +255,7 @@ const HposInterface = {
   getHoloFuelProfile: async () => {
     try {
       const params = {
-        appId: localStorage.getItem('host-console-ui-core-app-version'),
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'get_my_profile',
@@ -287,7 +288,7 @@ const HposInterface = {
         path: '/core_app_version'
       })
 
-      localStorage.setItem('host-console-ui-core-app-version', coreAppVersion)
+      localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
 
       return { coreAppVersion }
     } catch (error) {
@@ -300,7 +301,7 @@ const HposInterface = {
   async updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
       const params = {
-        appId: localStorage.getItem('host-console-ui-core-app-version'),
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'update_my_profile',

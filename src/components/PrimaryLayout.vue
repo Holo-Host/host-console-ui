@@ -22,8 +22,8 @@
       <GoToHoloFuelModal
         :is-visible="isGoToHolofuelModalVisible"
         :app-name="$t('$.app_name')"
-        dont-show-modal-again-local-storage-key="holo.host-console.dont-show-go-to-holoFuel-modal-again"
-        :holo-fuel-url="holoFuelUrl"
+        :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
+        :holo-fuel-url="kHoloFuelUrl"
         @close="hideGoToHolofuelModal"
       />
 
@@ -47,6 +47,7 @@ import MobileTopNav from 'components/MobileTopNav'
 import WelcomeModal from 'components/modals/WelcomeModal'
 import TheSidebar from 'components/TheSidebar'
 import TopNav from 'components/TopNav'
+import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 
@@ -68,8 +69,6 @@ const isLoading = ref(false)
 
 const isWelcomeModalVisible = ref(false)
 const isGoToHolofuelModalVisible = ref(false)
-
-const holoFuelUrl = computed(() => `https://${location.host}/holofuel`)
 
 const nickname = computed(() => userStore.holoFuel?.nickname)
 const agentAddress = computed(() => userStore.holoFuel?.agentAddress || null)

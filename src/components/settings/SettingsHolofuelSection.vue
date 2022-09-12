@@ -8,7 +8,10 @@
     <SettingsRow
       :label="$t('settings.holofuel_address')"
     >
-      <HoloFuelAddress :agent-address="agentAddress" />
+      <HoloFuelAddress
+        v-if="agentAddress"
+        :agent-address="agentAddress"
+      />
     </SettingsRow>
   </SettingsSection>
 </template>
