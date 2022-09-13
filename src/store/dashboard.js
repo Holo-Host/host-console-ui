@@ -25,8 +25,8 @@ export const useDashboardStore = defineStore('dashboard', {
       this.usage = await HposInterface.getUsage()
     },
 
-    async getHostedHapps() {
-      this.hostedHapps = await HposInterface.getHostedHapps()
+    async getTopHostedHapps() {
+      this.hostedHapps = await HposInterface.getTopHostedHapps()
     },
 
     async getEarnings() {

@@ -2,7 +2,7 @@
   <BaseCard
     :is-loading="isLoading"
     :is-error="isError"
-    title="HoloFuel"
+    :title="$t('holofuel.title')"
     @try-again-clicked="emit('try-again-clicked')"
   >
     <div
@@ -25,7 +25,7 @@
     </div>
 
     <button class="redeem-button">
-      Redeem HoloFuel
+      {{ $t('holofuel.redeem_holofuel') }}
     </button>
   </BaseCard>
 </template>
@@ -34,6 +34,9 @@
 import BaseCard from '@uicommon/components/BaseCard'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   data: {
@@ -53,12 +56,12 @@ const emit = defineEmits(['try-again-clicked'])
 
 const items = computed(() => [
   {
-    label: 'Balance',
+    label: t('holofuel.balance'),
     value: props.data && props.data.balance ? formatCurrency(Number(props.data.balance)) : '--',
     isActive: true
   },
   {
-    label: 'Redeemable',
+    label: t('holofuel.redeemable'),
     value:
       props.data && props.data.redeemable ? formatCurrency(Number(props.data.redeemable)) : '--',
     isActive: false
@@ -84,9 +87,5 @@ const items = computed(() => [
 
 .margin-bottom {
   margin-bottom: 10px;
-}
-
-.card-spinner {
-  height: 130px;
 }
 </style>

@@ -2,12 +2,15 @@
   <BaseCard
     :is-loading="isLoading"
     :is-error="isError"
-    title="Top Hosted hApps"
+    :title="$t('hosted_happs.title')"
     @try-again-clicked="emit('try-again-clicked')"
   >
     <div class="body">
-      <div v-if="!data || data.length === 0">
-        Currently no hApps to display
+      <div
+        v-if="!data || data.length === 0"
+        class="no-happs"
+      >
+        {{ $t('hosted_happs.no_happs') }}
       </div>
       <div
         v-for="happ in data"
@@ -23,7 +26,7 @@
             {{ happ.name }}
           </div>
           <div class="card-info-row margin-bottom">
-            -- HF
+            {{ happ.sourceChains }} source chains
           </div>
         </div>
       </div>
@@ -54,6 +57,10 @@ const emit = defineEmits(['try-again-clicked'])
 </script>
 
 <style scoped>
+.body {
+  height: 100%;
+}
+
 .top-happ-row {
   display: flex;
   margin-bottom: 4px;
@@ -72,7 +79,12 @@ const emit = defineEmits(['try-again-clicked'])
   margin: 0 16px;
 }
 
-.card-spinner {
-  height: 156px;
+.no-happs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--grey-color);
+  font-weight: bold;
 }
 </style>

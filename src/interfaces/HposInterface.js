@@ -14,6 +14,8 @@ const axiosConfig = {
   }
 }
 
+const kTopHappsToDisplay = 3
+
 // bump port number by 1 for tests so we can run tests with the UI open
 const HPOS_PORT =
   process.env.NODE_ENV === 'test'
@@ -116,7 +118,7 @@ const HposInterface = {
     }
   },
 
-  getHostedHapps: async () => {
+  getTopHostedHapps: async () => {
     try {
       const result = await hposHolochainCall({
         method: 'get',
@@ -130,12 +132,8 @@ const HposInterface = {
       if (Array.isArray(result)) {
         return result
           .filter((happ) => happ.enabled)
-          .map(mergeMockHappData)
-          .map((happ) => ({
-            // currently hiding storage value from the UI as it's mock data coming from the api
-            ...happ,
-            storage: '--'
-          }))
+          .sort((a, b) => a.sourceChains - b.sourceChains)
+          .slice(0, kTopHappsToDisplay)
       } else {
         console.error("getHostedHapps didn't return an array")
         return []

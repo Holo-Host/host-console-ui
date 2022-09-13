@@ -7,12 +7,32 @@ const translations = {
     identicon_explanation:
       'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.'
   },
+  earnings: {
+    title: 'Earnings',
+    last_30_days: 'Last 30 days',
+    last_7_days: 'Last 7 days',
+    last_day: 'Last day'
+  },
+  holofuel: {
+    title: 'HoloFuel',
+    balance: 'Balance',
+    redeemable: 'Redeemable',
+    redeem_holofuel: 'Redeem HoloFuel'
+  },
   holofuel_modal: {
     ...commonTranslations.holofuel_modal
+  },
+  hosted_happs: {
+    title: 'Top Hosted hApps',
+    no_happs: 'You’re not currently hosting any hApps'
   },
   login: {
     ...commonTranslations.login,
     title: 'Host Console Login'
+  },
+  recent_payments: {
+    title: 'Recent Payments',
+    no_payments: 'You have no payments'
   },
   settings: {
     account_display_name: 'Account Display Name',

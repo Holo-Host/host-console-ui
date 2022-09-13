@@ -2,10 +2,10 @@
   <BaseCard
     :is-loading="isLoading"
     :is-error="isError"
-    title="Earnings"
+    :title="$t('earnings.title')"
     @try-again-clicked="emit('try-again-clicked')"
   >
-    <div class="body">
+    <div>
       <div
         v-for="{ label, value } in items"
         :key="label"
@@ -22,6 +22,9 @@
 import BaseCard from '@uicommon/components/BaseCard'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   data: {
@@ -41,16 +44,16 @@ const isError = computed(() => !!props.data.error)
 
 const items = computed(() => [
   {
-    label: 'Last 30 days',
+    label: t('earnings.last_30_days'),
     value:
       props.data && props.data.last30days ? formatCurrency(Number(props.data.last30days)) : '--'
   },
   {
-    label: 'Last 7 days',
+    label: t('earnings.last_7_days'),
     value: props.data && props.data.last7days ? formatCurrency(Number(props.data.last7days)) : '--'
   },
   {
-    label: 'Last day',
+    label: t('earnings.last_day'),
     value: props.data && props.data.lastday ? formatCurrency(Number(props.data.lastday)) : '--'
   }
 ])
@@ -65,9 +68,5 @@ const items = computed(() => [
   color: var(--grey-color);
   margin-bottom: 20px;
   margin-right: 50px;
-}
-
-.card-spinner {
-  height: 156px;
 }
 </style>

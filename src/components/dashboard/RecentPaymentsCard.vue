@@ -2,11 +2,14 @@
   <BaseCard
     :is-loading="isLoading"
     :is-error="isError"
-    title="Recent Payments"
+    :title="$t('recent_payments.title')"
   >
     <div class="body">
-      <div v-if="data.length === 0">
-        Currently no payments to display
+      <div
+        v-if="!data || data.length === 0"
+        class="no-payments"
+      >
+        {{ $t('recent_payments.no_payments') }}
       </div>
 
       <div
@@ -18,11 +21,11 @@
           {{ payment.amount ? formatCurrency(payment.amount) : '--' }} HF
         </div>
         <div class="payment-details">
-          <div class="">
+          <div>
             {{ payment.status ? capitalizeWord(payment.status) : '--' }}
           </div>
           <div class="payment-happ">
-            {{ payment ? payment.happ : '--' }}
+            {{ payment.happ ? payment.happ.name : '--' }}
           </div>
         </div>
         <div class="payment-time">
@@ -56,6 +59,10 @@ const isError = computed(() => !!props.data.error)
 </script>
 
 <style scoped>
+.body {
+  height: 100%;
+}
+
 .payment-row {
   display: flex;
   align-items: flex-start;
@@ -86,7 +93,12 @@ const isError = computed(() => !!props.data.error)
   margin-top: 4px;
 }
 
-.card-spinner {
-  height: 156px;
+.no-payments {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--grey-color);
+  font-weight: bold;
 }
 </style>

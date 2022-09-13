@@ -20,7 +20,7 @@
         :is-loading="isLoadingHostedHapps"
         with-more-button
         @more-clicked="() => {}"
-        @try-again-clicked="getHostedHapps"
+        @try-again-clicked="getTopHostedHapps"
       />
 
       <EarningsCard
@@ -52,7 +52,7 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import { useDashboardStore } from 'src/store/dashboard'
 import { computed, onMounted, ref } from 'vue'
 
-const kTopHappsToDisplay = 3
+const kPaymentsToDisplay = 3
 
 const dashboardStore = useDashboardStore()
 
@@ -60,21 +60,31 @@ const isLoadingEarnings = ref(false)
 const isLoadingUsage = ref(false)
 const isLoadingHostedHapps = ref(false)
 
-const holoFuel = computed(() => dashboardStore.hostEarnings.holofuel)
-
-const topHostedHapps = computed(() =>
-  dashboardStore.hostedHapps.error
-    ? dashboardStore.hostedHapps
-    : dashboardStore.hostedHapps.slice(0, kTopHappsToDisplay)
+const holoFuel = computed(() =>
+  dashboardStore.hostEarnings.error
+    ? dashboardStore.hostEarnings
+    : dashboardStore.hostEarnings.holofuel
 )
 
-const earnings = computed(() => dashboardStore.hostEarnings.earnings)
-const recentPayments = computed(() => dashboardStore.hostEarnings.recentPayments)
+const topHostedHapps = computed(() => dashboardStore.hostedHapps)
+
+const earnings = computed(() =>
+  dashboardStore.hostEarnings.error
+    ? dashboardStore.hostEarnings
+    : dashboardStore.hostEarnings.earnings
+)
+
+const recentPayments = computed(() =>
+  dashboardStore.hostEarnings.error
+    ? dashboardStore.hostEarnings
+    : dashboardStore.hostEarnings.recentPayments.slice(0, kPaymentsToDisplay)
+)
+
 const usage = computed(() => dashboardStore.usage)
 
-async function getHostedHapps() {
+async function getTopHostedHapps() {
   isLoadingHostedHapps.value = true
-  await dashboardStore.getHostedHapps()
+  await dashboardStore.getTopHostedHapps()
   isLoadingHostedHapps.value = false
 }
 
@@ -97,7 +107,7 @@ onMounted(async () => {
 
   await getEarnings()
   await getUsage()
-  await getHostedHapps()
+  await getTopHostedHapps()
 })
 </script>
 
