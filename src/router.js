@@ -6,8 +6,8 @@ import HostingPreferences from 'pages/HostingPreferences.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import SettingsPage from 'src/pages/SettingsPage.vue'
-import { checkHpAdminKeypair } from 'src/utils/keyManagement'
 import { createWebHistory, createRouter } from 'vue-router'
+import { kAuthTokenLSKey } from '@/constants'
 
 export const kRoutes = {
   login: {
@@ -110,9 +110,9 @@ export const routerFactory = () => {
       // page only visible when logged in
 
       // Existence of AuthToken in localStorage is equal to user logged in
-      if (localStorage.getItem('authToken') == null) {
+      if (localStorage.getItem(kAuthTokenLSKey) == null) {
         next({
-          name: 'Login',
+          name: kRoutes.login.name,
           params: { nextUrl: to.fullPath }
         })
       } else {
@@ -120,10 +120,10 @@ export const routerFactory = () => {
       }
     } else if (to.matched.some((record) => record.meta.guest)) {
       // page only visible when *not* logged in
-      if(localStorage.getItem('authToken') == null) {
-          next()
+      if (localStorage.getItem(kAuthTokenLSKey) == null) {
+        next()
       } else {
-          next({ name: 'Dashboard'})
+        next({ name: kRoutes.dashboard.name })
       }
     } else {
       // publicly visible page

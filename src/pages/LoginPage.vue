@@ -88,6 +88,7 @@ import HposInterface from '../interfaces/HposInterface'
 import { kRoutes } from '../router'
 import { useUserStore } from '../store/user'
 import { generateToken } from '../utils'
+import { kAuthTokenLSKey } from '@/constants'
 
 const kMinPasswordLength = 5
 
@@ -110,7 +111,7 @@ onMounted(async () => {
   // redirect from login page if user already logged in
   // To prevent infinite loop of redirects code will erase authToken
   // from localStorage whenever 401 from server is detected
-  if (localStorage.getItem('authToken') !== null) {
+  if (localStorage.getItem(kAuthTokenLSKey) !== null) {
     await router.push({ name: kRoutes.dashboard.name })
   }
 })
@@ -163,13 +164,11 @@ async function login() {
     isLoading.value = true
 
     try {
-      // const isAuthenticated = await userStore.login(email.value.toLowerCase(), password.value)
-
-      if (localStorage.getItem('authToken') === null) {
+      if (localStorage.getItem(kAuthTokenLSKey) === null) {
         const authHeaders = await createAuthHeaders(email.value, password.value)
 
         if (authHeaders) {
-          localStorage.setItem('authToken', authHeaders.authToken)
+          localStorage.setItem(kAuthTokenLSKey, authHeaders.authToken)
 
           await userStore.getUser()
 

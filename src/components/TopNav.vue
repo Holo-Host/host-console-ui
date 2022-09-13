@@ -1,6 +1,9 @@
 <template>
   <section class="top-nav">
-    <h1 v-if="!path" class="main-title">
+    <h1
+      v-if="!path"
+      class="main-title"
+    >
       {{ mainTitle }}
     </h1>
 
@@ -12,9 +15,15 @@
       {{ mainTitle }}
     </router-link>
 
-    <RightChevronIcon v-if="isSubtitleVisible" class="chevron" />
+    <RightChevronIcon
+      v-if="isSubtitleVisible"
+      class="chevron"
+    />
 
-    <div v-if="isSubtitleVisible" class="sub-title">
+    <div
+      v-if="isSubtitleVisible"
+      class="sub-title"
+    >
       {{ subTitle }}
     </div>
 
@@ -66,6 +75,7 @@ const isSubtitleVisible = computed(
   flex: 0 0 70px;
   padding-top: 46px;
 }
+
 .main-title {
   font-size: 26px;
   font-weight: 700;
@@ -73,9 +83,11 @@ const isSubtitleVisible = computed(
   color: #273048;
   text-decoration: none;
 }
+
 .chevron {
   margin: 12px 10px 0 15px;
 }
+
 .sub-title {
   font-size: 14px;
   font-weight: 600;
@@ -83,14 +95,17 @@ const isSubtitleVisible = computed(
   color: var(--grey-color);
   text-decoration: none;
 }
+
 .alpha-flag {
   display: none;
 }
+
 @media screen and (max-width: 1050px) {
   .top-nav {
     padding-top: 22px;
     flex: 0 0 46px;
   }
+
   .alpha-flag {
     display: block;
     height: 22px;

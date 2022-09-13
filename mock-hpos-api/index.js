@@ -61,7 +61,7 @@ class MockHposApi {
     })
   }
 
-  checkAuth (req, res, next) {
+  checkAuth(req, res, next) {
     if (!this.shouldCheckAuth) {
       return next()
     } else {

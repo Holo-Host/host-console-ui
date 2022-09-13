@@ -34,6 +34,8 @@ import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { kAuthTokenLSKey } from '@/constants'
+import { kRoutes } from '@/router'
 
 const router = useRouter()
 
@@ -61,13 +63,13 @@ function toggleMenu() {
 }
 
 function logout() {
-  localStorage.removeItem('authToken')
+  localStorage.removeItem(kAuthTokenLSKey)
   router.push({ name: kRoutes.login.name })
 }
 
 function openSettingsAndCloseMenu() {
   isMenuOpen.value = false
-  router.push({ name: 'Settings' })
+  router.push({ name: kRoutes.accountSettings.name })
 }
 </script>
 

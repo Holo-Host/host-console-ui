@@ -93,6 +93,9 @@ onMounted(async () => {
   addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
   addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
 
+  // Get user data when the app is hard reloaded and user was logged in before.
+  // In that case we still have a valid token but all store is cleared, that is why
+  // we need to fetch user data again.
   await nextTick(async () => {
     if (!userStore.publicKey) {
       isLoading.value = true

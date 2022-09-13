@@ -4,3 +4,5 @@ export const kDontShowGoToHoloFuelModalAgainLSKey =
 export const kHoloFuelUrl = `https://${location.host}/holofuel`
 
 export const kCoreAppVersionLSKey = 'holo.host-console.core-app-version'
+
+export const kAuthTokenLSKey = 'authToken'

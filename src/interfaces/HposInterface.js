@@ -1,9 +1,8 @@
 import axios from 'axios'
 import stringify from 'fast-json-stable-stringify'
-import mergeMockHappData from 'src/mergeMockHappData'
 import router from 'src/router'
 import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/keyManagement'
-import { kCoreAppVersionLSKey } from '@/constants'
+import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 
 require('dotenv').config()
 
@@ -29,7 +28,7 @@ export const HPOS_API_URL = HPOS_PORT
 async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
   const fullUrl = HPOS_API_URL + pathPrefix + path
 
-  const authToken = localStorage.getItem('authToken')
+  const authToken = localStorage.getItem(kAuthTokenLSKey)
 
   const headers = {
     'X-Hpos-Auth-Token': authToken,
@@ -65,7 +64,7 @@ const hposAdminCall = async (args) => {
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
-      localStorage.removeItem('authToken')
+      localStorage.removeItem(kAuthTokenLSKey)
       router.push('/login')
     }
     return Promise.reject(err)
@@ -81,7 +80,7 @@ const hposHolochainCall = async (args) => {
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
-      localStorage.removeItem('authToken')
+      localStorage.removeItem(kAuthTokenLSKey)
       router.push('/login')
     }
     return Promise.reject(err)
