@@ -131,7 +131,7 @@ const HposInterface = {
       if (Array.isArray(result)) {
         return result
           .filter((happ) => happ.enabled)
-          .sort((a, b) => a.sourceChains - b.sourceChains)
+          .sort((a, b) => b.sourceChains - a.sourceChains)
           .slice(0, kTopHappsToDisplay)
       } else {
         console.error("getHostedHapps didn't return an array")
