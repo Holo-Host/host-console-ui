@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import wait from 'waait'
 import MockHposApi from '../../mock-hpos-api'
 import App from '../App.vue'
@@ -57,7 +57,7 @@ describe.skip('Login Flow', () => {
     const wrongEmail = 'wrong@email.com'
     const wrongPassword = 'asdfgh'
 
-    const wrapper = mount(App, {
+    const wrapper = shallowMount(App, {
       global: {
         plugins: [router]
       }
@@ -81,7 +81,7 @@ describe.skip('Login Flow', () => {
   })
 
   it("logs you out if you don't have a keypair", async () => {
-    const wrapper = mount(App, {
+    const wrapper = shallowMount(App, {
       global: {
         plugins: [router]
       }
@@ -99,7 +99,7 @@ describe.skip('Login Flow', () => {
   })
 
   it('logs in and redirects to hApps page with correct credentials', async () => {
-    const wrapper = mount(App, {
+    const wrapper = shallowMount(App, {
       global: {
         plugins: [router]
       }
