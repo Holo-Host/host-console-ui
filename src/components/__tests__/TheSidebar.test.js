@@ -6,7 +6,7 @@ import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from 'src/router'
 import { createI18n } from 'vue-i18n'
 import wait from 'waait'
-import TheSidebar from '../TheSidebar'
+import TheSidebar from '../sidebar/TheSidebar'
 import locales from '@/locales'
 
 const i18n = createI18n({
