@@ -93,7 +93,7 @@ export default {
   },
 
   async created() {
-    this.happs = await HposInterface.hostedHapps()
+    this.happs = await HposInterface.getHostedHapps()
   },
 
   methods: {

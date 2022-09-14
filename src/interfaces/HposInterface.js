@@ -134,6 +134,29 @@ const HposInterface = {
           .sort((a, b) => b.sourceChains - a.sourceChains)
           .slice(0, kTopHappsToDisplay)
       } else {
+        console.error("getTopHostedHapps didn't return an array")
+        return []
+      }
+    } catch (error) {
+      console.error('getTopHostedHapps encountered an error: ', error)
+      return { error }
+    }
+  },
+
+  getHostedHapps: async () => {
+    try {
+      const result = await hposHolochainCall({
+        method: 'get',
+        path: '/hosted_happs',
+        params: {
+          duration_unit: 'WEEK',
+          amount: 1
+        }
+      })
+
+      if (Array.isArray(result)) {
+        return result.filter((happ) => happ.enabled)
+      } else {
         console.error("getHostedHapps didn't return an array")
         return []
       }
@@ -315,42 +338,6 @@ const HposInterface = {
       return true
     } catch (error) {
       return false
-    }
-  },
-
-  getSshAccess: async () => {
-    try {
-      const { enabled } = await hposAdminCall({
-        method: 'get',
-        path: '/profiles/development/features/ssh'
-      })
-      return enabled
-    } catch (err) {
-      return null
-    }
-  },
-
-  enableSshAccess: async () => {
-    try {
-      const { enabled } = await hposAdminCall({
-        method: 'put',
-        path: '/profiles/development/features/ssh'
-      })
-      return enabled
-    } catch (err) {
-      return null
-    }
-  },
-
-  disableSshAccess: async () => {
-    try {
-      const { enabled } = hposAdminCall({
-        method: 'delete',
-        path: '/profiles/development/features/ssh'
-      })
-      return enabled
-    } catch (err) {
-      return null
     }
   }
 }

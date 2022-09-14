@@ -174,7 +174,7 @@ export default {
   },
 
   async created() {
-    const happs = await HposInterface.hostedHapps()
+    const happs = await HposInterface.getHostedHapps()
     const happId = decodeURIComponent(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
 
