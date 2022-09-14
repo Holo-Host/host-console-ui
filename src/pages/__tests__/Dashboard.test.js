@@ -21,34 +21,14 @@ describe('dashboard page', () => {
       data: [{ enabled: true }, { enabled: true }, { enabled: true }] // this page just cares about length
     }
 
-    const dashboardResult = {
+    const usageResult = {
       data: {
-        earnings: { last30Days: 1343209.4, last7Days: 447768.54, lastDay: 34209.4 },
-        holofuel: { balance: 1234 },
-        recentPayments: [
-          {
-            id: '1',
-            amount: 167504.4,
-            status: 'received',
-            happ: 'HoloFuel',
-            updatedAt: '2022-06-10T14:48:00.000Z'
-          },
-          {
-            id: '2',
-            amount: 987334.34,
-            status: 'received',
-            happ: 'SF GeoChat',
-            updatedAt: '2022-06-09T14:48:00.000Z'
-          },
-          {
-            id: '3',
-            amount: 65456.02,
-            status: 'received',
-            happ: 'HC-Wiki',
-            updatedAt: '2022-06-05T14:48:00.000Z'
-          }
-        ],
-        usage: { bandwidth: 5094853480509, totalSourceChains: 387, totalHostedHapps: 3 }
+        totalSourceChains: 387,
+        currentTotalStorage: 590348543805,
+        totalUsage: {
+          cpu: 39084998,
+          bandwidth: 5094853480509
+        }
       }
     }
 
@@ -73,8 +53,8 @@ describe('dashboard page', () => {
         }
       }
 
-      if (path.endsWith('dashboard')) {
-        return dashboardResult
+      if (path.endsWith('usage')) {
+        return usageResult
       }
 
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
@@ -87,6 +67,6 @@ describe('dashboard page', () => {
     await wait(0)
 
     expect(getByTestId('happ-no').textContent === hostedHappsResult.data.length)
-    expect(getByTestId('sc-no').textContent === dashboardResult.data.totalSourceChains)
+    expect(getByTestId('sc-no').textContent === usageResult.data.totalSourceChains)
   })
 })
