@@ -19,6 +19,7 @@
         :data="topHostedHapps"
         :is-loading="isLoadingHostedHapps"
         with-more-button
+        class="happs-card"
         @more-clicked="() => {}"
         @try-again-clicked="getTopHostedHapps"
       />
@@ -27,6 +28,7 @@
         :data="earnings"
         :is-loading="isLoadingEarnings"
         with-more-button
+        class="earnings-card"
         @more-clicked="() => {}"
         @try-again-clicked="getEarnings"
       />
@@ -35,6 +37,7 @@
         :data="recentPayments"
         :is-loading="isLoadingEarnings"
         with-more-button
+        class="payments-card"
         @more-clicked="() => {}"
         @try-again-clicked="getEarnings"
       />
@@ -116,6 +119,18 @@ onMounted(async () => {
   display: flex;
   flex-direction: row;
   margin-bottom: 32px;
+}
+
+.earnings-card {
+  min-width: 250px;
+}
+
+.happs-card {
+  min-width: 250px;
+}
+
+.payments-card {
+  min-width: 320px;
 }
 
 @media screen and (max-width: 1050px) {

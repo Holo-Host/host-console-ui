@@ -69,4 +69,10 @@ const items = computed(() => [
   margin-bottom: 20px;
   margin-right: 50px;
 }
+
+@media screen and (max-width: 1350px) {
+  .earnings-info-row {
+    margin-right: 0;
+  }
+}
 </style>

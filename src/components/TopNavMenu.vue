@@ -19,11 +19,11 @@
 
     <div v-if="isMenuOpen" class="menu">
       <div class="menu-item" @click="openSettingsAndCloseMenu">
-        Account Settings
+        {{ $t('settings.header') }}
       </div>
 
       <div class="menu-item" @click="logout">
-        Logout
+        {{ $t('$.logout') }}
       </div>
     </div>
   </div>

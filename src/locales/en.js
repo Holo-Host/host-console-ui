@@ -4,8 +4,15 @@ const translations = {
   $: {
     ...commonTranslations.$,
     app_name: 'Host Console',
+    dashboard: 'Dashboard',
+    happs: 'hApps',
+    holo: 'HOLO',
+    hosting_preferences: 'Hosting Preferences',
     identicon_explanation:
-      'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.'
+      'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
+    learn_more: 'Learn more',
+    logout: 'Logout',
+    terms_of_service: 'Terms of Service'
   },
   earnings: {
     title: 'Earnings',
@@ -41,7 +48,16 @@ const translations = {
     factory_reset: 'Factory Reset',
     holofuel_address: 'HoloFuel Address',
     hpos_version: 'HPOS Version',
-    ssh_access: 'Access for HoloPort support (SSH)'
+    ssh_access: 'Access for HoloPort support (SSH)',
+    header: 'Account Settings'
+  },
+  sidebar: {
+    alpha: {
+      description:
+        'Host Console is in Alpha testing. All references to HF should be interpreted as Test Fuel.',
+      short: 'HF = Test Fuel',
+      title: 'ALPHA: HoloFuel = Test Fuel'
+    }
   },
   usage: {
     daily_snapshot: 'Daily Snapshot',

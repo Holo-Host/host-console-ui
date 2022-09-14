@@ -29,7 +29,8 @@
           </div>
         </div>
         <div class="payment-time">
-          {{ payment ? dayjs(payment.updatedAt).format('DD MMM hh:mm') : '--' }}
+          {{ payment ? dayjs(payment.updatedAt).format('DD MMM') : '--' }}
+          {{ payment ? dayjs(payment.updatedAt).format('hh:mm') : '--' }}
         </div>
       </div>
     </div>
@@ -75,6 +76,9 @@ const isError = computed(() => !!props.data.error)
 .payment-amount {
   min-width: 128px;
   font-weight: bold;
+  text-align: end;
+  padding-right: 30px;
+  white-space: nowrap;
 }
 
 .payment-details {

@@ -33,7 +33,7 @@
     />
 
     <div class="alpha-flag">
-      HF = Test Fuel
+      {{ $t('sidebar.alpha.short') }}
     </div>
   </section>
 </template>

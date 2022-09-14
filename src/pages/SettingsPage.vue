@@ -1,5 +1,5 @@
 <template>
-  <PrimaryLayout title="Account Settings">
+  <PrimaryLayout :title="$t('settings.header')">
     <SettingsHoloportSection
       :settings="user"
       @update:device-name="onDeviceNameUpdate"

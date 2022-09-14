@@ -20,7 +20,7 @@
 
 <script setup>
 import MenuIcon from 'components/icons/MenuIcon'
-import TheSidebar from 'components/TheSidebar'
+import TheSidebar from 'components/sidebar/TheSidebar'
 import TopNavMenu from 'components/TopNavMenu'
 import { ref } from 'vue'
 
