@@ -134,13 +134,13 @@ export default {
       get() {
         return this.settings.sshAccess
       },
+
       set(newValue) {
         if (newValue) {
           HposInterface.enableSshAccess()
         } else {
           HposInterface.disableSshAccess()
         }
-
         this.settings.sshAccess = newValue
       }
     }
