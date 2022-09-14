@@ -22,6 +22,8 @@ const NEXT_PATH = ' . next . '
 
 const NEXT_RESPONSE_KEY = generateResponseKey('', NEXT_PATH, {})
 
+let savedAuthToken
+
 class MockHposApi {
   constructor(port, authEmail, authPassword) {
     this.port = port
@@ -39,7 +41,7 @@ class MockHposApi {
 
     app.use(cors())
     app.use(bodyParser.json())
-    app.use(mockHposApi.checkAuth.bind(mockHposApi))
+    app.use(mockHposApi.getUser.bind(mockHposApi))
     app.use(mockHposApi.handleRequest.bind(mockHposApi))
 
     await mockHposApi.startServer(app)
@@ -60,6 +62,30 @@ class MockHposApi {
   }
 
   checkAuth(req, res, next) {
+    if (!this.shouldCheckAuth) {
+      return next()
+    } else {
+      const authToken = req.header('x-hpos-auth-token')
+      console.log(`authToken: ${authToken}`)
+      if (authToken) {
+        const signature = req.header('x-hpos-admin-signature')
+        if (signature) {
+          const keypair = new HpAdminKeypair(HC_PUBKEY, this.authEmail, this.authPassword)
+          const valid = verifySignedRequest(signature, authToken, keypair)
+          if (valid) {
+            savedAuthToken = authToken
+            return next()
+          }
+        } else {
+          if (authToken === savedAuthToken) return next()
+        }
+      }
+
+      res.status(401).end()
+    }
+  }
+
+  getUser(req, res, next) {
     if (!this.shouldCheckAuth) {
       next()
     } else {

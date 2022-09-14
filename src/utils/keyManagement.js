@@ -1,5 +1,3 @@
-// there's some duplication between this file and mock-hpos-api/authUtils.js
-
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
 const getHcPubkey = () => {
   if (process.env.VUE_APP_USE_REAL_PUB_KEY === 'true') {
@@ -46,50 +44,6 @@ export const getHpAdminKeypair = async (email, password) => {
 }
 
 export const checkHpAdminKeypair = () => !!HpAdminKeypairInstance
-
-export const signRequest = async (method, url, params) => {
-  const keypair = await getHpAdminKeypair()
-
-  // Workaround to allow making requests within unit tests
-  if (keypair === null) {
-    return ''
-  }
-
-  let pathToSign = new URL(url).pathname
-  const body = ''
-
-  if (params) {
-    switch (method) {
-      case 'get':
-        break
-
-      case 'delete':
-        pathToSign = `${pathToSign}?${new URLSearchParams(params)}`
-        break
-
-      case 'post':
-        break
-
-      case 'put':
-        // BUG: real server (hp-admin-crypto) does not properly check the body when
-        //      verifying signature [1]. pass empty string so that it validates
-        //      successfully
-        //
-        // [1]: https://github.com/Holo-Host/hp-admin-crypto/issues/25
-        //
-        // correct code:
-        //
-        // body = stringify(params)
-        break
-
-      default:
-        throw new Error(`No case in hposCall for ${method} method`)
-    }
-  }
-
-  const payload = { method: method.toLowerCase(), request: pathToSign, body }
-  return keypair.sign(payload)
-}
 
 export const hashString = async (string) => {
   const dataBytes = Buffer.from(string)
