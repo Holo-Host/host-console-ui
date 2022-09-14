@@ -76,6 +76,7 @@
     "gh-pages": "^4.0.0",
     "jest": "^26.5.3",
     "jest-canvas-mock": "^2.4.0",
+    "jest-svg-transformer": "^1.0.0",
     "prettier": "^2.6.2",
     "storybook-addon-mock": "^2.4.0",
     "storybook-i18n": "^1.0.11",

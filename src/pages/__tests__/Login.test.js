@@ -1,5 +1,6 @@
 // @testing-library/vue has not caught up all features of Vue 3 yet, specifically their support for tests involving routing
 // is not there. So while waiting for them, I'm using '@vue/test-utils' for routing tests.
+import { createTestingPinia } from '@pinia/testing'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import { kRoutes } from 'src/router'
@@ -41,7 +42,7 @@ jest.mock('src/interfaces/HposInterface')
 
 it('shows a login button as disabled when no inputs provided', () => {
   const { getByText } = render(Login, {
-    global: { plugins: [router, i18n] }
+    global: { plugins: [router, i18n, createTestingPinia()] }
   })
   const loginButton = getByText('Login').closest('button')
   expect(loginButton).toHaveProperty('disabled', true)
@@ -49,7 +50,7 @@ it('shows a login button as disabled when no inputs provided', () => {
 
 it('shows a login button as disabled when only email is provided', async () => {
   const { getByText, getByLabelText } = render(Login, {
-    global: { plugins: [router, i18n] }
+    global: { plugins: [router, i18n, createTestingPinia()] }
   })
 
   const emailField = getByLabelText('Email:')
@@ -61,7 +62,7 @@ it('shows a login button as disabled when only email is provided', async () => {
 
 it('shows a login button as disabled when only password is provided', async () => {
   const { getByText, getByLabelText } = render(Login, {
-    global: { plugins: [router, i18n] }
+    global: { plugins: [router, i18n, createTestingPinia()] }
   })
 
   const passwordField = getByLabelText('Password:')
@@ -73,7 +74,7 @@ it('shows a login button as disabled when only password is provided', async () =
 
 it('shows an error when given a bad email', async () => {
   const { getByLabelText, getByText } = render(Login, {
-    global: { plugins: [router, i18n] }
+    global: { plugins: [router, i18n, createTestingPinia()] }
   })
 
   const emailField = getByLabelText('Email:')
@@ -90,7 +91,7 @@ it('shows an error when given a bad email', async () => {
 
 it('shows an error when given a bad password', async () => {
   const { getByLabelText, getByText } = render(Login, {
-    global: { plugins: [router, i18n] }
+    global: { plugins: [router, i18n, createTestingPinia()] }
   })
 
   const emailField = getByLabelText('Email:')
