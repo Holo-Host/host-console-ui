@@ -1,12 +1,22 @@
 import { createTestingPinia } from '@pinia/testing'
 import { render } from '@testing-library/vue'
-import { routes } from 'src/router'
+import { kRoutes, routes } from 'src/router'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from '../TopNav.vue'
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes: [
+    kRoutes.accountSettings,
+    kRoutes.dashboard,
+    kRoutes.default,
+    kRoutes.earnings,
+    kRoutes.happ,
+    kRoutes.happs,
+    kRoutes.hostingPreferences,
+    kRoutes.invoices,
+    kRoutes.login
+  ]
 })
 
 it('renders a title', async () => {

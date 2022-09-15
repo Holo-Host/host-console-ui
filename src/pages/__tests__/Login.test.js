@@ -1,10 +1,36 @@
 // @testing-library/vue has not caught up all features of Vue 3 yet, specifically their support for tests involving routing
 // is not there. So while waiting for them, I'm using '@vue/test-utils' for routing tests.
+import { createTestingPinia } from '@pinia/testing'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
+import { kRoutes } from 'src/router'
+import { createI18n } from 'vue-i18n'
+import { createRouter, createWebHistory } from 'vue-router'
 import wait from 'waait'
-import Login from '../Login.vue'
+import Login from '../LoginPage.vue'
 import HposInterface from '@/interfaces/HposInterface'
+import messages from '@/locales'
+
+const i18n = createI18n({
+  legacy: true,
+  locale: 'en',
+  messages
+})
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    kRoutes.accountSettings,
+    kRoutes.dashboard,
+    kRoutes.default,
+    kRoutes.earnings,
+    kRoutes.happ,
+    kRoutes.happs,
+    kRoutes.hostingPreferences,
+    kRoutes.invoices,
+    kRoutes.login
+  ]
+})
 
 const validPassword = 'password'
 const invalidPassword = '2shrt'
@@ -15,13 +41,17 @@ const invalidEmail = 'invalidemail'
 jest.mock('src/interfaces/HposInterface')
 
 it('shows a login button as disabled when no inputs provided', () => {
-  const { getByText } = render(Login)
+  const { getByText } = render(Login, {
+    global: { plugins: [router, i18n, createTestingPinia()] }
+  })
   const loginButton = getByText('Login').closest('button')
   expect(loginButton).toHaveProperty('disabled', true)
 })
 
 it('shows a login button as disabled when only email is provided', async () => {
-  const { getByText, getByLabelText } = render(Login)
+  const { getByText, getByLabelText } = render(Login, {
+    global: { plugins: [router, i18n, createTestingPinia()] }
+  })
 
   const emailField = getByLabelText('Email:')
   await fireEvent.update(emailField, validEmail)
@@ -31,7 +61,9 @@ it('shows a login button as disabled when only email is provided', async () => {
 })
 
 it('shows a login button as disabled when only password is provided', async () => {
-  const { getByText, getByLabelText } = render(Login)
+  const { getByText, getByLabelText } = render(Login, {
+    global: { plugins: [router, i18n, createTestingPinia()] }
+  })
 
   const passwordField = getByLabelText('Password:')
   await fireEvent.update(passwordField, validPassword)
@@ -41,7 +73,9 @@ it('shows a login button as disabled when only password is provided', async () =
 })
 
 it('shows an error when given a bad email', async () => {
-  const { getByLabelText, getByText } = render(Login)
+  const { getByLabelText, getByText } = render(Login, {
+    global: { plugins: [router, i18n, createTestingPinia()] }
+  })
 
   const emailField = getByLabelText('Email:')
   await fireEvent.update(emailField, invalidEmail)
@@ -56,7 +90,9 @@ it('shows an error when given a bad email', async () => {
 })
 
 it('shows an error when given a bad password', async () => {
-  const { getByLabelText, getByText } = render(Login)
+  const { getByLabelText, getByText } = render(Login, {
+    global: { plugins: [router, i18n, createTestingPinia()] }
+  })
 
   const emailField = getByLabelText('Email:')
   await fireEvent.update(emailField, validEmail)
@@ -84,7 +120,7 @@ it.skip('sets local storage and pushes the happs route on login', async () => {
     push: jest.fn()
   }
 
-  HposInterface.checkAuth.mockImplementationOnce(() => Promise.resolve(true))
+  HposInterface.getUser.mockImplementationOnce(() => Promise.resolve(true))
 
   const wrapper = mount(Login, {
     global: {
