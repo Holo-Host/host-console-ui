@@ -126,8 +126,11 @@ import StopHostingModal from 'components/StopHostingModal.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 
+const kInitialsLength = 2
+
 export default {
   name: 'HappDetails',
+
   components: {
     PrimaryLayout,
     HappImage,
@@ -138,6 +141,7 @@ export default {
     AlertCircleIcon,
     StopHostingModal
   },
+
   data() {
     return {
       happ: {
@@ -147,6 +151,7 @@ export default {
       hostingModalVisible: false
     }
   },
+
   computed: {
     breadcrumbs() {
       return [
@@ -159,15 +164,17 @@ export default {
         }
       ]
     },
+
     initials() {
       return this.happ.name
-        .replace(/[^a-z]/gi, '')
-        .slice(0, 2)
+        .replace(/[^a-z]/giu, '')
+        .slice(0, kInitialsLength)
         .toUpperCase()
     }
   },
-  created: async function () {
-    const happs = await HposInterface.hostedHapps()
+
+  async created() {
+    const happs = await HposInterface.getHostedHapps()
     const happId = decodeURIComponent(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
 
@@ -177,20 +184,25 @@ export default {
 
     this.happ = happ
   },
+
   methods: {
     editRates() {
-      alert('Editing rates is not implemented in this version')
+      console.error('Editing rates is not implemented in this version')
     },
+
     openHostingModal() {
       // This function is not currently used but should replace the call to stopHostingHapp once we have implemented stopping hosting
       this.hostingModalVisible = true
     },
+
     closeHostingModal() {
       this.hostingModalVisible = false
     },
+
     stopHostingHapp() {
       console.log('NOT YET IMPLEMENTED: Stopping hosting happ', this.happ.name)
     },
+
     presentHolofuelAmount,
     presentMicroSeconds,
     presentBytes
@@ -202,18 +214,18 @@ export default {
 .happ-details {
   display: flex;
   flex-direction: column;
-  background-color: white;
-  box-shadow: 0px 4px 20px #eceef1;
+  background-color: var(--white-color);
+  box-shadow: 0 4px 20px #eceef1;
   border-radius: 5px;
   margin: 0 10px 20px 12px;
   padding: 30px;
-  color: #606c8b;
+  color: var(--grey-color);
   font-size: 14px;
   line-height: 19px;
   font-weight: 600;
 }
 .back-link {
-  color: #606c8b;
+  color: var(--grey-color);
   text-decoration: none;
   font-size: 14px;
   margin-bottom: 32px;
@@ -235,7 +247,7 @@ export default {
 }
 .description {
   font-weight: 700;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .main-column {
   display: flex;
@@ -249,22 +261,15 @@ export default {
 }
 .name {
   margin: 0 0 34px 0;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
 }
-.arrow-icon {
-  margin-left: auto;
-}
-.snapshot-label {
-  margin-left: 3px;
-  margin-bottom: 3px;
-}
 .info-row {
   display: flex;
   align-items: center;
-  color: #606c8b;
+  color: var(--grey-color);
   margin-bottom: 14px;
   font-size: 14px;
 }
@@ -273,7 +278,7 @@ export default {
 }
 .info {
   font-weight: 700;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .earnings-margin {
   margin-bottom: 48px;
@@ -290,7 +295,7 @@ export default {
 }
 .usage-row {
   display: flex;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 12px;
   font-weight: 600;
   padding-right: 36px;
@@ -305,14 +310,14 @@ export default {
 }
 .usage-value {
   padding: 0 5px;
-  border-bottom: 2px solid #00cad9;
+  border-bottom: 2px solid var(--primary-color);
   font-size: 13px;
   font-weight: 700;
   margin-right: 7px;
 }
 .rates-title {
   display: flex;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 12px;
@@ -330,7 +335,7 @@ export default {
   flex: 0 0 100px;
 }
 .rate-value {
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-weight: 700;
 }
 .rates-margin {
@@ -345,7 +350,7 @@ export default {
   font-size: 12px;
   line-height: 16px;
   text-decoration-line: underline;
-  color: #313c59;
+  color: var(--grey-dark-color);
   margin-right: 10px;
   cursor: pointer;
   flex-shrink: 0;
@@ -355,7 +360,7 @@ export default {
   align-items: flex-start;
   background: #f3f5f8;
   border-radius: 4px;
-  color: #313c59;
+  color: var(--grey-dark-color);
   font-size: 12px;
   font-weight: 400;
   padding: 4px 12px;

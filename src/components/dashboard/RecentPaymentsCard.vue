@@ -1,0 +1,108 @@
+<template>
+  <BaseCard
+    :is-loading="isLoading"
+    :is-error="isError"
+    :title="$t('recent_payments.title')"
+  >
+    <div class="body">
+      <div
+        v-if="!data || data.length === 0"
+        class="no-payments"
+      >
+        {{ $t('recent_payments.no_payments') }}
+      </div>
+
+      <div
+        v-for="payment in data"
+        :key="payment.id"
+        class="payment-row"
+      >
+        <div class="payment-amount">
+          {{ payment.amount ? formatCurrency(payment.amount) : '--' }} HF
+        </div>
+        <div class="payment-details">
+          <div>
+            {{ payment.status ? capitalizeWord(payment.status) : '--' }}
+          </div>
+          <div class="payment-happ">
+            {{ payment.happ ? payment.happ.name : '--' }}
+          </div>
+        </div>
+        <div class="payment-time">
+          {{ payment ? dayjs(payment.updatedAt).format('DD MMM') : '--' }}
+          {{ payment ? dayjs(payment.updatedAt).format('hh:mm') : '--' }}
+        </div>
+      </div>
+    </div>
+  </BaseCard>
+</template>
+
+<script setup>
+import BaseCard from '@uicommon/components/BaseCard'
+import { formatCurrency } from '@uicommon/utils/numbers'
+import { capitalizeWord } from '@uicommon/utils/stringUtils'
+import dayjs from 'dayjs'
+import { computed } from 'vue'
+
+const props = defineProps({
+  data: {
+    type: Array,
+    default: () => []
+  },
+
+  isLoading: {
+    type: Boolean,
+    required: true
+  }
+})
+
+const isError = computed(() => !!props.data.error)
+</script>
+
+<style scoped>
+.body {
+  height: 100%;
+}
+
+.payment-row {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 19px;
+  margin-bottom: 16px;
+  color: var(--grey-color);
+}
+
+.payment-amount {
+  min-width: 128px;
+  font-weight: bold;
+  text-align: end;
+  padding-right: 30px;
+  white-space: nowrap;
+}
+
+.payment-details {
+  min-width: 72px;
+}
+
+.payment-happ {
+  font-style: italic;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.payment-time {
+  font-size: 9px;
+  line-height: 12px;
+  margin-top: 4px;
+}
+
+.no-payments {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--grey-color);
+  font-weight: bold;
+}
+</style>

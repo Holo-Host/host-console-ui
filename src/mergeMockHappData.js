@@ -14,10 +14,10 @@ const mockHappData = {
   }
 }
 
-export default function mergeMockHappData (happ, i) {
+export default function mergeMockHappData(happ, i) {
   return {
     ...mockHappData,
     id: i,
-    ...happ,
+    ...happ
   }
 }

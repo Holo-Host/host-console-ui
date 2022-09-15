@@ -1,9 +1,6 @@
 <template>
   <BaseModal @close="$emit('close')">
-    <div
-      v-if="!confirmed"
-      class="stop-hosting-modal"
-    >
+    <div v-if="!confirmed" class="stop-hosting-modal">
       <ExclamationIcon class="exclamation-icon" />
       <p class="content">
         Are you sure you want to stop hosting {{ happName }}?
@@ -12,10 +9,7 @@
         It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.
       </p>
     </div>
-    <div
-      v-if="confirmed"
-      class="stop-hosting-modal"
-    >
+    <div v-if="confirmed" class="stop-hosting-modal">
       <BigCheckIcon class="exclamation-icon" />
       <p class="content">
         This hApp has been removed from hosting.
@@ -29,63 +23,62 @@
       v-if="confirmed"
       #buttons
     >
-      <Button
-        color="teal"
-        @click="closeAndGoToHapps"
-      >
+      <BaseButton @click="closeAndGoToHapps">
         Close
-      </Button>
+      </BaseButton>
     </template>
     <template
       v-else
       #buttons
     >
-      <Button
-        color="teal"
-        @click="confirm"
-      >
+      <BaseButton @click="confirm">
         Yes, I want to stop hosting this hApp
-      </Button>
-      <Button
-        color="white"
-        @click="$emit('close')"
-      >
+      </BaseButton>
+
+      <BaseButton @click="$emit('close')">
         Cancel
-      </Button>
+      </BaseButton>
     </template>
   </BaseModal>
 </template>
 
 <script>
-import BaseModal from 'components/BaseModal'
-import Button from 'components/Button'
+import BaseButton from '@uicommon/components/BaseButton'
+import BaseModal from '@uicommon/components/BaseModal'
 import BigCheckIcon from 'components/icons/BigCheckIcon'
 import ExclamationIcon from 'components/icons/ExclamationIcon'
 
 export default {
   name: 'StopHostingModal',
+
   components: {
     BaseModal,
-    Button,
+    BaseButton,
     ExclamationIcon,
     BigCheckIcon
   },
+
   props: {
     happName: {
       type: String,
       required: true
     }
   },
-  data: function () {
+
+  emits: ['close', 'stop-hosting-happ'],
+
+  data() {
     return {
       confirmed: false
     }
   },
+
   methods: {
     confirm() {
       this.$emit('stop-hosting-happ')
       this.confirmed = true
     },
+
     closeAndGoToHapps() {
       this.$emit('close')
       this.$router.push('/happs')
@@ -105,7 +98,7 @@ export default {
   font-size: 14px;
   line-height: 19px;
   text-align: center;
-  color: #313c59;
+  color: var(--grey-dark-color);
 }
 .exclamation-icon {
   margin-bottom: 22px;
@@ -113,23 +106,5 @@ export default {
 .content {
   max-width: 625px;
   margin: 0 0 20px 0;
-}
-.buttons {
-  display: flex;
-  margin-top: 20px;
-  margin-bottom: 26px;
-  direction: rtl; /* this is so that we have the correct order of buttons in mobile view */
-}
-
-@media screen and (max-width: 1050px) {
-  .buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .buttons button {
-    margin-bottom: 20px;
-    width: fit-content;
-  }
 }
 </style>

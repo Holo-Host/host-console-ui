@@ -1,0 +1,18 @@
+:root {
+    --font-family: "Nunito Sans", sans-serif;
+
+    --white-color: #FFFFFF;
+    --black-color: #000000;
+
+    --primary-color: #00cad9;
+    --primary-light-color: rgba(176, 236, 240, 0.72);
+
+    --grey-color: #606c8b;
+    --grey-dark-color: #313c59;
+
+    --violet-color: #E339FF;
+    --red-color: #ff5f5f;
+    --green-color: #21BE98;
+
+    --yellow-light-color: #ffe871;
+}

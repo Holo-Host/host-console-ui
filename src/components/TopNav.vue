@@ -1,47 +1,72 @@
 <template>
   <section class="top-nav">
-    <h1 v-if="!path" class="main-title">{{ mainTitle }}</h1>
-    <router-link v-if="!!path" class="main-title" :to="path">{{ mainTitle }}</router-link>
-    <RightChevronIcon v-if="showSubtitle" class="chevron" />
-    <div v-if="showSubtitle" class="sub-title">{{ subTitle }}</div>
-    <TopNavMenu :deviceName="deviceName" :openSettingsModal="openSettingsModal" />
-    <div class='alpha-flag'>HF = Test Fuel</div>
+    <h1
+      v-if="!path"
+      class="main-title"
+    >
+      {{ mainTitle }}
+    </h1>
+
+    <router-link
+      v-if="!!path"
+      class="main-title"
+      :to="path"
+    >
+      {{ mainTitle }}
+    </router-link>
+
+    <RightChevronIcon
+      v-if="isSubtitleVisible"
+      class="chevron"
+    />
+
+    <div
+      v-if="isSubtitleVisible"
+      class="sub-title"
+    >
+      {{ subTitle }}
+    </div>
+
+    <TopNavMenu
+      :nickname="nickname"
+      :agent-address="agentAddress"
+    />
+
+    <div class="alpha-flag">
+      {{ $t('sidebar.alpha.short') }}
+    </div>
   </section>
 </template>
 
-<script>
-import TopNavMenu from 'components/TopNavMenu.vue'
+<script setup>
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
+import TopNavMenu from 'components/TopNavMenu.vue'
+import { computed } from 'vue'
 
-export default {
-  name: 'TopNav',
-  components: {
-    TopNavMenu,
-    RightChevronIcon
+const props = defineProps({
+  breadcrumbs: {
+    type: Array,
+    default: () => [{}, {}]
   },
-  props: {
-    breadcrumbs: {
-      type: Array,
-      default: [{}, {}]
-    },
-    deviceName: String,
-    openSettingsModal: Function
+
+  nickname: {
+    type: String,
+    required: true
   },
-  computed: {
-    mainTitle () {
-      return this.breadcrumbs[0].label
-    },
-    path () {
-      return this.breadcrumbs[0].path
-    },
-    subTitle () {
-      return this.breadcrumbs[1].label
-    },
-    showSubtitle () {
-      return this.breadcrumbs.length > 1 && !!this.breadcrumbs[1].label
-    }
+
+  agentAddress: {
+    type: Uint8Array,
+    default: []
   }
-}
+})
+
+const mainTitle = computed(() => props.breadcrumbs[0].label)
+const subTitle = computed(() => props.breadcrumbs[1].label)
+const path = computed(() => props.breadcrumbs[0].path)
+
+const isSubtitleVisible = computed(
+  () => props.breadcrumbs.length > 1 && !!props.breadcrumbs[1].label
+)
 </script>
 
 <style scoped>
@@ -50,6 +75,7 @@ export default {
   flex: 0 0 70px;
   padding-top: 46px;
 }
+
 .main-title {
   font-size: 26px;
   font-weight: 700;
@@ -57,33 +83,37 @@ export default {
   color: #273048;
   text-decoration: none;
 }
+
 .chevron {
   margin: 12px 10px 0 15px;
 }
+
 .sub-title {
   font-size: 14px;
   font-weight: 600;
-  margin: 0;
-  color: #606C8B;
+  margin: 9px 0 0;
+  color: var(--grey-color);
   text-decoration: none;
-  margin-top: 9px;
 }
+
 .alpha-flag {
   display: none;
 }
+
 @media screen and (max-width: 1050px) {
   .top-nav {
     padding-top: 22px;
     flex: 0 0 46px;
   }
+
   .alpha-flag {
     display: block;
     height: 22px;
-    background-color: #E339FF;
+    background-color: var(--violet-color);
     font-weight: 600;
     font-size: 11px;
     line-height: 22px;
-    color: #FFFFFF;
+    color: var(--white-color);
     position: absolute;
     right: -2px;
     padding: 0 7px;

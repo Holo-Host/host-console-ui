@@ -1,51 +1,75 @@
 <template>
   <div class="top-nav-menu">
-    <div class="owner" @click="toggleMenu">{{ deviceName }} <DownTriangleIcon class='down-triangle' :white="white" /></div>
-    <div class="verification-status">Unverified</div>
-    <div v-if="menuOpen" class="menu">
-      <div @click="openSettingsAndCloseMenu" class="menu-item">
-        HoloPort Settings
+    <div class="owner">
+      <Identicon
+        v-if="props.agentAddress"
+        size="42"
+        :agent-key="props.agentAddress"
+        role="img"
+        aria-label="Agent Identity Icon"
+      />
+      <div class="display-name" @click="toggleMenu">
+        {{ nickname }}
+        <span class="verification-status">
+          Unverified
+        </span>
       </div>
-      <div @click="holofuel" class="menu-item">HoloFuel</div>
-      <div @click="logout" class="menu-item">Logout</div>
+      <DownTriangleIcon class="down-triangle" :white="white" />
+    </div>
+
+    <div v-if="isMenuOpen" class="menu">
+      <div class="menu-item" @click="openSettingsAndCloseMenu">
+        {{ $t('settings.header') }}
+      </div>
+
+      <div class="menu-item" @click="logout">
+        {{ $t('$.logout') }}
+      </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { kAuthTokenLSKey } from '@/constants'
+import { kRoutes } from '@/router'
 
-export default {
-  name: 'TopNav',
-  components: {
-    DownTriangleIcon
+const router = useRouter()
+
+const props = defineProps({
+  nickname: {
+    type: String,
+    required: true
   },
-  props: {
-    deviceName: String,
-    white: Boolean,
-    openSettingsModal: Function
+
+  agentAddress: {
+    type: Uint8Array,
+    default: []
   },
-  data () {
-    return {
-      menuOpen: false
-    }
-  },
-  methods: {
-    toggleMenu () {
-      this.menuOpen = !this.menuOpen
-    },
-    logout () {
-      localStorage.removeItem('authToken')
-      this.$router.push('/login')
-    },
-    holofuel () {
-      location.replace(`https://${location.host}/holofuel`)
-    },
-    openSettingsAndCloseMenu () {
-      this.menuOpen = false
-      this.openSettingsModal()
-    }
+
+  white: {
+    type: Boolean,
+    default: false
   }
+})
+
+const isMenuOpen = ref(false)
+
+function toggleMenu() {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+function logout() {
+  localStorage.removeItem(kAuthTokenLSKey)
+  router.push({ name: kRoutes.login.name })
+}
+
+function openSettingsAndCloseMenu() {
+  isMenuOpen.value = false
+  router.push({ name: kRoutes.accountSettings.name })
 }
 </script>
 
@@ -55,12 +79,17 @@ export default {
   position: relative;
   margin-left: auto;
   margin-right: -3px;
-  color: #313C59;
+  color: var(--grey-dark-color);
 }
+
 .mobile-banner .top-nav-menu {
   display: none;
 }
+
 .owner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
@@ -69,37 +98,48 @@ export default {
   text-align: end;
   padding-right: 20px;
 }
+
+.display-name {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  margin-left: 12px;
+}
+
 .verification-status {
   font-style: italic;
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
-  text-align: right;
-  margin-right: 38px;
 }
+
 .down-triangle {
-  margin-left: 3px;
+  margin-left: 12px;
 }
+
 .menu {
   position: absolute;
   z-index: 50;
   right: 12px;
   top: 20px;
-  background: #FFFFFF;
+  background: var(--white-color);
   border-radius: 2px;
   font-size: 14px;
   line-height: 19px;
-  color: #606C8B;
+  color: var(--grey-color);
   margin-top: 1px;
-  padding: 5px 0px;
+  padding: 5px 0;
   cursor: pointer;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
+
 .mobile-banner .menu {
   right: -2px;
   top: 20px;
   z-index: 10;
 }
+
 .menu::before {
   position: absolute;
   right: 7px;
@@ -111,10 +151,12 @@ export default {
   border-width: 0 6px 6px 6px;
   border-color: transparent transparent white transparent;
 }
+
 .menu-item {
-  padding: 0px 16px;
+  padding: 0 16px;
   margin: 7px 0;
 }
+
 .menu-item:hover {
   background-color: rgba(176, 236, 240, 0.72);
 }
@@ -132,9 +174,6 @@ export default {
 
   .owner {
     padding-right: 6px;
-  }
-  .verification-status {
-    margin-right: 24px;
   }
 }
 </style>

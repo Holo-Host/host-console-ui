@@ -1,0 +1,72 @@
+<template>
+  <section class="mobile-banner">
+    <MenuIcon @click="isMobileSidebarVisible = !isMobileSidebarVisible" />
+
+    <TopNavMenu
+      :nickname="nickname"
+      :white="true"
+      :agent-address="agentAddress"
+    />
+
+    <TheSidebar v-if="isMobileSidebarVisible" />
+
+    <div
+      v-if="isMobileSidebarVisible"
+      class="sidebar-backdrop"
+      @click="isMobileSidebarVisible = false"
+    />
+  </section>
+</template>
+
+<script setup>
+import MenuIcon from 'components/icons/MenuIcon'
+import TheSidebar from 'components/sidebar/TheSidebar'
+import TopNavMenu from 'components/TopNavMenu'
+import { ref } from 'vue'
+
+defineProps({
+  nickname: {
+    type: String,
+    required: true
+  },
+
+  agentAddress: {
+    type: Uint8Array,
+    default: []
+  }
+})
+
+const isMobileSidebarVisible = ref(false)
+</script>
+
+<style scoped>
+.mobile-banner {
+  display: none;
+  flex: 0 0 88px;
+  align-items: flex-end;
+  background-color: var(--primary-color);
+  padding: 20px;
+  margin: 0 -18px;
+}
+
+.sidebar-backdrop {
+  display: none;
+  background-color: rgba(49, 60, 89, 0.67);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+}
+
+@media screen and (max-width: 1050px) {
+  .mobile-banner {
+    display: flex;
+  }
+
+  .sidebar-backdrop {
+    display: flex;
+  }
+}
+</style>

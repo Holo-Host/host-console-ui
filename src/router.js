@@ -1,111 +1,129 @@
-import { createWebHistory, createRouter } from "vue-router"
-import Login from "pages/Login.vue"
-import Dashboard from "pages/Dashboard.vue"
-import HostedHapps from "pages/HostedHapps.vue"
-import HappDetails from "pages/HappDetails.vue"
-import Settings from "pages/Settings.vue"
-import Earnings from "pages/Earnings.vue"
-import EarningsInvoices from "pages/EarningsInvoices.vue"
-import HostingPreferences from "pages/HostingPreferences.vue"
+import Earnings from 'pages/Earnings.vue'
+import EarningsInvoices from 'pages/EarningsInvoices.vue'
+import HappDetails from 'pages/HappDetails.vue'
+import HostedHapps from 'pages/HostedHapps.vue'
+import HostingPreferences from 'pages/HostingPreferences.vue'
+import DashboardPage from 'src/pages/DashboardPage.vue'
+import LoginPage from 'src/pages/LoginPage.vue'
+import SettingsPage from 'src/pages/SettingsPage.vue'
+import { createWebHistory, createRouter } from 'vue-router'
+import { kAuthTokenLSKey } from '@/constants'
 
-export const routes = [
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
+export const kRoutes = {
+  login: {
+    path: '/login',
+    name: 'Login',
+    component: LoginPage,
     meta: {
       guest: true
     }
   },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    component: Dashboard,
+
+  dashboard: {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardPage,
     meta: {
       requiresAuth: true
     }
   },
-  {
-    path: "/happs",
-    name: "HostedHapps",
+
+  happs: {
+    path: '/happs',
+    name: 'HostedHapps',
     component: HostedHapps,
     meta: {
       requiresAuth: true
     }
   },
-  {
-    path: "/happ/:id",
-    name: "HappDetails",
+
+  happ: {
+    path: '/happ/:id',
+    name: 'HappDetails',
     component: HappDetails,
     meta: {
       requiresAuth: true
     }
   },
-  {
-    path: "/settings",
-    name: "Settings",
-    component: Settings,
+
+  accountSettings: {
+    path: '/settings',
+    name: 'Settings',
+    component: SettingsPage,
     meta: {
       requiresAuth: true
     }
   },
-  {
-    path: "/earnings",
-    name: "Earnings",
+
+  earnings: {
+    path: '/earnings',
+    name: 'Earnings',
     component: Earnings,
     meta: {
       requiresAuth: true
     }
   },
-  {
-    path: "/earnings/invoices",
-    name: "EarningsInvoices",
+
+  invoices: {
+    path: '/earnings/invoices',
+    name: 'EarningsInvoices',
     component: EarningsInvoices,
     meta: {
       requiresAuth: true
     }
   },
-  {
-    path: "/preferences",
-    name: "HostingPreferences",
+
+  hostingPreferences: {
+    path: '/preferences',
+    name: 'HostingPreferences',
     component: HostingPreferences,
     meta: {
       requiresAuth: true
     }
   },
-  {
+
+  default: {
     path: '/',
     redirect: '/dashboard'
   }
-]
+}
 
 // used in loginFlow.integration.test.js
 export const routerFactory = () => {
   const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes: [
+      kRoutes.accountSettings,
+      kRoutes.dashboard,
+      kRoutes.default,
+      kRoutes.earnings,
+      kRoutes.happ,
+      kRoutes.happs,
+      kRoutes.hostingPreferences,
+      kRoutes.invoices,
+      kRoutes.login
+    ]
   })
 
   router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
       // page only visible when logged in
 
       // Existence of AuthToken in localStorage is equal to user logged in
-      if (localStorage.getItem('authToken') == null) {
+      if (localStorage.getItem(kAuthTokenLSKey) == null) {
         next({
-          name: 'Login',
+          name: kRoutes.login.name,
           params: { nextUrl: to.fullPath }
         })
       } else {
         next()
       }
-    } else if (to.matched.some(record => record.meta.guest)) {
-
+    } else if (to.matched.some((record) => record.meta.guest)) {
       // page only visible when *not* logged in
-      if(localStorage.getItem('authToken') == null) {
-          next()
+      if (localStorage.getItem(kAuthTokenLSKey) == null) {
+        next()
       } else {
-          next({ name: 'Dashboard'})
+        next({ name: kRoutes.dashboard.name })
       }
     } else {
       // publicly visible page
@@ -120,4 +138,4 @@ const router = routerFactory()
 
 export default router
 
-export const happDetailsPath = ({ id }) => '/happ/' + encodeURIComponent(id)
+export const happDetailsPath = ({ id }) => `/happ/${encodeURIComponent(id)}`

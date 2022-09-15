@@ -3,7 +3,7 @@ const getHcPubkey = () => {
   if (process.env.VUE_APP_USE_REAL_PUB_KEY === 'true') {
     return window.location.hostname.split('.')[0]
   } else if (process.env.VUE_APP_HOLOPORT_URL) {
-    return (new URL(process.env.VUE_APP_HOLOPORT_URL)).hostname.split('.')[0]
+    return new URL(process.env.VUE_APP_HOLOPORT_URL).hostname.split('.')[0]
   } else {
     return '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
   }
@@ -27,11 +27,15 @@ export const eraseHpAdminKeypair = () => {
 // Uses singleton pattern
 // Return null when trying to initialize with no params
 export const getHpAdminKeypair = async (email, password) => {
-  if (HpAdminKeypairInstance) return HpAdminKeypairInstance
+  if (HpAdminKeypairInstance) {
+    return HpAdminKeypairInstance
+  }
 
   const hcKey = getHcPubkey()
 
-  if (!hcKey || !email || !password) return null
+  if (!hcKey || !email || !password) {
+    return null
+  }
 
   const HpAdminKeypair = await importHpAdminKeypairClass()
   HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)

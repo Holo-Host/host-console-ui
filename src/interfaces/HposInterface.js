@@ -1,10 +1,10 @@
-require('dotenv').config() // this is necessary for testing. Otherwise the process.env does not get set up befoe constants are defined
 import axios from 'axios'
-import mergeMockHappData from 'src/mergeMockHappData'
-import { hashString } from 'src/utils/keyManagement'
-import { getHpAdminKeypair, eraseHpAdminKeypair } from 'src/utils/keyManagement'
 import stringify from 'fast-json-stable-stringify'
 import router from 'src/router'
+import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/keyManagement'
+import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
+
+require('dotenv').config()
 
 const axiosConfig = {
   headers: {
@@ -13,46 +13,50 @@ const axiosConfig = {
   }
 }
 
+const kTopHappsToDisplay = 3
+
 // bump port number by 1 for tests so we can run tests with the UI open
-const HPOS_PORT = process.env.NODE_ENV === 'test' ? Number(process.env.VUE_APP_HPOS_PORT) + 1 : process.env.VUE_APP_HPOS_PORT
+const HPOS_PORT =
+  process.env.NODE_ENV === 'test'
+    ? Number(process.env.VUE_APP_HPOS_PORT) + 1
+    : process.env.VUE_APP_HPOS_PORT
 
 export const HPOS_API_URL = HPOS_PORT
   ? `http://localhost:${HPOS_PORT}`
-  : (window.location.protocol + '//' + window.location.host)
+  : `${window.location.protocol}//${window.location.host}`
 
-async function hposCall ({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
+async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
   const fullUrl = HPOS_API_URL + pathPrefix + path
 
-  const authToken = localStorage.getItem('authToken')
+  const authToken = localStorage.getItem(kAuthTokenLSKey)
 
   const headers = {
     'X-Hpos-Auth-Token': authToken,
     ...axiosConfig.headers,
-    ...userHeaders,
+    ...userHeaders
   }
 
-  let data
+  let response
 
   switch (method) {
     case 'get':
-      ({ data } = await axios.get(fullUrl, { params, headers }))
-      return data
+      response = await axios.get(fullUrl, { params, headers })
+      return response.data
     case 'post':
-      ({ data } = await axios.post(fullUrl, params, { headers }))
-      return data
+      response = await axios.post(fullUrl, params, { headers })
+      return response.data
     case 'put':
-      ({ data } = await axios.put(fullUrl, params, { headers }))
-      return data
+      response = await axios.put(fullUrl, params, { headers })
+      return response.data
     case 'delete':
-      ({ data } = await axios.delete(fullUrl, { params, headers }))
-      return data
+      response = await axios.delete(fullUrl, { params, headers })
+      return response.data
     default:
       throw new Error(`No case in hposCall for ${method} method`)
   }
 }
 
 const hposAdminCall = async (args) => {
-  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
   try {
     return await hposCall({
       ...args,
@@ -60,7 +64,7 @@ const hposAdminCall = async (args) => {
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
-      localStorage.removeItem('authToken')
+      localStorage.removeItem(kAuthTokenLSKey)
       router.push('/login')
     }
     return Promise.reject(err)
@@ -76,7 +80,7 @@ const hposHolochainCall = async (args) => {
     })
   } catch (err) {
     if (err.response && err.response.status === 401) {
-      localStorage.removeItem('authToken')
+      localStorage.removeItem(kAuthTokenLSKey)
       router.push('/login')
     }
     return Promise.reject(err)
@@ -84,79 +88,108 @@ const hposHolochainCall = async (args) => {
 }
 
 const presentHposSettings = (hposSettings) => {
-  const { admin, holoportos = {}, deviceName } = hposSettings
+  const { admin, holoportOs = {}, deviceName } = hposSettings
   return {
     hostPubKey: admin.public_key,
     registrationEmail: admin.email,
-    networkStatus: holoportos.network || 'test', // ie: 'live'
-    sshAccess: holoportos.sshAccess || false,
-    deviceName: deviceName || (admin.public_key && admin.public_key.slice(-8)) || 'Your HP'
+    networkStatus: holoportOs.network, // ie: 'live'
+    sshAccess: holoportOs.sshAccess || false,
+    hposVersion: holoportOs.hposVersion,
+    // eslint-disable-next-line no-magic-numbers
+    deviceName: deviceName || (admin.public_key && `...${admin.public_key.slice(-8)}`) || 'Your HP'
   }
 }
 
 const HposInterface = {
-  usage: async () => {
+  getUsage: async () => {
     try {
-      const usageData = await hposHolochainCall({
+      return await hposHolochainCall({
         method: 'get',
-        path: '/usage' ,
+        path: '/usage',
         params: {
           duration_unit: 'DAY',
           amount: 1
         }
       })
-      return usageData
-    } catch (err) {
-      console.error("usage encountered an error: ", err)
-      return {}
+    } catch (error) {
+      console.error('usage encountered an error: ', error)
+      return { error }
     }
   },
 
-  hostedHapps: async () => {
+  getTopHostedHapps: async () => {
     try {
       const result = await hposHolochainCall({
         method: 'get',
         path: '/hosted_happs',
         params: {
-          duration_unit: "WEEK",
+          duration_unit: 'WEEK',
           amount: 1
         }
       })
 
       if (Array.isArray(result)) {
-        return result.filter(happ => happ.enabled)
-          .map(mergeMockHappData)
-          .map(happ => ({ // currently hiding storage value from the UI as it's mock data coming from the api
-            ...happ,
-            storage: '--'
-          }))
+        return result
+          .filter((happ) => happ.enabled)
+          .sort((a, b) => b.sourceChains - a.sourceChains)
+          .slice(0, kTopHappsToDisplay)
       } else {
-        console.error("hosted_happs didn't return an array")
+        console.error("getTopHostedHapps didn't return an array")
         return []
       }
-    } catch (err) {
-      return []
+    } catch (error) {
+      console.error('getTopHostedHapps encountered an error: ', error)
+      return { error }
     }
   },
 
-  settings: async () => {
+  getHostedHapps: async () => {
     try {
-      const result = await hposAdminCall({ method: 'get', path: '/config' })
-      return presentHposSettings(result)
-    } catch (err) {
-      return {}
+      const result = await hposHolochainCall({
+        method: 'get',
+        path: '/hosted_happs',
+        params: {
+          duration_unit: 'WEEK',
+          amount: 1
+        }
+      })
+
+      if (Array.isArray(result)) {
+        return result.filter((happ) => happ.enabled)
+      } else {
+        console.error("getHostedHapps didn't return an array")
+        return []
+      }
+    } catch (error) {
+      console.error('getHostedHapps encountered an error: ', error)
+      return { error }
+    }
+  },
+
+  getHostEarnings: async () => {
+    try {
+      return await hposHolochainCall({
+        method: 'get',
+        path: '/host_earnings'
+      })
+    } catch (error) {
+      console.error('getHostEarnings encountered an error: ', error)
+      return { error }
     }
   },
 
   checkAuth: async (email, password, authToken) => {
     const keypair = await getHpAdminKeypair(email, password)
+
     if (keypair === null) {
       return false
     }
 
-    // crate signature header
+    const adminSignature = keypair.sign(authToken)
+
+    // create signature header
     const signatureHeader = {
-      "X-Hpos-Admin-Signature": keypair.sign(authToken),
+      'X-Hpos-Admin-Signature': adminSignature,
       // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
       // but authToken is not recorded yet in localStorage so we have to set this header manually
       'X-Hpos-Auth-Token': authToken
@@ -167,22 +200,52 @@ const HposInterface = {
 
     try {
       // Make a call to some endpoint and only in case of 200 return true
-     let res = await hposCall({
-        method: 'get', path: '/config', headers: signatureHeader,
+      await hposCall({
+        method: 'get',
+        path: '/config',
+        headers: signatureHeader,
         pathPrefix: '/api/v1'
       })
+
+      return { adminSignature }
     } catch (err) {
       // This will be executed if response.status === 401
       console.log('User authentication failed', err)
+      return null
+    }
+  },
+
+  getUser: async () => {
+    try {
+      const user = await HposInterface.getSettings()
+      const holoFuelProfile = await HposInterface.getHoloFuelProfile()
+
+      return { user, holoFuelProfile }
+    } catch (error) {
+      console.error('getUser failed', error)
       return false
     }
+  },
 
-    return true
+  getSettings: async () => {
+    try {
+      const result = await hposAdminCall({
+        method: 'get',
+        path: '/config'
+      })
+
+      return presentHposSettings(result)
+    } catch (err) {
+      return {}
+    }
   },
 
   updateSettings: async ({ deviceName }) => {
     try {
-      const settingsResponse = await hposAdminCall({ method: 'get', path: '/config' })
+      const settingsResponse = await hposAdminCall({
+        method: 'get',
+        path: '/config'
+      })
 
       // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
       const headers = {
@@ -192,11 +255,17 @@ const HposInterface = {
       const settingsConfig = {
         ...settingsResponse
       }
+
       if (deviceName !== undefined) {
         settingsConfig.deviceName = deviceName
       }
 
-      await hposAdminCall({ method: 'put', path: '/config', headers, params: settingsConfig })
+      await hposAdminCall({
+        method: 'put',
+        path: '/config',
+        headers,
+        params: settingsConfig
+      })
       // We don't assume the successful PUT /api/v1/config returns the current config
       return presentHposSettings(settingsConfig)
     } catch (err) {
@@ -204,30 +273,71 @@ const HposInterface = {
     }
   },
 
-  getSshAccess: async () => {
+  getHoloFuelProfile: async () => {
     try {
-      const { enabled } = await hposAdminCall({ method: 'get', path: '/profiles/development/features/ssh' })
-      return enabled
-    } catch (err) {
-      return null
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'profile',
+        fnName: 'get_my_profile',
+        payload: null
+      }
+
+      const {
+        agent_address: agentAddress,
+        nickname,
+        avatar_url: avatarUrl
+      } = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+    } catch (error) {
+      return {
+        nickname: null,
+        avatarUrl: null
+      }
     }
   },
 
-  enableSshAccess: async () => {
+  getCoreAppVersion: async () => {
     try {
-      const { enabled } = await hposAdminCall({ method: 'put', path: '/profiles/development/features/ssh' })
-      return enabled
-    } catch (err) {
-      return null
+      const { version: coreAppVersion } = await hposHolochainCall({
+        method: 'get',
+        path: '/core_app_version'
+      })
+
+      localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
+
+      return { coreAppVersion }
+    } catch (error) {
+      return {
+        coreAppVersion: null
+      }
     }
   },
 
-  disableSshAccess: async () => {
+  async updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
-      const { enabled } = hposAdminCall({ method: 'delete', path: '/profiles/development/features/ssh' })
-      return enabled
-    } catch (err) {
-      return null
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'profile',
+        fnName: 'update_my_profile',
+        payload: { nickname, avatarUrl }
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return true
+    } catch (error) {
+      return false
     }
   }
 }

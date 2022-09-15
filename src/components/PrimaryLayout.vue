@@ -1,33 +1,32 @@
 <template>
   <section class="layout">
-    <Sidebar />
-    <section class="main-column">
-      <MobileBanner
-        :device-name="deviceName"
-        :show-mobile-sidebar="showMobileSidebar"
-        :mobile-sidebar-visible="mobileSidebarVisible"
-        :open-settings-modal="openSettingsModal"
+    <TheSidebar />
+
+    <section v-if="!isLoading" class="main-column">
+      <MobileTopNav
+        :nickname="nickname"
+        :agent-address="agentAddress"
       />
+
       <TopNav
         :breadcrumbs="breadcrumbsOrTitle"
-        :device-name="deviceName"
-        :open-settings-modal="openSettingsModal"
+        :nickname="nickname"
+        :agent-address="agentAddress"
       />
-      <SettingsModal
-        :is-visible="settingsModalVisible"
-        @close="closeSettingsModal"
+
+      <WelcomeModal
+        :is-visible="isWelcomeModalVisible"
+        @close="closeWelcomeModal"
       />
-      <div
-        v-if="kycBannerVisible"
-        class="kyc-banner"
-      >
-        You haven't finished verifying your identity yet. Go to our
-        <a
-          href="https://holo.host/kyc"
-          target="_blank"
-        >third party provider's site</a> to complete
-        your verification.
-      </div>
+
+      <GoToHoloFuelModal
+        :is-visible="isGoToHolofuelModalVisible"
+        :app-name="$t('$.app_name')"
+        :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
+        :holo-fuel-url="kHoloFuelUrl"
+        @close="hideGoToHolofuelModal"
+      />
+
       <section class="content">
         <slot />
       </section>
@@ -35,64 +34,94 @@
   </section>
 </template>
 
-<script>
-import MobileBanner from 'components/MobileBanner.vue'
-import SettingsModal from 'components/SettingsModal.vue'
-import Sidebar from 'components/Sidebar.vue'
-import TopNav from 'components/TopNav.vue'
-import HposInterface from 'src/interfaces/HposInterface'
+<script setup>
+import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
+import {
+  addObserver,
+  removeObserver,
+  ENotification,
+  postNotification,
+  EProjectNotification
+} from '@uicommon/utils/notifications'
+import MobileTopNav from 'components/MobileTopNav'
+import WelcomeModal from 'components/modals/WelcomeModal'
+import TheSidebar from 'components/sidebar/TheSidebar'
+import TopNav from 'components/TopNav'
+import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
+import { useUserStore } from 'src/store/user'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 
-export default {
-  name: 'PrimaryLayout',
-  components: {
-    Sidebar,
-    TopNav,
-    MobileBanner,
-    SettingsModal
-  },
-  props: {
-    title: String,
-    breadcrumbs: Array
-  },
-  data() {
-    return {
-      deviceName: 'Loading...',
-      mobileSidebarVisible: false,
-      settingsModalVisible: false,
-      kycBannerVisible: false
-    }
-  },
-  computed: {
-    breadcrumbsOrTitle() {
-      if (this.breadcrumbs) {
-        return this.breadcrumbs
-      } else {
-        return [
-          {
-            label: this.title
-          }
-        ]
-      }
-    }
-  },
-  async mounted() {
-    const { deviceName } = await HposInterface.settings()
+const userStore = useUserStore()
 
-    if (deviceName) {
-      this.deviceName = deviceName
-    }
+const props = defineProps({
+  title: {
+    type: String,
+    required: true
   },
-  methods: {
-    showMobileSidebar(shouldShow = false) {
-      this.mobileSidebarVisible = shouldShow
-    },
-    openSettingsModal() {
-      this.settingsModalVisible = true
-    },
-    closeSettingsModal() {
-      this.settingsModalVisible = false
-    }
+
+  breadcrumbs: {
+    type: Array,
+    default: () => []
   }
+})
+
+const isLoading = ref(false)
+
+const isWelcomeModalVisible = ref(false)
+const isGoToHolofuelModalVisible = ref(false)
+
+const nickname = computed(() => userStore.holoFuel?.nickname)
+const agentAddress = computed(() => userStore.holoFuel?.agentAddress || null)
+
+const breadcrumbsOrTitle = computed(() => {
+  if (props.breadcrumbs.length) {
+    return props.breadcrumbs
+  } else {
+    return [
+      {
+        label: props.title
+      }
+    ]
+  }
+})
+
+function closeWelcomeModal() {
+  isWelcomeModalVisible.value = false
+}
+
+onMounted(async () => {
+  addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
+  addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
+
+  // Get user data when the app is hard reloaded and user was logged in before.
+  // In that case we still have a valid token but all store is cleared, that is why
+  // we need to fetch user data again.
+  await nextTick(async () => {
+    if (!userStore.publicKey) {
+      isLoading.value = true
+
+      postNotification(ENotification.showBusyState)
+      await userStore.getUser()
+
+      postNotification(ENotification.hideBusyState)
+      isLoading.value = false
+    }
+
+    isWelcomeModalVisible.value = !userStore.holoFuel.nickname
+  })
+})
+
+onUnmounted(() => {
+  removeObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
+  removeObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
+})
+
+function showGoToHolofuelModal() {
+  isGoToHolofuelModalVisible.value = true
+}
+
+function hideGoToHolofuelModal() {
+  isGoToHolofuelModalVisible.value = false
 }
 </script>
 
@@ -103,26 +132,14 @@ export default {
   /* Making room for the sidebar */
   padding-left: 270px;
 }
+
 .main-column {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 0 20px;
+  padding: 0 30px;
 }
-.kyc-banner {
-  margin: -30px -20px 28px -20px;
-  background-color: #ffe871;
-  text-align: center;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 28px;
-  color: #000000;
-}
-.kyc-banner a {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #000000;
-}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -134,11 +151,6 @@ export default {
   }
   .layout {
     padding-left: 0;
-  }
-  .kyc-banner {
-    margin-top: 0;
-    padding: 10px 30px;
-    line-height: 20px;
   }
 }
 </style>

@@ -1,112 +1,162 @@
 <template>
-  <PrimaryLayout :breadcrumbs="breadcrumbs">
+  <PrimaryLayout
+    title="Earnings"
+    :breadcrumbs="breadcrumbs"
+  >
     <div class="controls">
       <div class="label">
         Filter:&nbsp;
       </div>
-      <select v-model="filter" class="dropdown">
-        <option v-for="option in filterOptions" :value="option" :key="option">
+      <select
+        v-model="filter"
+        class="dropdown"
+      >
+        <option
+          v-for="option in filterOptions"
+          :key="option"
+          :value="option"
+        >
           {{ option }}
         </option>
       </select>
     </div>
-    <div class='invoices-padding'>
+    <div class="invoices-padding">
       <table class="invoices">
-        <tr class='header-row'>
-          <th v-for="{ name } in headers"
-            :key='name'
-            @click="handleHeaderClick(name)"
+        <tr class="header-row">
+          <th
+            v-for="{ name } in headers"
+            :key="name"
             :class="[{ selected: name === sort}, 'desktop-cell']"
             :title="name"
+            @click="handleHeaderClick(name)"
           >
             {{ name }}
-            <ShortUpArrowIcon :color="name === sort ? '#000' : '#FFF'" :class="{ 'rotate-180': sortDesc }"/>
+            <ShortUpArrowIcon
+              :color="name === sort ? '#000' : '#FFF'"
+              :class="{ 'rotate-180': sortDesc }"
+            />
           </th>
-          <th v-for="{ mobileName, name } in mobileHeaders"
-            :key='mobileName'
-            @click="handleHeaderClick(name)"
+          <th
+            v-for="{ mobileName, name } in mobileHeaders"
+            :key="mobileName"
             :class="[{ selected: name === sort, 'amount-header': name === SORT_AMOUNT }, 'mobile-cell']"
             :title="mobileName"
+            @click="handleHeaderClick(name)"
           >
             {{ mobileName }}
-            <ShortUpArrowIcon :color="name === sort ? '#000' : '#FFF'" :class="{ 'rotate-180': sortDesc }"/>
+            <ShortUpArrowIcon
+              :color="name === sort ? '#000' : '#FFF'"
+              :class="{ 'rotate-180': sortDesc }"
+            />
           </th>
         </tr>
-        <template v-for="invoice in pagedInvoices" :key='invoice.id'>
+        <template
+          v-for="invoice in pagedInvoices"
+          :key="invoice.id"
+        >
           <tr :class="['invoice-row', {'expanded-parent-row': isExpanded(invoice)}]">
-            <td class='happ-cell'>
+            <td class="happ-cell">
               {{ invoice.happ }}
             </td>
-            <td class='desktop-cell'>
+            <td class="desktop-cell">
               {{ presentPublisherHash(invoice.publisher) }}
             </td>
-            <td class='desktop-cell'>
+            <td class="desktop-cell">
               {{ presentDate(invoice.date_created) }}
             </td>
-            <td class='mobile-cell'>
+            <td class="mobile-cell">
               {{ presentShortDate(invoice.date_created) }}
             </td>
-            <td class='desktop-cell'>
+            <td class="desktop-cell">
               {{ presentDate(invoice.date_due) }}
             </td>
-            <td class='desktop-cell'>
+            <td class="desktop-cell">
               {{ invoice.id }}
             </td>
-            <td class='amount-cell desktop-cell'>
+            <td class="amount-cell desktop-cell">
               {{ presentHolofuelAmount(invoice.amount) }}
             </td>
-            <td class='amount-cell mobile-cell'>
+            <td class="amount-cell mobile-cell">
               {{ presentShortHolofuelAmount(invoice.amount) }}
             </td>
-            <td class='pstatus-cell'>
+            <td class="pstatus-cell">
               {{ invoice.payment_status }}
-              <RightChevronIcon @click="toggleExpandInvoice(invoice)" :class="[isExpanded(invoice) ? 'up-chevron' : 'down-chevron']" color="#00CAD9" />
+              <RightChevronIcon
+                :class="[isExpanded(invoice) ? 'up-chevron' : 'down-chevron']"
+                color="#00CAD9"
+                @click="toggleExpandInvoice(invoice)"
+              />
             </td>
-            <td class='desktop-cell'>
+            <td class="desktop-cell">
               {{ invoice.exception_status }}
             </td>
           </tr>
-          <tr v-if="isExpanded(invoice)" class='expanded-invoice-row'>
-            <td class='expanded-invoice' colspan='4'>
-              <div class='inner-row'>
-                <span class='label'>Publisher</span><span class='data'>{{ presentPublisherHash(invoice.publisher) }}</span>
+          <tr
+            v-if="isExpanded(invoice)"
+            class="expanded-invoice-row"
+          >
+            <td
+              class="expanded-invoice"
+              colspan="4"
+            >
+              <div class="inner-row">
+                <span class="label">Publisher</span><span class="data">{{ presentPublisherHash(invoice.publisher) }}</span>
               </div>
-              <div class='inner-row'>
-                <span class='label'>Date Due</span><span class='data'>{{ presentDate(invoice.date_due) }}</span>
+              <div class="inner-row">
+                <span class="label">Date Due</span><span class="data">{{ presentDate(invoice.date_due) }}</span>
               </div>
-              <div class='inner-row'>
-                <span class='label'>Invoice #</span><span class='data'>{{ invoice.id }}</span>
+              <div class="inner-row">
+                <span class="label">Invoice #</span><span class="data">{{ invoice.id }}</span>
               </div>
-              <div class='inner-row'>
-                <span class='label'>Exception Status</span><span class='data'>{{ invoice.exception_status }}</span>
+              <div class="inner-row">
+                <span class="label">Exception Status</span><span class="data">{{ invoice.exception_status }}</span>
               </div>
             </td>
           </tr>
         </template>
       </table>
     </div>
-    <div class='footer'>
+    <div class="footer">
       Rows per page:&nbsp;&nbsp;
-      <select v-model="pageSize" class="dropdown">
-        <option v-for="option in pageSizeOptions" :value="option" :key="option">
+      <select
+        v-model="pageSize"
+        class="dropdown"
+      >
+        <option
+          v-for="option in pageSizeOptions"
+          :key="option"
+          :value="option"
+        >
           {{ option }}
         </option>
       </select>
-      <div class='pagination'>
+      <div class="pagination">
         {{ paginationLegend }}
-        <RightChevronIcon @click="hasPrevPage && goToPrevPage()" class="page-arrow-left" :color="hasPrevPage ? '#00CAD9' : '#606C8B'" />
-        <RightChevronIcon @click="hasNextPage && goToNextPage()" class="page-arrow-right" :color="hasNextPage ? '#00CAD9' : '#606C8B'" />
+        <RightChevronIcon
+          class="page-arrow-left"
+          :color="hasPrevPage ? '#00CAD9' : '#606C8B'"
+          @click="hasPrevPage && goToPrevPage()"
+        />
+        <RightChevronIcon
+          class="page-arrow-right"
+          :color="hasNextPage ? '#00CAD9' : '#606C8B'"
+          @click="hasNextPage && goToNextPage()"
+        />
       </div>
     </div>
   </PrimaryLayout>
 </template>
 
 <script>
-
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import ShortUpArrowIcon from 'components/icons/ShortUpArrowIcon.vue'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
-import mockInvoiceData, { PSTATUS_LATE, PSTATUS_PAID, PSTATUS_UNPAID, ESTATUS_EXCEPTION } from 'src/mockInvoiceData'
+import ShortUpArrowIcon from 'components/icons/ShortUpArrowIcon.vue'
+import PrimaryLayout from 'components/PrimaryLayout.vue'
+import mockInvoiceData, {
+  PSTATUS_LATE,
+  PSTATUS_PAID,
+  PSTATUS_UNPAID,
+  ESTATUS_EXCEPTION
+} from 'src/mockInvoiceData'
 import { presentPublisherHash, presentHolofuelAmount, presentShortHolofuelAmount } from 'src/utils'
 
 const SORT_HAPP = 'hApp'
@@ -118,27 +168,35 @@ const SORT_AMOUNT = 'HoloFuel'
 const SORT_PAYMENT = 'Payment Status'
 const SORT_EXCEPTION_STATUS = 'Exception Status'
 
-const headers = [{
-  name: SORT_HAPP,
-  mobileName: SORT_HAPP
-}, {
-  name: SORT_PUBLISHER
-}, {
-  name: SORT_CREATED,
-  mobileName: 'Date'
-}, {
-  name: SORT_DUE
-}, {
-  name: SORT_INVOICE,
-}, {
-  name: SORT_AMOUNT,
-  mobileName: SORT_AMOUNT
-}, {
-  name: SORT_PAYMENT,
-  mobileName: 'Status'
-}, {
-  name: SORT_EXCEPTION_STATUS
-},
+const headers = [
+  {
+    name: SORT_HAPP,
+    mobileName: SORT_HAPP
+  },
+  {
+    name: SORT_PUBLISHER
+  },
+  {
+    name: SORT_CREATED,
+    mobileName: 'Date'
+  },
+  {
+    name: SORT_DUE
+  },
+  {
+    name: SORT_INVOICE
+  },
+  {
+    name: SORT_AMOUNT,
+    mobileName: SORT_AMOUNT
+  },
+  {
+    name: SORT_PAYMENT,
+    mobileName: 'Status'
+  },
+  {
+    name: SORT_EXCEPTION_STATUS
+  }
 ]
 
 const FILTER_ALL = 'All'
@@ -147,13 +205,15 @@ const FILTER_PAID = 'Paid'
 const FILTER_EXCEPTIONS = 'Exceptions'
 
 export default {
-  name: 'EarningsInvoices',
+  name: 'EarningsInvoicesPage',
+
   components: {
     PrimaryLayout,
     ShortUpArrowIcon,
     RightChevronIcon
   },
-  data () {
+
+  data() {
     return {
       invoices: mockInvoiceData,
       filter: FILTER_ALL,
@@ -164,60 +224,65 @@ export default {
       expandedInvoiceId: null
     }
   },
-  created () {
-    this.filterOptions = [FILTER_ALL, FILTER_UNPAID_LATE, FILTER_PAID, FILTER_EXCEPTIONS]
-    this.pageSizeOptions = [5, 10, 20, 30, 50]
-    this.headers = headers
-    this.mobileHeaders = headers.filter(header => header.mobileName)
 
-    const queryFilter = this.$route.query.filter
-    if (queryFilter === 'unpaid') {
-      this.filter = FILTER_UNPAID_LATE
-    } else if (queryFilter === 'exceptions') {
-      this.filter = FILTER_EXCEPTIONS
-    }
-  },
   computed: {
-    breadcrumbs () {
-      return [{
-        label: 'Earnings',
-        path: '/earnings'
-      }, {
-        label: 'Invoices'
-      }]
+    breadcrumbs() {
+      return [
+        {
+          label: 'Earnings',
+          path: '/earnings'
+        },
+        {
+          label: 'Invoices'
+        }
+      ]
     },
-    paginationLegend () {
-      const first = (this.page * this.pageSize) + 1
+
+    paginationLegend() {
+      const first = this.page * this.pageSize + 1
       const last = first + this.pagedInvoices.length - 1
       return `${first}-${last} of ${this.invoiceCount} items`
     },
-    hasPrevPage () {
+
+    hasPrevPage() {
       return this.page > 0
     },
-    hasNextPage () {
-      return ((this.page + 1) * this.pageSize <= this.invoiceCount)
+
+    hasNextPage() {
+      return (this.page + 1) * this.pageSize <= this.invoiceCount
     },
-    filteredSortedInvoices () {
+
+    filteredSortedInvoices() {
       let filtered
+
       switch (this.filter) {
         case FILTER_ALL:
-            filtered = this.invoices
-          break;
+          filtered = this.invoices
+          break
+
         case FILTER_UNPAID_LATE:
-            filtered = this.invoices.filter(invoice => invoice.payment_status === PSTATUS_UNPAID || invoice.payment_status === PSTATUS_LATE)
-          break;
+          filtered = this.invoices.filter(
+            (invoice) =>
+              invoice.payment_status === PSTATUS_UNPAID || invoice.payment_status === PSTATUS_LATE
+          )
+          break
+
         case FILTER_PAID:
-            filtered = this.invoices.filter(invoice => invoice.payment_status === PSTATUS_PAID)
-          break;
+          filtered = this.invoices.filter((invoice) => invoice.payment_status === PSTATUS_PAID)
+          break
+
         case FILTER_EXCEPTIONS:
-            filtered = this.invoices.filter(invoice => invoice.exception_status === ESTATUS_EXCEPTION)
-          break;
+          filtered = this.invoices.filter(
+            (invoice) => invoice.exception_status === ESTATUS_EXCEPTION
+          )
+          break
+
         default:
-            filtered = this.invoices
-          break;
+          filtered = this.invoices
+          break
       }
 
-      const sortKey = ({
+      const sortKey = {
         [SORT_HAPP]: 'happ',
         [SORT_PUBLISHER]: 'publisher',
         [SORT_CREATED]: 'date_created',
@@ -226,7 +291,7 @@ export default {
         [SORT_AMOUNT]: 'amount',
         [SORT_PAYMENT]: 'payment_status',
         [SORT_EXCEPTION_STATUS]: 'exception_status'
-      })[this.sort]
+      }[this.sort]
 
       return filtered.sort((a, b) => {
         if (a[sortKey] === b[sortKey]) {
@@ -240,69 +305,100 @@ export default {
         }
       })
     },
-    pagedInvoices () {
+
+    pagedInvoices() {
       const startIndex = this.page * this.pageSize
       const endIndex = (this.page + 1) * this.pageSize
       return this.filteredSortedInvoices.slice(startIndex, endIndex)
     },
-    invoiceCount () {
+
+    invoiceCount() {
       return this.filteredSortedInvoices.length
     },
-    SORT_AMOUNT () {
+
+    SORT_AMOUNT() {
       return SORT_AMOUNT
-    },
+    }
   },
+
+  watch: {
+    pageSize() {
+      this.page = 0
+    },
+
+    filter() {
+      this.page = 0
+    },
+
+    sort(val) {
+      console.log(val)
+    }
+  },
+
+  created() {
+    this.filterOptions = [FILTER_ALL, FILTER_UNPAID_LATE, FILTER_PAID, FILTER_EXCEPTIONS]
+    // eslint-disable-next-line no-magic-numbers
+    this.pageSizeOptions = [5, 10, 20, 30, 50]
+    this.headers = headers
+    this.mobileHeaders = headers.filter((header) => header.mobileName)
+
+    const queryFilter = this.$route.query.filter
+
+    if (queryFilter === 'unpaid') {
+      this.filter = FILTER_UNPAID_LATE
+    } else if (queryFilter === 'exceptions') {
+      this.filter = FILTER_EXCEPTIONS
+    }
+  },
+
   methods: {
     presentPublisherHash,
-    presentDate (date) {
-      return date.format("DD MMM YYYY")
+
+    presentDate(date) {
+      return date.format('DD MMM YYYY')
     },
-    presentShortDate (date) {
-      return date.format("DD MMM")
+
+    presentShortDate(date) {
+      return date.format('DD MMM')
     },
+
     presentHolofuelAmount,
+
     presentShortHolofuelAmount,
-    handleHeaderClick (header) {
+
+    handleHeaderClick(header) {
       if (this.sort === header) {
         this.sortDesc = !this.sortDesc
       } else {
         this.sort = header
       }
     },
-    goToPrevPage () {
+
+    goToPrevPage() {
       if (this.hasPrevPage) {
         this.page = this.page - 1
       }
     },
-    goToNextPage () {
+
+    goToNextPage() {
       if (this.hasNextPage) {
         this.page = this.page + 1
       }
     },
-    isExpanded (invoice) {
+
+    isExpanded(invoice) {
       return invoice.id === this.expandedInvoiceId
     },
-    toggleExpandInvoice (invoice) {
+
+    toggleExpandInvoice(invoice) {
       if (this.isExpanded(invoice)) {
         this.expandedInvoiceId = null
       } else {
         this.expandedInvoiceId = invoice.id
       }
     }
-  },
-  watch: {
-    pageSize () {
-      this.page = 0
-    },
-    filter () {
-      this.page = 0
-    },
-    sort (val) {
-      console.log(val)
-    }
   }
 }
-
 </script>
 
 <style scoped>
@@ -314,7 +410,7 @@ export default {
   padding: 9px 0;
 }
 .controls .label {
-  color: #606C8B;
+  color: var(--grey-color);
   font-size: 12px;
   margin-left: 30px;
   margin-right: 2px;
@@ -325,15 +421,15 @@ export default {
   background-color: transparent;
   font-size: 12px;
   font-weight: 600;
-  color: #313C59;
+  color: var(--grey-dark-color);
   padding: 4px 16px 4px 4px;
   background-image: url(/images/chevron.svg);
   background-repeat: no-repeat;
   background-position: right;
 }
 .invoices-padding {
-  background: #FFFFFF;
-  box-shadow: 0px 4px 20px #ECEEF1;
+  background: #ffffff;
+  box-shadow: 0 4px 20px #eceef1;
   border-radius: 12px;
   padding: 0 10px;
   margin-bottom: 20px;
@@ -342,15 +438,15 @@ export default {
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
-  color: #606C8B;
+  color: var(--grey-color);
   border-collapse: collapse;
   width: 100%;
 }
 .header-row {
   font-size: 16px;
   line-height: 22px;
-  color: #313C59;
-  border-bottom: 0.5px solid #BCBFC6;
+  color: var(--grey-dark-color);
+  border-bottom: 0.5px solid #bcbfc6;
 }
 .header-row th {
   text-align: start;
@@ -376,7 +472,7 @@ th::after {
   visibility: hidden;
 }
 .invoice-row {
-  border-bottom: 0.5px solid #BCBFC6;
+  border-bottom: 0.5px solid #bcbfc6;
 }
 .invoice-row:last-child {
   border: none;
@@ -385,7 +481,8 @@ th::after {
   text-align: start;
   padding: 10px 0 14px 20px;
 }
-.happ-cell, .amount-cell {
+.happ-cell,
+.amount-cell {
   font-weight: bold;
 }
 .invoice-row td.amount-cell {
@@ -405,7 +502,7 @@ th::after {
   font-weight: 600;
   font-size: 12px;
   line-height: 16px;
-  color: #313C59;
+  color: var(--grey-dark-color);
   margin-bottom: 20px;
 }
 .pagination {
@@ -434,7 +531,7 @@ th::after {
 
 .expanded-invoice-row {
   display: none;
-  box-shadow: 0px 2px 6px rgba(96, 108, 139, 0.4);
+  box-shadow: 0 2px 6px rgba(96, 108, 139, 0.4);
 }
 
 @media screen and (max-width: 1050px) {
@@ -481,14 +578,14 @@ th::after {
     flex-basis: 50%;
     font-weight: 600;
     font-size: 16px;
-    color: #313C59;
+    color: var(--grey-dark-color);
   }
 
   .expanded-invoice .inner-row .data {
     flex-basis: 50%;
     font-weight: 600;
     font-size: 14px;
-    color: #606C8B;
+    color: var(--grey-color);
   }
 
   .header-row th {

@@ -1,10 +1,19 @@
+import { createTestingPinia } from '@pinia/testing'
 import { render } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from 'src/router'
+import { createI18n } from 'vue-i18n'
 import wait from 'waait'
 import HostingPreferences from '../HostingPreferences.vue'
+import locales from '@/locales'
+
+const i18n = createI18n({
+  legacy: true,
+  locale: 'en',
+  messages: locales
+})
 
 jest.mock('axios')
 mockGlobalCrypto()
@@ -29,8 +38,9 @@ describe('hosting preferences page', () => {
     })
 
     const { getByText } = render(HostingPreferences, {
-      global: { plugins: [router] }
+      global: { plugins: [router, createTestingPinia(), i18n] }
     })
+
     await wait(0)
 
     getByText('Price Configuration')
