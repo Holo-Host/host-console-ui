@@ -22,6 +22,7 @@
 </template>
 
 <script setup>
+import CashIcon from '@uicommon/components/icons/CashIcon'
 import GearIcon from 'components/icons/GearIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
 import HomeIcon from 'components/icons/HomeIcon.vue'
@@ -30,22 +31,29 @@ import TheSidebarFooter from 'components/sidebar/TheSidebarFooter'
 import TheSidebarItem from 'components/sidebar/TheSidebarItem'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { kRoutes } from '@/router'
 
 const { t } = useI18n()
 
 const items = computed(() => [
   {
-    to: '/dashboard',
+    to: kRoutes.dashboard.path,
     label: t('$.dashboard'),
     icon: HomeIcon
   },
   {
-    to: '/happs',
+    to: kRoutes.happs.path,
     label: t('$.happs'),
     icon: HappsIcon
   },
   {
-    to: '/preferences',
+    to: kRoutes.earnings.path,
+    label: t('$.earnings'),
+    icon: CashIcon,
+    iconStyle: { marginTop: '10px' }
+  },
+  {
+    to: kRoutes.hostingPreferences.path,
     label: t('$.hosting_preferences'),
     icon: GearIcon,
     iconStyle: { marginLeft: '3px', marginRight: '15px' }

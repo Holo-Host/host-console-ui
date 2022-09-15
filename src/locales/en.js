@@ -5,6 +5,7 @@ const translations = {
     ...commonTranslations.$,
     app_name: 'Host Console',
     dashboard: 'Dashboard',
+    earnings: 'Earnings',
     happs: 'hApps',
     holo: 'HOLO',
     hosting_preferences: 'Hosting Preferences',
