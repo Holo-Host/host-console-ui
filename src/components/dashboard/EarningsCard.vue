@@ -12,7 +12,7 @@
         class="earnings-info-row"
       >
         <span class="earnings-label">{{ label }}</span>
-        <span class="bold">{{ value || '--' }} HF</span>
+        <span class="bold">{{ value }} HF</span>
       </div>
     </div>
   </BaseCard>
@@ -46,15 +46,18 @@ const items = computed(() => [
   {
     label: t('earnings.last_30_days'),
     value:
-      props.data && props.data.last30days ? formatCurrency(Number(props.data.last30days)) : '--'
+      props.data && Number(props.data.last30days)
+        ? formatCurrency(Number(props.data.last30days))
+        : 0
   },
   {
     label: t('earnings.last_7_days'),
-    value: props.data && props.data.last7days ? formatCurrency(Number(props.data.last7days)) : '--'
+    value:
+      props.data && Number(props.data.last7days) ? formatCurrency(Number(props.data.last7days)) : 0
   },
   {
     label: t('earnings.last_day'),
-    value: props.data && props.data.lastday ? formatCurrency(Number(props.data.lastday)) : '--'
+    value: props.data && Number(props.data.lastday) ? formatCurrency(Number(props.data.lastday)) : 0
   }
 ])
 </script>

@@ -18,11 +18,11 @@
         class="payment-row"
       >
         <div class="payment-amount">
-          {{ payment.amount ? formatCurrency(payment.amount) : '--' }} HF
+          {{ props.data && Number(payment.amount) ? formatCurrency(payment.amount) : 0 }} HF
         </div>
         <div class="payment-details">
           <div>
-            {{ payment.status ? capitalizeWord(payment.status) : '--' }}
+            {{ payment.status ? capitalizeWord(payment.status) : 0 }}
           </div>
           <div class="payment-happ">
             {{ payment.happ ? payment.happ.name : '--' }}

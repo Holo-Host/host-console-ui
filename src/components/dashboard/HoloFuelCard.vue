@@ -57,13 +57,16 @@ const emit = defineEmits(['try-again-clicked'])
 const items = computed(() => [
   {
     label: t('holofuel.balance'),
-    value: props.data && props.data.balance ? formatCurrency(Number(props.data.balance)) : '--',
+    value:
+      props.data && Number(props.data.balance) ? formatCurrency(Number(props.data.balance)) : 0,
     isActive: true
   },
   {
     label: t('holofuel.redeemable'),
     value:
-      props.data && props.data.redeemable ? formatCurrency(Number(props.data.redeemable)) : '--',
+      props.data && Number(props.data.redeemable)
+        ? formatCurrency(Number(props.data.redeemable))
+        : 0,
     isActive: false
   }
 ])

@@ -9,6 +9,7 @@ import { createI18n } from 'vue-i18n'
 import wait from 'waait'
 import HostedHapps from '../HostedHapps.vue'
 import locales from '@/locales'
+const clickOutside = jest.fn()
 
 const i18n = createI18n({
   legacy: false,
@@ -47,7 +48,12 @@ describe('hosted happs page', () => {
     })
 
     render(HostedHapps, {
-      global: { plugins: [router, createTestingPinia(), i18n] }
+      global: {
+        plugins: [router, createTestingPinia(), i18n],
+        directives: {
+          clickOutside
+        }
+      }
     })
 
     await wait(0)

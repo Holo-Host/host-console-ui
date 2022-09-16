@@ -8,13 +8,19 @@
         role="img"
         aria-label="Agent Identity Icon"
       />
-      <div class="display-name" @click="toggleMenu">
-        {{ nickname }}
-        <span class="verification-status">
-          Unverified
-        </span>
+      <div
+        v-click-outside="closeDropdown"
+        class="dropdown-wrapper"
+        @click="toggleMenu"
+      >
+        <div class="display-name">
+          {{ nickname }}
+          <span class="verification-status">
+            Unverified
+          </span>
+        </div>
+        <DownTriangleIcon class="down-triangle" :white="white" />
       </div>
-      <DownTriangleIcon class="down-triangle" :white="white" />
     </div>
 
     <div v-if="isMenuOpen" class="menu">
@@ -62,6 +68,10 @@ function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value
 }
 
+function closeDropdown() {
+  isMenuOpen.value = false
+}
+
 function logout() {
   localStorage.removeItem(kAuthTokenLSKey)
   router.push({ name: kRoutes.login.name })
@@ -99,6 +109,10 @@ function openSettingsAndCloseMenu() {
   padding-right: 20px;
 }
 
+.dropdown-wrapper {
+  display: flex;
+}
+
 .display-name {
   display: flex;
   flex-direction: column;
@@ -115,7 +129,8 @@ function openSettingsAndCloseMenu() {
 }
 
 .down-triangle {
-  margin-left: 12px;
+  margin-left: 8px;
+  margin-top: 7px;
 }
 
 .menu {
