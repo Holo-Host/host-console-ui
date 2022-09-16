@@ -8,6 +8,7 @@ import router from './router'
 import './assets/css/index.scss'
 
 const i18n = createI18n({
+  legacy: false,
   locale: 'en',
   fallbackLocale: 'en',
   messages

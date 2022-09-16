@@ -10,7 +10,7 @@ import TheSidebar from '../sidebar/TheSidebar'
 import locales from '@/locales'
 
 const i18n = createI18n({
-  legacy: true,
+  legacy: false,
   locale: 'en',
   messages: locales
 })
