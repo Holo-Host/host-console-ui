@@ -16,10 +16,11 @@ const translations = {
     terms_of_service: 'Terms of Service'
   },
   earnings: {
-    title: 'Earnings',
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
-    last_day: 'Last day'
+    last_day: 'Last day',
+    title: 'Earnings',
+    weekly_earnings: 'Weekly Earnings'
   },
   holofuel: {
     title: 'HoloFuel',

@@ -1,23 +1,14 @@
 <template>
-  <PrimaryLayout title="Earnings">
-    <section class="top-row">
-      <span class="available"><span class="available-label">Total Available HF: </span><span class="available-hf">{{ availableHF.toLocaleString() }}</span></span>
-      <a
-        href=""
-        class="holofuel-link"
-      ><LeaveSiteIcon class="leave-site-icon" />Go to HoloFuel</a>
-    </section>
-    <section class="card">
-      <h3 class="card-title">
-        Weekly Earnings
-      </h3>
-      <div class="card-content row">
-        <div class="column">
-          <div class="hf-amount">
-            {{ weeklyEarnings.toLocaleString() }} HF
-          </div>
-          <TmpGraphIcon class="graph" />
-        </div>
+  <PrimaryLayout :title="$t('$.earnings')">
+    <BaseCard
+      :is-loading="isLoading"
+      :is-error="isError"
+      @try-again-clicked="emit('try-again-clicked')"
+    >
+      <template #left>
+        <WeeklyEarnings />
+      </template>
+      <template #right>
         <div class="column main-links">
           <router-link
             to="/earnings/invoices"
@@ -49,8 +40,8 @@
             />
           </router-link>
         </div>
-      </div>
-    </section>
+      </template>
+    </BaseCard>
 
     <section class="card">
       <h3 class="card-title">
@@ -80,6 +71,7 @@
 </template>
 
 <script>
+import BaseCard from '@uicommon/components/BaseCard'
 import FatArrowIcon from 'components/icons/FatArrowIcon'
 import FilledExclamationIcon from 'components/icons/FilledExclamationIcon'
 import LeaveSiteIcon from 'components/icons/LeaveSiteIcon'
@@ -89,11 +81,14 @@ import RightChevronIcon from 'components/icons/RightChevronIcon'
 import TmpGraphIcon from 'components/icons/TmpGraphIcon'
 import UnpaidLateIcon from 'components/icons/UnpaidLateIcon'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
+import WeeklyEarnings from 'components/earnings/WeeklyEarnings';
 
 export default {
   name: 'EarningsPage',
 
   components: {
+		WeeklyEarnings,
+    BaseCard,
     PrimaryLayout,
     LeaveSiteIcon,
     PaymentIcon,
@@ -123,66 +118,22 @@ export default {
 </script>
 
 <style scoped>
-.top-row {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 32px;
-}
-.available-label {
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 25px;
-  color: var(--grey-color);
-  margin-right: 10px;
-}
-.available-hf {
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 25px;
-  color: var(--grey-dark-color);
-  margin-right: 52px;
-}
-.holofuel-link {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  text-decoration-line: underline;
-  color: var(--grey-dark-color);
-}
-.leave-site-icon {
-  margin-right: 10px;
-}
-.card {
-  background: var(--white-color);
-  box-shadow: 0 4px 20px #eceef1;
-  border-radius: 12px;
-  margin-bottom: 55px;
-}
 .card-content {
-  padding: 0 90px 35px 90px;
+  padding: 0 50px 35px;
 }
-.row {
-  display: flex;
-  justify-content: space-between;
-}
-.column {
-  display: flex;
-  flex-direction: column;
-  flex-basis: 50%;
-}
-.main-links {
-  padding-top: 26px;
-}
+
 .card-title {
-  margin: 0 0 5px 0;
-  padding: 35px 90px 0 90px;
+  margin: 10px 0 0 62px;
   font-weight: bold;
   font-size: 16px;
   line-height: 22px;
   color: var(--grey-dark-color);
 }
+
+.main-links {
+  padding-top: 36px;
+}
+
 .hf-amount {
   font-weight: bold;
   font-size: 14px;
@@ -190,6 +141,7 @@ export default {
   color: var(--grey-color);
   margin-bottom: 40px;
 }
+
 .main-link {
   height: 52px;
   margin: 0 28px 24px 0;
@@ -204,9 +156,11 @@ export default {
   align-items: center;
   text-decoration: none;
 }
+
 .main-link-icon {
   margin-right: 14px;
 }
+
 .notification {
   background-color: white;
   font-weight: bold;
@@ -217,13 +171,16 @@ export default {
   margin-left: 18px;
   padding: 2px 8px;
 }
+
 .right-chevron-icon {
   margin-left: auto;
   transform: scale(1.8);
 }
+
 .redemption-links {
   display: flex;
 }
+
 .redemption-links .main-link {
   padding-left: 35px;
   padding-right: 35px;
@@ -231,10 +188,6 @@ export default {
 }
 
 @media screen and (max-width: 1050px) {
-  .card {
-    box-shadow: 0 4px 20px #eceef1;
-    margin-bottom: 28px;
-  }
   .card-title {
     background-color: #f0fcfd;
     padding: 0 0 0 20px;

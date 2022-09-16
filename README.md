@@ -99,3 +99,31 @@ Storybook is automatically deployed to `https://holo-host.github.io/host-console
 
 ### User authentication mechanism
 See [Token authentication](https://hackmd.io/Evi5CVFqTI22UD8_OrDgYA?view) description.
+
+### Deploy to dev environment
+
+To deploy a new version to dev environment you need to update the appropriate `rev` value in the holo-nixpkgs repo.
+
+https://github.com/Holo-Host/holo-nixpkgs/blob/develop/overlays/holo-nixpkgs/host-console-ui/default.nix
+
+Replace `rev` but your latest commit hash.
+
+Run the command below from the root of the holo-nixpkgs repo:
+
+`nix-build . -A host-console-ui`
+
+I should fail with a message
+
+```
+hash mismatch in fixed-output derivation '/nix/store/....:
+    specified: sha256-...
+    got:      sha256-...
+```
+
+Copy the `got` value to the `sha256` in the `holo-nixpkgs/overlays/holo-nixpkgs/host-console-ui/default.nix` file.
+
+Create a PR off `develop`, merge it and wait for hydra to deploy it. You can check the status in the link below.
+
+`https://hydra.holo.host/project/holo-nixpkgs`
+
+Once the build is done, all holoports that watch for `develop` channel should pick up the change and update the version of the app.
