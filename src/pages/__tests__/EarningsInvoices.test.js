@@ -8,9 +8,10 @@ import { createI18n } from 'vue-i18n'
 import wait from 'waait'
 import EarningsInvoices from '../EarningsInvoices.vue'
 import locales from '@/locales'
+const clickOutside = jest.fn()
 
 const i18n = createI18n({
-  legacy: true,
+  legacy: false,
   locale: 'en',
   messages: locales
 })
@@ -38,7 +39,12 @@ describe('earnings invoices page', () => {
     })
 
     const { getByText } = render(EarningsInvoices, {
-      global: { plugins: [router, createTestingPinia(), i18n] }
+      global: {
+        plugins: [router, createTestingPinia(), i18n],
+        directives: {
+          clickOutside
+        }
+      }
     })
 
     await wait(0)

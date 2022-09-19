@@ -6,8 +6,10 @@ import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from '../TopNav.vue'
 
+const clickOutside = jest.fn()
+
 const i18n = createI18n({
-  legacy: true,
+  legacy: false,
   locale: 'en',
   messages
 })
@@ -40,7 +42,12 @@ it('renders a title', async () => {
         62, 210, 166, 100, 55, 151, 238, 176, 36, 80, 111, 82, 43, 225, 83, 139, 240, 203, 176
       ])
     },
-    global: { plugins: [router, createTestingPinia(), i18n] }
+    global: {
+      plugins: [router, createTestingPinia(), i18n],
+      directives: {
+        clickOutside
+      }
+    }
   })
 
   await router.isReady()

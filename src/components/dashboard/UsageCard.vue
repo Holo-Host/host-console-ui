@@ -13,14 +13,14 @@
         <span
           class="bold"
           data-testid="happ-no"
-        >{{ data ? data.totalHostedHapps : '--' }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
+        >{{ data ? data.totalHostedHapps : 0 }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
       </div>
 
       <div class="info-row usage-row">
         <span
           class="bold"
           data-testid="sc-no"
-        >{{ data ? data.totalSourceChains : '--' }}&nbsp;</span> {{ $t('usage.total_source_chains_hosted') }}
+        >{{ data ? data.totalSourceChains : 0 }}&nbsp;</span> {{ $t('usage.total_source_chains_hosted') }}
       </div>
 
       <router-link
@@ -46,7 +46,7 @@
           {{ $t('$.cpu') }}
         </span>
         <span class="bold">
-          {{ (data && data.cpu) ? presentMicroSeconds(data.cpu) : '--' }}
+          {{ presentMicroSeconds(data.totalUsage.cpu) }}
         </span>
       </div>
 
@@ -55,14 +55,14 @@
           {{ $t('$.storage') }}
         </span>
         <span class="bold">
-          {{ (data && data.currentTotalStorage) ? presentBytes(data.currentTotalStorage) : '--' }}
+          {{ presentBytes(data.currentTotalStorage) }}
         </span>
       </div>
       <div class="info-row daily-row">
         <span class="daily-label">
           {{ $t('$.bandwidth') }}
         </span>
-        <span class="bold">{{ (data && data.bandwidth) ? presentBytes(data.bandwidth) : '--' }}
+        <span class="bold">{{ presentBytes(data.totalUsage.bandwidth) }}
         </span>
       </div>
     </template>

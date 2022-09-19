@@ -12,7 +12,7 @@ import HposInterface from '@/interfaces/HposInterface'
 import locales from '@/locales'
 
 const i18n = createI18n({
-  legacy: true,
+  legacy: false,
   locale: 'en',
   messages: locales
 })

@@ -8,9 +8,10 @@ import { createI18n } from 'vue-i18n'
 import wait from 'waait'
 import DashboardPage from '../DashboardPage.vue'
 import locales from '@/locales'
+const clickOutside = jest.fn()
 
 const i18n = createI18n({
-  legacy: true,
+  legacy: false,
   locale: 'en',
   messages: locales
 })
@@ -69,7 +70,12 @@ describe('dashboard page', () => {
     })
 
     const { getByTestId } = render(DashboardPage, {
-      global: { plugins: [router, createTestingPinia(), i18n] }
+      global: {
+        plugins: [router, createTestingPinia(), i18n],
+        directives: {
+          clickOutside
+        }
+      }
     })
 
     await wait(0)

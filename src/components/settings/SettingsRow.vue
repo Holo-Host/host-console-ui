@@ -33,7 +33,7 @@ defineProps({
 
   &__value {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     color: var(--grey-dark-color);
   }
 }
