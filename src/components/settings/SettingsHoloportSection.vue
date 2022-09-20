@@ -44,7 +44,7 @@
 
     <SettingsRow
       :label="$t('$.network')"
-      :value="settings.networkStatus"
+      :value="settings.networkFlavour"
     />
 
     <SettingsRow :label="$t('settings.ssh_access')">
