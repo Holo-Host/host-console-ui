@@ -5,7 +5,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     publicKey: null,
     email: '',
-    networkStatus: '',
+    networkFlavour: '',
     sshAccess: '',
     deviceName: '',
     hposVersion: '',
@@ -20,15 +20,15 @@ export const useUserStore = defineStore('user', {
   actions: {
     async getUser() {
       const { coreAppVersion } = await HposInterface.getCoreAppVersion()
-      const { user, holoFuelProfile } = await HposInterface.getUser()
+      const { user, holoport, holoFuelProfile } = await HposInterface.getUser()
 
       if (user && holoFuelProfile && coreAppVersion) {
         this.publicKey = user.hostPubKey
         this.email = user.registrationEmail
-        this.networkStatus = user.networkStatus
+        this.networkFlavour = holoport.networkFlavour
         this.sshAccess = true
         this.deviceName = user.deviceName
-        this.hposVersion = user.hposVersion
+        this.hposVersion = holoport.hposVersion
         this.holoFuel = holoFuelProfile
         this.coreAppVersion = coreAppVersion
       }
