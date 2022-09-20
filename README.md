@@ -83,7 +83,7 @@ Note: you must have a .env file with `VUE_APP_HPOS_PORT` for tests to pass as it
 yarn build
 ```
 
-### Lints and fixes files
+### Lints and fixes files!
 ```
 yarn lint
 ```
