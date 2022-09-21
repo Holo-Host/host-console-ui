@@ -16,10 +16,17 @@ const translations = {
     terms_of_service: 'Terms of Service'
   },
   earnings: {
+    exceptions: 'Exceptions',
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
     last_day: 'Last day',
+    payments: 'Payments',
+    redeemable_holofuel: 'Redeemable HoloFuel',
+    redeem_holofuel: 'Redeem HoloFuel',
+    redemption_history: 'Redemption History',
     title: 'Earnings',
+    transfer_holofuel: 'Transfer HoloFuel',
+    unpaid_and_late: 'Unpaid & Late',
     weekly_earnings: 'Weekly Earnings'
   },
   holofuel: {

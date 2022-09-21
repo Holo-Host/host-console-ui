@@ -1,0 +1,53 @@
+<template>
+  <div class="earnings-card-header">
+    <div class="earnings-card-header__label">
+      <span>
+        {{ label }}
+      </span>
+
+      <span class="earnings-card-header__amount">
+        {{ amount }} HF
+      </span>
+    </div>
+
+    <slot />
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  label: {
+    type: String,
+    required: true
+  },
+
+  amount: {
+    type: Number,
+    required: true
+  }
+})
+</script>
+
+<style lang="scss" scoped>
+.earnings-card-header {
+  display: flex;
+  font-weight: bold;
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__amount {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--grey-color);
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .earnings-card-header {
+    flex-direction: column;
+  }
+}
+</style>

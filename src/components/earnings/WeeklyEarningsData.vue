@@ -1,31 +1,25 @@
 <template>
-  <div class="weekly-earnings">
-    <div class="weekly-earnings__header">
-      <div class="weekly-earnings__header-label">
-        <span>
-          {{ $t('earnings.weekly_earnings') }}
-        </span>
-
-        <span class="weekly-earnings__header-amount">
-          {{ weeklyEarnings }} HF
-        </span>
-      </div>
-
+  <div class="weekly-earnings-data">
+    <CardHeader
+      :label="$t('earnings.weekly_earnings')"
+      :amount="weeklyEarnings"
+    >
       <BaseButton
-        class="weekly-earnings__holofuel-button"
+        class="weekly-earnings-data__holofuel-button"
         @click="showGoToHolofuelModal"
       >
         {{ $t('holofuel.go_to_holofuel') }}
       </BaseButton>
-    </div>
+    </CardHeader>
 
-    <TmpGraphIcon class="weekly-earnings__graph" />
+    <TmpGraphIcon class="weekly-earnings-data__graph" />
   </div>
 </template>
 
 <script setup>
 import BaseButton from '@uicommon/components/BaseButton'
 import { EProjectNotification, postNotification } from '@uicommon/utils/notifications'
+import CardHeader from 'components/earnings/CardHeader'
 import TmpGraphIcon from 'components/icons/TmpGraphIcon'
 import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
 
@@ -48,27 +42,11 @@ function showGoToHolofuelModal() {
 </script>
 
 <style lang="scss" scoped>
-.weekly-earnings {
+.weekly-earnings-data {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
   padding: 0 60px;
-  font-weight: bold;
-
-  &__header {
-    display: flex;
-  }
-
-  &__header-label {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__header-amount {
-    margin-top: 10px;
-    font-size: 14px;
-    color: var(--grey-color);
-  }
 
   &__graph {
     margin-top: 40px;
@@ -78,6 +56,29 @@ function showGoToHolofuelModal() {
     margin-left: 8px;
     margin-top: -8px;
     transform: scale(0.7);
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  .weekly-earnings-data {
+    padding: 0 10px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .weekly-earnings-data {
+    padding: 0;
+
+    &__holofuel-button {
+      margin-left: 0;
+      margin-top: 40px;
+      height: 50px;
+      transform: scale(1);
+    }
+
+    &__graph {
+      display: none;
+    }
   }
 }
 </style>
