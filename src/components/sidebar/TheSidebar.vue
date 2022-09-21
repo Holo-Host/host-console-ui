@@ -85,7 +85,7 @@ const items = computed(() => [
   }
 
   &__menu {
-    padding: 30px 24px 30px 18px;
+    padding: 24px 24px 30px 14px;
     flex: 1;
     display: flex;
     flex-direction: column;

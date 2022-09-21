@@ -23,10 +23,11 @@ const translations = {
     weekly_earnings: 'Weekly Earnings'
   },
   holofuel: {
-    title: 'HoloFuel',
     balance: 'Balance',
+    go_to_holofuel: 'Open HoloFuel',
     redeemable: 'Redeemable',
-    redeem_holofuel: 'Redeem HoloFuel'
+    redeem_holofuel: 'Redeem HoloFuel',
+    title: 'HoloFuel'
   },
   holofuel_modal: {
     ...commonTranslations.holofuel_modal
