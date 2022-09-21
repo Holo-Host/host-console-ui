@@ -6,7 +6,7 @@
       @try-again-clicked="emit('try-again-clicked')"
     >
       <template #left>
-        <WeeklyEarnings />
+        <WeeklyEarnings :weekly-earnings="weeklyEarnings" />
       </template>
       <template #right>
         <div class="column main-links">
@@ -49,7 +49,7 @@
       </h3>
       <div class="card-content">
         <div class="hf-amount">
-          {{ redeemableHF.toLocaleString() }} HF
+          {{ redeemableHoloFuel }} HF
         </div>
         <div class="redemption-links">
           <router-link
@@ -70,8 +70,10 @@
   </PrimaryLayout>
 </template>
 
-<script>
+<script setup>
 import BaseCard from '@uicommon/components/BaseCard'
+import { formatCurrency } from '@uicommon/utils/numbers'
+import WeeklyEarnings from 'components/earnings/WeeklyEarnings'
 import FatArrowIcon from 'components/icons/FatArrowIcon'
 import FilledExclamationIcon from 'components/icons/FilledExclamationIcon'
 import LeaveSiteIcon from 'components/icons/LeaveSiteIcon'
@@ -81,40 +83,36 @@ import RightChevronIcon from 'components/icons/RightChevronIcon'
 import TmpGraphIcon from 'components/icons/TmpGraphIcon'
 import UnpaidLateIcon from 'components/icons/UnpaidLateIcon'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
-import WeeklyEarnings from 'components/earnings/WeeklyEarnings';
+import { computed, onMounted, ref } from 'vue'
+import { useDashboardStore } from '@/store/dashboard'
+import { useEarningsStore } from '@/store/earnings'
 
-export default {
-  name: 'EarningsPage',
+const dashboardStore = useDashboardStore()
 
-  components: {
-		WeeklyEarnings,
-    BaseCard,
-    PrimaryLayout,
-    LeaveSiteIcon,
-    PaymentIcon,
-    UnpaidLateIcon,
-    FilledExclamationIcon,
-    RedemptionHistoryIcon,
-    FatArrowIcon,
-    RightChevronIcon,
-    TmpGraphIcon
-  },
+const isLoading = ref(false)
+const isError = ref(false)
 
-  data() {
-    return {
-      availableHF: 4233456.0665,
-      redeemableHF: 2990348.0342,
-      // eslint-disable-next-line no-magic-numbers
-      lastWeekOfEarnings: [150000.78, 200000, 75000, 225000, 150000, 240000, 275000]
-    }
-  },
+const rawWeeklyEarnings = computed(() => dashboardStore.hostEarnings.earnings.last7days)
 
-  computed: {
-    weeklyEarnings() {
-      return this.lastWeekOfEarnings.reduce((sum, day) => sum + day, 0)
-    }
-  }
+const weeklyEarnings = computed(() =>
+  rawWeeklyEarnings.value && Number(rawWeeklyEarnings.value)
+    ? formatCurrency(Number(rawWeeklyEarnings.value))
+    : 0
+)
+
+const redeemableHoloFuel = computed(() => 0)
+
+async function getEarnings() {
+  isLoading.value = true
+  await dashboardStore.getEarnings()
+  isLoading.value = false
 }
+
+onMounted(async () => {
+  if (!weeklyEarnings.value) {
+    await getEarnings()
+  }
+})
 </script>
 
 <style scoped>
