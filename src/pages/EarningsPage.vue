@@ -1,5 +1,8 @@
 <template>
-  <PrimaryLayout :title="$t('$.earnings')">
+  <PrimaryLayout
+    :title="$t('$.earnings')"
+    data-testid="earnings-page"
+  >
     <WeeklyEarningsCard
       :data="weeklyEarnings"
       :is-loading="isLoading"
