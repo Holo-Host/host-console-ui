@@ -8,7 +8,7 @@
     <CardHeader
       is-disabled
       :label="$t('earnings.redeemable_holofuel')"
-      amount="0"
+      :amount="data"
       class="redeemable-holofuel__header"
     />
 
@@ -55,7 +55,7 @@ const { goToHoloFuel } = useGoToHoloFuel()
 
 defineProps({
   data: {
-    type: String,
+    type: Number,
     required: true
   },
 

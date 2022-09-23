@@ -53,7 +53,7 @@ const emit = defineEmits(['try-again-clicked'])
 
 defineProps({
   data: {
-    type: String,
+    type: Number,
     required: true
   },
 

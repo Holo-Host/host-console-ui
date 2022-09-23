@@ -29,7 +29,7 @@ const dashboardStore = useDashboardStore()
 
 const isLoading = ref(false)
 
-const isError = computed(() => dashboardStore.hostEarnings.error)
+const isError = computed(() => !!dashboardStore.hostEarnings.error)
 
 const rawWeeklyEarnings = computed(() => dashboardStore.hostEarnings.earnings?.last7days)
 
