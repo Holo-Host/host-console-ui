@@ -28,6 +28,10 @@
         {{ $t('settings.header') }}
       </div>
 
+      <div class="menu-item" @click="holofuel">
+        {{ $t('$.holofuel') }}
+      </div>
+
       <div class="menu-item" @click="logout">
         {{ $t('$.logout') }}
       </div>
@@ -70,6 +74,10 @@ function toggleMenu() {
 
 function closeDropdown() {
   isMenuOpen.value = false
+}
+
+function holofuel() {
+  location.replace(`https://${location.host}/holofuel`)
 }
 
 function logout() {
