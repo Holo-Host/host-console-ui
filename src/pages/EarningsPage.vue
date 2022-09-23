@@ -58,4 +58,10 @@ onMounted(async () => {
 .redeemable-holofuel-card {
   margin-top: 60px;
 }
+
+@media screen and (max-width: 1050px) {
+  .redeemable-holofuel-card {
+    margin-top: 0;
+  }
+}
 </style>

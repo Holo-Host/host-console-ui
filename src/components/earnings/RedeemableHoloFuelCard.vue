@@ -11,6 +11,7 @@
       amount="0"
       class="redeemable-holofuel__header"
     />
+
     <div class="redeemable-holofuel__links">
       <BaseLinkButton
         is-disabled
@@ -87,6 +88,23 @@ defineProps({
   &__link {
     margin-right: 30px;
     padding-right: 40px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .redeemable-holofuel {
+    padding: 0 0 40px;
+
+    &__links {
+      display: block;
+      position: relative;
+      padding-right: 0;
+    }
+
+    &__link {
+      margin-top: 24px;
+      margin-right: 0;
+    }
   }
 }
 </style>
