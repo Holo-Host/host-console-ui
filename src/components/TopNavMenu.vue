@@ -28,7 +28,7 @@
         {{ $t('settings.header') }}
       </div>
 
-      <div class="menu-item" @click="holofuel">
+      <div class="menu-item" @click="goToHoloFuel">
         {{ $t('$.holofuel') }}
       </div>
 
@@ -42,9 +42,10 @@
 <script setup>
 import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
+import { postNotification, EProjectNotification } from '@uicommon/utils/notifications'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { kAuthTokenLSKey } from '@/constants'
+import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl, kAuthTokenLSKey } from '@/constants'
 import { kRoutes } from '@/router'
 
 const router = useRouter()
@@ -76,8 +77,14 @@ function closeDropdown() {
   isMenuOpen.value = false
 }
 
-function holofuel() {
-  location.replace(`https://${location.host}/holofuel`)
+function goToHoloFuel() {
+  const isModalDisabled = localStorage.getItem(kDontShowGoToHoloFuelModalAgainLSKey) === 'true'
+
+  if (isModalDisabled) {
+    window.open(kHoloFuelUrl, '_blank').focus()
+  } else {
+    postNotification(EProjectNotification.showGoToHolofuelModal)
+  }
 }
 
 function logout() {
