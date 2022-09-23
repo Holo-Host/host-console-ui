@@ -1,5 +1,8 @@
 <template>
-  <div class="earnings-card-header">
+  <div
+    class="earnings-card-header"
+    :class="{ 'disabled': isDisabled }"
+  >
     <div class="earnings-card-header__label">
       <span>
         {{ label }}
@@ -24,6 +27,11 @@ defineProps({
   amount: {
     type: Number,
     required: true
+  },
+
+  isDisabled: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -42,6 +50,11 @@ defineProps({
     margin-top: 10px;
     font-size: 14px;
     color: var(--grey-color);
+  }
+
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 }
 

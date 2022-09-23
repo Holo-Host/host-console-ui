@@ -1,18 +1,19 @@
 <template>
   <BaseCard
-    is-disabled
     :is-loading="isLoading"
     :is-error="isError"
     class="redeemable-holofuel"
     @try-again-clicked="emit('try-again-clicked')"
   >
     <CardHeader
+      is-disabled
       :label="$t('earnings.redeemable_holofuel')"
       amount="0"
       class="redeemable-holofuel__header"
     />
     <div class="redeemable-holofuel__links">
       <BaseLinkButton
+        is-disabled
         to=""
         :icon="RedemptionHistoryIcon"
         :label="$t('earnings.redemption_history')"
@@ -20,18 +21,19 @@
       />
 
       <BaseLinkButton
+        is-disabled
         to=""
-        :icon="UnpaidLateIcon"
+        :icon="RightArrowIcon"
         :label="$t('earnings.redeem_holofuel')"
         class="redeemable-holofuel__link"
       />
 
       <BaseLinkButton
-        is-disabled
         to=""
-        :icon="FilledExclamationIcon"
+        :icon="TransferIcon"
         :label="$t('earnings.transfer_holofuel')"
         class="redeemable-holofuel__link"
+        @click="goToHoloFuel"
       />
     </div>
   </BaseCard>
@@ -41,11 +43,14 @@
 import BaseCard from '@uicommon/components/BaseCard'
 import BaseLinkButton from '@uicommon/components/BaseLinkButton'
 import CardHeader from 'components/earnings/CardHeader'
-import FilledExclamationIcon from 'components/icons/FilledExclamationIcon'
+import RightArrowIcon from 'components/icons/FatArrowIcon'
 import RedemptionHistoryIcon from 'components/icons/RedemptionHistoryIcon'
-import UnpaidLateIcon from 'components/icons/UnpaidLateIcon'
+import TransferIcon from 'components/icons/TransferIcon'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 const emit = defineEmits(['try-again-clicked'])
+
+const { goToHoloFuel } = useGoToHoloFuel()
 
 defineProps({
   data: {

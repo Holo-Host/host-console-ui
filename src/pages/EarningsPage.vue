@@ -9,8 +9,8 @@
 
     <RedeemableHoloFuelCard
       :data="redeemableHoloFuel"
-      :is-loading="isLoading"
-      :is-error="isError"
+      :is-loading="false"
+      :is-error="false"
       class="redeemable-holofuel-card"
       @try-again-clicked="getEarnings"
     />
