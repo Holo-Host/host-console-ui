@@ -41,6 +41,8 @@ const { goToHoloFuel } = useGoToHoloFuel()
 
   &__graph {
     margin-top: 40px;
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 
   &__holofuel-button {
