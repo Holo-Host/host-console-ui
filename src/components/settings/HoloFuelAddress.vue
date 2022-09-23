@@ -26,7 +26,7 @@
 
     <p
       class="holofuel-address__link"
-      @click="showGoToHolofuelModal"
+      @click="goToHoloFuel"
     >
       <LeaveSiteIcon />
       <span class="holofuel-address__link-label">
@@ -39,9 +39,8 @@
 <script setup>
 import Identicon from '@uicommon/components/Identicon'
 import { encodeAgentId } from '@uicommon/utils/agent'
-import { postNotification, EProjectNotification } from '@uicommon/utils/notifications'
-import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import LeaveSiteIcon from '../icons/LeaveSiteIcon'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 defineProps({
   agentAddress: {
@@ -50,15 +49,7 @@ defineProps({
   }
 })
 
-function showGoToHolofuelModal() {
-  const isModalDisabled = localStorage.getItem(kDontShowGoToHoloFuelModalAgainLSKey) === 'true'
-
-  if (isModalDisabled) {
-    window.open(kHoloFuelUrl, '_blank').focus()
-  } else {
-    postNotification(EProjectNotification.showGoToHolofuelModal)
-  }
-}
+const { goToHoloFuel } = useGoToHoloFuel()
 </script>
 
 <style lang="scss">

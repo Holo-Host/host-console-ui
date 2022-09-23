@@ -6,7 +6,7 @@
     >
       <BaseButton
         class="weekly-earnings-data__holofuel-button"
-        @click="showGoToHolofuelModal"
+        @click="goToHoloFuel"
       >
         {{ $t('holofuel.go_to_holofuel') }}
       </BaseButton>
@@ -18,10 +18,9 @@
 
 <script setup>
 import BaseButton from '@uicommon/components/BaseButton'
-import { EProjectNotification, postNotification } from '@uicommon/utils/notifications'
 import CardHeader from 'components/earnings/CardHeader'
 import TmpGraphIcon from 'components/icons/TmpGraphIcon'
-import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 defineProps({
   weeklyEarnings: {
@@ -30,15 +29,7 @@ defineProps({
   }
 })
 
-function showGoToHolofuelModal() {
-  const isModalDisabled = localStorage.getItem(kDontShowGoToHoloFuelModalAgainLSKey) === 'true'
-
-  if (isModalDisabled) {
-    window.open(kHoloFuelUrl, '_blank').focus()
-  } else {
-    postNotification(EProjectNotification.showGoToHolofuelModal)
-  }
-}
+const { goToHoloFuel } = useGoToHoloFuel()
 </script>
 
 <style lang="scss" scoped>
