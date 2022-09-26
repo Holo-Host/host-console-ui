@@ -51,12 +51,10 @@ export const useUserStore = defineStore('user', {
       return isSuccess
     },
 
-    async updateDeviceName(value) {
-      this.deviceName = value
+    async updateDeviceName(name) {
+      this.deviceName = name
 
-      await HposInterface.updateSettings({
-        deviceName: value
-      })
+      await HposInterface.updateHoloportName(name)
     }
   }
 })

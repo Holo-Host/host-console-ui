@@ -15,7 +15,7 @@
       <PencilIcon
         v-if="!isEditingDeviceName"
         class="holoport-settings__editable-value-icon"
-        @click="() => {}"
+        @click="editDeviceName"
       />
       <div
         v-else
