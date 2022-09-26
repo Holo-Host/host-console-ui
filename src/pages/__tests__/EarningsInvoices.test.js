@@ -6,7 +6,7 @@ import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from 'src/router'
 import { createI18n } from 'vue-i18n'
 import wait from 'waait'
-import EarningsInvoices from '../EarningsInvoices.vue'
+import EarningsInvoices from '../PaidInvoicesPage.vue'
 import locales from '@/locales'
 const clickOutside = jest.fn()
 

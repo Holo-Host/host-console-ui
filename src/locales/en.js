@@ -20,6 +20,7 @@ const translations = {
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
     last_day: 'Last day',
+    paid_invoices: 'Paid invoices',
     payments: 'Payments',
     redeemable_holofuel: 'Redeemable HoloFuel',
     redeem_holofuel: 'Redeem HoloFuel',
