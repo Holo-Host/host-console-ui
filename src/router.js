@@ -1,8 +1,8 @@
 import Earnings from 'pages/EarningsPage.vue'
-import EarningsInvoices from 'pages/EarningsInvoices.vue'
 import HappDetails from 'pages/HappDetails.vue'
 import HostedHapps from 'pages/HostedHapps.vue'
 import HostingPreferences from 'pages/HostingPreferences.vue'
+import PaidInvoices from 'pages/PaidInvoicesPage.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import SettingsPage from 'src/pages/SettingsPage.vue'
@@ -64,10 +64,10 @@ export const kRoutes = {
     }
   },
 
-  invoices: {
-    path: '/earnings/invoices',
-    name: 'EarningsInvoices',
-    component: EarningsInvoices,
+  paidInvoices: {
+    path: '/earnings/invoices/paid',
+    name: 'PaidInvoices',
+    component: PaidInvoices,
     meta: {
       requiresAuth: true
     }
@@ -100,7 +100,7 @@ export const routerFactory = () => {
       kRoutes.happ,
       kRoutes.happs,
       kRoutes.hostingPreferences,
-      kRoutes.invoices,
+      kRoutes.paidInvoices,
       kRoutes.login
     ]
   })
