@@ -1,56 +1,29 @@
 <template>
   <PrimaryLayout
-    title="Earnings"
+    :title="$t('earnings.paid_invoices')"
     :breadcrumbs="breadcrumbs"
     data-testid="earnings-invoices-page"
   >
     <div class="controls">
       <div class="label">
-        Filter:&nbsp;
+        Filter by:&nbsp;
       </div>
       <select
         v-model="filter"
         class="dropdown"
       >
-        <option
-          v-for="option in filterOptions"
-          :key="option"
-          :value="option"
-        >
-          {{ option }}
+        <option value="All">
+          {{ 'All' }}
         </option>
       </select>
     </div>
-    <div class="invoices-padding">
+
+    <BaseCard>
       <table class="invoices">
-        <tr class="header-row">
-          <th
-            v-for="{ name } in headers"
-            :key="name"
-            :class="[{ selected: name === sort}, 'desktop-cell']"
-            :title="name"
-            @click="handleHeaderClick(name)"
-          >
-            {{ name }}
-            <ShortUpArrowIcon
-              :color="name === sort ? '#000' : '#FFF'"
-              :class="{ 'rotate-180': sortDesc }"
-            />
-          </th>
-          <th
-            v-for="{ mobileName, name } in mobileHeaders"
-            :key="mobileName"
-            :class="[{ selected: name === sort, 'amount-header': name === SORT_AMOUNT }, 'mobile-cell']"
-            :title="mobileName"
-            @click="handleHeaderClick(name)"
-          >
-            {{ mobileName }}
-            <ShortUpArrowIcon
-              :color="name === sort ? '#000' : '#FFF'"
-              :class="{ 'rotate-180': sortDesc }"
-            />
-          </th>
-        </tr>
+        <InvoicesTableHeader
+          :sort-by="sortBy"
+          @sort-by-changed="onSortByChanged"
+        />
         <template
           v-for="invoice in pagedInvoices"
           :key="invoice.id"
@@ -116,7 +89,7 @@
           </tr>
         </template>
       </table>
-    </div>
+    </BaseCard>
     <div class="footer">
       Rows per page:&nbsp;&nbsp;
       <select
@@ -148,17 +121,15 @@
   </PrimaryLayout>
 </template>
 
-<script>
+<script setup>
+import BaseCard from '@uicommon/components/BaseCard'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
-import ShortUpArrowIcon from 'components/icons/ShortUpArrowIcon.vue'
+import InvoicesTableHeader from 'components/InvoicesTableHeader'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
-import mockInvoiceData, {
-  PSTATUS_LATE,
-  PSTATUS_PAID,
-  PSTATUS_UNPAID,
-  ESTATUS_EXCEPTION
-} from 'src/mockInvoiceData'
+import mockInvoiceData from 'src/mockInvoiceData'
 import { presentPublisherHash, presentHolofuelAmount, presentShortHolofuelAmount } from 'src/utils'
+import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const SORT_HAPP = 'hApp'
 const SORT_PUBLISHER = 'Publisher'
@@ -169,235 +140,111 @@ const SORT_AMOUNT = 'HoloFuel'
 const SORT_PAYMENT = 'Payment Status'
 const SORT_EXCEPTION_STATUS = 'Exception Status'
 
-const headers = [
+const pageSizeOptions = ref([5, 10, 20, 30, 50])
+
+const { t } = useI18n()
+
+const invoices = ref(mockInvoiceData)
+const filter = ref('All')
+const sortBy = ref(SORT_CREATED)
+const sortDesc = ref(true)
+const pageSize = ref(10)
+const page = ref(0)
+const expandedInvoiceId = ref(null)
+
+// eslint-disable-next-line no-magic-numbers
+
+const breadcrumbs = computed(() => [
   {
-    name: SORT_HAPP,
-    mobileName: SORT_HAPP
+    label: t('$.earnings'),
+    path: '/earnings'
   },
   {
-    name: SORT_PUBLISHER
-  },
-  {
-    name: SORT_CREATED,
-    mobileName: 'Date'
-  },
-  {
-    name: SORT_DUE
-  },
-  {
-    name: SORT_INVOICE
-  },
-  {
-    name: SORT_AMOUNT,
-    mobileName: SORT_AMOUNT
-  },
-  {
-    name: SORT_PAYMENT,
-    mobileName: 'Status'
-  },
-  {
-    name: SORT_EXCEPTION_STATUS
+    label: t('earnings.paid_invoices')
   }
-]
+])
 
-const FILTER_ALL = 'All'
-const FILTER_UNPAID_LATE = 'Unpaid & Late'
-const FILTER_PAID = 'Paid'
-const FILTER_EXCEPTIONS = 'Exceptions'
+const paginationLegend = computed(() => {
+  const first = page.value * pageSize.value + 1
+  const last = first + pagedInvoices.value.length - 1
+  return `${first}-${last} of ${invoiceCount.value} items`
+})
 
-export default {
-  name: 'EarningsInvoicesPage',
+const hasPrevPage = computed(() => page.value > 0)
+const hasNextPage = computed(() => (page.value + 1) * pageSize.value <= invoiceCount.value)
 
-  components: {
-    PrimaryLayout,
-    ShortUpArrowIcon,
-    RightChevronIcon
-  },
+const sortedInvoices = computed(() => {
+  const sortKey = {
+    [SORT_HAPP]: 'happ',
+    [SORT_PUBLISHER]: 'publisher',
+    [SORT_CREATED]: 'date_created',
+    [SORT_DUE]: 'date_due',
+    [SORT_INVOICE]: 'id',
+    [SORT_AMOUNT]: 'amount',
+    [SORT_PAYMENT]: 'payment_status',
+    [SORT_EXCEPTION_STATUS]: 'exception_status'
+  }[sortBy.value]
 
-  data() {
-    return {
-      invoices: mockInvoiceData,
-      filter: FILTER_ALL,
-      sort: SORT_CREATED,
-      sortDesc: true,
-      pageSize: 10,
-      page: 0,
-      expandedInvoiceId: null
+  const invoicesCopy = [...invoices.value]
+
+  return invoicesCopy.sort((a, b) => {
+    if (a[sortKey] === b[sortKey]) {
+      return 0
     }
-  },
 
-  computed: {
-    breadcrumbs() {
-      return [
-        {
-          label: 'Earnings',
-          path: '/earnings'
-        },
-        {
-          label: 'Invoices'
-        }
-      ]
-    },
-
-    paginationLegend() {
-      const first = this.page * this.pageSize + 1
-      const last = first + this.pagedInvoices.length - 1
-      return `${first}-${last} of ${this.invoiceCount} items`
-    },
-
-    hasPrevPage() {
-      return this.page > 0
-    },
-
-    hasNextPage() {
-      return (this.page + 1) * this.pageSize <= this.invoiceCount
-    },
-
-    filteredSortedInvoices() {
-      let filtered
-
-      switch (this.filter) {
-        case FILTER_ALL:
-          filtered = this.invoices
-          break
-
-        case FILTER_UNPAID_LATE:
-          filtered = this.invoices.filter(
-            (invoice) =>
-              invoice.payment_status === PSTATUS_UNPAID || invoice.payment_status === PSTATUS_LATE
-          )
-          break
-
-        case FILTER_PAID:
-          filtered = this.invoices.filter((invoice) => invoice.payment_status === PSTATUS_PAID)
-          break
-
-        case FILTER_EXCEPTIONS:
-          filtered = this.invoices.filter(
-            (invoice) => invoice.exception_status === ESTATUS_EXCEPTION
-          )
-          break
-
-        default:
-          filtered = this.invoices
-          break
-      }
-
-      const sortKey = {
-        [SORT_HAPP]: 'happ',
-        [SORT_PUBLISHER]: 'publisher',
-        [SORT_CREATED]: 'date_created',
-        [SORT_DUE]: 'date_due',
-        [SORT_INVOICE]: 'id',
-        [SORT_AMOUNT]: 'amount',
-        [SORT_PAYMENT]: 'payment_status',
-        [SORT_EXCEPTION_STATUS]: 'exception_status'
-      }[this.sort]
-
-      return filtered.sort((a, b) => {
-        if (a[sortKey] === b[sortKey]) {
-          return 0
-        }
-
-        if (this.sortDesc) {
-          return a[sortKey] > b[sortKey] ? -1 : 1
-        } else {
-          return a[sortKey] < b[sortKey] ? -1 : 1
-        }
-      })
-    },
-
-    pagedInvoices() {
-      const startIndex = this.page * this.pageSize
-      const endIndex = (this.page + 1) * this.pageSize
-      return this.filteredSortedInvoices.slice(startIndex, endIndex)
-    },
-
-    invoiceCount() {
-      return this.filteredSortedInvoices.length
-    },
-
-    SORT_AMOUNT() {
-      return SORT_AMOUNT
+    if (sortDesc.value) {
+      return a[sortKey] > b[sortKey] ? -1 : 1
+    } else {
+      return a[sortKey] < b[sortKey] ? -1 : 1
     }
-  },
+  })
+})
 
-  watch: {
-    pageSize() {
-      this.page = 0
-    },
+const pagedInvoices = computed(() => {
+  const startIndex = page.value * pageSize.value
+  const endIndex = (page.value + 1) * pageSize.value
+  return sortedInvoices.value.slice(startIndex, endIndex)
+})
 
-    filter() {
-      this.page = 0
-    },
+const invoiceCount = computed(() => sortedInvoices.value.length)
 
-    sort(val) {
-      console.log(val)
-    }
-  },
+watch(pageSize, () => (page.value = 0))
+watch(filter, () => (page.value = 0))
 
-  created() {
-    this.filterOptions = [FILTER_ALL, FILTER_UNPAID_LATE, FILTER_PAID, FILTER_EXCEPTIONS]
-    // eslint-disable-next-line no-magic-numbers
-    this.pageSizeOptions = [5, 10, 20, 30, 50]
-    this.headers = headers
-    this.mobileHeaders = headers.filter((header) => header.mobileName)
+function presentDate(date) {
+  date.format('DD MMM YYYY')
+}
 
-    const queryFilter = this.$route.query.filter
+function presentShortDate(date) {
+  return date.format('DD MMM')
+}
 
-    if (queryFilter === 'unpaid') {
-      this.filter = FILTER_UNPAID_LATE
-    } else if (queryFilter === 'exceptions') {
-      this.filter = FILTER_EXCEPTIONS
-    }
-  },
+function onSortByChanged({ name, direction }) {
+  sortBy.value = name
+  sortDesc.value = direction === 'desc'
+}
 
-  methods: {
-    presentPublisherHash,
+function goToPrevPage() {
+  if (hasPrevPage.value) {
+    page.value = page.value - 1
+  }
+}
 
-    presentDate(date) {
-      return date.format('DD MMM YYYY')
-    },
+function goToNextPage() {
+  if (hasNextPage.value) {
+    page.value = page.value + 1
+  }
+}
 
-    presentShortDate(date) {
-      return date.format('DD MMM')
-    },
+function isExpanded(invoice) {
+  return invoice.id === expandedInvoiceId.value
+}
 
-    presentHolofuelAmount,
-
-    presentShortHolofuelAmount,
-
-    handleHeaderClick(header) {
-      if (this.sort === header) {
-        this.sortDesc = !this.sortDesc
-      } else {
-        this.sort = header
-      }
-    },
-
-    goToPrevPage() {
-      if (this.hasPrevPage) {
-        this.page = this.page - 1
-      }
-    },
-
-    goToNextPage() {
-      if (this.hasNextPage) {
-        this.page = this.page + 1
-      }
-    },
-
-    isExpanded(invoice) {
-      return invoice.id === this.expandedInvoiceId
-    },
-
-    toggleExpandInvoice(invoice) {
-      if (this.isExpanded(invoice)) {
-        this.expandedInvoiceId = null
-      } else {
-        this.expandedInvoiceId = invoice.id
-      }
-    }
+function toggleExpandInvoice(invoice) {
+  if (isExpanded(invoice)) {
+    expandedInvoiceId.value = null
+  } else {
+    expandedInvoiceId.value = invoice.id
   }
 }
 </script>
@@ -408,14 +255,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 9px 0;
+  margin-right: 300px;
+  padding-bottom: 10px;
 }
+
 .controls .label {
   color: var(--grey-color);
   font-size: 12px;
   margin-left: 30px;
   margin-right: 2px;
 }
+
 .dropdown {
   appearance: none;
   border: none;
@@ -428,6 +278,7 @@ export default {
   background-repeat: no-repeat;
   background-position: right;
 }
+
 .invoices-padding {
   background: #ffffff;
   box-shadow: 0 4px 20px #eceef1;
@@ -435,6 +286,7 @@ export default {
   padding: 0 10px;
   margin-bottom: 20px;
 }
+
 .invoices {
   font-weight: 600;
   font-size: 14px;
@@ -443,60 +295,39 @@ export default {
   border-collapse: collapse;
   width: 100%;
 }
-.header-row {
-  font-size: 16px;
-  line-height: 22px;
-  color: var(--grey-dark-color);
-  border-bottom: 0.5px solid #bcbfc6;
-}
-.header-row th {
-  text-align: start;
-  padding: 20px 0 30px 22px;
-  font-weight: 600;
-  cursor: pointer;
-}
 
-.rotate-180 {
-  transform: rotate(180deg);
-}
-th.selected {
-  font-weight: 700;
-}
-/* this rule prevents the layout from jumping when the font-weight changes */
-th::after {
-  display: block;
-  content: attr(title);
-  font-weight: 700;
-  height: 1px;
-  color: transparent;
-  overflow: hidden;
-  visibility: hidden;
-}
 .invoice-row {
   border-bottom: 0.5px solid #bcbfc6;
 }
+
 .invoice-row:last-child {
   border: none;
 }
+
 .invoice-row td {
   text-align: start;
   padding: 10px 0 14px 20px;
 }
+
 .happ-cell,
 .amount-cell {
   font-weight: bold;
 }
+
 .invoice-row td.amount-cell {
   text-align: end;
   padding-right: 20px;
 }
+
 .header-row th[title='HoloFuel'] {
   text-align: end;
 }
+
 .pstatus-cell {
   display: flex;
   align-items: center;
 }
+
 .footer {
   display: flex;
   width: 100%;
@@ -506,13 +337,16 @@ th::after {
   color: var(--grey-dark-color);
   margin-bottom: 20px;
 }
+
 .pagination {
   margin-left: auto;
 }
+
 .page-arrow-right {
   margin-left: 40px;
   transform: scale(1.4);
 }
+
 .page-arrow-left {
   margin-left: 40px;
   transform: scale(1.4) rotate(180deg);
