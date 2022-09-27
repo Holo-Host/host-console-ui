@@ -218,14 +218,15 @@ const HposInterface = {
   getHposStatus: async () => {
     try {
       // eslint-disable-next-line camelcase
-      const { holo_nixpkgs } = await hposAdminCall({
+      const { holo_nixpkgs, holoport } = await hposAdminCall({
         method: 'get',
         path: '/status'
       })
 
       return {
         networkFlavour: HposInterface.formatNetworkName(holo_nixpkgs),
-        hposVersion: HposInterface.formatHposVersion(holo_nixpkgs)
+        hposVersion: HposInterface.formatHposVersion(holo_nixpkgs),
+        name: holoport.name
       }
     } catch (err) {
       return {}
@@ -269,40 +270,17 @@ const HposInterface = {
     }
   },
 
-  // Functionality of writing into config.json file is deemed unsafe
-  // therefore updateSettings is removed
-  // updateSettings: async ({ deviceName }) => {
-  //   try {
-  //     const settingsResponse = await hposAdminCall({
-  //       method: 'get',
-  //       path: '/config'
-  //     })
-
-  //     // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
-  //     const headers = {
-  //       'X-Hpos-Admin-CAS': await hashString(stringify(settingsResponse))
-  //     }
-
-  //     const settingsConfig = {
-  //       ...settingsResponse
-  //     }
-
-  //     if (deviceName !== undefined) {
-  //       settingsConfig.deviceName = deviceName
-  //     }
-
-  //     await hposAdminCall({
-  //       method: 'put',
-  //       path: '/config',
-  //       headers,
-  //       params: settingsConfig
-  //     })
-  //     // We don't assume the successful PUT /api/v1/config returns the current config
-  //     return presentHposSettings(settingsConfig)
-  //   } catch (err) {
-  //     return {}
-  //   }
-  // },
+  updateHoloportName: async (name) => {
+    try {
+      await hposAdminCall({
+        method: 'put',
+        path: '/holoport/name',
+        params: { name }
+      })
+    } catch (error) {
+      console.error('updateHoloportName failed: ', error)
+    }
+  },
 
   getHoloFuelProfile: async () => {
     try {

@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', {
         this.email = user.registrationEmail
         this.networkFlavour = holoport.networkFlavour
         this.sshAccess = true
-        this.deviceName = user.deviceName
+        this.deviceName = holoport.name
         this.hposVersion = holoport.hposVersion
         this.holoFuel = holoFuelProfile
         this.coreAppVersion = coreAppVersion
@@ -51,12 +51,10 @@ export const useUserStore = defineStore('user', {
       return isSuccess
     },
 
-    async updateDeviceName(value) {
-      this.deviceName = value
+    async updateDeviceName(name) {
+      this.deviceName = name
 
-      await HposInterface.updateSettings({
-        deviceName: value
-      })
+      await HposInterface.updateHoloportName(name)
     }
   }
 })
