@@ -30,62 +30,48 @@
           v-for="invoice in pagedInvoices"
           :key="invoice.id"
         >
-          <tr :class="['invoice-row', {'expanded-parent-row': isExpanded(invoice)}]">
-            <td class="happ-cell">
-              {{ invoice.happ }}
-            </td>
-            <td class="desktop-cell">
-              {{ presentPublisherHash(invoice.publisher) }}
-            </td>
-            <td class="desktop-cell">
-              {{ presentDate(invoice.date_created) }}
-            </td>
-            <td class="mobile-cell">
-              {{ presentShortDate(invoice.date_created) }}
-            </td>
-            <td class="desktop-cell">
-              {{ presentDate(invoice.date_due) }}
-            </td>
-            <td class="desktop-cell">
-              {{ invoice.id }}
-            </td>
-            <td class="amount-cell desktop-cell">
-              {{ presentHolofuelAmount(invoice.amount) }}
-            </td>
-            <td class="amount-cell mobile-cell">
-              {{ presentShortHolofuelAmount(invoice.amount) }}
-            </td>
-            <td class="pstatus-cell">
-              {{ invoice.payment_status }}
-              <RightChevronIcon
-                :class="[isExpanded(invoice) ? 'up-chevron' : 'down-chevron']"
-                color="#00CAD9"
-                @click="toggleExpandInvoice(invoice)"
+          <BaseTableRow>
+            <BaseTableRowItem
+              :value="invoice.happ"
+              is-visible-on-mobile
+              is-bold
+            />
+
+            <BaseTableRowItem
+              :value="invoice.publisher"
+            />
+
+            <BaseTableRowItem
+              :value="invoice.date_created"
+              is-visible-on-mobile
+            />
+
+            <BaseTableRowItem
+              :value="invoice.date_completed"
+            />
+
+            <BaseTableRowItem
+              :value="invoice.id"
+            />
+
+            <BaseTableRowItem
+              :value="invoice.amount"
+              is-visible-on-mobile
+              is-bold
+              align="end"
+            />
+
+            <BaseTableRowItem
+              :value="invoice.payment_status"
+              is-visible-on-mobile
+            />
+
+            <template #expanded-content>
+              <PaidInvoicesExpandableContent
+                :invoice="invoice"
               />
-            </td>
-          </tr>
-          <tr
-            v-if="isExpanded(invoice)"
-            class="expanded-invoice-row"
-          >
-            <td
-              class="expanded-invoice"
-              colspan="4"
-            >
-              <div class="inner-row">
-                <span class="label">Publisher</span><span class="data">{{ presentPublisherHash(invoice.publisher) }}</span>
-              </div>
-              <div class="inner-row">
-                <span class="label">Date Due</span><span class="data">{{ presentDate(invoice.date_due) }}</span>
-              </div>
-              <div class="inner-row">
-                <span class="label">Invoice #</span><span class="data">{{ invoice.id }}</span>
-              </div>
-              <div class="inner-row">
-                <span class="label">Exception Status</span><span class="data">{{ invoice.exception_status }}</span>
-              </div>
-            </td>
-          </tr>
+            </template>
+          </BaseTableRow>
         </template>
       </table>
     </BaseCard>
@@ -123,10 +109,14 @@
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
 import BaseTableHeader from '@uicommon/components/BaseTableHeader'
+import BaseTableRow from '@uicommon/components/BaseTableRow'
+import BaseTableRowItem from '@uicommon/components/BaseTableRowItem'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
+import PaidInvoicesExpandableContent from 'components/invoices/PaidInvoicesExpandableContent'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
+import dayjs from 'dayjs'
 import mockInvoiceData from 'src/mockInvoiceData'
-import { presentPublisherHash, presentHolofuelAmount, presentShortHolofuelAmount } from 'src/utils'
+import { presentHolofuelAmount } from 'src/utils'
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -180,7 +170,8 @@ const headersMap = new Map([
     {
       key: 'amount',
       label: t('invoices.headers.amount'),
-      isVisibleOnMobile: true
+      isVisibleOnMobile: true,
+      align: 'end'
     }
   ],
   [
@@ -193,13 +184,19 @@ const headersMap = new Map([
   ]
 ])
 
-const invoices = ref(mockInvoiceData)
+const invoices = ref(
+  mockInvoiceData.map((invoice) => ({
+    ...invoice,
+    amount: presentHolofuelAmount(invoice.amount),
+    date_created: presentDate(invoice.date_created),
+    date_completed: presentDate(invoice.date_completed)
+  }))
+)
 const filter = ref('All')
 const sortBy = ref('date_created')
 const sortDesc = ref(true)
 const pageSize = ref(10)
 const page = ref(0)
-const expandedInvoiceId = ref(null)
 
 // eslint-disable-next-line no-magic-numbers
 
@@ -253,11 +250,7 @@ watch(pageSize, () => (page.value = 0))
 watch(filter, () => (page.value = 0))
 
 function presentDate(date) {
-  date.format('DD MMM YYYY')
-}
-
-function presentShortDate(date) {
-  return date.format('DD MMM')
+  return dayjs(date).format('DD MMM YYYY')
 }
 
 function onSortByChanged({ key, direction }) {
@@ -274,18 +267,6 @@ function goToPrevPage() {
 function goToNextPage() {
   if (hasNextPage.value) {
     page.value = page.value + 1
-  }
-}
-
-function isExpanded(invoice) {
-  return invoice.id === expandedInvoiceId.value
-}
-
-function toggleExpandInvoice(invoice) {
-  if (isExpanded(invoice)) {
-    expandedInvoiceId.value = null
-  } else {
-    expandedInvoiceId.value = invoice.id
   }
 }
 </script>
@@ -329,44 +310,7 @@ function toggleExpandInvoice(invoice) {
 }
 
 .invoices {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  color: var(--grey-color);
   border-collapse: collapse;
-  width: 100%;
-}
-
-.invoice-row {
-  border-bottom: 0.5px solid var(--grey-light-color);
-}
-
-.invoice-row:last-child {
-  border: none;
-}
-
-.invoice-row td {
-  text-align: start;
-  padding: 10px 0 14px 20px;
-}
-
-.happ-cell,
-.amount-cell {
-  font-weight: bold;
-}
-
-.invoice-row td.amount-cell {
-  text-align: end;
-  padding-right: 20px;
-}
-
-.header-row th[title='HoloFuel'] {
-  text-align: end;
-}
-
-.pstatus-cell {
-  display: flex;
-  align-items: center;
 }
 
 .footer {
@@ -391,89 +335,5 @@ function toggleExpandInvoice(invoice) {
 .page-arrow-left {
   margin-left: 40px;
   transform: scale(1.4) rotate(180deg);
-}
-
-.up-chevron {
-  display: none;
-}
-
-.down-chevron {
-  display: none;
-}
-
-.mobile-cell {
-  display: none;
-}
-
-.expanded-invoice-row {
-  display: none;
-  box-shadow: 0 2px 6px rgba(96, 108, 139, 0.4);
-}
-
-@media screen and (max-width: 1050px) {
-  .desktop-cell {
-    display: none;
-  }
-  .mobile-cell {
-    display: table-cell;
-  }
-
-  .up-chevron {
-    display: flex;
-    transform: scale(1.4) rotate(270deg);
-    padding: 5px;
-    margin: -1px 0 0 auto;
-  }
-
-  .down-chevron {
-    display: flex;
-    transform: scale(1.4) rotate(90deg);
-    padding: 5px;
-    margin: 6px 0 -5px auto;
-  }
-
-  .expanded-invoice-row {
-    display: table-row;
-  }
-
-  .expanded-parent-row {
-    border-bottom: none;
-  }
-
-  .expanded-invoice {
-    padding: 12px;
-    line-height: 36px;
-  }
-
-  .expanded-invoice .inner-row {
-    display: flex;
-  }
-
-  .expanded-invoice .inner-row .label {
-    flex-basis: 50%;
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--grey-dark-color);
-  }
-
-  .expanded-invoice .inner-row .data {
-    flex-basis: 50%;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--grey-color);
-  }
-
-  .header-row th {
-    padding: 20px 0 30px 0;
-  }
-  .invoice-row td {
-    padding: 10px 0 14px 0;
-  }
-  .header-row th[title='HoloFuel'].selected {
-    padding-right: 10px;
-  }
-  .invoice-row td.amount-cell {
-    padding-right: 20px;
-  }
 }
 </style>
