@@ -218,14 +218,15 @@ const HposInterface = {
   getHposStatus: async () => {
     try {
       // eslint-disable-next-line camelcase
-      const { holo_nixpkgs } = await hposAdminCall({
+      const { holo_nixpkgs, holoport } = await hposAdminCall({
         method: 'get',
         path: '/status'
       })
 
       return {
         networkFlavour: HposInterface.formatNetworkName(holo_nixpkgs),
-        hposVersion: HposInterface.formatHposVersion(holo_nixpkgs)
+        hposVersion: HposInterface.formatHposVersion(holo_nixpkgs),
+        name: holoport.name
       }
     } catch (err) {
       return {}

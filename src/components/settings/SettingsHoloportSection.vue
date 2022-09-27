@@ -131,8 +131,7 @@ function cancelEditDeviceName() {
   &__editable-value-icon {
     margin-left: 5px;
     opacity: 0.5;
-    cursor: not-allowed;
-    //cursor: pointer;
+    cursor: pointer;
   }
 
   &__factory-reset-link {
