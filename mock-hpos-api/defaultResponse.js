@@ -196,6 +196,9 @@ const holoNixpkgs = {
     current_system: {
       rev: 'bc34eaa633a0b6483a97b86dd25811697220574d'
     }
+  },
+  holoport: {
+    name: 'my Holoport'
   }
 }
 
@@ -210,7 +213,8 @@ const data = {
     '/holochain-api/v1/core_app_version': coreAppVersion
   },
   put: {
-    '/api/v1/config': (args) => args
+    '/api/v1/config': (args) => args,
+    '/api/v1/holoport/name': {}
   },
   post: {
     '/holochain-api/v1/zome_call': getMyProfile
