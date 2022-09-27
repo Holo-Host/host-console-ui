@@ -44,6 +44,18 @@ const translations = {
     title: 'Top Hosted hApps',
     no_happs: 'You’re not currently hosting any hApps'
   },
+  invoices: {
+    headers: {
+      amount: 'Amount',
+      completed: 'Date Completed',
+      created: 'Date Created',
+      due: 'Date Due',
+      happ: 'hApp',
+      invoice: 'Transaction Hash',
+      payment_status: 'Payment Status',
+      publisher: 'Publisher'
+    }
+  },
   login: {
     ...commonTranslations.login,
     title: 'Host Console Login'

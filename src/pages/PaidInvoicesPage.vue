@@ -20,10 +20,12 @@
 
     <BaseCard>
       <table class="invoices">
-        <InvoicesTableHeader
+        <BaseTableHeader
+          :headers="headersMap.values()"
           :sort-by="sortBy"
           @sort-by-changed="onSortByChanged"
         />
+
         <template
           v-for="invoice in pagedInvoices"
           :key="invoice.id"
@@ -60,9 +62,6 @@
                 color="#00CAD9"
                 @click="toggleExpandInvoice(invoice)"
               />
-            </td>
-            <td class="desktop-cell">
-              {{ invoice.exception_status }}
             </td>
           </tr>
           <tr
@@ -123,30 +122,80 @@
 
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
+import BaseTableHeader from '@uicommon/components/BaseTableHeader'
 import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
-import InvoicesTableHeader from 'components/InvoicesTableHeader'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import mockInvoiceData from 'src/mockInvoiceData'
 import { presentPublisherHash, presentHolofuelAmount, presentShortHolofuelAmount } from 'src/utils'
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const SORT_HAPP = 'hApp'
-const SORT_PUBLISHER = 'Publisher'
-const SORT_CREATED = 'Date Created'
-const SORT_DUE = 'Date Due'
-const SORT_INVOICE = 'Invoice #'
-const SORT_AMOUNT = 'HoloFuel'
-const SORT_PAYMENT = 'Payment Status'
-const SORT_EXCEPTION_STATUS = 'Exception Status'
-
 const pageSizeOptions = ref([5, 10, 20, 30, 50])
 
 const { t } = useI18n()
 
+const headersMap = new Map([
+  [
+    'happ',
+    {
+      key: 'happ',
+      label: t('invoices.headers.happ'),
+      isVisibleOnMobile: true
+    }
+  ],
+  [
+    'publisher',
+    {
+      key: 'publisher',
+      label: t('invoices.headers.publisher'),
+      isVisibleOnMobile: false
+    }
+  ],
+  [
+    'date_created',
+    {
+      key: 'date_created',
+      label: t('invoices.headers.created'),
+      isVisibleOnMobile: true
+    }
+  ],
+  [
+    'date_completed',
+    {
+      key: 'date_completed',
+      label: t('invoices.headers.completed'),
+      isVisibleOnMobile: false
+    }
+  ],
+  [
+    'id',
+    {
+      key: 'id',
+      label: t('invoices.headers.invoice'),
+      isVisibleOnMobile: false
+    }
+  ],
+  [
+    'amount',
+    {
+      key: 'amount',
+      label: t('invoices.headers.amount'),
+      isVisibleOnMobile: true
+    }
+  ],
+  [
+    'payment_status',
+    {
+      key: 'payment_status',
+      label: t('invoices.headers.payment_status'),
+      isVisibleOnMobile: true
+    }
+  ]
+])
+
 const invoices = ref(mockInvoiceData)
 const filter = ref('All')
-const sortBy = ref(SORT_CREATED)
+const sortBy = ref('date_created')
 const sortDesc = ref(true)
 const pageSize = ref(10)
 const page = ref(0)
@@ -174,16 +223,8 @@ const hasPrevPage = computed(() => page.value > 0)
 const hasNextPage = computed(() => (page.value + 1) * pageSize.value <= invoiceCount.value)
 
 const sortedInvoices = computed(() => {
-  const sortKey = {
-    [SORT_HAPP]: 'happ',
-    [SORT_PUBLISHER]: 'publisher',
-    [SORT_CREATED]: 'date_created',
-    [SORT_DUE]: 'date_due',
-    [SORT_INVOICE]: 'id',
-    [SORT_AMOUNT]: 'amount',
-    [SORT_PAYMENT]: 'payment_status',
-    [SORT_EXCEPTION_STATUS]: 'exception_status'
-  }[sortBy.value]
+  const sortKey = sortBy.value
+  const sortDescValue = sortDesc.value
 
   const invoicesCopy = [...invoices.value]
 
@@ -192,7 +233,7 @@ const sortedInvoices = computed(() => {
       return 0
     }
 
-    if (sortDesc.value) {
+    if (sortDescValue) {
       return a[sortKey] > b[sortKey] ? -1 : 1
     } else {
       return a[sortKey] < b[sortKey] ? -1 : 1
@@ -219,8 +260,8 @@ function presentShortDate(date) {
   return date.format('DD MMM')
 }
 
-function onSortByChanged({ name, direction }) {
-  sortBy.value = name
+function onSortByChanged({ key, direction }) {
+  sortBy.value = key
   sortDesc.value = direction === 'desc'
 }
 
@@ -297,7 +338,7 @@ function toggleExpandInvoice(invoice) {
 }
 
 .invoice-row {
-  border-bottom: 0.5px solid #bcbfc6;
+  border-bottom: 0.5px solid var(--grey-light-color);
 }
 
 .invoice-row:last-child {
@@ -397,7 +438,6 @@ function toggleExpandInvoice(invoice) {
 
   .expanded-parent-row {
     border-bottom: none;
-    font-weight: 800;
   }
 
   .expanded-invoice {
