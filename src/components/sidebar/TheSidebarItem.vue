@@ -54,7 +54,7 @@ const color = computed(() => {
   font-size: 14px;
   text-decoration: none;
   color: var(--grey-dark-color);
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   padding: 3px 0 3px 24px;
   height: 32px;
 

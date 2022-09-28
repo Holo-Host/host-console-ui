@@ -5,6 +5,7 @@ const translations = {
     ...commonTranslations.$,
     app_name: 'Host Console',
     dashboard: 'Dashboard',
+    earnings: 'Earnings',
     happs: 'hApps',
     holo: 'HOLO',
     hosting_preferences: 'Hosting Preferences',
@@ -15,16 +16,25 @@ const translations = {
     terms_of_service: 'Terms of Service'
   },
   earnings: {
-    title: 'Earnings',
+    exceptions: 'Exceptions',
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
-    last_day: 'Last day'
+    last_day: 'Last day',
+    payments: 'Payments',
+    redeemable_holofuel: 'Redeemable HoloFuel',
+    redeem_holofuel: 'Redeem HoloFuel',
+    redemption_history: 'Redemption History',
+    title: 'Earnings',
+    transfer_holofuel: 'Transfer HoloFuel',
+    unpaid_and_late: 'Unpaid & Late',
+    weekly_earnings: 'Weekly Earnings'
   },
   holofuel: {
-    title: 'HoloFuel',
     balance: 'Balance',
+    go_to_holofuel: 'Open HoloFuel',
     redeemable: 'Redeemable',
-    redeem_holofuel: 'Redeem HoloFuel'
+    redeem_holofuel: 'Redeem HoloFuel',
+    title: 'HoloFuel'
   },
   holofuel_modal: {
     ...commonTranslations.holofuel_modal

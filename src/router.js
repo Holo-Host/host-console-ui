@@ -1,4 +1,4 @@
-import Earnings from 'pages/Earnings.vue'
+import Earnings from 'pages/EarningsPage.vue'
 import EarningsInvoices from 'pages/EarningsInvoices.vue'
 import HappDetails from 'pages/HappDetails.vue'
 import HostedHapps from 'pages/HostedHapps.vue'

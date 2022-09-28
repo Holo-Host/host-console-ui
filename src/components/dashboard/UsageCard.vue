@@ -46,7 +46,7 @@
           {{ $t('$.cpu') }}
         </span>
         <span class="bold">
-          {{ presentMicroSeconds(data.totalUsage.cpu) }}
+          {{ presentMicroSeconds(data ? data.totalUsage?.cpu : 0 ) }}
         </span>
       </div>
 
@@ -55,14 +55,14 @@
           {{ $t('$.storage') }}
         </span>
         <span class="bold">
-          {{ presentBytes(data.currentTotalStorage) }}
+          {{ presentBytes(data ? data.currentTotalStorage : 0) }}
         </span>
       </div>
       <div class="info-row daily-row">
         <span class="daily-label">
           {{ $t('$.bandwidth') }}
         </span>
-        <span class="bold">{{ presentBytes(data.totalUsage.bandwidth) }}
+        <span class="bold">{{ presentBytes(data ? data.totalUsage?.bandwidth : 0) }}
         </span>
       </div>
     </template>

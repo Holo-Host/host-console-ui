@@ -10,6 +10,7 @@
       <HoloFuelCard
         :is-loading="isLoadingEarnings"
         :data="holoFuel"
+        class="holofuel-card"
         @try-again-clicked="getEarnings"
       />
     </div>
@@ -123,6 +124,7 @@ onMounted(async () => {
 
 .earnings-card {
   min-width: 250px;
+  margin-left: 30px;
 }
 
 .happs-card {
@@ -131,12 +133,23 @@ onMounted(async () => {
 
 .payments-card {
   min-width: 320px;
+  margin-left: 30px;
+}
+
+.holofuel-card {
+  margin-left: 30px;
 }
 
 @media screen and (max-width: 1050px) {
   .row {
     flex-direction: column;
     margin: 0;
+  }
+
+  .earnings-card,
+  .payments-card,
+  .holofuel-card {
+    margin-left: 0;
   }
 }
 </style>

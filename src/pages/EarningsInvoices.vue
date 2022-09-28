@@ -2,6 +2,7 @@
   <PrimaryLayout
     title="Earnings"
     :breadcrumbs="breadcrumbs"
+    data-testid="earnings-invoices-page"
   >
     <div class="controls">
       <div class="label">

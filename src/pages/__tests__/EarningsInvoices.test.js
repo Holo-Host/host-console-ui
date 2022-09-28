@@ -1,5 +1,5 @@
 import { createTestingPinia } from '@pinia/testing'
-import { render } from '@testing-library/vue'
+import { render, within } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
@@ -38,7 +38,7 @@ describe('earnings invoices page', () => {
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
-    const { getByText } = render(EarningsInvoices, {
+    const { getByTestId } = render(EarningsInvoices, {
       global: {
         plugins: [router, createTestingPinia(), i18n],
         directives: {
@@ -49,7 +49,7 @@ describe('earnings invoices page', () => {
 
     await wait(0)
 
-    getByText('Earnings')
-    getByText('Invoices')
+    within(getByTestId('earnings-invoices-page')).getAllByText('Earnings')
+    within(getByTestId('earnings-invoices-page')).getAllByText('Invoices')
   })
 })
