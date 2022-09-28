@@ -20,7 +20,7 @@ const translations = {
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
     last_day: 'Last day',
-    paid_invoices: 'Paid invoices',
+    paid_invoices: 'Paid Invoices',
     payments: 'Payments',
     redeemable_holofuel: 'Redeemable HoloFuel',
     redeem_holofuel: 'Redeem HoloFuel',
@@ -28,6 +28,7 @@ const translations = {
     title: 'Earnings',
     transfer_holofuel: 'Transfer HoloFuel',
     unpaid_and_late: 'Unpaid & Late',
+    unpaid_invoices: 'Unpaid Invoices',
     weekly_earnings: 'Weekly Earnings'
   },
   holofuel: {

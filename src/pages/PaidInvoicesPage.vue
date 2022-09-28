@@ -16,7 +16,7 @@
       initial-sort-by="completed_date"
       :items="invoices"
     >
-      <InvoicesTableItem
+      <InvoicesTableRow
         v-for="item in items"
         :key="item.id"
         :invoice="item"
@@ -28,7 +28,7 @@
 <script setup>
 import BaseTable from '@uicommon/components/BaseTable'
 import { formatCurrency } from '@uicommon/utils/numbers'
-import InvoicesTableItem from 'components/invoices/InvoicesTableItem'
+import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import dayjs from 'dayjs'
 import mockPaidInvoicesData from 'src/mockInvoiceData'

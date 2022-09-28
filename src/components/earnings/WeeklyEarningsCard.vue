@@ -19,7 +19,7 @@
         />
 
         <BaseLinkButton
-          :to="kRoutes.paidInvoices.path"
+          :to="kRoutes.unpaidInvoices.path"
           :icon="UnpaidLateIcon"
           :label="$t('earnings.unpaid_and_late')"
           with-arrow
