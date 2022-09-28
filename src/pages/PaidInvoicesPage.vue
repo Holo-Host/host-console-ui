@@ -13,7 +13,7 @@
     <BaseTable
       v-slot="{ items }"
       :headers="[...headersMap.values()]"
-      initial-sort-by="date_created"
+      initial-sort-by="completed_date"
       :items="invoices"
     >
       <InvoicesTableItem
@@ -27,9 +27,11 @@
 
 <script setup>
 import BaseTable from '@uicommon/components/BaseTable'
+import { formatCurrency } from '@uicommon/utils/numbers'
 import InvoicesTableItem from 'components/invoices/InvoicesTableItem'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
-import mockInvoiceData from 'src/mockInvoiceData'
+import dayjs from 'dayjs'
+import mockPaidInvoicesData from 'src/mockInvoiceData'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -41,39 +43,44 @@ const headersMap = new Map([
     {
       key: 'happ',
       label: t('invoices.headers.happ'),
-      isVisibleOnMobile: true
+      isVisibleOnMobile: true,
+      isSortable: true
     }
   ],
   [
-    'publisher',
+    'counterparty',
     {
-      key: 'publisher',
+      key: 'counterparty',
       label: t('invoices.headers.publisher'),
-      isVisibleOnMobile: false
+      isVisibleOnMobile: false,
+      isSortable: true
     }
   ],
   [
-    'date_created',
+    'completed_date',
     {
-      key: 'date_created',
-      label: t('invoices.headers.created'),
-      isVisibleOnMobile: true
-    }
-  ],
-  [
-    'date_completed',
-    {
-      key: 'date_completed',
+      key: 'completed_date',
       label: t('invoices.headers.completed'),
-      isVisibleOnMobile: false
+      isVisibleOnMobile: true,
+      isSortable: true
     }
   ],
   [
-    'id',
+    'expiration_date',
     {
-      key: 'id',
+      key: 'expiration_date',
+      label: t('invoices.headers.due'),
+      isVisibleOnMobile: false,
+      isSortable: true
+    }
+  ],
+  [
+    'formattedId',
+    {
+      key: 'formattedId',
       label: t('invoices.headers.invoice'),
-      isVisibleOnMobile: false
+      isVisibleOnMobile: false,
+      isSortable: true
     }
   ],
   [
@@ -82,27 +89,42 @@ const headersMap = new Map([
       key: 'amount',
       label: t('invoices.headers.amount'),
       isVisibleOnMobile: true,
+      isSortable: true,
       align: 'end'
     }
   ],
   [
-    'payment_status',
+    'status',
     {
       key: 'payment_status',
       label: t('invoices.headers.payment_status'),
-      isVisibleOnMobile: true
+      isVisibleOnMobile: true,
+      isSortable: false
     }
   ]
 ])
 
-const invoices = ref(
-  mockInvoiceData.map((invoice) => ({
+const rawInvoices = ref(mockPaidInvoicesData)
+
+const kMsInSecond = 1000
+const kDefaultDateFormat = 'D MMM YYYY'
+const kVisibleHashLength = 6
+
+const invoices = computed(() =>
+  rawInvoices.value.map((invoice) => ({
     ...invoice,
-    publisher: 'mocked-data'
+    formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
+    happ: invoice.note.split(':')[1],
+    formattedExpirationDate: dayjs(new Date(invoice.expiration_date / kMsInSecond)).format(
+      kDefaultDateFormat
+    ),
+    amount: Number(invoice.amount),
+    formattedCompletedDate: dayjs(invoice.completed_date / kMsInSecond).format(kDefaultDateFormat),
+    formattedAmount:
+      invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
+    status: t('invoices.status.paid')
   }))
 )
-
-// eslint-disable-next-line no-magic-numbers
 
 const breadcrumbs = computed(() => [
   {

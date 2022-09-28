@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import BaseTableHeader from '@uicommon/components/BaseTableHeader'
+import BaseTableHeader from '../../../../ui-common-library/src/components/BaseTableHeader'
 
 defineProps({
   headers: {

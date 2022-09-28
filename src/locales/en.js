@@ -47,13 +47,16 @@ const translations = {
   invoices: {
     headers: {
       amount: 'Amount',
-      completed: 'Date Completed',
+      completed: 'Date Paid',
       created: 'Date Created',
       due: 'Date Due',
       happ: 'hApp',
       invoice: 'Transaction Hash',
       payment_status: 'Payment Status',
       publisher: 'Publisher'
+    },
+    status: {
+      paid: 'Paid'
     }
   },
   login: {

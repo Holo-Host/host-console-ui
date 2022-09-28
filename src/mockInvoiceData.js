@@ -1,174 +1,184 @@
 import dayjs from 'dayjs'
 
-export const PSTATUS_PAID = 'Paid'
-export const PSTATUS_UNPAID = 'Unpaid'
-export const PSTATUS_LATE = 'Late'
+const kMsInSecond = 1000
 
-export const ESTATUS_NA = 'n/a'
-export const ESTATUS_EXCEPTION = 'Exception'
-export const ESTATUS_REJECTED = 'Rejected'
+export function createDate(year, month, day) {
+  return dayjs(`${year}-${month}-${day}`).valueOf() * kMsInSecond
+}
 
-const mockInvoiceData = [
+/* eslint-disable no-magic-numbers */
+
+const mockPaidInvoicesData = [
   {
-    id: '7ca96d311e',
-    happ: 'Communities',
-    publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 234567.0964,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6H',
+    amount: '1234567',
+    created_date: createDate(2022, 9, 20),
+    completed_date: createDate(2022, 9, 23),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k2EkZzuUESiw03zuRYoPh05vswcLsi566MC-Nxqtuc',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:AAA',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 25)
   },
   {
-    id: 'cd956fb3be',
-    happ: 'Communities',
-    publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 344566.2344,
-    payment_status: PSTATUS_UNPAID,
-    exception_status: ESTATUS_EXCEPTION
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6I',
+    amount: '1224567',
+    created_date: createDate(2022, 9, 21),
+    completed_date: createDate(2022, 9, 23),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:AAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 27)
   },
   {
-    id: 'fbd5967d92',
-    happ: 'Communities',
-    publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
-    date_created: dayjs('2021-09-08'),
-    date_due: dayjs('2021-10-08'),
-    amount: 899553.1233,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6J',
+    amount: '123469.89',
+    created_date: createDate(2022, 9, 20),
+    completed_date: createDate(2022, 9, 23),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:ABA',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 27)
   },
   {
-    id: '4a123c1d3b',
-    happ: 'Communities',
-    publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
-    date_created: dayjs('2021-09-08'),
-    date_due: dayjs('2021-10-08'),
-    amount: 133456.0095,
-    payment_status: PSTATUS_LATE,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6K',
+    amount: '1234565.89',
+    created_date: createDate(2022, 9, 25),
+    completed_date: createDate(2022, 9, 26),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAA',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: 1663999999999999
   },
   {
-    id: '3daa99dbad',
-    happ: 'Communities',
-    publisher: 'uhCAkSZ36lo1RSJ4hbRDnHR4nf5AV5LsjHTO6g9geo6R7ujCr9FH8',
-    date_created: dayjs('2021-09-07'),
-    date_due: dayjs('2021-10-07'),
-    amount: 34556.3233,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6L',
+    amount: '134561.89',
+    created_date: createDate(2022, 8, 20),
+    completed_date: createDate(2022, 8, 23),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 8, 25)
   },
   {
-    id: 'd9705d5842',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 670213.8902,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6M',
+    amount: '1234563.89',
+    created_date: createDate(2022, 8, 28),
+    completed_date: createDate(2022, 8, 30),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 8, 30)
   },
   {
-    id: 'e3af880fcf',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 345554.3213,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6N',
+    amount: '124561.93',
+    created_date: createDate(2022, 9, 28),
+    completed_date: createDate(2022, 9, 29),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 30)
   },
   {
-    id: '3792ef4047',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 122347.864,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6O',
+    amount: '1234568.89',
+    created_date: createDate(2022, 9, 1),
+    completed_date: createDate(2022, 9, 3),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 25)
   },
   {
-    id: '04019e1201',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 190334.5644,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6P',
+    amount: '1234568.89',
+    created_date: createDate(2022, 9, 3),
+    completed_date: createDate(2022, 9, 4),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 5)
   },
   {
-    id: '8776ad591f',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 345669.5422,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6R',
+    amount: '2234569.89',
+    created_date: createDate(2022, 9, 3),
+    completed_date: createDate(2022, 9, 4),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 9)
   },
   {
-    id: '9944402196',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 99234.3422,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6S',
+    amount: '234563.89',
+    created_date: createDate(2022, 9, 3),
+    completed_date: createDate(2022, 9, 4),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 10)
   },
   {
-    id: '82f698f578',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 456903.3321,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
-  },
-  {
-    id: '9e55f4298c',
-    happ: 'HoloFuel',
-    publisher: 'uhCAkBM6Ubf7qufeZa25o4hgcCCNMQQ1CzQlbSRRKEoG94zLhoYjq',
-    date_created: dayjs('2021-09-12'),
-    date_due: dayjs('2021-10-12'),
-    amount: 239320.2211,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
-  },
-  {
-    id: '650d60c833',
-    happ: 'H-Wiki',
-    publisher: 'uhCAknuUVuN5gzCE0su3efwTmErbVXObiCpx-9qMNF2Gji5pR96GX',
-    date_created: dayjs('2021-09-07'),
-    date_due: dayjs('2021-10-07'),
-    amount: 89930.2224,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
-  },
-  {
-    id: '9715e2cac0',
-    happ: 'H-Wiki',
-    publisher: 'uhCAknuUVuN5gzCE0su3efwTmErbVXObiCpx-9qMNF2Gji5pR96GX',
-    date_created: dayjs('2021-09-07'),
-    date_due: dayjs('2021-10-07'),
-    amount: 120459.9022,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
-  },
-  {
-    id: 'd62226ce39',
-    happ: 'H-Wiki',
-    publisher: 'uhCAknuUVuN5gzCE0su3efwTmErbVXObiCpx-9qMNF2Gji5pR96GX',
-    date_created: dayjs('2021-09-07'),
-    date_due: dayjs('2021-10-07'),
-    amount: 78293.9903,
-    payment_status: PSTATUS_PAID,
-    exception_status: ESTATUS_NA
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6T',
+    amount: '1234565.89',
+    created_date: createDate(2022, 9, 7),
+    completed_date: createDate(2022, 9, 9),
+    transaction_type: { Request: null },
+    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
+    direction: { Outgoing: null },
+    status: { Completed: null },
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
+    proof_of_service_token: null,
+    url: null,
+    expiration_date: createDate(2022, 9, 11)
   }
 ]
 
-export default mockInvoiceData
+export default mockPaidInvoicesData
+
+/* eslint-enable no-magic-numbers */
