@@ -20,11 +20,9 @@
       />
 
       <GoToHoloFuelModal
-        :is-visible="isGoToHolofuelModalVisible"
         :app-name="$t('$.app_name')"
         :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
         :holo-fuel-url="kHoloFuelUrl"
-        @close="hideGoToHolofuelModal"
       />
 
       <section class="content">
@@ -36,20 +34,14 @@
 
 <script setup>
 import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
-import {
-  addObserver,
-  removeObserver,
-  ENotification,
-  postNotification,
-  EProjectNotification
-} from '@uicommon/utils/notifications'
+import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import MobileTopNav from 'components/MobileTopNav'
 import WelcomeModal from 'components/modals/WelcomeModal'
 import TheSidebar from 'components/sidebar/TheSidebar'
 import TopNav from 'components/TopNav'
 import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import { useUserStore } from 'src/store/user'
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
 const userStore = useUserStore()
 
@@ -68,7 +60,6 @@ const props = defineProps({
 const isLoading = ref(false)
 
 const isWelcomeModalVisible = ref(false)
-const isGoToHolofuelModalVisible = ref(false)
 
 const nickname = computed(() => userStore.holoFuel?.nickname)
 const agentAddress = computed(() => userStore.holoFuel?.agentAddress || null)
@@ -90,9 +81,6 @@ function closeWelcomeModal() {
 }
 
 onMounted(async () => {
-  addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
-  addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
-
   // Get user data when the app is hard reloaded and user was logged in before.
   // In that case we still have a valid token but all store is cleared, that is why
   // we need to fetch user data again.
@@ -110,19 +98,6 @@ onMounted(async () => {
     isWelcomeModalVisible.value = !userStore.holoFuel.nickname
   })
 })
-
-onUnmounted(() => {
-  removeObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
-  removeObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
-})
-
-function showGoToHolofuelModal() {
-  isGoToHolofuelModalVisible.value = true
-}
-
-function hideGoToHolofuelModal() {
-  isGoToHolofuelModalVisible.value = false
-}
 </script>
 
 <style scoped>
