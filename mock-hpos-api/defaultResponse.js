@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 // mock of normal hpos api responses
 
 const happs = [
@@ -211,7 +209,7 @@ function defaultResponse(method, path, body) {
     const response = pathsForMethod[path]
 
     if (response) {
-      if (_.isFunction(response)) {
+      if (typeof response === 'function') {
         return response(body)
       } else {
         return response

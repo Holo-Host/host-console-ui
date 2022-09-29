@@ -2,9 +2,12 @@ const HpAdminKeypair = require('@holo-host/hp-admin-keypair').HpAdminKeypair
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const express = require('express')
-const _ = require('lodash')
 const { verifySignedRequest } = require('./authUtils')
 const defaultResponse = require('./defaultResponse')
+
+function isEmpty(obj) {
+  return [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length
+}
 
 const kHttpStatuses = {
   UNAUTHORISED: 401,
@@ -125,7 +128,7 @@ class MockHposApi {
     let responseKey
 
     // if there are responses in the 'next' queue, we use those and ignore the specific type and data of the request
-    if (!_.isEmpty(this.responseQueues[NEXT_RESPONSE_KEY])) {
+    if (!isEmpty(this.responseQueues[NEXT_RESPONSE_KEY])) {
       responseKey = NEXT_RESPONSE_KEY
     } else {
       responseKey = generateResponseKey(method, type, data)
@@ -160,9 +163,10 @@ class MockHposApi {
       res.status(kHttpStatuses.SERVER_ERROR).send(e.message)
     }
 
-    const response = _.isFunction(responseOrResponseFunc)
-      ? responseOrResponseFunc(method.toLowerCase(), path, body)
-      : responseOrResponseFunc
+    const response =
+      typeof responseOrResponseFunc === 'function'
+        ? responseOrResponseFunc(method.toLowerCase(), path, body)
+        : responseOrResponseFunc
 
     res.send(response)
   }
