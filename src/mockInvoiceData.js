@@ -8,7 +8,7 @@ export function createDate(year, month, day) {
 
 /* eslint-disable no-magic-numbers */
 
-const mockPaidInvoicesData = [
+export const mockPaidInvoicesData = [
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6H',
     amount: '1234567',
@@ -179,6 +179,41 @@ const mockPaidInvoicesData = [
   }
 ]
 
-export default mockPaidInvoicesData
-
+export const mockUnpaidInvoicesData = {
+  invoice_pending: [
+    {
+      id: 'uhCEk8JMlpIf-ITDT7uND_zvyGG2hp6VhnYzG6WUpwOxF6ya8105V',
+      amount: '3.23',
+      created_date: createDate(2022, 9, 7),
+      completed_date: null,
+      transaction_type: { Request: null },
+      counterparty: 'uhCAkDOc0jde0SS4CO3HRThx5_cee2Nm_w-T30bTNE-uLmMoOoZzX',
+      direction: { Outgoing: null },
+      status: { Pending: null },
+      note: 'Holo Hosting Invoice <last 5 char of hha_id>: <hApp_name>',
+      proof_of_service_token: null,
+      url: null,
+      expiration_date: createDate(2022, 9, 11)
+    }
+  ],
+  promise_pending: [
+    {
+      id: 'uhCEkoQQJ2Ksp_FcqEnatDYBLFQzzWzStQdXE5SDDI4a2rqZyh7ik',
+      amount: '1.23',
+      created_date: 1663688288964525,
+      completed_date: null,
+      transaction_type: { Offer: null },
+      counterparty: 'uhCAkDOc0jde0SS4CO3HRThx5_cee2Nm_w-T30bTNE-uLmMoOoZzX',
+      direction: { Outgoing: null },
+      status: { Pending: null },
+      note: 'Holo Hosting Invoice <last 5 char of hha_id>: <hApp_name>',
+      proof_of_service_token: null,
+      url: null,
+      expiration_date: 9007199254740991
+    }
+  ],
+  invoice_declined: [],
+  promise_declined: [],
+  accepted: []
+}
 /* eslint-enable no-magic-numbers */

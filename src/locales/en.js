@@ -57,7 +57,8 @@ const translations = {
       publisher: 'Publisher'
     },
     status: {
-      paid: 'Paid'
+      paid: 'Paid',
+      unpaid: 'Unpaid'
     }
   },
   login: {

@@ -2,8 +2,7 @@ import Earnings from 'pages/EarningsPage.vue'
 import HappDetails from 'pages/HappDetails.vue'
 import HostedHapps from 'pages/HostedHapps.vue'
 import HostingPreferences from 'pages/HostingPreferences.vue'
-import PaidInvoices from 'pages/PaidInvoicesPage.vue'
-import UnpaidInvoices from 'pages/UnpaidInvoicesPage.vue'
+import InvoicesPage from 'pages/InvoicesPage.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import SettingsPage from 'src/pages/SettingsPage.vue'
@@ -68,7 +67,7 @@ export const kRoutes = {
   paidInvoices: {
     path: '/earnings/invoices/paid',
     name: 'PaidInvoices',
-    component: PaidInvoices,
+    component: InvoicesPage,
     meta: {
       requiresAuth: true
     }
@@ -77,7 +76,7 @@ export const kRoutes = {
   unpaidInvoices: {
     path: '/earnings/invoices/unpaid',
     name: 'UnpaidInvoices',
-    component: UnpaidInvoices,
+    component: InvoicesPage,
     meta: {
       requiresAuth: true
     }

@@ -17,7 +17,7 @@
     </BaseTableRowItem>
 
     <BaseTableRowItem
-      :value="invoice.formattedCompletedDate"
+      :value="isPaid ? invoice.formattedCompletedDate : invoice.formattedCreatedDate"
       is-visible-on-mobile
     />
 
@@ -55,17 +55,16 @@ import BaseTableRowItem from '@uicommon/components/BaseTableRowItem'
 import Identicon from '@uicommon/components/Identicon'
 import { decodeAgentId } from '@uicommon/utils/agent'
 import PaidInvoicesExpandableContent from 'components/invoices/PaidInvoicesExpandableContent'
-import dayjs from 'dayjs'
-import { presentHolofuelAmount } from 'utils'
 
 defineProps({
   invoice: {
     type: Object,
     required: true
+  },
+
+  isPaid: {
+    type: Boolean,
+    default: false
   }
 })
-
-function presentDate(date) {
-  return dayjs(date).format('DD MMM YYYY')
-}
 </script>
