@@ -107,7 +107,7 @@ const headersMap = new Map([
 const rawInvoices = ref(mockPaidInvoicesData)
 
 const kMsInSecond = 1000
-const kDefaultDateFormat = 'D MMM YYYY'
+const kDefaultDateFormat = 'DD MMM YYYY'
 const kVisibleHashLength = 6
 
 const invoices = computed(() =>
