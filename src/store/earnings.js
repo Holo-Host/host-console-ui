@@ -3,12 +3,20 @@ import HposInterface from 'src/interfaces/HposInterface'
 
 export const useEarningsStore = defineStore('earnings', {
   state: () => ({
-    earnings: {}
+    earnings: {},
+    paidInvoices: [],
+    unpaidInvoices: []
   }),
 
   actions: {
-    async getCompletedTransactions() {
-      this.earnings = await HposInterface.getCompletedTransactions()
+    async getPaidInvoices() {
+      this.paidInvoices = await HposInterface.getCompletedTransactions()
+    },
+
+    async getUnpaidInvoices() {
+      const pendingTransactions = await HposInterface.getPendingTransactions()
+
+      this.unpaidInvoices = pendingTransactions.invoice_pending
     }
   }
 })

@@ -32,14 +32,18 @@ import { formatCurrency } from '@uicommon/utils/numbers'
 import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import dayjs from 'dayjs'
-import { mockPaidInvoicesData } from 'src/mockInvoiceData'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { kRoutes } from '../router'
+import { useEarningsStore } from '../store/earnings'
 
 const { t } = useI18n()
 const router = useRouter()
+
+const isLoading = ref(false)
+
+const earningsStore = useEarningsStore()
 
 const headersMap = computed(
   () =>
@@ -113,14 +117,16 @@ const headersMap = computed(
     ])
 )
 
-const rawInvoices = ref(mockPaidInvoicesData)
-
 const kMsInSecond = 1000
 const kDefaultDateFormat = 'DD MMM YYYY'
 const kVisibleHashLength = 6
 
-const invoices = computed(() =>
-  rawInvoices.value.map((invoice) => ({
+const invoices = computed(() => {
+  const rawInvoices = isPaidInvoices.value
+    ? earningsStore.paidInvoices
+    : earningsStore.unpaidInvoices
+
+  return rawInvoices.map((invoice) => ({
     ...invoice,
     formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
     happ: invoice.note.split(':')[1],
@@ -134,7 +140,7 @@ const invoices = computed(() =>
       invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
     status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
   }))
-)
+})
 
 const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
@@ -151,6 +157,16 @@ const breadcrumbs = computed(() => [
     label: t(isPaidInvoices.value ? 'earnings.paid_invoices' : 'earnings.unpaid_invoices')
   }
 ])
+
+async function getInvoices() {
+  isLoading.value = true
+  isPaidInvoices.value ? await earningsStore.getPaidInvoices() : earningsStore.getUnpaidInvoices()
+  isLoading.value = false
+}
+
+onMounted(async () => {
+  await getInvoices()
+})
 </script>
 
 <style scoped>

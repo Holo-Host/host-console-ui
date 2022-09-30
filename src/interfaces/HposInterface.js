@@ -330,17 +330,35 @@ const HposInterface = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
         roleId: 'holofuel',
         zomeName: 'transactor',
-        fnName: 'get_pending_transactions',
+        fnName: 'get_completed_transactions',
         payload: null
       }
 
-      await hposHolochainCall({
+      return hposHolochainCall({
         method: 'post',
         path: '/zome_call',
         params
       })
+    } catch (error) {
+      return false
+    }
+  },
 
-      return true
+  async getPendingTransactions() {
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'transactor',
+        fnName: 'get_pending_transactions',
+        payload: null
+      }
+
+      return hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
     } catch (error) {
       return false
     }
