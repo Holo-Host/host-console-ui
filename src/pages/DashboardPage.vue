@@ -21,7 +21,7 @@
         :is-loading="isLoadingHostedHapps"
         with-more-button
         class="happs-card"
-        @more-clicked="() => {}"
+        @more-clicked="() => router.push({ name: kRoutes.happs.name })"
         @try-again-clicked="getTopHostedHapps"
       />
 
@@ -30,7 +30,7 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="earnings-card"
-        @more-clicked="() => {}"
+        @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
         @try-again-clicked="getEarnings"
       />
 
@@ -39,7 +39,7 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="payments-card"
-        @more-clicked="() => {}"
+        @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
         @try-again-clicked="getEarnings"
       />
     </div>
@@ -55,9 +55,12 @@ import UsageCard from 'components/dashboard/UsageCard.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import { useDashboardStore } from 'src/store/dashboard'
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { kRoutes } from '../router'
 
 const kPaymentsToDisplay = 3
 
+const router = useRouter()
 const dashboardStore = useDashboardStore()
 
 const isLoadingEarnings = ref(false)
