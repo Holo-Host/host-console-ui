@@ -12,9 +12,13 @@
 
     <BaseTable
       v-slot="{ items }"
+      :is-loading="isLoading"
+      :is-error="isError"
       :headers="[...headersMap.values()]"
       initial-sort-by="completed_date"
       :items="invoices"
+      :empty-message-translation-key="emptyMessageTranslationKey"
+      @try-again-clicked="getInvoices"
     >
       <InvoicesTableRow
         v-for="item in items"
@@ -42,6 +46,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 const isLoading = ref(false)
+const isError = ref(false)
 
 const earningsStore = useEarningsStore()
 
@@ -126,26 +131,34 @@ const invoices = computed(() => {
     ? earningsStore.paidInvoices
     : earningsStore.unpaidInvoices
 
-  return rawInvoices.map((invoice) => ({
-    ...invoice,
-    formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
-    happ: invoice.note.split(':')[1],
-    formattedExpirationDate: dayjs(new Date(invoice.expiration_date / kMsInSecond)).format(
-      kDefaultDateFormat
-    ),
-    amount: Number(invoice.amount),
-    formattedCompletedDate: dayjs(invoice.completed_date / kMsInSecond).format(kDefaultDateFormat),
-    formattedCreatedDate: dayjs(invoice.created_date / kMsInSecond).format(kDefaultDateFormat),
-    formattedAmount:
-      invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
-    status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
-  }))
+  return Array.isArray(rawInvoices)
+    ? rawInvoices.map((invoice) => ({
+      ...invoice,
+      formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
+      happ: invoice.note.split(':')[1],
+      formattedExpirationDate: dayjs(new Date(invoice.expiration_date / kMsInSecond)).format(
+        kDefaultDateFormat
+      ),
+      amount: Number(invoice.amount),
+      formattedCompletedDate: dayjs(invoice.completed_date / kMsInSecond).format(
+        kDefaultDateFormat
+      ),
+      formattedCreatedDate: dayjs(invoice.created_date / kMsInSecond).format(kDefaultDateFormat),
+      formattedAmount:
+          invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
+      status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
+    }))
+    : []
 })
 
 const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
 const pageHeaderTranslationKey = computed(() =>
   isPaidInvoices.value ? 'earnings.paid_invoices' : 'earnings.unpaid_invoices'
+)
+
+const emptyMessageTranslationKey = computed(() =>
+  isPaidInvoices.value ? 'invoices.errors.no_paid_invoices' : 'invoices.errors.no_unpaid_invoices'
 )
 
 const breadcrumbs = computed(() => [
@@ -159,9 +172,18 @@ const breadcrumbs = computed(() => [
 ])
 
 async function getInvoices() {
+  isError.value = false
   isLoading.value = true
-  isPaidInvoices.value ? await earningsStore.getPaidInvoices() : earningsStore.getUnpaidInvoices()
+
+  const rawInvoices = isPaidInvoices.value
+    ? await earningsStore.getPaidInvoices()
+    : await earningsStore.getUnpaidInvoices()
+
   isLoading.value = false
+
+  if (!rawInvoices) {
+    isError.value = true
+  }
 }
 
 onMounted(async () => {

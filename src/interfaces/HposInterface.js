@@ -343,7 +343,7 @@ const HposInterface = {
         payload: null
       }
 
-      return hposHolochainCall({
+      return await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
         params
@@ -363,7 +363,7 @@ const HposInterface = {
         payload: null
       }
 
-      return hposHolochainCall({
+      return await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
         params

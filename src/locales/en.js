@@ -46,6 +46,10 @@ const translations = {
     no_happs: 'You’re not currently hosting any hApps'
   },
   invoices: {
+    errors: {
+      no_paid_invoices: 'You have no paid invoices.',
+      no_unpaid_invoices: 'You have no unpaid invoices.'
+    },
     headers: {
       amount: 'Amount',
       completed: 'Date Paid',

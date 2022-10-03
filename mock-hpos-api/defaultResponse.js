@@ -422,7 +422,7 @@ const holoNixpkgs = {
 const data = {
   get: {
     '/api/v1/config': userConfig,
-    '/api/v1/settings': holoNixpkgs,
+    '/api/v1/status': holoNixpkgs,
     '/holochain-api/v1/hosted_happs': happs,
     '/holochain-api/v1/usage': usage,
     '/holochain-api/v1/host_earnings': earnings,

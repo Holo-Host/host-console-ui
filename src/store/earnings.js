@@ -10,13 +10,15 @@ export const useEarningsStore = defineStore('earnings', {
 
   actions: {
     async getPaidInvoices() {
-      this.paidInvoices = await HposInterface.getCompletedTransactions()
+      const completedTransactions = await HposInterface.getCompletedTransactions()
+      this.paidInvoices = completedTransactions
+      return completedTransactions
     },
 
     async getUnpaidInvoices() {
       const pendingTransactions = await HposInterface.getPendingTransactions()
-
       this.unpaidInvoices = pendingTransactions.invoice_pending
+      return pendingTransactions
     }
   }
 })
