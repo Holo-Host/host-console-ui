@@ -87,19 +87,6 @@ const hposHolochainCall = async (args) => {
   }
 }
 
-const presentHposSettings = (hposSettings) => {
-  const { admin, holoportOs = {}, deviceName } = hposSettings
-  return {
-    hostPubKey: admin.public_key,
-    registrationEmail: admin.email,
-    networkStatus: holoportOs.network, // ie: 'live'
-    sshAccess: holoportOs.sshAccess || false,
-    hposVersion: holoportOs.hposVersion,
-    // eslint-disable-next-line no-magic-numbers
-    deviceName: deviceName || (admin.public_key && `...${admin.public_key.slice(-8)}`) || 'Your HP'
-  }
-}
-
 const HposInterface = {
   getUsage: async () => {
     try {
@@ -218,58 +205,80 @@ const HposInterface = {
   getUser: async () => {
     try {
       const user = await HposInterface.getSettings()
+      const holoport = await HposInterface.getHposStatus()
       const holoFuelProfile = await HposInterface.getHoloFuelProfile()
 
-      return { user, holoFuelProfile }
+      return { user, holoport, holoFuelProfile }
     } catch (error) {
       console.error('getUser failed', error)
       return false
     }
   },
 
-  getSettings: async () => {
+  getHposStatus: async () => {
     try {
-      const result = await hposAdminCall({
+      // eslint-disable-next-line camelcase
+      const { holo_nixpkgs, holoport } = await hposAdminCall({
         method: 'get',
-        path: '/config'
+        path: '/status'
       })
 
-      return presentHposSettings(result)
+      return {
+        networkFlavour: HposInterface.formatNetworkName(holo_nixpkgs),
+        hposVersion: HposInterface.formatHposVersion(holo_nixpkgs),
+        name: holoport.name
+      }
     } catch (err) {
       return {}
     }
   },
 
-  updateSettings: async ({ deviceName }) => {
+  // Return devNet for channel develop, alphaNet for channel master, otherwise channel name
+  formatNetworkName: (holoNixpkgs) => {
+    if (holoNixpkgs && holoNixpkgs.channel && holoNixpkgs.channel.name) {
+      if (holoNixpkgs.channel.name === 'master') return 'alphaNet'
+      else if (holoNixpkgs.channel.name === 'develop') return 'devNet'
+      else return holoNixpkgs.channel.name
+    } else {
+      return 'Unknown'
+    }
+  },
+
+  // Return firs 7 characters of holoport's revision
+  formatHposVersion: (holoNixpkgs) => {
+    const strLen = 7
+    return holoNixpkgs && holoNixpkgs.current_system && holoNixpkgs.current_system.rev
+      ? holoNixpkgs.current_system.rev.substr(0, strLen)
+      : 'Unknown'
+  },
+
+  getSettings: async () => {
     try {
-      const settingsResponse = await hposAdminCall({
+      const { admin, deviceName } = await hposAdminCall({
         method: 'get',
         path: '/config'
       })
-
-      // Updating the config endpoint requires the hash of the current config to make sure nothing has changed.
-      const headers = {
-        'X-Hpos-Admin-CAS': await hashString(stringify(settingsResponse))
+      return {
+        hostPubKey: admin.public_key,
+        registrationEmail: admin.email,
+        deviceName:
+          // eslint-disable-next-line no-magic-numbers
+          deviceName || (admin.public_key && `...${admin.public_key.slice(-8)}`) || 'Your HP'
       }
-
-      const settingsConfig = {
-        ...settingsResponse
-      }
-
-      if (deviceName !== undefined) {
-        settingsConfig.deviceName = deviceName
-      }
-
-      await hposAdminCall({
-        method: 'put',
-        path: '/config',
-        headers,
-        params: settingsConfig
-      })
-      // We don't assume the successful PUT /api/v1/config returns the current config
-      return presentHposSettings(settingsConfig)
     } catch (err) {
       return {}
+    }
+  },
+
+  updateHoloportName: async (name) => {
+    try {
+      await hposAdminCall({
+        method: 'put',
+        path: '/holoport/name',
+        params: { name }
+      })
+    } catch (error) {
+      console.error('updateHoloportName failed: ', error)
     }
   },
 

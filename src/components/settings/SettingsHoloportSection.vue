@@ -15,7 +15,7 @@
       <PencilIcon
         v-if="!isEditingDeviceName"
         class="holoport-settings__editable-value-icon"
-        @click="() => {}"
+        @click="editDeviceName"
       />
       <div
         v-else
@@ -44,7 +44,7 @@
 
     <SettingsRow
       :label="$t('$.network')"
-      :value="settings.networkStatus"
+      :value="settings.networkFlavour"
     />
 
     <SettingsRow :label="$t('settings.ssh_access')">
@@ -131,8 +131,7 @@ function cancelEditDeviceName() {
   &__editable-value-icon {
     margin-left: 5px;
     opacity: 0.5;
-    cursor: not-allowed;
-    //cursor: pointer;
+    cursor: pointer;
   }
 
   &__factory-reset-link {

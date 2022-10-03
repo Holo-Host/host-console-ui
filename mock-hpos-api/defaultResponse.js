@@ -403,17 +403,34 @@ const mockUnpaidInvoicesData = {
   accepted: []
 }
 
+const holoNixpkgs = {
+  holo_nixpkgs: {
+    channel: {
+      name: 'develop',
+      rev: '26a12619249c0ab0db7c0d9c98709386cfd991b0'
+    },
+    current_system: {
+      rev: 'bc34eaa633a0b6483a97b86dd25811697220574d'
+    }
+  },
+  holoport: {
+    name: 'my Holoport'
+  }
+}
+
 // NB: both /api and /holochain-api calls are mocked here
 const data = {
   get: {
     '/api/v1/config': userConfig,
+    '/api/v1/settings': holoNixpkgs,
     '/holochain-api/v1/hosted_happs': happs,
     '/holochain-api/v1/usage': usage,
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion
   },
   put: {
-    '/api/v1/config': (args) => args
+    '/api/v1/config': (args) => args,
+    '/api/v1/holoport/name': {}
   },
   post: {
     '/holochain-api/v1/zome_call': (args) => {
