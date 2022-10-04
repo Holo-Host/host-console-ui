@@ -34,7 +34,7 @@
           with-arrow
           class="weekly-earnings__link"
         >
-          <span class="weekly-earnings__notification">2 new</span>
+          <!--          <span class="weekly-earnings__notification">2 new</span>-->
         </BaseLinkButton>
       </div>
     </template>
