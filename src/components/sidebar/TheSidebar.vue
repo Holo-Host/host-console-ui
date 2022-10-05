@@ -1,5 +1,8 @@
 <template>
-  <section class="sidebar">
+  <section
+    class="sidebar"
+    data-testid="sidebar"
+  >
     <h1 class="sidebar__header">
       {{ $t('$.host_console') }}
     </h1>

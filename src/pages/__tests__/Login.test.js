@@ -27,7 +27,8 @@ const router = createRouter({
     kRoutes.happ,
     kRoutes.happs,
     kRoutes.hostingPreferences,
-    kRoutes.invoices,
+    kRoutes.paidInvoices,
+    kRoutes.unpaidInvoices,
     kRoutes.login
   ]
 })

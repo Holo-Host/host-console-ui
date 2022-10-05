@@ -2,12 +2,17 @@
   <PrimaryLayout
     :title="$t(pageHeaderTranslationKey)"
     :breadcrumbs="breadcrumbs"
-    data-testid="earnings-invoices-page"
+    data-testid="invoices-page"
   >
-    <div class="controls">
-      <div class="label">
-        Filter by:&nbsp;
-      </div>
+    <div
+      class="controls"
+      data-testid="invoices-page-filters"
+    >
+      <BaseFilterInput
+        :value="filterValue"
+        is-disabled
+        @on-change="onFilterChange"
+      />
     </div>
 
     <BaseTable
@@ -31,6 +36,7 @@
 </template>
 
 <script setup>
+import BaseFilterInput from '@uicommon/components/BaseFilterInput'
 import BaseTable from '@uicommon/components/BaseTable'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
@@ -126,6 +132,12 @@ const kMsInSecond = 1000
 const kDefaultDateFormat = 'DD MMM YYYY'
 const kVisibleHashLength = 6
 
+const filterValue = ref('')
+
+function onFilterChange(value) {
+  filterValue.value = value
+}
+
 const invoices = computed(() => {
   const rawInvoices = isPaidInvoices.value
     ? earningsStore.paidInvoices
@@ -198,12 +210,5 @@ onMounted(async () => {
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 10px;
-}
-
-.controls .label {
-  color: var(--grey-color);
-  font-size: 12px;
-  margin-left: 30px;
-  margin-right: 2px;
 }
 </style>
