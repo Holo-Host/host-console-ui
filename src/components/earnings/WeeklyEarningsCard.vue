@@ -11,7 +11,7 @@
     <template #right>
       <div class="weekly-earnings__links">
         <BaseLinkButton
-          to=""
+          :to="kRoutes.paidInvoices.path"
           :icon="PaymentIcon"
           :label="$t('earnings.payments')"
           with-arrow
@@ -19,7 +19,7 @@
         />
 
         <BaseLinkButton
-          to=""
+          :to="kRoutes.unpaidInvoices.path"
           :icon="UnpaidLateIcon"
           :label="$t('earnings.unpaid_and_late')"
           with-arrow
@@ -34,7 +34,7 @@
           with-arrow
           class="weekly-earnings__link"
         >
-          <span class="weekly-earnings__notification">2 new</span>
+          <!--          <span class="weekly-earnings__notification">2 new</span>-->
         </BaseLinkButton>
       </div>
     </template>
@@ -48,12 +48,13 @@ import WeeklyEarningsData from 'components/earnings/WeeklyEarningsData'
 import FilledExclamationIcon from 'components/icons/FilledExclamationIcon'
 import PaymentIcon from 'components/icons/PaymentIcon'
 import UnpaidLateIcon from 'components/icons/UnpaidLateIcon'
+import { kRoutes } from '@/router'
 
 const emit = defineEmits(['try-again-clicked'])
 
 defineProps({
   data: {
-    type: Number,
+    type: [Number, String],
     required: true
   },
 

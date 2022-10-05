@@ -45,6 +45,7 @@ const kBaseRules = {
     }
   ],
   'import/first': 'error',
+  indent: ['error', kIndent],
   'max-depth': [
     'error',
     {

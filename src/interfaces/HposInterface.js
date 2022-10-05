@@ -311,23 +311,6 @@ const HposInterface = {
     }
   },
 
-  getCoreAppVersion: async () => {
-    try {
-      const { version: coreAppVersion } = await hposHolochainCall({
-        method: 'get',
-        path: '/core_app_version'
-      })
-
-      localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
-
-      return { coreAppVersion }
-    } catch (error) {
-      return {
-        coreAppVersion: null
-      }
-    }
-  },
-
   async updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
       const params = {
@@ -347,6 +330,63 @@ const HposInterface = {
       return true
     } catch (error) {
       return false
+    }
+  },
+
+  async getCompletedTransactions() {
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'transactor',
+        fnName: 'get_completed_transactions',
+        payload: null
+      }
+
+      return await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+    } catch (error) {
+      return false
+    }
+  },
+
+  async getPendingTransactions() {
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'transactor',
+        fnName: 'get_pending_transactions',
+        payload: null
+      }
+
+      return await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+    } catch (error) {
+      return false
+    }
+  },
+
+  getCoreAppVersion: async () => {
+    try {
+      const { version: coreAppVersion } = await hposHolochainCall({
+        method: 'get',
+        path: '/core_app_version'
+      })
+
+      localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
+
+      return { coreAppVersion }
+    } catch (error) {
+      return {
+        coreAppVersion: null
+      }
     }
   }
 }

@@ -24,7 +24,7 @@ import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 defineProps({
   weeklyEarnings: {
-    type: Number,
+    type: [Number, String],
     required: true
   }
 })

@@ -131,7 +131,7 @@ export default {
   outline-color: var(--grey-dark-color);
 }
 .filter-input::placeholder {
-  color: #bcbfc6;
+  color: var(--grey-light-color);
 }
 .ex-icon {
   position: absolute;

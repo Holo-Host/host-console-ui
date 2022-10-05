@@ -1,5 +1,8 @@
 <template>
-  <section class="top-nav">
+  <section
+    class="top-nav"
+    data-testid="top-nav"
+  >
     <h1
       v-if="!path"
       class="main-title"

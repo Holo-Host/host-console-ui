@@ -115,11 +115,9 @@ onUnmounted(() => {
   removeObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
   removeObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
 })
-
 function showGoToHolofuelModal() {
   isGoToHolofuelModalVisible.value = true
 }
-
 function hideGoToHolofuelModal() {
   isGoToHolofuelModalVisible.value = false
 }
