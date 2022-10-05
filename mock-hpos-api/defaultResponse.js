@@ -193,7 +193,6 @@ function createDate(year, month, day) {
 }
 
 /* eslint-disable no-magic-numbers */
-
 const mockPaidInvoicesData = [
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6H',
@@ -465,3 +464,5 @@ function defaultResponse(method, path, body) {
 }
 
 module.exports = defaultResponse
+exports.mockPaidInvoicesData = mockPaidInvoicesData
+exports.mockUnpaidInvoicesData = mockUnpaidInvoicesData
