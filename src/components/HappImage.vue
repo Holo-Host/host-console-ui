@@ -5,41 +5,36 @@
   />
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
+
 const kInitialsLength = 2
 
-export default {
-  name: 'HappImage',
-
-  props: {
-    happ: Object,
-
-    size: {
-      type: String,
-      default: '140px'
-    }
+const props = defineProps({
+  happ: {
+    type: Object,
+    required: true
   },
 
-  data: function () {
-    return {
-      style: {
-        width: this.size,
-        height: this.size,
-        'font-size': this.size,
-        'line-height': this.size
-      }
-    }
-  },
-
-  computed: {
-    initials() {
-      return this.happ.name
-        .replace(/[^a-z]/giu, '')
-        .slice(0, kInitialsLength)
-        .toUpperCase()
-    }
+  size: {
+    type: String,
+    default: '140px'
   }
-}
+})
+
+const style = computed(() => ({
+  width: props.size,
+  height: props.size,
+  'font-size': props.size,
+  'line-height': props.size
+}))
+
+const initials = computed(() =>
+  props.happ.name
+    .replace(/[^a-z]/giu, '')
+    .slice(0, kInitialsLength)
+    .toUpperCase()
+)
 </script>
 
 <style scoped>

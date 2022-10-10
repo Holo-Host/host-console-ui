@@ -22,6 +22,7 @@
         v-for="happ in filteredHapps"
         :key="happ.id"
         :happ="happ"
+        class="happs__happ-list-item"
       />
     </div>
   </PrimaryLayout>
@@ -75,11 +76,8 @@ onMounted(async () => {
     padding: 9px 0;
   }
 
-  &__happ-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-right: -18px;
+  &__happ-list-item {
+    max-width: 546px;
   }
 }
 
