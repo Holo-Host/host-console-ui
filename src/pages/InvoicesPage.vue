@@ -11,7 +11,7 @@
       <BaseFilterInput
         :value="filterValue"
         is-disabled
-        @on-change="onFilterChange"
+        @update:value="onFilterChange"
       />
     </div>
 
