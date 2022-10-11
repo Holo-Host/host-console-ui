@@ -1,6 +1,6 @@
 import Earnings from 'pages/EarningsPage.vue'
 import HappDetails from 'pages/HappDetails.vue'
-import HostedHapps from 'pages/HostedHapps.vue'
+import HAppsPage from 'pages/HAppsPage.vue'
 import HostingPreferences from 'pages/HostingPreferences.vue'
 import InvoicesPage from 'pages/InvoicesPage.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
@@ -30,8 +30,8 @@ export const kRoutes = {
 
   happs: {
     path: '/happs',
-    name: 'HostedHapps',
-    component: HostedHapps,
+    name: 'HAppsPage',
+    component: HAppsPage,
     meta: {
       requiresAuth: true
     }

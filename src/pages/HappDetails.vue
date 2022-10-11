@@ -27,7 +27,7 @@
         </div>
         <div class="main-column">
           <div class="mobile-column">
-            <HappImage
+            <HAppImage
               :happ="happ"
               size="124px"
               class="happ-image"
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import HappImage from 'components/HappImage.vue'
+import HAppImage from 'components/hApps/HAppImage.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
@@ -133,7 +133,7 @@ export default {
 
   components: {
     PrimaryLayout,
-    HappImage,
+		HAppImage,
     ClockIcon,
     LeftChevronIcon,
     ChainIcon,

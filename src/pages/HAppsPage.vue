@@ -22,6 +22,7 @@
         v-for="happ in filteredHapps"
         :key="happ.id"
         :happ="happ"
+        class="happs__happ-list-item"
       />
     </div>
   </PrimaryLayout>
@@ -29,7 +30,7 @@
 
 <script setup>
 import BaseFilterInput from '@uicommon/components/BaseFilterInput.vue'
-import HappCard from 'components/HappCard.vue'
+import HappCard from 'components/hApps/HappCard.vue'
 import SortByDropdown from 'components/hApps/SortByDropdown'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HposInterface from 'src/interfaces/HposInterface'
@@ -75,11 +76,12 @@ onMounted(async () => {
     padding: 9px 0;
   }
 
-  &__happ-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-right: -18px;
+  &__happ-list-item {
+    max-width: 546px;
+
+    &:not(:first-child) {
+      margin-top: 24px;
+    }
   }
 }
 
