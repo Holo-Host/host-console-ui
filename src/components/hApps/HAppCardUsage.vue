@@ -38,7 +38,7 @@ const items = computed(() => {
     {
       value: presentBytes(props.happ.usage.bandwidth || 0),
       unit: t('$.bandwidth'),
-      isDisabled: true
+      isDisabled: false
     }
   ]
 })

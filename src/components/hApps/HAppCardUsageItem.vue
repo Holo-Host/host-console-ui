@@ -1,5 +1,8 @@
 <template>
-  <div class="usage-item">
+  <div
+    class="usage-item"
+    :class="{ 'usage-item--disabled' : item.isDisabled }"
+  >
     <span class="usage-item__value">
       {{ item.value }}
     </span>
@@ -27,6 +30,10 @@ defineProps({
     border-bottom: 2px solid var(--primary-color);
     font-size: 14px;
     font-weight: 700;
+  }
+
+  &--disabled {
+    opacity: 0.2;
   }
 }
 
