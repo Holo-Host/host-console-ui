@@ -9,9 +9,9 @@
 </template>
 
 <script setup>
-import { presentMicroSeconds, presentBytes } from 'utils'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { presentMicroSeconds, presentBytes } from '../../utils'
 import HAppCardUsageItem from './HAppCardUsageItem.vue'
 
 const { t } = useI18n()

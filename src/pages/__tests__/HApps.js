@@ -7,7 +7,7 @@ import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import router from 'src/router'
 import { createI18n } from 'vue-i18n'
 import wait from 'waait'
-import HostedHapps from '../HAppsPage.vue'
+import HAppsPage from '../HAppsPage.vue'
 import locales from '@/locales'
 const clickOutside = jest.fn()
 
@@ -20,7 +20,7 @@ const i18n = createI18n({
 jest.mock('axios')
 mockGlobalCrypto()
 
-describe('hosted happs page', () => {
+describe('happs page', () => {
   beforeEach(() => {
     axios.get.mockClear()
     axios.put.mockClear()
@@ -47,7 +47,7 @@ describe('hosted happs page', () => {
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
-    render(HostedHapps, {
+    render(HAppsPage, {
       global: {
         plugins: [router, createTestingPinia(), i18n],
         directives: {
