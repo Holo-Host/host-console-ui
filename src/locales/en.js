@@ -5,6 +5,7 @@ const translations = {
     ...commonTranslations.$,
     app_name: 'Host Console',
     dashboard: 'Dashboard',
+    days: 'days',
     earnings: 'Earnings',
     happs: 'hApps',
     holo: 'HOLO',
@@ -42,8 +43,9 @@ const translations = {
     ...commonTranslations.holofuel_modal
   },
   hosted_happs: {
-    title: 'Top Hosted hApps',
-    no_happs: 'You’re not currently hosting any hApps'
+    hosted_for: 'Hosted for',
+    no_happs: 'You’re not currently hosting any hApps',
+    title: 'Top Hosted hApps'
   },
   invoices: {
     errors: {

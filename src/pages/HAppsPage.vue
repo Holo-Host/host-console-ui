@@ -30,7 +30,7 @@
 
 <script setup>
 import BaseFilterInput from '@uicommon/components/BaseFilterInput.vue'
-import HappCard from 'components/HappCard.vue'
+import HappCard from 'components/hApps/HappCard.vue'
 import SortByDropdown from 'components/hApps/SortByDropdown'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HposInterface from 'src/interfaces/HposInterface'
@@ -78,6 +78,10 @@ onMounted(async () => {
 
   &__happ-list-item {
     max-width: 546px;
+
+    &:not(:first-child) {
+      margin-top: 24px;
+    }
   }
 }
 

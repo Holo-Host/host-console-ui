@@ -7,7 +7,7 @@ import { HPOS_API_URL } from 'src/interfaces/HposInterface'
 import router from 'src/router'
 import { createI18n } from 'vue-i18n'
 import wait from 'waait'
-import HostedHapps from '../HostedHapps.vue'
+import HostedHapps from '../HAppsPage.vue'
 import locales from '@/locales'
 const clickOutside = jest.fn()
 
