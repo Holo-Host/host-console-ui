@@ -1,6 +1,23 @@
 <template>
   <BaseCard class="happ-card" margin="sm">
-    <div class="happ-card__content">
+    <div
+      v-if="isEmpty"
+      class="happ-card__content happ-card__content--empty"
+    >
+      {{ $t('hosted_happs.no_happs') }}
+    </div>
+
+    <div
+      v-if="isError"
+      class="happ-card__content happ-card__content--empty"
+    >
+      {{ $t('hosted_happs.no_happs') }}
+    </div>
+
+    <div
+      v-if="!isEmpty && !isError"
+      class="happ-card__content"
+    >
       <HAppImage
         :happ="happ"
         class="happ-card__desktop-image"
@@ -9,15 +26,15 @@
       <div class="happ-card__details">
         <div class="happ-card__name">
           {{ happ.name }}
-          <ArrowIcon class="happ-card__name-arrow-icon" />
-        </div>
 
-        <div class="happ-card__duration">
-          <ClockIcon class="happ-card__duration-clock-icon" />
-          {{ $t('hosted_happs.hosted_for') }}:&nbsp
-          <span class="bold">
-            {{ happ.hosted_for || 0 }} {{ $t('$.days') }}
-          </span>
+          <div
+            v-if="happ.isPaused"
+            class="happ-card__paused-chip"
+          >
+            {{ $t('$.paused') }}
+          </div>
+
+          <ArrowIcon class="happ-card__name-arrow-icon" />
         </div>
 
         <div class="happ-card__earnings disabled">
@@ -39,14 +56,23 @@ import { formatCurrency } from '@uicommon/utils/numbers'
 import HAppCardUsage from 'components/hApps/HAppCardUsage'
 import HAppImage from 'components/hApps/HAppImage.vue'
 import ArrowIcon from 'components/icons/ArrowIcon.vue'
-import ClockIcon from 'components/icons/ClockIcon.vue'
 import { computed } from 'vue'
 import { happDetailsPath } from '../../router'
 
 const props = defineProps({
   happ: {
     type: Object,
-    required: true
+    default: () => {}
+  },
+
+  isEmpty: {
+    type: Boolean,
+    default: false
+  },
+
+  isError: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -68,6 +94,19 @@ const pathToHapp = computed(() => happDetailsPath(this.happ))
     text-decoration: none;
     padding-left: 10px;
     padding-bottom: 12px;
+
+    &--empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      padding-top: 24px;
+      padding-left: 0;
+      font-size: 14px;
+      line-height: 19px;
+      font-weight: 700;
+      color: var(--grey-color);
+    }
   }
 
   &__details {
@@ -99,23 +138,25 @@ const pathToHapp = computed(() => happDetailsPath(this.happ))
     }
   }
 
-  &__duration {
-    display: flex;
+  &__paused-chip {
     align-items: center;
-    margin-top: 6px;
-    margin-bottom: 8px;
-
-    &-clock-icon {
-      margin-left: 1px;
-      margin-right: 7px;
-    }
+    display: inline-flex;
+    justify-content: center;
+    background-color: var(--primary-light-color);
+    border-radius: 9999px;
+    padding: 1px 13px;
+    margin-left: 10px;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--grey-color);
   }
 
   &__earnings {
     display: flex;
     align-items: center;
     color: var(--grey-dark-color);
-    margin: 24px 0 10px 4px;
+    margin: 60px 0 10px 4px;
   }
 }
 
@@ -138,6 +179,10 @@ const pathToHapp = computed(() => happDetailsPath(this.happ))
       margin-right: 0;
       max-width: none;
       flex-basis: 0;
+
+      &--empty {
+        width: 100%;
+      }
     }
   }
 }

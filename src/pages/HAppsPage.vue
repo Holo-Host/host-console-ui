@@ -17,11 +17,24 @@
       />
     </div>
 
-    <div class="happs__happ-list">
+    <div
+      v-if="filteredHapps.length"
+      class="happs__happ-list"
+    >
       <HappCard
         v-for="happ in filteredHapps"
         :key="happ.id"
         :happ="happ"
+        class="happs__happ-list-item"
+      />
+    </div>
+
+    <div
+      v-else
+      class="happs__happ-list"
+    >
+      <HappCard
+        is-empty
         class="happs__happ-list-item"
       />
     </div>
@@ -76,24 +89,35 @@ onMounted(async () => {
     padding: 9px 0;
   }
 
-  &__happ-list-item {
-    max-width: 546px;
+  &__happ-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(546px, 546px));
+    grid-template-rows: repeat(auto-fill, 180px);
+    grid-gap: 24px;
+    margin-top: 12px;
+    height: calc(100vh - 175px);
+    overflow-y: scroll;
+  }
 
-    &:not(:first-child) {
-      margin-top: 24px;
-    }
+  &__happ-list-item {
+    height: 185px;
   }
 }
 
 @media screen and (max-width: 1050px) {
   .happs {
-    &__controls {
-      justify-content: flex-end;
+    &__happ-list {
+      grid-template-columns: repeat(auto-fill, minmax(97%, 97%));
+      grid-template-rows: repeat(auto-fill, 250px);
+      height: calc(100vh - 250px);
     }
 
-    &__happ-list {
-      flex-direction: column;
-      margin-right: 0;
+    &__happ-list-item {
+      height: 250px;
+    }
+
+    &__controls {
+      justify-content: flex-end;
     }
 
     &__sort-by-dropdown {
