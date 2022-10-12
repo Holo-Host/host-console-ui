@@ -2,10 +2,14 @@
   <PrimaryLayout
     title="hApps"
     class="happs"
+    :is-content-loading="isLoading"
+    :is-content-error="isError"
+    @try-again-clicked="getData"
   >
     <div class="happs__controls">
       <BaseFilterInput
         :value="filterValue"
+        :is-disabled="isLoading"
         @update:value="onFilterChange"
       />
 
@@ -17,26 +21,28 @@
       />
     </div>
 
-    <div
-      v-if="filteredHapps.length"
-      class="happs__happ-list"
-    >
-      <HappCard
-        v-for="happ in filteredHapps"
-        :key="happ.id"
-        :happ="happ"
-        class="happs__happ-list-item"
-      />
-    </div>
+    <div v-if="!isLoading && !isError">
+      <div
+        v-if="filteredHapps.length"
+        class="happs__happ-list"
+      >
+        <HappCard
+          v-for="happ in filteredHapps"
+          :key="happ.id"
+          :happ="happ"
+          class="happs__happ-list-item"
+        />
+      </div>
 
-    <div
-      v-else
-      class="happs__happ-list"
-    >
-      <HappCard
-        is-empty
-        class="happs__happ-list-item"
-      />
+      <div
+        v-else
+        class="happs__happ-list"
+      >
+        <HappCard
+          is-empty
+          class="happs__happ-list-item"
+        />
+      </div>
     </div>
   </PrimaryLayout>
 </template>
@@ -49,6 +55,9 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 import { computed, onMounted, ref } from 'vue'
 import { kSortOptions } from '@/constants/ui'
+
+const isLoading = ref(false)
+const isError = ref(false)
 
 const filterValue = ref('')
 
@@ -74,8 +83,21 @@ function onSortByChange(value) {
   sortBy.value = value
 }
 
-onMounted(async () => {
+async function getData() {
+  isError.value = false
+  isLoading.value = true
+
   happs.value = await HposInterface.getHostedHapps()
+
+  if (happs.value.error) {
+    isError.value = true
+  }
+
+  isLoading.value = false
+}
+
+onMounted(async () => {
+  await getData()
 })
 </script>
 
