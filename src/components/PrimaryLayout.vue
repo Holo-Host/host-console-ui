@@ -34,15 +34,19 @@
           v-if="isContentLoading || isContentError"
           class="content__overlay"
         >
-          <CircleSpinner v-if="isContentLoading" class="content__overlay-spinner" />
+          <CircleSpinner
+            v-if="isContentLoading"
+            class="content__overlay-spinner"
+          />
+
           <div
             v-else-if="isContentError"
             class="content__overlay-error-message"
           >
-            <p>Sorry, we couldn’t fetch this data.</p>
+            <p>{{ $t('$.generic_error') }}</p>
             <BaseButton
               :type="EButtonType.gray"
-              title="Try again"
+              :title="$t('$.try_again')"
               @click="emit('try-again-clicked')"
             />
           </div>

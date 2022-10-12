@@ -7,6 +7,7 @@ const translations = {
     dashboard: 'Dashboard',
     days: 'days',
     earnings: 'Earnings',
+    generic_error: 'Sorry, we couldn’t fetch this data.',
     happs: 'hApps',
     holo: 'HOLO',
     hosting_preferences: 'Hosting Preferences',
@@ -15,7 +16,8 @@ const translations = {
     learn_more: 'Learn more',
     logout: 'Logout',
     paused: 'paused',
-    terms_of_service: 'Terms of Service'
+    terms_of_service: 'Terms of Service',
+    try_again: 'Try again'
   },
   earnings: {
     exceptions: 'Exceptions',
