@@ -8,14 +8,7 @@
     </div>
 
     <div
-      v-if="isError"
-      class="happ-card__content happ-card__content--empty"
-    >
-      {{ $t('hosted_happs.no_happs') }}
-    </div>
-
-    <div
-      v-if="!isEmpty && !isError"
+      v-if="!isEmpty"
       class="happ-card__content"
     >
       <HAppImage
@@ -66,11 +59,6 @@ const props = defineProps({
   },
 
   isEmpty: {
-    type: Boolean,
-    default: false
-  },
-
-  isError: {
     type: Boolean,
     default: false
   }
