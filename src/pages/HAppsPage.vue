@@ -2,10 +2,14 @@
   <PrimaryLayout
     title="hApps"
     class="happs"
+    :is-content-loading="isLoading"
+    :is-content-error="isError"
+    @try-again-clicked="getData"
   >
     <div class="happs__controls">
       <BaseFilterInput
         :value="filterValue"
+        :is-disabled="isLoading"
         @update:value="onFilterChange"
       />
 
@@ -17,13 +21,28 @@
       />
     </div>
 
-    <div class="happs__happ-list">
-      <HappCard
-        v-for="happ in filteredHapps"
-        :key="happ.id"
-        :happ="happ"
-        class="happs__happ-list-item"
-      />
+    <div v-if="!isLoading && !isError">
+      <div
+        v-if="filteredHapps.length"
+        class="happs__happ-list"
+      >
+        <HappCard
+          v-for="happ in filteredHapps"
+          :key="happ.id"
+          :happ="happ"
+          class="happs__happ-list-item"
+        />
+      </div>
+
+      <div
+        v-else
+        class="happs__happ-list"
+      >
+        <HappCard
+          is-empty
+          class="happs__happ-list-item"
+        />
+      </div>
     </div>
   </PrimaryLayout>
 </template>
@@ -36,6 +55,9 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 import { computed, onMounted, ref } from 'vue'
 import { kSortOptions } from '@/constants/ui'
+
+const isLoading = ref(false)
+const isError = ref(false)
 
 const filterValue = ref('')
 
@@ -61,8 +83,21 @@ function onSortByChange(value) {
   sortBy.value = value
 }
 
-onMounted(async () => {
+async function getData() {
+  isError.value = false
+  isLoading.value = true
+
   happs.value = await HposInterface.getHostedHapps()
+
+  if (happs.value.error) {
+    isError.value = true
+  }
+
+  isLoading.value = false
+}
+
+onMounted(async () => {
+  await getData()
 })
 </script>
 
@@ -76,24 +111,35 @@ onMounted(async () => {
     padding: 9px 0;
   }
 
-  &__happ-list-item {
-    max-width: 546px;
+  &__happ-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(546px, 546px));
+    grid-template-rows: repeat(auto-fill, 180px);
+    grid-gap: 24px;
+    margin-top: 12px;
+    height: calc(100vh - 175px);
+    overflow-y: scroll;
+  }
 
-    &:not(:first-child) {
-      margin-top: 24px;
-    }
+  &__happ-list-item {
+    height: 185px;
   }
 }
 
 @media screen and (max-width: 1050px) {
   .happs {
-    &__controls {
-      justify-content: flex-end;
+    &__happ-list {
+      grid-template-columns: repeat(auto-fill, minmax(97%, 97%));
+      grid-template-rows: repeat(auto-fill, 250px);
+      height: calc(100vh - 250px);
     }
 
-    &__happ-list {
-      flex-direction: column;
-      margin-right: 0;
+    &__happ-list-item {
+      height: 250px;
+    }
+
+    &__controls {
+      justify-content: flex-end;
     }
 
     &__sort-by-dropdown {

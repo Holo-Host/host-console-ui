@@ -29,13 +29,38 @@
 
       <section class="content">
         <slot />
+
+        <div
+          v-if="isContentLoading || isContentError"
+          class="content__overlay"
+        >
+          <CircleSpinner
+            v-if="isContentLoading"
+            class="content__overlay-spinner"
+          />
+
+          <div
+            v-else-if="isContentError"
+            class="content__overlay-error-message"
+          >
+            <p>{{ $t('$.generic_error') }}</p>
+            <BaseButton
+              :type="EButtonType.gray"
+              :title="$t('$.try_again')"
+              @click="emit('try-again-clicked')"
+            />
+          </div>
+        </div>
       </section>
     </section>
   </section>
 </template>
 
 <script setup>
+import BaseButton from '@uicommon/components/BaseButton'
+import CircleSpinner from '@uicommon/components/CircleSpinner'
 import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
+import { EButtonType } from '@uicommon/types/ui'
 import {
   addObserver,
   removeObserver,
@@ -62,8 +87,20 @@ const props = defineProps({
   breadcrumbs: {
     type: Array,
     default: () => []
+  },
+
+  isContentLoading: {
+    type: Boolean,
+    default: false
+  },
+
+  isContentError: {
+    type: Boolean,
+    default: false
   }
 })
+
+const emit = defineEmits(['try-again-clicked'])
 
 const isLoading = ref(false)
 
@@ -123,7 +160,7 @@ function hideGoToHolofuelModal() {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .layout {
   display: flex;
   height: 100%;
@@ -139,8 +176,35 @@ function hideGoToHolofuelModal() {
 }
 
 .content {
+  position: relative;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+
+    &-spinner {
+      position: absolute;
+    }
+
+    &-error-message {
+      padding: 5px 20px;
+      text-align: center;
+      color: var(--grey-color);
+    }
+  }
 }
 
 @media screen and (max-width: 1050px) {

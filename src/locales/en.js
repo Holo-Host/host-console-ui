@@ -7,6 +7,7 @@ const translations = {
     dashboard: 'Dashboard',
     days: 'days',
     earnings: 'Earnings',
+    generic_error: 'Sorry, we couldn’t fetch this data.',
     happs: 'hApps',
     holo: 'HOLO',
     hosting_preferences: 'Hosting Preferences',
@@ -14,7 +15,9 @@ const translations = {
       'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
     learn_more: 'Learn more',
     logout: 'Logout',
-    terms_of_service: 'Terms of Service'
+    paused: 'paused',
+    terms_of_service: 'Terms of Service',
+    try_again: 'Try again'
   },
   earnings: {
     exceptions: 'Exceptions',
@@ -44,7 +47,7 @@ const translations = {
   },
   hosted_happs: {
     hosted_for: 'Hosted for',
-    no_happs: 'You’re not currently hosting any hApps',
+    no_happs: 'You’re not hosting any hApps',
     title: 'Top Hosted hApps'
   },
   invoices: {
