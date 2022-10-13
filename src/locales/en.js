@@ -48,6 +48,7 @@ const translations = {
   hosted_happs: {
     hosted_for: 'Hosted for',
     no_happs: 'You’re not hosting any hApps',
+    no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },
   invoices: {

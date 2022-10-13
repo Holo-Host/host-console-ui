@@ -40,6 +40,7 @@
       >
         <HappCard
           is-empty
+          :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : 'hosted_happs.no_happs'"
           class="happs__happ-list-item"
         />
       </div>

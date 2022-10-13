@@ -4,7 +4,7 @@
       v-if="isEmpty"
       class="happ-card__content happ-card__content--empty"
     >
-      {{ $t('hosted_happs.no_happs') }}
+      {{ $t(emptyCardLabel) }}
     </div>
 
     <div
@@ -61,6 +61,11 @@ const props = defineProps({
   isEmpty: {
     type: Boolean,
     default: false
+  },
+
+  emptyCardLabel: {
+    type: String,
+    default: 'hosted_happs.no_happs'
   }
 })
 
