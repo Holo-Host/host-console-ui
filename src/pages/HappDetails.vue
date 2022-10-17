@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import HAppImage from 'components/hApps/HAppImage.vue'
+import HAppImage from '@uicommon/components/HAppImage.vue'
 import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
 import ChainIcon from 'components/icons/ChainIcon.vue'
 import ClockIcon from 'components/icons/ClockIcon.vue'
@@ -133,7 +133,7 @@ export default {
 
   components: {
     PrimaryLayout,
-		HAppImage,
+    HAppImage,
     ClockIcon,
     LeftChevronIcon,
     ChainIcon,

@@ -8,9 +8,10 @@
       class="controls"
       data-testid="invoices-page-filters"
     >
-      <BaseFilterInput
+      <BaseSearchInput
         :value="filterValue"
         is-disabled
+        label-translation-key="$.filter_by"
         @update:value="onFilterChange"
       />
     </div>
@@ -36,7 +37,7 @@
 </template>
 
 <script setup>
-import BaseFilterInput from '@uicommon/components/BaseFilterInput'
+import BaseSearchInput from '@uicommon/components/BaseSearchInput'
 import BaseTable from '@uicommon/components/BaseTable'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
