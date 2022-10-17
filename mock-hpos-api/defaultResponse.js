@@ -8,6 +8,7 @@ const happs = [
     id: '1',
     name: 'HoloFuel',
     enabled: true,
+    isPaused: true,
     sourceChains: 110,
     storage: 3902834,
     usage: {
@@ -19,6 +20,7 @@ const happs = [
     id: '2',
     name: 'Community',
     enabled: true,
+    isPaused: false,
     sourceChains: 79,
     storage: 709049842834,
     usage: {
@@ -30,6 +32,7 @@ const happs = [
     id: '3',
     name: 'Elemental Chat',
     enabled: true,
+    isPaused: false,
     sourceChains: 34,
     storage: 50949882,
     usage: {

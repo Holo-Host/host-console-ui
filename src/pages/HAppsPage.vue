@@ -11,7 +11,7 @@
         :value="filterValue"
         :is-disabled="isLoading"
         label-translation-key="$.filter_by"
-        @update:value="onFilterChange"
+        @update="onFilterChange"
       />
 
       <SortByDropdown
@@ -62,8 +62,10 @@ const isLoading = ref(false)
 const isError = ref(false)
 
 const filterValue = ref('')
+const filterIsActive = ref(false)
 
-function onFilterChange(value) {
+function onFilterChange({ value, isActive }) {
+  filterIsActive.value = isActive
   filterValue.value = value
 }
 
@@ -76,9 +78,13 @@ const filteredHapps = computed(() => {
       ? (a, b) => (a.sevenDayEarnings < b.sevenDayEarnings ? 1 : -1)
       : (a, b) => (a.name > b.name ? 1 : -1)
 
-  return happs.value
-    .filter(({ name }) => name.toLowerCase().includes(filterValue.value.toLowerCase()))
-    .sort(sortByLogic)
+  if (filterIsActive.value && filterValue.value) {
+    return happs.value
+      .filter(({ name }) => name.toLowerCase().includes(filterValue.value.toLowerCase()))
+      .sort(sortByLogic)
+  }
+
+  return [...happs.value].sort(sortByLogic)
 })
 
 function onSortByChange(value) {
@@ -115,7 +121,7 @@ onMounted(async () => {
 
   &__happ-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(546px, 546px));
+    grid-template-columns: repeat(auto-fill, minmax(600px, 600px));
     grid-template-rows: repeat(auto-fill, 180px);
     grid-gap: 24px;
     margin-top: 12px;
