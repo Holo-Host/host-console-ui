@@ -10,7 +10,7 @@
     >
       <BaseSearchInput
         :value="filterValue"
-        is-disabled
+        :is-disabled="isLoading || isError || invoices.length === 0"
         label-translation-key="$.filter_by"
         @update:value="onFilterChange"
       />
@@ -43,7 +43,7 @@ import { formatCurrency } from '@uicommon/utils/numbers'
 import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import dayjs from 'dayjs'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { kRoutes } from '../router'
@@ -136,8 +136,36 @@ const kVisibleHashLength = 6
 const filterValue = ref('')
 
 function onFilterChange(value) {
-  filterValue.value = value
+  if (value !== false) {
+    filterValue.value = value
+    console.log('do filter')
+  } else {
+    console.log('too short')
+  }
 }
+
+const kFilterCriteria = [
+  {
+    key: 'happ',
+    minLength: 1,
+    exact: false
+  },
+  {
+    key: 'counterparty',
+    minLength: 15,
+    exact: true
+  },
+  {
+    key: 'id',
+    minLength: 15,
+    exact: true
+  },
+  {
+    key: 'amount',
+    minLength: 1,
+    exact: true
+  }
+]
 
 const invoices = computed(() => {
   const rawInvoices = isPaidInvoices.value

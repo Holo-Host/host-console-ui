@@ -115,7 +115,7 @@ onMounted(async () => {
 
   &__happ-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(546px, 546px));
+    grid-template-columns: repeat(auto-fill, minmax(600px, 600px));
     grid-template-rows: repeat(auto-fill, 180px);
     grid-gap: 24px;
     margin-top: 12px;
