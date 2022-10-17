@@ -12,7 +12,7 @@
         :value="filterValue"
         :is-disabled="isLoading || isError || invoices.length === 0"
         label-translation-key="$.filter_by"
-        @update:value="onFilterChange"
+        @update="onFilterChange"
       />
     </div>
 
@@ -22,7 +22,7 @@
       :is-error="isError"
       :headers="[...headersMap.values()]"
       initial-sort-by="completed_date"
-      :items="invoices"
+      :items="filteredInvoices"
       :empty-message-translation-key="emptyMessageTranslationKey"
       @try-again-clicked="getInvoices"
     >
@@ -134,38 +134,12 @@ const kDefaultDateFormat = 'DD MMM YYYY'
 const kVisibleHashLength = 6
 
 const filterValue = ref('')
+const filterIsActive = ref(false)
 
-function onFilterChange(value) {
-  if (value !== false) {
-    filterValue.value = value
-    console.log('do filter')
-  } else {
-    console.log('too short')
-  }
+function onFilterChange({ value, isActive }) {
+  filterIsActive.value = isActive
+  filterValue.value = value
 }
-
-const kFilterCriteria = [
-  {
-    key: 'happ',
-    minLength: 1,
-    exact: false
-  },
-  {
-    key: 'counterparty',
-    minLength: 15,
-    exact: true
-  },
-  {
-    key: 'id',
-    minLength: 15,
-    exact: true
-  },
-  {
-    key: 'amount',
-    minLength: 1,
-    exact: true
-  }
-]
 
 const invoices = computed(() => {
   const rawInvoices = isPaidInvoices.value
@@ -190,6 +164,61 @@ const invoices = computed(() => {
       status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
     }))
     : []
+})
+
+const kFilterCriteria = [
+  {
+    key: 'happ',
+    minLength: 3,
+    exact: false
+  },
+  {
+    key: 'counterparty',
+    minLength: 15,
+    exact: true
+  },
+  {
+    key: 'id',
+    minLength: 15,
+    exact: true
+  },
+  {
+    key: 'amount',
+    minLength: 3,
+    exact: true
+  }
+]
+
+const activeFilterCriteria = computed(() => {
+  return kFilterCriteria.filter((criteria) => criteria.minLength <= filterValue.value.length)
+})
+
+const filteredInvoices = computed(() => {
+  if (filterIsActive.value && filterValue.value) {
+    let filteredInvoices = new Set([])
+
+    console.log(activeFilterCriteria.value)
+
+    activeFilterCriteria.value.forEach((criteria) => {
+      filteredInvoices = new Set([
+        ...filteredInvoices,
+        ...invoices.value.filter((invoice) => {
+          if (criteria.key === 'amount') {
+            return (
+              Number(`${invoice[criteria.key]}`.split('.')[0]) ===
+              Number(filterValue.value.split('.')[0])
+            )
+          } else {
+            return invoice[criteria.key].toLowerCase().includes(filterValue.value.toLowerCase())
+          }
+        })
+      ])
+    })
+
+    return [...filteredInvoices]
+  } else {
+    return invoices.value
+  }
 })
 
 const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
