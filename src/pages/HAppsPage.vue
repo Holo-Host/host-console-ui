@@ -7,10 +7,11 @@
     @try-again-clicked="getData"
   >
     <div class="happs__controls">
-      <BaseFilterInput
+      <BaseSearchInput
         :value="filterValue"
         :is-disabled="isLoading"
-        @update:value="onFilterChange"
+        label-translation-key="$.filter_by"
+        @update="onFilterChange"
       />
 
       <SortByDropdown
@@ -26,7 +27,7 @@
         v-if="filteredHapps.length"
         class="happs__happ-list"
       >
-        <HappCard
+        <HAppCard
           v-for="happ in filteredHapps"
           :key="happ.id"
           :happ="happ"
@@ -38,7 +39,7 @@
         v-else
         class="happs__happ-list"
       >
-        <HappCard
+        <HAppCard
           is-empty
           :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : 'hosted_happs.no_happs'"
           class="happs__happ-list-item"
@@ -49,9 +50,9 @@
 </template>
 
 <script setup>
-import BaseFilterInput from '@uicommon/components/BaseFilterInput.vue'
-import HappCard from 'components/hApps/HappCard.vue'
-import SortByDropdown from 'components/hApps/SortByDropdown'
+import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
+import HAppCard from '@uicommon/components/HAppCard.vue'
+import SortByDropdown from 'components/hApps/SortByDropdown.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HposInterface from 'src/interfaces/HposInterface'
 import { computed, onMounted, ref } from 'vue'
@@ -61,8 +62,10 @@ const isLoading = ref(false)
 const isError = ref(false)
 
 const filterValue = ref('')
+const filterIsActive = ref(false)
 
-function onFilterChange(value) {
+function onFilterChange({ value, isActive }) {
+  filterIsActive.value = isActive
   filterValue.value = value
 }
 
@@ -75,9 +78,13 @@ const filteredHapps = computed(() => {
       ? (a, b) => (a.sevenDayEarnings < b.sevenDayEarnings ? 1 : -1)
       : (a, b) => (a.name > b.name ? 1 : -1)
 
-  return happs.value
-    .filter(({ name }) => name.toLowerCase().includes(filterValue.value.toLowerCase()))
-    .sort(sortByLogic)
+  if (filterIsActive.value && filterValue.value) {
+    return happs.value
+      .filter(({ name }) => name.toLowerCase().includes(filterValue.value.toLowerCase()))
+      .sort(sortByLogic)
+  }
+
+  return [...happs.value].sort(sortByLogic)
 })
 
 function onSortByChange(value) {
@@ -114,7 +121,7 @@ onMounted(async () => {
 
   &__happ-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(546px, 546px));
+    grid-template-columns: repeat(auto-fill, minmax(600px, 600px));
     grid-template-rows: repeat(auto-fill, 180px);
     grid-gap: 24px;
     margin-top: 12px;
@@ -131,12 +138,12 @@ onMounted(async () => {
   .happs {
     &__happ-list {
       grid-template-columns: repeat(auto-fill, minmax(97%, 97%));
-      grid-template-rows: repeat(auto-fill, 250px);
-      height: calc(100vh - 250px);
+      grid-template-rows: repeat(auto-fill, 215px);
+      height: calc(100vh - 215px);
     }
 
     &__happ-list-item {
-      height: 250px;
+      height: 215px;
     }
 
     &__controls {

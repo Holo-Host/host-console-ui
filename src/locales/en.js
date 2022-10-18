@@ -15,7 +15,6 @@ const translations = {
       'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
     learn_more: 'Learn more',
     logout: 'Logout',
-    paused: 'paused',
     terms_of_service: 'Terms of Service',
     try_again: 'Try again'
   },
