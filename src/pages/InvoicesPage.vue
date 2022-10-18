@@ -10,7 +10,7 @@
     >
       <BaseSearchInput
         :value="filterValue"
-        :is-disabled="isLoading || isError || invoices.length === 0"
+        :is-disabled="!isFilteringEnabled"
         label-translation-key="$.filter_by"
         @update="onFilterChange"
       />
@@ -22,7 +22,7 @@
       :is-error="isError"
       :headers="[...headersMap.values()]"
       initial-sort-by="completed_date"
-      :items="filteredInvoices"
+      :items="filteredData"
       :empty-message-translation-key="emptyMessageTranslationKey"
       @try-again-clicked="getInvoices"
     >
@@ -39,11 +39,12 @@
 <script setup>
 import BaseSearchInput from '@uicommon/components/BaseSearchInput'
 import BaseTable from '@uicommon/components/BaseTable'
+import { useFilter, EFilterTypes } from '@uicommon/composables/useFilter'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import dayjs from 'dayjs'
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { kRoutes } from '../router'
@@ -54,6 +55,10 @@ const router = useRouter()
 
 const isLoading = ref(false)
 const isError = ref(false)
+
+const isFilteringEnabled = computed(
+  () => !isLoading.value && !isError.value && invoices.value.length > 0
+)
 
 const earningsStore = useEarningsStore()
 
@@ -133,13 +138,7 @@ const kMsInSecond = 1000
 const kDefaultDateFormat = 'DD MMM YYYY'
 const kVisibleHashLength = 6
 
-const filterValue = ref('')
-const filterIsActive = ref(false)
-
-function onFilterChange({ value, isActive }) {
-  filterIsActive.value = isActive
-  filterValue.value = value
-}
+const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
 const invoices = computed(() => {
   const rawInvoices = isPaidInvoices.value
@@ -169,59 +168,34 @@ const invoices = computed(() => {
 const kFilterCriteria = [
   {
     key: 'happ',
+    type: EFilterTypes.string,
     minLength: 3,
     exact: false
   },
   {
     key: 'counterparty',
+    type: EFilterTypes.string,
     minLength: 15,
     exact: true
   },
   {
     key: 'id',
+    type: EFilterTypes.string,
     minLength: 15,
     exact: true
   },
   {
     key: 'amount',
+    type: EFilterTypes.number,
     minLength: 3,
-    exact: true
+    exact: false
   }
 ]
 
-const activeFilterCriteria = computed(() => {
-  return kFilterCriteria.filter((criteria) => criteria.minLength <= filterValue.value.length)
+const { filteredData, onFilterChange, filterValue } = useFilter({
+  data: invoices,
+  criteria: kFilterCriteria
 })
-
-const filteredInvoices = computed(() => {
-  if (filterIsActive.value && filterValue.value) {
-    let filteredInvoices = new Set([])
-
-    console.log(activeFilterCriteria.value)
-
-    activeFilterCriteria.value.forEach((criteria) => {
-      filteredInvoices = new Set([
-        ...filteredInvoices,
-        ...invoices.value.filter((invoice) => {
-          if (criteria.key === 'amount') {
-            return (
-              Number(`${invoice[criteria.key]}`.split('.')[0]) ===
-              Number(filterValue.value.split('.')[0])
-            )
-          } else {
-            return invoice[criteria.key].toLowerCase().includes(filterValue.value.toLowerCase())
-          }
-        })
-      ])
-    })
-
-    return [...filteredInvoices]
-  } else {
-    return invoices.value
-  }
-})
-
-const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
 const pageHeaderTranslationKey = computed(() =>
   isPaidInvoices.value ? 'earnings.paid_invoices' : 'earnings.unpaid_invoices'
