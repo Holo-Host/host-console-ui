@@ -12,7 +12,7 @@
         :value="filterValue"
         :is-disabled="!isFilteringEnabled"
         label-translation-key="$.filter_by"
-        @update="onFilterChange"
+        @update="setFilter"
       />
     </div>
 
@@ -192,7 +192,7 @@ const kFilterCriteria = [
   }
 ]
 
-const { filteredData, onFilterChange, filterValue } = useFilter({
+const { filteredData, setFilter, filterValue } = useFilter({
   data: invoices,
   criteria: kFilterCriteria
 })
