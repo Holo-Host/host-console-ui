@@ -1,5 +1,8 @@
-import { EProjectNotification, postNotification } from '@uicommon/utils/notifications'
+import { useModals } from '@uicommon/composables/useModals'
+import { EModal } from '@uicommon/types/ui'
 import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
+
+const { showModal } = useModals()
 
 export function useGoToHoloFuel() {
   function goToHoloFuel() {
@@ -8,7 +11,7 @@ export function useGoToHoloFuel() {
     if (isModalDisabled) {
       window.open(kHoloFuelUrl, '_blank').focus()
     } else {
-      postNotification(EProjectNotification.showGoToHolofuelModal)
+      showModal(EModal.go_to_holofuel)
     }
   }
 

@@ -3,7 +3,7 @@
     :title="modalContent.title"
     :is-dismissible="step === 2"
     :has-close-button="false"
-    :is-visible="isVisible"
+    :is-visible="visibleModal === EModal.welcome"
   >
     <div class="welcome-modal">
       <section v-if="step === 1">
@@ -77,23 +77,17 @@ import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseInput from '@uicommon/components/BaseInput.vue'
 import BaseModal from '@uicommon/components/BaseModal.vue'
 import Identicon from '@uicommon/components/Identicon.vue'
+import { useModals } from '@uicommon/composables/useModals'
 import { encodeAgentId } from '@uicommon/utils/agent'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUserStore } from '../../store/user'
+import { EModal } from '@/constants/ui'
 
 const { t } = useI18n()
-
-defineProps({
-  isVisible: {
-    type: Boolean,
-    required: true
-  }
-})
+const { visibleModal, hideModal } = useModals()
 
 const userStore = useUserStore()
-
-const emit = defineEmits(['close'])
 
 const nickname = ref('')
 
@@ -133,7 +127,7 @@ async function handleSubmit() {
       isError.value = true
     }
   } else {
-    emit('close')
+    hideModal()
   }
 }
 </script>
