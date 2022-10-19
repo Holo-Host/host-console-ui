@@ -59,8 +59,8 @@ import BaseButton from '@uicommon/components/BaseButton'
 import CircleSpinner from '@uicommon/components/CircleSpinner'
 import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
 import { useModals } from '@uicommon/composables/useModals'
+import { useOverlay } from '@uicommon/composables/useOverlay'
 import { EButtonType } from '@uicommon/types/ui'
-import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import MobileTopNav from 'components/MobileTopNav'
 import WelcomeModal from 'components/modals/WelcomeModal'
 import TheSidebar from 'components/sidebar/TheSidebar'
@@ -71,7 +71,7 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { EModal } from '@/constants/ui'
 
 const userStore = useUserStore()
-
+const { showLoadingOverlay, hideOverlay } = useOverlay()
 const { showModal } = useModals()
 
 const props = defineProps({
@@ -123,10 +123,10 @@ onMounted(async () => {
     if (!userStore.publicKey) {
       isLoading.value = true
 
-      postNotification(ENotification.showBusyState)
+      showLoadingOverlay()
       await userStore.getUser()
 
-      postNotification(ENotification.hideBusyState)
+      hideOverlay()
       isLoading.value = false
     }
 
