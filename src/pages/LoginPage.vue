@@ -78,8 +78,8 @@
 <script setup>
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
+import { useBanner } from '@uicommon/composables/useBanner'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
-import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import validator from 'email-validator'
 import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -97,6 +97,7 @@ const validatePassword = (password) => password.length > kMinPasswordLength
 
 const router = useRouter()
 const { t } = useI18n()
+const { showBanner, hideBanner } = useBanner()
 
 const userStore = useUserStore()
 
@@ -119,7 +120,7 @@ onMounted(async () => {
 watch(
   () => email.value,
   (value) => {
-    postNotification(ENotification.hideBanner)
+    hideBanner()
 
     if (errors.email && validateEmail(value)) {
       errors.email = ''
@@ -130,7 +131,7 @@ watch(
 watch(
   () => password.value,
   (value) => {
-    postNotification(ENotification.hideBanner)
+    hideBanner()
 
     if (errors.password && validatePassword(value)) {
       errors.password = ''
@@ -174,13 +175,13 @@ async function login() {
 
           await router.push({ name: kRoutes.dashboard.name })
         } else {
-          postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
+          showBanner({ message: t('$.errors.login_failed') })
         }
       } else {
         await router.push({ name: kRoutes.dashboard.name })
       }
     } catch (e) {
-      postNotification(ENotification.showBanner, { message: t('$.errors.login_failed') })
+      showBanner({ message: t('$.errors.login_failed') })
     } finally {
       isLoading.value = false
     }
