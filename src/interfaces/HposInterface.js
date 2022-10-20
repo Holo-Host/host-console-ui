@@ -106,20 +106,19 @@ const HposInterface = {
 
   getTopHostedHapps: async () => {
     try {
+      // NB: the `/hosted_happs` endpoint returns happs sorted by earnings in descending order
       const result = await hposHolochainCall({
         method: 'get',
         path: '/hosted_happs',
         params: {
           duration_unit: 'WEEK',
-          amount: 1
+          amount: 1,
+          quantity: kTopHappsToDisplay
         }
       })
 
       if (Array.isArray(result)) {
-        return result
-          .filter((happ) => happ.enabled)
-          .sort((a, b) => b.sourceChains - a.sourceChains)
-          .slice(0, kTopHappsToDisplay)
+        return result.filter((happ) => happ.enabled)
       } else {
         console.error("getTopHostedHapps didn't return an array")
         return []
