@@ -30,7 +30,7 @@ const translations = {
     redemption_history: 'Redemption History',
     title: 'Earnings',
     transfer_holofuel: 'Transfer HoloFuel',
-    unpaid_and_late: 'Unpaid & Late',
+    unpaid_and_late: 'Unpaid & Late Invoices',
     unpaid_invoices: 'Unpaid Invoices',
     weekly_earnings: 'Weekly Earnings'
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="weekly-earnings-data">
     <CardHeader
-      :label="$t('earnings.weekly_earnings')"
+      :label="$t('earnings.last_7_days')"
       :amount="weeklyEarnings"
     >
       <BaseButton
@@ -17,9 +17,9 @@
 </template>
 
 <script setup>
-import BaseButton from '@uicommon/components/BaseButton'
-import CardHeader from 'components/earnings/CardHeader'
-import TmpGraphIcon from 'components/icons/TmpGraphIcon'
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import CardHeader from './CardHeader.vue'
+import TmpGraphIcon from '@/components/icons/TmpGraphIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 defineProps({
