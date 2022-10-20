@@ -8,3 +8,7 @@ export const kSortOptions = {
     value: 'earnings'
   }
 }
+
+export const EModal = {
+  welcome: 100
+}

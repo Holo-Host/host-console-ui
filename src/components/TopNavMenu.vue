@@ -19,20 +19,35 @@
             Unverified
           </span>
         </div>
-        <DownTriangleIcon class="down-triangle" :white="white" />
+        <DownTriangleIcon
+          class="down-triangle"
+          :white="white"
+        />
       </div>
     </div>
 
-    <div v-if="isMenuOpen" class="menu">
-      <div class="menu-item" @click="openSettingsAndCloseMenu">
+    <div
+      v-if="isMenuOpen"
+      class="menu"
+    >
+      <div
+        class="menu-item"
+        @click="openSettingsAndCloseMenu"
+      >
         {{ $t('settings.header') }}
       </div>
 
-      <div class="menu-item" @click="goToHoloFuel">
+      <div
+        class="menu-item"
+        @click="goToHoloFuel"
+      >
         {{ $t('$.holofuel') }}
       </div>
 
-      <div class="menu-item" @click="logout">
+      <div
+        class="menu-item"
+        @click="logout"
+      >
         {{ $t('$.logout') }}
       </div>
     </div>
@@ -42,11 +57,13 @@
 <script setup>
 import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
-import { postNotification, EProjectNotification } from '@uicommon/utils/notifications'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl, kAuthTokenLSKey } from '@/constants'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
+import { kAuthTokenLSKey } from '@/constants'
 import { kRoutes } from '@/router'
+
+const { goToHoloFuel } = useGoToHoloFuel()
 
 const router = useRouter()
 
@@ -75,16 +92,6 @@ function toggleMenu() {
 
 function closeDropdown() {
   isMenuOpen.value = false
-}
-
-function goToHoloFuel() {
-  const isModalDisabled = localStorage.getItem(kDontShowGoToHoloFuelModalAgainLSKey) === 'true'
-
-  if (isModalDisabled) {
-    window.open(kHoloFuelUrl, '_blank').focus()
-  } else {
-    postNotification(EProjectNotification.showGoToHolofuelModal)
-  }
 }
 
 function logout() {

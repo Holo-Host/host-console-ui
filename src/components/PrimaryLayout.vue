@@ -2,7 +2,10 @@
   <section class="layout">
     <TheSidebar />
 
-    <section v-if="!isLoading" class="main-column">
+    <section
+      v-if="!isLoading"
+      class="main-column"
+    >
       <MobileTopNav
         :nickname="nickname"
         :agent-address="agentAddress"
@@ -14,17 +17,12 @@
         :agent-address="agentAddress"
       />
 
-      <WelcomeModal
-        :is-visible="isWelcomeModalVisible"
-        @close="closeWelcomeModal"
-      />
+      <WelcomeModal />
 
       <GoToHoloFuelModal
-        :is-visible="isGoToHolofuelModalVisible"
         :app-name="$t('$.app_name')"
         :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
         :holo-fuel-url="kHoloFuelUrl"
-        @close="hideGoToHolofuelModal"
       />
 
       <section class="content">
@@ -60,23 +58,21 @@
 import BaseButton from '@uicommon/components/BaseButton'
 import CircleSpinner from '@uicommon/components/CircleSpinner'
 import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
+import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
-import {
-  addObserver,
-  removeObserver,
-  ENotification,
-  postNotification,
-  EProjectNotification
-} from '@uicommon/utils/notifications'
+import { ENotification, postNotification } from '@uicommon/utils/notifications'
 import MobileTopNav from 'components/MobileTopNav'
 import WelcomeModal from 'components/modals/WelcomeModal'
 import TheSidebar from 'components/sidebar/TheSidebar'
 import TopNav from 'components/TopNav'
 import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import { useUserStore } from 'src/store/user'
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
+import { EModal } from '@/constants/ui'
 
 const userStore = useUserStore()
+
+const { showModal } = useModals()
 
 const props = defineProps({
   title: {
@@ -104,9 +100,6 @@ const emit = defineEmits(['try-again-clicked'])
 
 const isLoading = ref(false)
 
-const isWelcomeModalVisible = ref(false)
-const isGoToHolofuelModalVisible = ref(false)
-
 const nickname = computed(() => userStore.holoFuel?.nickname)
 const agentAddress = computed(() => userStore.holoFuel?.agentAddress || null)
 
@@ -122,14 +115,7 @@ const breadcrumbsOrTitle = computed(() => {
   }
 })
 
-function closeWelcomeModal() {
-  isWelcomeModalVisible.value = false
-}
-
 onMounted(async () => {
-  addObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
-  addObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
-
   // Get user data when the app is hard reloaded and user was logged in before.
   // In that case we still have a valid token but all store is cleared, that is why
   // we need to fetch user data again.
@@ -144,20 +130,11 @@ onMounted(async () => {
       isLoading.value = false
     }
 
-    isWelcomeModalVisible.value = !userStore.holoFuel.nickname
+    if (!userStore.holoFuel.nickname) {
+      showModal(EModal.welcome)
+    }
   })
 })
-
-onUnmounted(() => {
-  removeObserver(EProjectNotification.showGoToHolofuelModal, showGoToHolofuelModal)
-  removeObserver(EProjectNotification.hideGoToHolofuelModal, hideGoToHolofuelModal)
-})
-function showGoToHolofuelModal() {
-  isGoToHolofuelModalVisible.value = true
-}
-function hideGoToHolofuelModal() {
-  isGoToHolofuelModalVisible.value = false
-}
 </script>
 
 <style lang="scss" scoped>
