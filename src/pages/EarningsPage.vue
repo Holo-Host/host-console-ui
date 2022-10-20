@@ -3,29 +3,31 @@
     :title="$t('$.earnings')"
     data-testid="earnings-page"
   >
-    <WeeklyEarningsCard
-      :data="weeklyEarnings"
-      :is-loading="isLoading"
-      :is-error="isError"
-      @try-again-clicked="getEarnings"
-    />
+    <div>
+      <WeeklyEarningsCard
+        :data="weeklyEarnings"
+        :is-loading="isLoading"
+        :is-error="isError"
+        @try-again-clicked="getEarnings"
+      />
 
-    <RedeemableHoloFuelCard
-      :data="redeemableHoloFuel"
-      :is-loading="false"
-      :is-error="false"
-      class="redeemable-holofuel-card"
-      @try-again-clicked="getEarnings"
-    />
+      <RedeemableHoloFuelCard
+        :data="redeemableHoloFuel"
+        :is-loading="false"
+        :is-error="false"
+        class="redeemable-holofuel-card"
+        @try-again-clicked="getEarnings"
+      />
+    </div>
   </PrimaryLayout>
 </template>
 
 <script setup>
 import { formatCurrency } from '@uicommon/utils/numbers'
-import RedeemableHoloFuelCard from 'components/earnings/RedeemableHoloFuelCard'
-import WeeklyEarningsCard from 'components/earnings/WeeklyEarningsCard'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
 import { computed, onMounted, ref } from 'vue'
+import RedeemableHoloFuelCard from '@/components/earnings/RedeemableHoloFuelCard.vue'
+import WeeklyEarningsCard from '@/components/earnings/WeeklyEarningsCard.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { useDashboardStore } from '@/store/dashboard'
 
 const dashboardStore = useDashboardStore()
