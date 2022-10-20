@@ -50,6 +50,12 @@ const translations = {
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },
+  hosting_preferences: {
+    prices: {
+      header: 'Price Configuration',
+      subheader: 'Default rates'
+    }
+  },
   invoices: {
     errors: {
       no_paid_invoices: 'You have no paid invoices.',

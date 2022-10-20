@@ -1,5 +1,10 @@
 <template>
-  <div class="settings-row">
+  <div
+    class="settings-row"
+    :style="{
+      'grid-template-columns': gridColumns || '280px auto'
+    }"
+  >
     <div class="settings-row__label">
       {{ label }}
       <slot name="label" />
@@ -21,6 +26,11 @@ defineProps({
   value: {
     type: String,
     default: ''
+  },
+
+  gridColumns: {
+    type: String,
+    default: ''
   }
 })
 </script>
@@ -29,7 +39,6 @@ defineProps({
 .settings-row {
   min-height: 40px;
   display: grid;
-  grid-template-columns: 280px auto;
 
   &__value {
     display: flex;

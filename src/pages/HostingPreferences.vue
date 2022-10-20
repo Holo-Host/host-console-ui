@@ -1,36 +1,6 @@
 <template>
   <PrimaryLayout title="Hosting Preferences">
-    <section class="card">
-      <h3 class="card-title">
-        Price Configuration
-      </h3>
-      <div class="card-content">
-        <h4 class="card-subtitle">
-          Default rates
-        </h4>
-
-        <div class="rate-row">
-          <span class="rate-label">CPU</span>
-          <span class="rate-value">100</span>
-          <span class="rate-unit">HF per min</span>
-          <PencilIcon class="pencil" />
-        </div>
-
-        <div class="rate-row">
-          <span class="rate-label">Storage</span>
-          <span class="rate-value">100</span>
-          <span class="rate-unit">HF per GB</span>
-          <PencilIcon class="pencil" />
-        </div>
-
-        <div class="rate-row">
-          <span class="rate-label">Bandwidth</span>
-          <span class="rate-value">100</span>
-          <span class="rate-unit">HF per GB</span>
-          <PencilIcon class="pencil" />
-        </div>
-      </div>
-    </section>
+    <PricesSection />
 
     <section class="card">
       <h3 class="card-title">
@@ -100,23 +70,13 @@
   </PrimaryLayout>
 </template>
 
-<script>
+<script setup>
 import PencilIcon from 'components/icons/PencilIcon'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
+import PricesSection from 'components/settings/HostingPreferencesPricesSection.vue'
+import { ref } from 'vue'
 
-export default {
-  name: 'HostingPreferencesPage',
-  components: {
-    PrimaryLayout,
-    PencilIcon
-  },
-
-  data() {
-    return {
-      paymentDue: 7
-    }
-  }
-}
+const paymentDue = ref(7)
 </script>
 
 <style scoped>
@@ -140,27 +100,6 @@ export default {
   font-size: 16px;
   line-height: 22px;
   color: var(--grey-dark-color);
-}
-.card-subtitle {
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 19px;
-  color: var(--grey-dark-color);
-}
-.rate-row {
-  line-height: 46px;
-  display: flex;
-  align-items: center;
-  padding-left: 42px;
-}
-.rate-label {
-  flex-basis: 108px;
-}
-.rate-value {
-  flex-basis: 54px;
-}
-.rate-unit {
-  flex-basis: 78px;
 }
 
 .terms-rows {
