@@ -15,7 +15,17 @@ module.exports = {
         utils: path.resolve(__dirname, 'src/utils'),
         types: path.resolve(__dirname, 'src/types'),
         vue: path.resolve(__dirname, '/node_modules/vue')
+      },
+      fallback: {
+        os: require.resolve('os-browserify/browser'),
+        path: require.resolve('path-browserify'),
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+        fs: false
       }
+    },
+    experiments: {
+      asyncWebAssembly: true
     }
   },
   devServer: holoportUrl && {

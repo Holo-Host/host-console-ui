@@ -30,8 +30,8 @@
   </BaseCard>
 </template>
 
-<script setup >
-import BaseCard from '@uicommon/components/BaseCard'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'

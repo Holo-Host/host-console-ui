@@ -1,0 +1,10 @@
+.github/
+.gitignore
+*.html
+build/
+cypress/
+dist/
+doc/
+node_modules/
+public/
+.eslintrc.js

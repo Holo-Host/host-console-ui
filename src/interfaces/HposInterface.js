@@ -1,10 +1,10 @@
 import axios from 'axios'
-import stringify from 'fast-json-stable-stringify'
-import router from 'src/router'
-import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/keyManagement'
+import dotenv from 'dotenv'
+import { eraseHpAdminKeypair, getHpAdminKeypair } from 'src/utils/keyManagement'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
+import router from '@/router'
 
-require('dotenv').config()
+const process = dotenv.config()
 
 const axiosConfig = {
   headers: {
@@ -42,15 +42,19 @@ async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders
     case 'get':
       response = await axios.get(fullUrl, { params, headers })
       return response.data
+
     case 'post':
       response = await axios.post(fullUrl, params, { headers })
       return response.data
+
     case 'put':
       response = await axios.put(fullUrl, params, { headers })
       return response.data
+
     case 'delete':
       response = await axios.delete(fullUrl, { params, headers })
       return response.data
+
     default:
       throw new Error(`No case in hposCall for ${method} method`)
   }
@@ -67,6 +71,7 @@ const hposAdminCall = async (args) => {
       localStorage.removeItem(kAuthTokenLSKey)
       router.push('/login')
     }
+
     return Promise.reject(err)
   }
 }
@@ -83,6 +88,7 @@ const hposHolochainCall = async (args) => {
       localStorage.removeItem(kAuthTokenLSKey)
       router.push('/login')
     }
+
     return Promise.reject(err)
   }
 }

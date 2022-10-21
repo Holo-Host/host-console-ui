@@ -69,9 +69,9 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
-import GearIcon from 'components/icons/GearIcon'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import GearIcon from 'components/icons/GearIcon.vue'
 import { presentMicroSeconds, presentBytes } from 'src/utils'
 import { computed } from 'vue'
 

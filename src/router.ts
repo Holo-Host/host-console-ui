@@ -6,7 +6,7 @@ import InvoicesPage from 'pages/InvoicesPage.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import SettingsPage from 'src/pages/SettingsPage.vue'
-import { createWebHistory, createRouter } from 'vue-router'
+import {createWebHistory, createRouter, Router} from 'vue-router'
 import { kAuthTokenLSKey } from '@/constants'
 
 export const kRoutes = {
@@ -98,7 +98,7 @@ export const kRoutes = {
 }
 
 // used in loginFlow.integration.test.js
-export const routerFactory = () => {
+export const routerFactory = (): Router => {
   const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -115,7 +115,7 @@ export const routerFactory = () => {
     ]
   })
 
-  router.beforeEach((to, from, next) => {
+  router.beforeEach((to, _, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // page only visible when logged in
 
@@ -148,4 +148,4 @@ const router = routerFactory()
 
 export default router
 
-export const happDetailsPath = ({ id }) => `/happ/${encodeURIComponent(id)}`
+export const happDetailsPath = ({ id }: { id: string }) => `/happ/${encodeURIComponent(id)}`

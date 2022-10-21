@@ -123,7 +123,7 @@ import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
 import PencilIcon from 'components/icons/PencilIcon.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import StopHostingModal from 'components/StopHostingModal.vue'
-import HposInterface from 'src/interfaces/HposInterface'
+import HposInterface from '@/interfaces/HposInterface'
 import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
 
 const kInitialsLength = 2

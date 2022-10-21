@@ -1,5 +1,5 @@
 import { app } from '@storybook/vue3'
-import messages from '../src/locales'
+import messages from '@/locales'
 import { createI18n } from 'vue-i18n'
 
 import '../src/assets/css/index.scss'

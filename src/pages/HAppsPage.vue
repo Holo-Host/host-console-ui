@@ -54,7 +54,7 @@ import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import HAppCard from '@uicommon/components/HAppCard.vue'
 import SortByDropdown from 'components/hApps/SortByDropdown.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
-import HposInterface from 'src/interfaces/HposInterface'
+import HposInterface from '@/interfaces/HposInterface'
 import { computed, onMounted, ref } from 'vue'
 import { kSortOptions } from '@/constants/ui'
 

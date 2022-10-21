@@ -34,9 +34,9 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
-import MissingLogoExIcon from 'components/icons/MissingLogoExIcon'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import MissingLogoExIcon from 'components/icons/MissingLogoExIcon.vue'
 import { computed } from 'vue'
 
 const props = defineProps({

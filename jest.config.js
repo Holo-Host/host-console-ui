@@ -26,7 +26,7 @@ module.exports = {
   setupFiles: ['jest-canvas-mock'],
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/src/__tests__/constants.js',
+    '/src/__tests__/constants.ts',
     '/src/__tests__/utils.js',
     '/ui-common-library/'
   ]

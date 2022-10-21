@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { kSortOptions } from '@/constants/ui'
 
 defineProps({
@@ -45,8 +45,8 @@ defineProps({
 
 const emit = defineEmits(['update:value'])
 
-const onChange = (e) => {
-  emit('update:value', e.target.value)
+function onChange(event: { target: { value: string } }): void {
+  emit('update:value', event.target.value)
 }
 </script>
 
@@ -72,7 +72,7 @@ const onChange = (e) => {
     font-weight: 600;
     color: var(--grey-dark-color);
     padding: 4px 16px 4px 4px;
-    background-image: url(/images/chevron.svg);
+    background-image: url('../../assets/images/chevron.svg');
     background-repeat: no-repeat;
     background-position: right;
   }

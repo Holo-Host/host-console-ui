@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import HposInterface from 'src/interfaces/HposInterface'
+import HposInterface from '@/interfaces/HposInterface'
 
 export const useEarningsStore = defineStore('earnings', {
   state: () => ({

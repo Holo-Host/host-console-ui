@@ -37,8 +37,8 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { capitalizeWord } from '@uicommon/utils/stringUtils'
 import dayjs from 'dayjs'

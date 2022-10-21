@@ -3,7 +3,7 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import App from './App.vue'
-import messages from './locales'
+import { messages } from './locales'
 import router from './router'
 
 import './assets/css/index.scss'

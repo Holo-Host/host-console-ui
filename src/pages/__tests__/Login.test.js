@@ -3,7 +3,7 @@
 import { createTestingPinia } from '@pinia/testing'
 import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
-import { kRoutes } from 'src/router'
+import { kRoutes } from '@/router'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import wait from 'waait'
