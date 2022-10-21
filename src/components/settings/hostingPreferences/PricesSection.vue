@@ -23,8 +23,8 @@
 <script setup >
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import HostingPreferencesEditablePriceRow from './HostingPreferencesEditablePriceRow.vue'
-import SettingsSection from './SettingsSection'
+import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
+import SettingsSection from '../SettingsSection'
 
 const { t } = useI18n()
 
@@ -55,7 +55,7 @@ const prices = ref([
   }
 
   &__prices {
-    margin-top: 30px;
+    margin-top: 24px;
     margin-left: 40px;
   }
 

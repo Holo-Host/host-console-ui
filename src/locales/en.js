@@ -51,9 +51,31 @@ const translations = {
     title: 'Top Hosted hApps'
   },
   hosting_preferences: {
+    header: 'Hosting Preferences',
+    invoices: {
+      header: 'Invoice & Payment Terms',
+      frequency: {
+        label: 'Frequency of Invoicing',
+        part_one: 'Invoice hApp publishers the earlier of every',
+        part_two: 'or when an invoice amount reaches'
+      },
+      due: {
+        label: 'Payment Terms (Net)',
+        part_one: 'Payment is due',
+        part_two: 'after invoice date'
+      },
+      note_one: {
+        part_one: '*hApps will be paused from hosting if payment is not received',
+        part_two: 'days after invoice date'
+      },
+      note_two: {
+        part_one: '*hApps will be removed if payment is not received',
+        part_two: 'days after invoice date'
+      }
+    },
     prices: {
       header: 'Price Configuration',
-      subheader: 'Default rates'
+      subheader: 'Default Rates'
     }
   },
   invoices: {

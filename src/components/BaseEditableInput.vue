@@ -1,70 +1,70 @@
 <template>
-  <SettingsRow
-    :label="label"
-    :value="!isEditing ? value : ''"
-    grid-columns="110px auto"
-  >
+  <div class="editable-input">
+    <span v-if="!isEditing">
+      {{ value }}
+    </span>
+
     <div
       v-if="isEditing"
-      class="editable-price-row__editable-value"
+      class="editable-input__editable-value"
     >
       <BaseInput
         v-model="editedValue"
         placeholder=""
         name="edited-value"
-        class="editable-price-row__editable-value-input"
+        class="editable-input__editable-value-input"
       />
 
       <FilledCheckIcon
-        class="editable-price-row__button"
+        class="editable-input__button"
         data-testid="save-button"
         @click="save"
       />
 
       <CircledExIcon
-        class="editable-price-row__button"
+        class="editable-input__button"
         data-testid="cancel-button"
         @click="cancel"
       />
     </div>
-    <span class="editable-price-row__unit">{{ unit }}</span>
+    <span class="editable-input__unit">{{ unit }}</span>
     <PencilIcon
       v-if="!isEditing"
-      class="editable-price-row__editable-value-icon disabled"
+      class="editable-input__editable-value-icon"
+      :class="{ 'disabled': isDisabled }"
       @click="edit"
     />
-  </SettingsRow>
+  </div>
 </template>
 
-<script setup >
-import BaseInput from '@uicommon/components/BaseInput'
+<script setup>
+import BaseInput from '@uicommon/components/BaseInput.vue'
 import { ref } from 'vue'
-import CircledExIcon from '../icons/CircledExIcon'
-import FilledCheckIcon from '../icons/FilledCheckIcon'
-import PencilIcon from '../icons/PencilIcon'
-import SettingsRow from './SettingsRow'
+import CircledExIcon from './icons/CircledExIcon.vue'
+import FilledCheckIcon from './icons/FilledCheckIcon.vue'
+import PencilIcon from './icons/PencilIcon.vue'
+
+const isEditing = ref(false)
+const editedValue = ref('')
 
 const props = defineProps({
-  label: {
-    type: String,
-    required: true
-  },
-
   value: {
-    type: Number,
+    type: [String, Number],
     required: true
   },
 
   unit: {
     type: String,
-    required: true
+    default: ''
+  },
+
+  isDisabled: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emit = defineEmits(['update:value'])
-
-const isEditing = ref(false)
-const editedValue = ref('')
 
 function edit() {
   editedValue.value = props.value
@@ -83,7 +83,9 @@ function cancel() {
 </script>
 
 <style lang="scss" scoped>
-.editable-price-row {
+.editable-input {
+  display: flex;
+  align-items: center;
   color: var(--grey-dark-color);
 
   &__editable-value {
@@ -92,22 +94,16 @@ function cancel() {
   }
 
   &__editable-value-input {
-    width: 60px;
+    max-width: 80px;
     margin-top: -8px;
-    margin-left: -15px;
     margin-right: 30px;
+    text-decoration: none;
   }
 
   &__editable-value-icon {
-    margin-left: 10px;
-    opacity: 0.5;
+    margin-top: 1px;
+    margin-left: 5px;
     cursor: pointer;
-
-    &.disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
   }
 
   &__button {
@@ -117,7 +113,7 @@ function cancel() {
   }
 
   &__unit {
-    margin-left: 30px;
+    margin-left: 3px;
     color: var(--grey-color);
     font-weight: 700;
   }
