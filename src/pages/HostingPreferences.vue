@@ -1,6 +1,10 @@
 <template>
   <PrimaryLayout :title="$t('hosting_preferences.header')">
-    <PricesSection />
+    <PricesSection
+      :data="pricesSettings"
+      class="hosting-preferences__invoices"
+      @update:price="updatePrice"
+    />
 
     <InvoicesSection
       :data="invoicesSettings"
@@ -42,7 +46,7 @@
 </template>
 
 <script setup>
-import PencilIcon from 'components/icons/PencilIcon'
+import PencilIcon from 'components/icons/PencilIcon.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
 import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
@@ -58,12 +62,22 @@ const invoicesSettings = reactive({
   }
 })
 
+const pricesSettings = reactive({
+  cpu: 100,
+  storage: 100,
+  bandwidth: 100
+})
+
 function updateFrequency(value) {
   invoicesSettings.frequency = value
 }
 
 function updateDue(value) {
   invoicesSettings.due = value
+}
+
+function updatePrice({ prop, value }) {
+  pricesSettings[prop] = value
 }
 </script>
 
