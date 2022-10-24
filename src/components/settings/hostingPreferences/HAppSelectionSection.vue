@@ -38,10 +38,7 @@
 
 <script setup >
 import PencilIcon from 'components/icons/PencilIcon.vue'
-import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
-
-const { t } = useI18n()
 </script>
 
 <style lang="scss" scoped>
