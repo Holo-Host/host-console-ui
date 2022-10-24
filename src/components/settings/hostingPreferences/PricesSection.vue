@@ -46,7 +46,7 @@ const prices = computed(() => [
   {
     label: t('$.storage'),
     value: props.data.storage,
-    unit: 'HF per GB per month',
+    unit: 'HF per GB',
     prop: 'storage'
   },
   {

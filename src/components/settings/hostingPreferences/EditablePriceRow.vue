@@ -31,7 +31,7 @@
     <span class="editable-price-row__unit">{{ unit }}</span>
     <PencilIcon
       v-if="!isEditing"
-      class="editable-price-row__editable-value-icon"
+      class="editable-price-row__editable-value-icon disabled"
       @click="edit"
     />
   </SettingsRow>

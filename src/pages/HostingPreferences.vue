@@ -2,7 +2,6 @@
   <PrimaryLayout :title="$t('hosting_preferences.header')">
     <PricesSection
       :data="pricesSettings"
-      class="hosting-preferences__invoices"
       @update:price="updatePrice"
     />
 
@@ -13,41 +12,13 @@
       @update:due="updateDue"
     />
 
-    <section class="card">
-      <div class="greyed-out">
-        <h3 class="card-title selection-title">
-          hApp Selection
-        </h3>
-
-        <div class="card-content">
-          <div class="selection-row">
-            <span class="selection-label">Jurisdiction Exclusions</span>
-            <span class="selection-choices">None</span>
-            <PencilIcon class="pencil" />
-          </div>
-
-          <div class="selection-parent-row">
-            <span class="selection-label">Category Tags:</span>
-            <div class="selection-child-row">
-              <span class="selection-label">Exclude</span>
-              <span class="selection-choices">None</span>
-              <PencilIcon class="pencil" />
-            </div>
-            <div class="selection-child-row">
-              <span class="selection-label">Include</span>
-              <span class="selection-choices">None</span>
-              <PencilIcon class="pencil" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <HAppSelectionSection class="hosting-preferences__happ-selection" />
   </PrimaryLayout>
 </template>
 
 <script setup>
-import PencilIcon from 'components/icons/PencilIcon.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
+import HAppSelectionSection from 'components/settings/hostingPreferences/HAppSelectionSection'
 import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
 import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
 import { reactive } from 'vue'
@@ -84,6 +55,10 @@ function updatePrice({ prop, value }) {
 <style lang="scss" scoped>
 .hosting-preferences {
   &__invoices {
+    margin-top: 18px;
+  }
+
+  &__happ-selection {
     margin-top: 18px;
   }
 }
