@@ -31,7 +31,8 @@
     <span class="editable-price-row__unit">{{ unit }}</span>
     <PencilIcon
       v-if="!isEditing"
-      class="editable-price-row__editable-value-icon disabled"
+      class="editable-price-row__editable-value-icon"
+      :class="{ 'disabled': isDisabled }"
       @click="edit"
     />
   </SettingsRow>
@@ -65,6 +66,11 @@ const props = defineProps({
   prop: {
     type: String,
     required: true
+  },
+
+  isDisabled: {
+    type: Boolean,
+    default: false
   }
 })
 

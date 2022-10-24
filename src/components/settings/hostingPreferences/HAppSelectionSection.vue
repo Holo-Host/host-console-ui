@@ -38,38 +38,10 @@
 
 <script setup >
 import PencilIcon from 'components/icons/PencilIcon.vue'
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 
 const { t } = useI18n()
-
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  }
-})
-
-const emit = defineEmits(['update:price'])
-
-const settings = computed(() => [
-  {
-    label: t('hosting_preferences.happ_selection.jurisdiction_exclusions'),
-    value: props.data.jurisdictionExclusions,
-    prop: 'jurisdictionExclusions'
-  },
-  {
-    label: t('hosting_preferences.happ_selection.exclude'),
-    value: props.data.exclude,
-    prop: 'exclude'
-  },
-  {
-    label: t('hosting_preferences.happ_selection.include'),
-    value: props.data.include,
-    prop: 'include'
-  }
-])
 </script>
 
 <style lang="scss" scoped>

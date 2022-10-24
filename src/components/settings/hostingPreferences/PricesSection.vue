@@ -41,19 +41,22 @@ const prices = computed(() => [
     label: t('$.cpu'),
     value: props.data.cpu,
     unit: 'HF per min',
-    prop: 'cpu'
+    prop: 'cpu',
+    isDisabled: true
   },
   {
     label: t('$.storage'),
     value: props.data.storage,
     unit: 'HF per GB',
-    prop: 'storage'
+    prop: 'storage',
+    isDisabled: true
   },
   {
     label: t('$.bandwidth'),
     value: props.data.bandwidth,
     unit: 'HF per GB',
-    prop: 'bandwidth'
+    prop: 'bandwidth',
+    isDisabled: true
   }
 ])
 
