@@ -50,6 +50,41 @@ const translations = {
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },
+  hosting_preferences: {
+    header: 'Hosting Preferences',
+    happ_selection: {
+      header: 'hApp Selection',
+      jurisdiction_exclusions: 'Jurisdiction Exclusions',
+      category_tags: 'Category Tags',
+      exclude: 'Exclude',
+      include: 'Include'
+    },
+    invoices: {
+      header: 'Invoice & Payment Terms',
+      frequency: {
+        label: 'Frequency of Invoicing',
+        part_one: 'Invoice hApp publishers the earlier of every',
+        part_two: 'or when an invoice amount reaches'
+      },
+      due: {
+        label: 'Payment Terms (Net)',
+        part_one: 'Payment is due',
+        part_two: 'after invoice date'
+      },
+      note_one: {
+        part_one: '*hApps will be paused from hosting if payment is not received',
+        part_two: 'after invoice date'
+      },
+      note_two: {
+        part_one: '*hApps will be removed if payment is not received',
+        part_two: 'after invoice date'
+      }
+    },
+    prices: {
+      header: 'Price Configuration',
+      subheader: 'Default Rates'
+    }
+  },
   invoices: {
     errors: {
       no_paid_invoices: 'You have no paid invoices.',

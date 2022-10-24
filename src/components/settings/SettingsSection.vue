@@ -1,6 +1,9 @@
 <template>
   <div class="settings-section">
-    <h3 class="settings-section__title">
+    <h3
+      class="settings-section__title"
+      :class="{ 'disabled': isDisabled }"
+    >
       {{ title }}
     </h3>
 
@@ -15,6 +18,11 @@ defineProps({
   title: {
     type: String,
     required: true
+  },
+
+  isDisabled: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
