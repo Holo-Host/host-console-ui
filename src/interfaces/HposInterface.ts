@@ -1,9 +1,185 @@
 import axios from 'axios'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from 'src/utils/keyManagement'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
+import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
 
-export function useHposInterface() {
+interface HposInterface {
+  getUsage: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  getTopHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  getHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  getHostEarnings: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  checkAuth: () => Promise<Record<string, unknown> | string | boolean | null>
+  getUser: () => Record<string, unknown>
+  getHposStatus: () => Record<string, unknown>
+  updateHoloportName: () => Record<string, unknown>
+  getHoloFuelProfile: () => Record<string, unknown>
+  updateHoloFuelProfile: () => Record<string, unknown>
+  getCompletedTransactions: () => Promise<Array<Record<string, unknown>> | boolean>
+  getPendingTransactions: () => Promise<Array<Record<string, unknown>> | boolean>
+  getCoreAppVersion: () => Promise<{ coreAppVersion: string | null }>
+  HPOS_API_URL: string
+}
+
+interface HposStatusResponse {
+  holo_nixpkgs: {
+    channel: {
+      name: string
+      rev: string
+    }
+    current_system: {
+      rev: string
+    }
+  }
+  holoport: {
+    name: string
+  }
+}
+
+interface HposConfigResponse {
+  admin: {
+    public_key: string
+    email: string
+  }
+  deviceName?: string
+}
+
+interface HoloFuelProfileResponse {
+  agent_address: string
+  nickname: string
+  avatar_url: string
+}
+
+interface CoreAppVersionResponse {
+  version: string
+}
+
+type HposHolochainCallResponse =
+  | HostEarnings
+  | HApp[]
+  | UsageResponse
+  | HposStatusResponse
+  | HoloFuelProfileResponse
+  | CoreAppVersionResponse
+  | Promise<PaidTransactions[] | boolean>
+
+type HposAdminCallResponse = HposConfigResponse
+
+interface UsageResponse {
+  totalHostedHapps: number
+  totalSourceChains: number
+  currentTotalStorage: number
+  totalUsage: {
+    cpu: number
+    bandwidth: number
+  }
+}
+
+interface HApp {
+  id: string
+  name: string
+  enabled: boolean
+  isPaused: boolean
+  sourceChains: number
+  storage: number
+  usage: {
+    bandwidth: number
+    cpu: number
+  }
+}
+
+interface HostEarnings {
+  earnings: {
+    last30days: number
+    last7days: number
+    lastday: number
+  }
+  holofuel: {
+    balance: number
+  }
+  recentPayments
+}
+
+interface Settings {
+  hostPubKey?: string
+  registrationEmail?: string
+  deviceName?: string
+}
+
+interface HPosStatus {
+  networkFlavour?: string
+  hposVersion?: string
+  name?: string
+}
+
+interface CoreAppVersion {
+  coreAppVersion: string | null
+}
+
+interface PaidTransactions {
+  id: string
+  amount: string
+  created_date: string
+  completed_date: string
+  transaction_type: Record<string, unknown>
+  counterparty: string
+  direction: Record<string, unknown>
+  status: Record<string, unknown>
+  note: string
+  proof_of_service_token: string | null
+  url: string | null
+  expiration_date: string
+}
+
+interface Error {
+  response: {
+    status: number
+  }
+}
+
+function isError(error: Error | unknown): error is Error {
+  return error !== undefined
+}
+
+function isHappArray(array: unknown): array is HApp[] {
+  return Array.isArray(array)
+}
+
+interface HposCallArgs {
+  pathPrefix?: string
+  method: string
+  path: string
+  headers?: Record<string, unknown>
+  params?: Record<string, unknown>
+}
+
+interface HoloFuelProfile {
+  agentAddress?: Uint8Array
+  nickname: string
+  avatarUrl: string
+}
+
+// Return devNet for channel develop, alphaNet for channel master, otherwise channel name
+function formatNetworkName(holoNixpkgs): string {
+  if (holoNixpkgs && holoNixpkgs.channel && holoNixpkgs.channel.name) {
+    if (holoNixpkgs.channel.name === 'master') return 'alphaNet'
+    else if (holoNixpkgs.channel.name === 'develop') return 'devNet'
+    else return holoNixpkgs.channel.name
+  } else {
+    return 'Unknown'
+  }
+}
+
+// Return firs 7 characters of holoport's revision
+function formatHposVersion(holoNixpkgs): string {
+  const strLen = 7
+
+  return holoNixpkgs && holoNixpkgs.current_system && holoNixpkgs.current_system.rev
+    ? holoNixpkgs.current_system.rev.substr(0, strLen)
+    : 'Unknown'
+}
+
+export function useHposInterface(): HposInterface {
   const axiosConfig = {
     headers: {
       'Content-Type': 'application/json',
@@ -23,8 +199,14 @@ export function useHposInterface() {
     ? `http://localhost:${HPOS_PORT}`
     : `${window.location.protocol}//${window.location.host}`
 
-  async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
-    const fullUrl = HPOS_API_URL + pathPrefix + path
+  async function hposCall({
+    pathPrefix,
+    method = 'get',
+    path,
+    headers: userHeaders = {},
+    params
+  }: HposCallArgs): Promise<HposHolochainCallResponse & HposAdminCallResponse> {
+    const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
 
     const authToken = localStorage.getItem(kAuthTokenLSKey)
 
@@ -58,23 +240,23 @@ export function useHposInterface() {
     }
   }
 
-  async function hposAdminCall(args) {
+  async function hposAdminCall(args: HposCallArgs): Promise<HposAdminCallResponse> {
     try {
       return await hposCall({
         ...args,
         pathPrefix: '/api/v1'
       })
     } catch (err) {
-      if (err.response && err.response.status === 401) {
+      if (isError(err) && err.response && err.response.status === kHttpStatus.UNAUTHORIZED) {
         localStorage.removeItem(kAuthTokenLSKey)
-        router.push('/login')
+        await router.push('/login')
       }
 
       return Promise.reject(err)
     }
   }
 
-  async function hposHolochainCall(args) {
+  async function hposHolochainCall(args: HposCallArgs): Promise<HposHolochainCallResponse> {
     // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
     try {
       return await hposCall({
@@ -82,16 +264,16 @@ export function useHposInterface() {
         pathPrefix: '/holochain-api/v1'
       })
     } catch (err) {
-      if (err.response && err.response.status === 401) {
+      if (isError(err) && err.response && err.response.status === kHttpStatus.UNAUTHORIZED) {
         localStorage.removeItem(kAuthTokenLSKey)
-        router.push('/login')
+        await router.push('/login')
       }
 
       return Promise.reject(err)
     }
   }
 
-  async function getUsage() {
+  async function getUsage(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       return await hposHolochainCall({
         method: 'get',
@@ -107,7 +289,7 @@ export function useHposInterface() {
     }
   }
 
-  async function getTopHostedHapps() {
+  async function getTopHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       // NB: the `/hosted_happs` endpoint returns happs sorted by earnings in descending order
       const result = await hposHolochainCall({
@@ -120,8 +302,8 @@ export function useHposInterface() {
         }
       })
 
-      if (Array.isArray(result)) {
-        return result.filter((happ) => happ.enabled)
+      if (isHappArray(result)) {
+        return result.filter((happ: HApp) => happ.enabled)
       } else {
         console.error("getTopHostedHapps didn't return an array")
         return []
@@ -132,7 +314,7 @@ export function useHposInterface() {
     }
   }
 
-  async function getHostedHapps() {
+  async function getHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       const result = await hposHolochainCall({
         method: 'get',
@@ -143,7 +325,7 @@ export function useHposInterface() {
         }
       })
 
-      if (Array.isArray(result)) {
+      if (isHappArray(result)) {
         return result.filter((happ) => happ.enabled)
       } else {
         console.error("getHostedHapps didn't return an array")
@@ -155,7 +337,7 @@ export function useHposInterface() {
     }
   }
 
-  async function getHostEarnings() {
+  async function getHostEarnings(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       return await hposHolochainCall({
         method: 'get',
@@ -167,17 +349,21 @@ export function useHposInterface() {
     }
   }
 
-  async function checkAuth(email, password, authToken) {
+  async function checkAuth(
+    email: string,
+    password: string,
+    authToken: string
+  ): Promise<Record<string, unknown> | string | boolean | null> {
     const keypair = await getHpAdminKeypair(email, password)
 
     if (keypair === null) {
       return false
     }
 
-    const adminSignature = keypair.sign(authToken)
+    const adminSignature: string = keypair.sign(authToken)
 
     // create signature header
-    const signatureHeader = {
+    const signatureHeader: Record<string, unknown> = {
       'X-Hpos-Admin-Signature': adminSignature,
       // Normally this header is auto set by hposCall using a localStorage.getItem('authToken')
       // but authToken is not recorded yet in localStorage so we have to set this header manually
@@ -188,7 +374,6 @@ export function useHposInterface() {
     eraseHpAdminKeypair()
 
     try {
-      // Make a call to some endpoint and only in case of 200 return true
       await hposCall({
         method: 'get',
         path: '/config',
@@ -204,57 +389,7 @@ export function useHposInterface() {
     }
   }
 
-  async function getUser() {
-    try {
-      const user = await getSettings()
-      const holoport = await getHposStatus()
-      const holoFuelProfile = await getHoloFuelProfile()
-
-      return { user, holoport, holoFuelProfile }
-    } catch (error) {
-      console.error('getUser failed', error)
-      return false
-    }
-  }
-
-  async function getHposStatus() {
-    try {
-      // eslint-disable-next-line camelcase
-      const { holo_nixpkgs, holoport } = await hposAdminCall({
-        method: 'get',
-        path: '/status'
-      })
-
-      return {
-        networkFlavour: formatNetworkName(holo_nixpkgs),
-        hposVersion: formatHposVersion(holo_nixpkgs),
-        name: holoport.name
-      }
-    } catch (err) {
-      return {}
-    }
-  }
-
-  // Return devNet for channel develop, alphaNet for channel master, otherwise channel name
-  function formatNetworkName(holoNixpkgs) {
-    if (holoNixpkgs && holoNixpkgs.channel && holoNixpkgs.channel.name) {
-      if (holoNixpkgs.channel.name === 'master') return 'alphaNet'
-      else if (holoNixpkgs.channel.name === 'develop') return 'devNet'
-      else return holoNixpkgs.channel.name
-    } else {
-      return 'Unknown'
-    }
-  }
-
-  // Return firs 7 characters of holoport's revision
-  function formatHposVersion(holoNixpkgs) {
-    const strLen = 7
-    return holoNixpkgs && holoNixpkgs.current_system && holoNixpkgs.current_system.rev
-      ? holoNixpkgs.current_system.rev.substr(0, strLen)
-      : 'Unknown'
-  }
-
-  async function getSettings() {
+  async function getSettings(): Promise<Settings> {
     try {
       const { admin, deviceName } = await hposAdminCall({
         method: 'get',
@@ -272,19 +407,25 @@ export function useHposInterface() {
     }
   }
 
-  async function updateHoloportName(name) {
+  async function getHposStatus(): Promise<HPosStatus> {
     try {
-      await hposAdminCall({
-        method: 'put',
-        path: '/holoport/name',
-        params: { name }
+      // eslint-disable-next-line camelcase
+      const { holo_nixpkgs, holoport } = await hposAdminCall({
+        method: 'get',
+        path: '/status'
       })
-    } catch (error) {
-      console.error('updateHoloportName failed: ', error)
+
+      return {
+        networkFlavour: formatNetworkName(holo_nixpkgs),
+        hposVersion: formatHposVersion(holo_nixpkgs),
+        name: holoport.name
+      }
+    } catch (err) {
+      return {}
     }
   }
 
-  async function getHoloFuelProfile() {
+  async function getHoloFuelProfile(): Promise<HoloFuelProfile> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -313,7 +454,7 @@ export function useHposInterface() {
     }
   }
 
-  async function updateHoloFuelProfile({ nickname, avatarUrl }) {
+  async function updateHoloFuelProfile({ nickname, avatarUrl }): Promise<boolean> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -335,7 +476,32 @@ export function useHposInterface() {
     }
   }
 
-  async function getCompletedTransactions() {
+  async function getUser(): Promise<Record<string, unknown> | boolean> {
+    try {
+      const user = await getSettings()
+      const holoport = await getHposStatus()
+      const holoFuelProfile = await getHoloFuelProfile()
+
+      return { user, holoport, holoFuelProfile }
+    } catch (error) {
+      console.error('getUser failed', error)
+      return false
+    }
+  }
+
+  async function updateHoloportName(name: string): Promise<void> {
+    try {
+      await hposAdminCall({
+        method: 'put',
+        path: '/holoport/name',
+        params: { name }
+      })
+    } catch (error) {
+      console.error('updateHoloportName failed: ', error)
+    }
+  }
+
+  async function getCompletedTransactions(): Promise<PaidTransactions[] | boolean> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -355,7 +521,7 @@ export function useHposInterface() {
     }
   }
 
-  async function getPendingTransactions() {
+  async function getPendingTransactions(): Promise<PaidTransactions[] | boolean> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -375,14 +541,16 @@ export function useHposInterface() {
     }
   }
 
-  async function getCoreAppVersion() {
+  async function getCoreAppVersion(): Promise<CoreAppVersion> {
     try {
       const { version: coreAppVersion } = await hposHolochainCall({
         method: 'get',
         path: '/core_app_version'
       })
 
-      localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
+      if (typeof coreAppVersion === 'string') {
+        localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
+      }
 
       return { coreAppVersion }
     } catch (error) {
