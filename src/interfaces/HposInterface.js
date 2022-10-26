@@ -164,6 +164,41 @@ const HposInterface = {
     }
   },
 
+  // TODO: Convert into a zome_call like for `setHostPreferences` once abstract and modularize the rust duration type fr use in js
+  getHostPreferences: async () => {
+    try {
+      return await hposHolochainCall({
+        method: 'get',
+        path: '/host_preferences'
+      })
+    } catch (error) {
+      console.error('getHostEarnings encountered an error: ', error)
+      return { error }
+    }
+  },
+
+  async setHostPreferences(hostPreferences) {
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'core-app',
+        zomeName: 'hha',
+        fnName: 'set_happ_preferences',
+        payload: hostPreferences
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
+  },
+
   checkAuth: async (email, password, authToken) => {
     const keypair = await getHpAdminKeypair(email, password)
 

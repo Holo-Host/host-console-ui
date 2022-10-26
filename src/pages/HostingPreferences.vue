@@ -21,7 +21,10 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HAppSelectionSection from 'components/settings/hostingPreferences/HAppSelectionSection'
 import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
 import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
+import { usePreferencesStore } from '@/store/preferences'
 import { reactive } from 'vue'
+
+const preferencesStore = usePreferencesStore()
 
 const invoicesSettings = reactive({
   frequency: {
@@ -30,14 +33,20 @@ const invoicesSettings = reactive({
   },
   due: {
     period: 7
-  }
+  },
+  ...rawInvoicesSettings
 })
 
 const pricesSettings = reactive({
   cpu: 100,
   storage: 100,
-  bandwidth: 100
+  bandwidth: 100,
+  ...rawPricesSettings
 })
+
+const rawPricesSettings = computed(() => preferencesStore.pricesSettings)
+
+const rawInvoicesSettings = computed(() => preferencesStore.invoicesSettings)
 
 function updateFrequency(value) {
   invoicesSettings.frequency = value
@@ -50,6 +59,44 @@ function updateDue(value) {
 function updatePrice({ prop, value }) {
   pricesSettings[prop] = value
 }
+
+// NOTE: This can currently only be called only once - ensure all values are present before invoking
+function setHostSettings (value) {
+  if (isError.value) {
+    isError.value = false
+  }
+
+  isLoading.value = true
+
+  const invoicesSettings = {
+    frequency: value,
+    // NB: Mock due period while it remains unimplemented in DNAs
+    due: {
+      period: 7
+    }
+  }
+
+  const isSuccess = await preferencesStore.updateHoloFuelProfile({ invoicesSettings })
+
+  isLoading.value = false
+
+  if (!isSuccess) {
+    isError.value = true
+  }
+}
+
+async function getHostPreferences() {
+  isLoading.value = true
+  await preferencesStore.getHostPreferences()
+  isLoading.value = false
+}
+
+onMounted(async () => {
+  if (!(invoicesSettings.value && pricesSettings) ) {
+    await getHostPreferences()
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>
