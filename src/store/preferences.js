@@ -24,7 +24,7 @@ export const usePreferencesStore = defineStore('preferences', {
       const { 
         max_fuel_before_invoice: amount,
         max_time_before_invoice: duration_threshold, // hos-holochain-api translates duratin -> days
-        // max_time_before_invoice_expiration: deadline, // TODO: Add this feild in SL and HF
+        // max_time_before_invoice_expiration: deadline, // TODO: Add this field in SL and HF
         price_compute: cpu,
         price_storage: storage,
         price_bandwidth: bandwidth
@@ -67,7 +67,7 @@ export const usePreferencesStore = defineStore('preferences', {
         price_storage: priceSettings.storage,
         price_bandwidth: priceSettings.bandwidth,
         max_time_before_invoice: invoiceSettings.frequency.period,
-        // max_time_before_invoice_expiration: invoiceSettings.due.period, // TODO: Add this feild in SL and HF
+        // max_time_before_invoice_expiration: invoiceSettings.due.period, // TODO: Add this field in SL and HF
       })
 
       if (result) {

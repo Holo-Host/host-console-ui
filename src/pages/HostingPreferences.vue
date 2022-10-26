@@ -61,22 +61,17 @@ function updatePrice({ prop, value }) {
 }
 
 // NOTE: This can currently only be called only once - ensure all values are present before invoking
-function setHostSettings (value) {
+function setHostSettings () {
   if (isError.value) {
     isError.value = false
   }
 
   isLoading.value = true
 
-  const invoicesSettings = {
-    frequency: value,
-    // NB: Mock due period while it remains unimplemented in DNAs
-    due: {
-      period: 7
-    }
-  }
-
-  const isSuccess = await preferencesStore.updateHoloFuelProfile({ invoicesSettings })
+  const isSuccess = await preferencesStore.updateHoloFuelProfile({ 
+    invoicesSettings: this.pricesSettings,
+    pricesSettings: this.pricesSettings
+  })
 
   isLoading.value = false
 
