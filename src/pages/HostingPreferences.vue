@@ -22,11 +22,11 @@ import HAppSelectionSection from 'components/settings/hostingPreferences/HAppSel
 import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
 import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
-import { reactive } from 'vue'
+import { reactive, computed, onMounted} from 'vue'
 
 const preferencesStore = usePreferencesStore()
 
-const invoicesSettings = reactive({
+const localInvoicesSettings = reactive({
   frequency: {
     amount: 100,
     period: 7
@@ -34,34 +34,38 @@ const invoicesSettings = reactive({
   due: {
     period: 7
   },
-  ...rawInvoicesSettings
 })
 
-const pricesSettings = reactive({
+const localPricesSettings = reactive({
   cpu: 100,
   storage: 100,
   bandwidth: 100,
-  ...rawPricesSettings
 })
 
-const rawPricesSettings = computed(() => preferencesStore.pricesSettings)
-
-const rawInvoicesSettings = computed(() => preferencesStore.invoicesSettings)
-
 function updateFrequency(value) {
-  invoicesSettings.frequency = value
+  localInvoicesSettings.frequency = value
 }
 
 function updateDue(value) {
-  invoicesSettings.due = value
+  localInvoicesSettings.due = value
 }
 
 function updatePrice({ prop, value }) {
-  pricesSettings[prop] = value
+  localPricesSettings[prop] = value
 }
 
+const pricesSettings = computed(() => ({
+  ...localPricesSettings,
+  ...preferencesStore.pricesSettings
+}))
+
+const invoicesSettings = computed(() => ({
+  ...localInvoicesSettings,
+  ...preferencesStore.invoicesSettings
+}))
+
 // NOTE: This can currently only be called only once - ensure all values are present before invoking
-function setHostSettings () {
+async function setHostSettings () {
   if (isError.value) {
     isError.value = false
   }
@@ -69,8 +73,8 @@ function setHostSettings () {
   isLoading.value = true
 
   const isSuccess = await preferencesStore.updateHoloFuelProfile({ 
-    invoicesSettings: this.pricesSettings,
-    pricesSettings: this.pricesSettings
+    invoicesSettings,
+    pricesSettings
   })
 
   isLoading.value = false
@@ -87,7 +91,7 @@ async function getHostPreferences() {
 }
 
 onMounted(async () => {
-  if (!(invoicesSettings.value && pricesSettings) ) {
+  if (!(invoicesSettings.value && pricesSettings.value) ) {
     await getHostPreferences()
   }
 })
