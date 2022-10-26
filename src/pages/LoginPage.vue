@@ -84,11 +84,13 @@ import validator from 'email-validator'
 import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import HposInterface from '../interfaces/HposInterface'
+import { useHposInterface } from '../interfaces/HposInterface'
 import { kRoutes } from '../router'
 import { useUserStore } from '../store/user'
 import { generateToken } from '../utils'
-import { kAuthTokenLSKey } from '@/constants'
+import { kAuthTokenLSKey } from '@/constants.ts'
+
+const { checkAuth } = useHposInterface()
 
 const kMinPasswordLength = 5
 
@@ -143,7 +145,7 @@ async function createAuthHeaders(email, password) {
   const authToken = generateToken()
 
   // make a call to API to check if it passes auth
-  const { adminSignature } = await HposInterface.checkAuth(email.toLowerCase(), password, authToken)
+  const { adminSignature } = await checkAuth(email.toLowerCase(), password, authToken)
 
   if (adminSignature) {
     return { authToken, adminSignature }

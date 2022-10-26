@@ -1,18 +1,19 @@
 module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
   globals: {
-    'vue-jest': {
+    '@vue/vue3-jest': {
       transform: {
         i18n: 'vue-i18n-jest'
       }
     }
   },
-  testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.vue$': 'vue-jest',
     '^.+\\js$': 'babel-jest',
-    '^.+\\.svg$': 'jest-svg-transformer'
+    '^.+\\ts$': 'ts-jest',
+    '^.+\\.vue$': '@vue/vue3-jest'
   },
-  moduleFileExtensions: ['vue', 'js', 'json', 'jsx'],
+  moduleFileExtensions: ['vue', 'js', 'ts', 'json', 'jsx'],
   moduleNameMapper: {
     '@uicommon/(.*)$': '<rootDir>/ui-common-library/src/$1',
     '@/(.*)$': '<rootDir>/src/$1',
@@ -30,4 +31,4 @@ module.exports = {
     '/src/__tests__/utils.js',
     '/ui-common-library/'
   ]
-}
+};

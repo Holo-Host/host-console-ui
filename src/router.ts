@@ -6,7 +6,7 @@ import InvoicesPage from 'pages/InvoicesPage.vue'
 import DashboardPage from 'src/pages/DashboardPage.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import SettingsPage from 'src/pages/SettingsPage.vue'
-import {createWebHistory, createRouter, Router} from 'vue-router'
+import { createWebHistory, createRouter, Router } from 'vue-router'
 import { kAuthTokenLSKey } from '@/constants'
 
 export const kRoutes = {

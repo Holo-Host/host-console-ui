@@ -3,12 +3,15 @@ import { render } from '@testing-library/vue'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
-import { HPOS_API_URL } from '@/interfaces/HposInterface'
 import router from '@/router'
 import { createI18n } from 'vue-i18n'
 import wait from 'waait'
 import HAppsPage from '../HAppsPage.vue'
 import locales from '@/locales'
+import { useHposInterface } from '@/interfaces/HposInterface'
+
+const { HPOS_API_URL } = useHposInterface()
+
 const clickOutside = jest.fn()
 
 const i18n = createI18n({

@@ -1,4 +1,4 @@
-import { kAuthTokenLSKey } from '@/constants'
+import { kAuthTokenLSKey } from '@/constants.ts'
 
 export function mockGlobalCrypto() {
   localStorage.setItem(kAuthTokenLSKey, 'abba')

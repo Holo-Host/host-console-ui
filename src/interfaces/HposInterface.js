@@ -1,44 +1,42 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from 'src/utils/keyManagement'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import router from '@/router'
 
-const process = dotenv.config()
-
-const axiosConfig = {
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  }
-}
-
-const kTopHappsToDisplay = 3
-
-// bump port number by 1 for tests so we can run tests with the UI open
-const HPOS_PORT =
-  process.env.NODE_ENV === 'test'
-    ? Number(process.env.VUE_APP_HPOS_PORT) + 1
-    : process.env.VUE_APP_HPOS_PORT
-
-export const HPOS_API_URL = HPOS_PORT
-  ? `http://localhost:${HPOS_PORT}`
-  : `${window.location.protocol}//${window.location.host}`
-
-async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
-  const fullUrl = HPOS_API_URL + pathPrefix + path
-
-  const authToken = localStorage.getItem(kAuthTokenLSKey)
-
-  const headers = {
-    'X-Hpos-Auth-Token': authToken,
-    ...axiosConfig.headers,
-    ...userHeaders
+export function useHposInterface() {
+  const axiosConfig = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
   }
 
-  let response
+  const kTopHappsToDisplay = 3
 
-  switch (method) {
+  // bump port number by 1 for tests so we can run tests with the UI open
+  const HPOS_PORT =
+    process.env.NODE_ENV === 'test'
+      ? Number(process.env.VUE_APP_HPOS_PORT) + 1
+      : process.env.VUE_APP_HPOS_PORT
+
+  const HPOS_API_URL = HPOS_PORT
+    ? `http://localhost:${HPOS_PORT}`
+    : `${window.location.protocol}//${window.location.host}`
+
+  async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders = {}, params }) {
+    const fullUrl = HPOS_API_URL + pathPrefix + path
+
+    const authToken = localStorage.getItem(kAuthTokenLSKey)
+
+    const headers = {
+      'X-Hpos-Auth-Token': authToken,
+      ...axiosConfig.headers,
+      ...userHeaders
+    }
+
+    let response
+
+    switch (method) {
     case 'get':
       response = await axios.get(fullUrl, { params, headers })
       return response.data
@@ -57,44 +55,43 @@ async function hposCall({ pathPrefix, method = 'get', path, headers: userHeaders
 
     default:
       throw new Error(`No case in hposCall for ${method} method`)
-  }
-}
-
-const hposAdminCall = async (args) => {
-  try {
-    return await hposCall({
-      ...args,
-      pathPrefix: '/api/v1'
-    })
-  } catch (err) {
-    if (err.response && err.response.status === 401) {
-      localStorage.removeItem(kAuthTokenLSKey)
-      router.push('/login')
     }
-
-    return Promise.reject(err)
   }
-}
 
-const hposHolochainCall = async (args) => {
-  // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
-  try {
-    return await hposCall({
-      ...args,
-      pathPrefix: '/holochain-api/v1'
-    })
-  } catch (err) {
-    if (err.response && err.response.status === 401) {
-      localStorage.removeItem(kAuthTokenLSKey)
-      router.push('/login')
+  async function hposAdminCall(args) {
+    try {
+      return await hposCall({
+        ...args,
+        pathPrefix: '/api/v1'
+      })
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem(kAuthTokenLSKey)
+        router.push('/login')
+      }
+
+      return Promise.reject(err)
     }
-
-    return Promise.reject(err)
   }
-}
 
-const HposInterface = {
-  getUsage: async () => {
+  async function hposHolochainCall(args) {
+    // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
+    try {
+      return await hposCall({
+        ...args,
+        pathPrefix: '/holochain-api/v1'
+      })
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem(kAuthTokenLSKey)
+        router.push('/login')
+      }
+
+      return Promise.reject(err)
+    }
+  }
+
+  async function getUsage() {
     try {
       return await hposHolochainCall({
         method: 'get',
@@ -108,9 +105,9 @@ const HposInterface = {
       console.error('usage encountered an error: ', error)
       return { error }
     }
-  },
+  }
 
-  getTopHostedHapps: async () => {
+  async function getTopHostedHapps() {
     try {
       // NB: the `/hosted_happs` endpoint returns happs sorted by earnings in descending order
       const result = await hposHolochainCall({
@@ -133,9 +130,9 @@ const HposInterface = {
       console.error('getTopHostedHapps encountered an error: ', error)
       return { error }
     }
-  },
+  }
 
-  getHostedHapps: async () => {
+  async function getHostedHapps() {
     try {
       const result = await hposHolochainCall({
         method: 'get',
@@ -156,9 +153,9 @@ const HposInterface = {
       console.error('getHostedHapps encountered an error: ', error)
       return { error }
     }
-  },
+  }
 
-  getHostEarnings: async () => {
+  async function getHostEarnings() {
     try {
       return await hposHolochainCall({
         method: 'get',
@@ -168,9 +165,9 @@ const HposInterface = {
       console.error('getHostEarnings encountered an error: ', error)
       return { error }
     }
-  },
+  }
 
-  checkAuth: async (email, password, authToken) => {
+  async function checkAuth(email, password, authToken) {
     const keypair = await getHpAdminKeypair(email, password)
 
     if (keypair === null) {
@@ -205,22 +202,22 @@ const HposInterface = {
       console.log('User authentication failed', err)
       return null
     }
-  },
+  }
 
-  getUser: async () => {
+  async function getUser() {
     try {
-      const user = await HposInterface.getSettings()
-      const holoport = await HposInterface.getHposStatus()
-      const holoFuelProfile = await HposInterface.getHoloFuelProfile()
+      const user = await getSettings()
+      const holoport = await getHposStatus()
+      const holoFuelProfile = await getHoloFuelProfile()
 
       return { user, holoport, holoFuelProfile }
     } catch (error) {
       console.error('getUser failed', error)
       return false
     }
-  },
+  }
 
-  getHposStatus: async () => {
+  async function getHposStatus() {
     try {
       // eslint-disable-next-line camelcase
       const { holo_nixpkgs, holoport } = await hposAdminCall({
@@ -229,17 +226,17 @@ const HposInterface = {
       })
 
       return {
-        networkFlavour: HposInterface.formatNetworkName(holo_nixpkgs),
-        hposVersion: HposInterface.formatHposVersion(holo_nixpkgs),
+        networkFlavour: formatNetworkName(holo_nixpkgs),
+        hposVersion: formatHposVersion(holo_nixpkgs),
         name: holoport.name
       }
     } catch (err) {
       return {}
     }
-  },
+  }
 
   // Return devNet for channel develop, alphaNet for channel master, otherwise channel name
-  formatNetworkName: (holoNixpkgs) => {
+  function formatNetworkName(holoNixpkgs) {
     if (holoNixpkgs && holoNixpkgs.channel && holoNixpkgs.channel.name) {
       if (holoNixpkgs.channel.name === 'master') return 'alphaNet'
       else if (holoNixpkgs.channel.name === 'develop') return 'devNet'
@@ -247,17 +244,17 @@ const HposInterface = {
     } else {
       return 'Unknown'
     }
-  },
+  }
 
   // Return firs 7 characters of holoport's revision
-  formatHposVersion: (holoNixpkgs) => {
+  function formatHposVersion(holoNixpkgs) {
     const strLen = 7
     return holoNixpkgs && holoNixpkgs.current_system && holoNixpkgs.current_system.rev
       ? holoNixpkgs.current_system.rev.substr(0, strLen)
       : 'Unknown'
-  },
+  }
 
-  getSettings: async () => {
+  async function getSettings() {
     try {
       const { admin, deviceName } = await hposAdminCall({
         method: 'get',
@@ -273,9 +270,9 @@ const HposInterface = {
     } catch (err) {
       return {}
     }
-  },
+  }
 
-  updateHoloportName: async (name) => {
+  async function updateHoloportName(name) {
     try {
       await hposAdminCall({
         method: 'put',
@@ -285,9 +282,9 @@ const HposInterface = {
     } catch (error) {
       console.error('updateHoloportName failed: ', error)
     }
-  },
+  }
 
-  getHoloFuelProfile: async () => {
+  async function getHoloFuelProfile() {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -314,9 +311,9 @@ const HposInterface = {
         avatarUrl: null
       }
     }
-  },
+  }
 
-  async updateHoloFuelProfile({ nickname, avatarUrl }) {
+  async function updateHoloFuelProfile({ nickname, avatarUrl }) {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -336,9 +333,9 @@ const HposInterface = {
     } catch (error) {
       return false
     }
-  },
+  }
 
-  async getCompletedTransactions() {
+  async function getCompletedTransactions() {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -356,9 +353,9 @@ const HposInterface = {
     } catch (error) {
       return false
     }
-  },
+  }
 
-  async getPendingTransactions() {
+  async function getPendingTransactions() {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -376,9 +373,9 @@ const HposInterface = {
     } catch (error) {
       return false
     }
-  },
+  }
 
-  getCoreAppVersion: async () => {
+  async function getCoreAppVersion() {
     try {
       const { version: coreAppVersion } = await hposHolochainCall({
         method: 'get',
@@ -394,6 +391,21 @@ const HposInterface = {
       }
     }
   }
-}
 
-export default HposInterface
+  return {
+    getUsage,
+    getTopHostedHapps,
+    getHostedHapps,
+    getHostEarnings,
+    checkAuth,
+    getUser,
+    getHposStatus,
+    updateHoloportName,
+    getHoloFuelProfile,
+    updateHoloFuelProfile,
+    getCompletedTransactions,
+    getPendingTransactions,
+    getCoreAppVersion,
+    HPOS_API_URL
+  }
+}

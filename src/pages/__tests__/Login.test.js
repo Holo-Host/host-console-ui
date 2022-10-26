@@ -8,7 +8,6 @@ import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import wait from 'waait'
 import Login from '../LoginPage.vue'
-import HposInterface from '@/interfaces/HposInterface'
 import locales from '@/locales'
 
 const i18n = createI18n({
@@ -121,7 +120,7 @@ it.skip('sets local storage and pushes the happs route on login', async () => {
     push: jest.fn()
   }
 
-  HposInterface.getUser.mockImplementationOnce(() => Promise.resolve(true))
+  HposInterface.useHposInterface.getUser.mockImplementationOnce(() => Promise.resolve(true))
 
   const wrapper = mount(Login, {
     global: {

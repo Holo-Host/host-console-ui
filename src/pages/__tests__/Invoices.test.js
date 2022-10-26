@@ -4,11 +4,13 @@ import axios from 'axios'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { createI18n } from 'vue-i18n'
 import { mockPaidInvoicesData } from '../../../mock-hpos-api/defaultResponse'
-import { HPOS_API_URL } from '@/interfaces/HposInterface'
 import locales from '@/locales'
 import InvoicesPage from '@/pages/InvoicesPage.vue'
 import router from '@/router'
 import { useEarningsStore } from '@/store/earnings'
+import { useHposInterface } from '@/interfaces/HposInterface'
+
+const { HPOS_API_URL } = useHposInterface()
 
 const clickOutside = jest.fn()
 

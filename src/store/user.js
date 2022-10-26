@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import HposInterface from '@/interfaces/HposInterface'
+import { useHposInterface } from '@/interfaces/HposInterface'
+
+const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName } = useHposInterface()
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -19,8 +21,8 @@ export const useUserStore = defineStore('user', {
 
   actions: {
     async getUser() {
-      const { coreAppVersion } = await HposInterface.getCoreAppVersion()
-      const { user, holoport, holoFuelProfile } = await HposInterface.getUser()
+      const { coreAppVersion } = await getCoreAppVersion()
+      const { user, holoport, holoFuelProfile } = await getUser()
 
       if (user && holoFuelProfile && coreAppVersion) {
         this.publicKey = user.hostPubKey
@@ -38,7 +40,7 @@ export const useUserStore = defineStore('user', {
       nickname = this.holoFuel.nickname,
       avatarUrl = this.holoFuel.avatarUrl
     }) {
-      const isSuccess = await HposInterface.updateHoloFuelProfile({
+      const isSuccess = await updateHoloFuelProfile({
         nickname,
         avatarUrl
       })
@@ -54,7 +56,7 @@ export const useUserStore = defineStore('user', {
     async updateDeviceName(name) {
       this.deviceName = name
 
-      await HposInterface.updateHoloportName(name)
+      await updateHoloportName(name)
     }
   }
 })

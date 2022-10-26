@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import HposInterface from '@/interfaces/HposInterface'
+import { useHposInterface } from '@/interfaces/HposInterface'
+
+const { getUsage, getTopHostedHapps, getHostEarnings } = useHposInterface()
 
 export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
@@ -22,15 +24,15 @@ export const useDashboardStore = defineStore('dashboard', {
 
   actions: {
     async getUsage() {
-      this.usage = await HposInterface.getUsage()
+      this.usage = await getUsage()
     },
 
     async getTopHostedHapps() {
-      this.hostedHapps = await HposInterface.getTopHostedHapps()
+      this.hostedHapps = await getTopHostedHapps()
     },
 
     async getEarnings() {
-      this.hostEarnings = await HposInterface.getHostEarnings()
+      this.hostEarnings = await getHostEarnings()
     }
   }
 })

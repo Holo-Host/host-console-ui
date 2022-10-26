@@ -54,9 +54,11 @@ import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import HAppCard from '@uicommon/components/HAppCard.vue'
 import SortByDropdown from 'components/hApps/SortByDropdown.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
-import HposInterface from '@/interfaces/HposInterface'
+import { useHposInterface } from '@/interfaces/HposInterface'
 import { computed, onMounted, ref } from 'vue'
 import { kSortOptions } from '@/constants/ui'
+
+const { getHostedHapps } = useHposInterface()
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -95,7 +97,7 @@ async function getData() {
   isError.value = false
   isLoading.value = true
 
-  happs.value = await HposInterface.getHostedHapps()
+  happs.value = await getHostedHapps()
 
   if (happs.value.error) {
     isError.value = true

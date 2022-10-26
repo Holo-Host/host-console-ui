@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack');
 
 const holoportUrl = process.env.VUE_APP_HOLOPORT_URL
 
@@ -17,6 +18,7 @@ module.exports = {
         vue: path.resolve(__dirname, '/node_modules/vue')
       },
       fallback: {
+        buffer: require.resolve('buffer/'),
         os: require.resolve('os-browserify/browser'),
         path: require.resolve('path-browserify'),
         crypto: require.resolve('crypto-browserify'),
@@ -26,7 +28,12 @@ module.exports = {
     },
     experiments: {
       asyncWebAssembly: true
-    }
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer']
+      }),
+    ]
   },
   devServer: holoportUrl && {
     proxy: {
