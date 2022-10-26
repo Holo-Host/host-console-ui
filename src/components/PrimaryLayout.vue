@@ -55,19 +55,19 @@
 </template>
 
 <script setup>
-import BaseButton from '@uicommon/components/BaseButton'
-import CircleSpinner from '@uicommon/components/CircleSpinner'
-import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
-import { useModals } from '@uicommon/composables/useModals'
-import { useOverlay } from '@uicommon/composables/useOverlay'
-import { EButtonType } from '@uicommon/types/ui'
-import MobileTopNav from 'components/MobileTopNav'
-import WelcomeModal from 'components/modals/WelcomeModal'
-import TheSidebar from 'components/sidebar/TheSidebar'
-import TopNav from 'components/TopNav'
-import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
-import { useUserStore } from 'src/store/user'
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
+import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal.vue'
+import { useModals } from '@uicommon/composables/useModals.js'
+import { useOverlay } from '@uicommon/composables/useOverlay.js'
+import { EButtonType } from '@uicommon/types/ui.js'
+import MobileTopNav from 'components/MobileTopNav.vue'
+import WelcomeModal from 'components/modals/WelcomeModal.vue'
+import TheSidebar from 'components/sidebar/TheSidebar.vue'
+import TopNav from 'components/TopNav.vue'
+import { useUserStore } from '@/store/user'
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
 import { EModal } from '@/constants/ui'
 
 const userStore = useUserStore()

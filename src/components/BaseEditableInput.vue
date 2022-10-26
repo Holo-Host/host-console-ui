@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseInput from '@uicommon/components/BaseInput.vue'
 import { ref } from 'vue'
 import CircledExIcon from './icons/CircledExIcon.vue'
@@ -45,38 +45,33 @@ import FilledCheckIcon from './icons/FilledCheckIcon.vue'
 import PencilIcon from './icons/PencilIcon.vue'
 
 const isEditing = ref(false)
-const editedValue = ref('')
+const editedValue = ref<string | number>('')
 
-const props = defineProps({
-  value: {
-    type: [String, Number],
-    required: true
-  },
-
-  unit: {
-    type: String,
-    default: ''
-  },
-
-  isDisabled: {
-    type: Boolean,
-    default: false
+const props = withDefaults(
+  defineProps<{
+    value: string | number
+    unit?: string
+    isDisabled?: boolean
+  }>(),
+  {
+    unit: '',
+    isDisabled: false
   }
-})
+)
 
 const emit = defineEmits(['update:value'])
 
-function edit() {
+function edit(): void {
   editedValue.value = props.value
   isEditing.value = true
 }
 
-function save() {
+function save(): void {
   emit('update:value', editedValue.value)
   isEditing.value = false
 }
 
-function cancel() {
+function cancel(): void {
   isEditing.value = false
   editedValue.value = ''
 }

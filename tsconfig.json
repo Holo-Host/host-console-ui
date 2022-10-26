@@ -35,7 +35,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "@uicommon": ["ui-common-library/src/*"],
+      "src": ["src"],
+      "components": ["src/components/*"],
+      "pages": ["src/pages/*"],
+      "utils": ["src/utils/*"],
+      "types": ["src/types/*"],
+      "vue": ["/node_modules/vue"]
     }
   },
   "include": [
@@ -45,7 +52,8 @@
   ],
   "exclude": [
     "node_modules",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "src/interfaces/HposInterface.ts"
   ],
   "ts-node": {
     "compilerOptions": {

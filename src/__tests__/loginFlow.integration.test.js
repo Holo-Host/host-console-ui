@@ -34,7 +34,7 @@ describe.skip('Login Flow', () => {
       )
     }
 
-    // the +1 in this line depends on the +1 in the definition of HPOS_PORT in HposInterface.js
+    // the +1 in this line depends on the +1 in the definition of HPOS_PORT in HposInterface.ts
     mockHposApi = await MockHposApi.start(
       Number(process.env.VUE_APP_HPOS_PORT) + 1,
       email,
