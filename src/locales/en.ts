@@ -54,6 +54,13 @@ const translations = {
   },
   hosting_preferences: {
     header: 'Hosting Preferences',
+    happ_selection: {
+      header: 'hApp Selection',
+      jurisdiction_exclusions: 'Jurisdiction Exclusions',
+      category_tags: 'Category Tags',
+      exclude: 'Exclude',
+      include: 'Include'
+    },
     invoices: {
       header: 'Invoice & Payment Terms',
       frequency: {
@@ -68,11 +75,11 @@ const translations = {
       },
       note_one: {
         part_one: '*hApps will be paused from hosting if payment is not received',
-        part_two: 'days after invoice date'
+        part_two: 'after invoice date'
       },
       note_two: {
         part_one: '*hApps will be removed if payment is not received',
-        part_two: 'days after invoice date'
+        part_two: 'after invoice date'
       }
     },
     prices: {

@@ -10,6 +10,7 @@
     >
       <BaseInput
         v-model="editedValue"
+        :input-type="EInputType.number"
         placeholder=""
         name="edited-value"
         class="editable-price-row__editable-value-input"
@@ -30,19 +31,21 @@
     <span class="editable-price-row__unit">{{ unit }}</span>
     <PencilIcon
       v-if="!isEditing"
-      class="editable-price-row__editable-value-icon disabled"
+      class="editable-price-row__editable-value-icon"
+      :class="{ 'disabled': isDisabled }"
       @click="edit"
     />
   </SettingsRow>
 </template>
 
 <script setup >
-import BaseInput from '@uicommon/components/BaseInput'
+import BaseInput from '@uicommon/components/BaseInput.vue'
+import { EInputType } from '@uicommon/types/ui'
 import { ref } from 'vue'
-import CircledExIcon from '../../icons/CircledExIcon'
-import FilledCheckIcon from '../../icons/FilledCheckIcon'
-import PencilIcon from '../../icons/PencilIcon'
-import SettingsRow from '../SettingsRow'
+import CircledExIcon from '../../icons/CircledExIcon.vue'
+import FilledCheckIcon from '../../icons/FilledCheckIcon.vue'
+import PencilIcon from '../../icons/PencilIcon.vue'
+import SettingsRow from '../SettingsRow.vue'
 
 const props = defineProps({
   label: {
@@ -58,6 +61,16 @@ const props = defineProps({
   unit: {
     type: String,
     required: true
+  },
+
+  prop: {
+    type: String,
+    required: true
+  },
+
+  isDisabled: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -67,12 +80,12 @@ const isEditing = ref(false)
 const editedValue = ref('')
 
 function edit() {
-  editedValue.value = props.value
+  editedValue.value = `${props.value}`
   isEditing.value = true
 }
 
 function save() {
-  emit('update:value', editedValue.value)
+  emit('update:value', { prop: props.prop, value: Number(editedValue.value) })
   isEditing.value = false
 }
 

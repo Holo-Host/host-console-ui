@@ -11,40 +11,58 @@
       <HostingPreferencesEditablePriceRow
         v-for="price in prices"
         :key="price.label"
-        :label="price.label"
-        :value="price.value"
-        :unit="price.unit"
+        v-bind="price"
         class="prices-section__price"
+        @update:value="updatePrice"
       />
     </div>
   </SettingsSection>
 </template>
 
 <script setup >
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import SettingsSection from '../SettingsSection.vue'
 import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
-import SettingsSection from '../SettingsSection'
 
 const { t } = useI18n()
 
-const prices = ref([
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
+  }
+})
+
+const emit = defineEmits(['update:price'])
+
+const prices = computed(() => [
   {
     label: t('$.cpu'),
-    value: 100,
-    unit: 'HF per min'
+    value: props.data.cpu,
+    unit: 'HF per min',
+    prop: 'cpu',
+    isDisabled: true
   },
   {
     label: t('$.storage'),
-    value: 100,
-    unit: 'HF per GB'
+    value: props.data.storage,
+    unit: 'HF per GB',
+    prop: 'storage',
+    isDisabled: true
   },
   {
     label: t('$.bandwidth'),
-    value: 100,
-    unit: 'HF per GB'
+    value: props.data.bandwidth,
+    unit: 'HF per GB',
+    prop: 'bandwidth',
+    isDisabled: true
   }
 ])
+
+function updatePrice({ prop, value }) {
+  emit('update:price', { prop, value })
+}
 </script>
 
 <style lang="scss" scoped>
