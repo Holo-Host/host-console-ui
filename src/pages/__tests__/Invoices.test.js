@@ -29,14 +29,14 @@ describe('invoices page', () => {
     axios.put.mockClear()
   })
 
-  it('calls proper endpoint on init', () => {
-    const zomeCallResult = {
+  it('calls host_invoices endpoint on init', () => {
+    const hostInvoicesResult = {
       data: []
     }
 
     axios.post.mockImplementation((path) => {
-      if (path.endsWith('zome_call')) {
-        return zomeCallResult
+      if (path.endsWith('/api/v1/host_invoices')) {
+        return hostInvoicesResult
       }
 
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
@@ -54,12 +54,12 @@ describe('invoices page', () => {
     const store = useEarningsStore()
 
     expect(store.getUnpaidInvoices).toHaveBeenCalledTimes(1)
-    expect(axios.post.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/zome_call`)
+    expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/host_invoices`)
   })
 
   describe('shows the invoices page', () => {
     axios.post.mockImplementation((path) => {
-      if (path.endsWith('zome_call')) {
+      if (path.endsWith('host_invoices')) {
         return { data: mockPaidInvoicesData }
       }
 
