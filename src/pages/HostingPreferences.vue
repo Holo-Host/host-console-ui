@@ -21,25 +21,28 @@ import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HAppSelectionSection from 'components/settings/hostingPreferences/HAppSelectionSection'
 import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
 import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { usePreferencesStore } from '@/store/preferences'
-import { reactive, computed, onMounted} from 'vue'
 
 const preferencesStore = usePreferencesStore()
 
+const isLoading = ref(false)
+const isError = ref(false)
+
 const localInvoicesSettings = reactive({
   frequency: {
-    amount: 100,
-    period: 7
+    amount: 0,
+    period: 0
   },
   due: {
-    period: 7
-  },
+    period: 0
+  }
 })
 
 const localPricesSettings = reactive({
-  cpu: 100,
-  storage: 100,
-  bandwidth: 100,
+  cpu: 0,
+  storage: 0,
+  bandwidth: 0
 })
 
 function updateFrequency(value) {
@@ -65,14 +68,14 @@ const invoicesSettings = computed(() => ({
 }))
 
 // NOTE: This can currently only be called only once - ensure all values are present before invoking
-async function setHostSettings () {
+async function setHostSettings() {
   if (isError.value) {
     isError.value = false
   }
 
   isLoading.value = true
 
-  const isSuccess = await preferencesStore.updateHoloFuelProfile({ 
+  const isSuccess = await preferencesStore.updateHoloFuelProfile({
     invoicesSettings,
     pricesSettings
   })
@@ -91,11 +94,10 @@ async function getHostPreferences() {
 }
 
 onMounted(async () => {
-  if (!(invoicesSettings.value && pricesSettings.value) ) {
+  if (!preferencesStore.isLoaded) {
     await getHostPreferences()
   }
 })
-
 </script>
 
 <style lang="scss" scoped>

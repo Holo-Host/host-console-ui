@@ -164,7 +164,7 @@ const HposInterface = {
     }
   },
 
-  // TODO: Convert into a zome_call like for `setHostPreferences` once abstract and modularize the rust duration type fr use in js
+  // TODO: Convert into a zome_call like for `setHostPreferences` once abstract and modularize the rust duration type for use in js
   getHostPreferences: async () => {
     try {
       return await hposHolochainCall({
