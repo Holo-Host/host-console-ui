@@ -130,9 +130,11 @@ onMounted(async () => {
       isLoading.value = false
     }
 
-    if (!userStore.holoFuel.nickname) {
-      showModal(EModal.welcome)
-    }
+    await nextTick(() => {
+      if (!userStore.holoFuel.nickname) {
+        showModal(EModal.welcome)
+      }
+    })
   })
 })
 </script>

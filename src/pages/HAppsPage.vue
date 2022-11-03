@@ -32,7 +32,15 @@
           :key="happ.id"
           :happ="happ"
           class="happs__happ-list-item"
-        />
+        >
+          <template #status-chip>
+            <BaseChip
+              v-if="happ.isPaused"
+              :label="$t('$.paused')"
+              :type="EChipType.info"
+            />
+          </template>
+        </HAppCard>
       </div>
 
       <div
@@ -50,8 +58,10 @@
 </template>
 
 <script setup>
+import BaseChip from '@uicommon/components/BaseChip.vue'
 import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import HAppCard from '@uicommon/components/HAppCard.vue'
+import { EChipType } from '@uicommon/types/ui'
 import SortByDropdown from 'components/hApps/SortByDropdown.vue'
 import PrimaryLayout from 'components/PrimaryLayout.vue'
 import HposInterface from 'src/interfaces/HposInterface'
