@@ -367,40 +367,24 @@ const HposInterface = {
     }
   },
 
-  async getCompletedTransactions() {
+  async getPaidInvoices() {
     try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'transactor',
-        fnName: 'get_completed_transactions',
-        payload: null
-      }
-
       return await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
+        method: 'get',
+        path: '/host_invoices',
+        params: { invoice_set: 'paid' }
       })
     } catch (error) {
       return false
     }
   },
 
-  async getPendingTransactions() {
+  async getUnpaidInvoices() {
     try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'transactor',
-        fnName: 'get_pending_transactions',
-        payload: null
-      }
-
       return await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
+        method: 'get',
+        path: '/host_invoices',
+        params: { invoice_set: 'unpaid' }
       })
     } catch (error) {
       return false
