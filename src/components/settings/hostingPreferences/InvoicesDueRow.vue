@@ -9,7 +9,7 @@
     <TimeDropdownSelect
       is-disabled
       :value="data.due.period"
-      :options="[7,30]"
+      :options="['N/A', 7, 30]"
       @update:selected-value="onDueChange"
     />
 

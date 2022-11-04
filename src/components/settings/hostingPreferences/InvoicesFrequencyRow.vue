@@ -9,7 +9,7 @@
     <TimeDropdownSelect
       is-disabled
       :value="data.frequency.period"
-      :options="[7,30]"
+      :options="['N/A', 7, 30]"
       @update:selected-value="onFrequencyPeriodChange"
     />
 
