@@ -18,13 +18,13 @@
       <div class="invoices-section__notes">
         <div>
           <span>{{ $t('hosting_preferences.invoices.note_one.part_one') }}</span>
-          <span class="invoices-section__notes-value">{{ 2 * data.due.period }} {{ $t('$.days') }}</span>
+          <span class="invoices-section__notes-value">{{ 2 * data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
           <span>{{ $t('hosting_preferences.invoices.note_one.part_two') }}</span>
         </div>
 
         <div class="invoices-section__note-two">
           <span>{{ $t('hosting_preferences.invoices.note_two.part_one') }}</span>
-          <span class="invoices-section__notes-value">{{ 4 * data.due.period }} {{ $t('$.days') }}</span>
+          <span class="invoices-section__notes-value">{{ 4 * data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
           <span>{{ $t('hosting_preferences.invoices.note_two.part_two') }}</span>
         </div>
       </div>
@@ -65,6 +65,7 @@ function updateDue(value) {
   }
 
   &__notes {
+    opacity: 0.3;
     margin-top: 20px;
     font-size: 12px;
     color: var(--grey-color);

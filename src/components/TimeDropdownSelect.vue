@@ -10,7 +10,7 @@
       :key="option"
       :value="option"
     >
-      {{ option }} {{ $t('$.days') }}
+      {{ option }} {{ option !== 'N/A' ? $t('$.days') : '' }}
     </option>
   </select>
 </template>
@@ -23,7 +23,7 @@ defineProps({
   },
 
   value: {
-    type: Number,
+    type: [Number, String],
     required: true
   },
 
