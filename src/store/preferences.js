@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import HposInterface from 'src/interfaces/HposInterface'
+import { useHposInterface } from '@/interfaces/HposInterface'
+
+const { getHostPreferences } = useHposInterface()
 
 export const usePreferencesStore = defineStore('preferences', {
   state: () => ({
@@ -28,7 +30,7 @@ export const usePreferencesStore = defineStore('preferences', {
         price_compute: cpu,
         price_storage: storage,
         price_bandwidth: bandwidth
-      } = await HposInterface.getHostPreferences()
+      } = await getHostPreferences()
 
       if (cpu && storage && bandwidth) {
         this.pricesSettings = {

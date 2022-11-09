@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 import axios from 'axios'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from 'src/utils/keyManagement'
+import { retry } from 'utils/functionUtils'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
@@ -9,15 +11,19 @@ interface HposInterface {
   getTopHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getHostEarnings: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  checkAuth: () => Promise<Record<string, unknown> | string | boolean | null>
-  getUser: () => Record<string, unknown>
-  getHposStatus: () => Record<string, unknown>
-  updateHoloportName: () => Record<string, unknown>
-  getHoloFuelProfile: () => Record<string, unknown>
-  updateHoloFuelProfile: () => Record<string, unknown>
-  getCompletedTransactions: () => Promise<Array<Record<string, unknown>> | boolean>
-  getPendingTransactions: () => Promise<Array<Record<string, unknown>> | boolean>
-  getCoreAppVersion: () => Promise<{ coreAppVersion: string | null }>
+  checkAuth: (
+    email: string,
+    password: string,
+    authToken: string
+  ) => Promise<Record<string, unknown> | string | boolean | null>
+  getUser: () => Promise<Record<string, unknown> | boolean>
+  getHposStatus: () => Promise<HPosStatus>
+  updateHoloportName: (name: string) => Promise<void>
+  getHoloFuelProfile: () => unknown
+  updateHoloFuelProfile: ({ nickname, avatarUrl }) => Promise<boolean>
+  getPaidInvoices: () => Promise<HposHolochainCallResponse>
+  getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
+  getCoreAppVersion: () => Promise<HposHolochainCallResponse>
   HPOS_API_URL: string
 }
 
@@ -160,8 +166,8 @@ interface HoloFuelProfile {
 }
 
 // Return devNet for channel develop, alphaNet for channel master, otherwise channel name
-function formatNetworkName(holoNixpkgs): string {
-  if (holoNixpkgs && holoNixpkgs.channel && holoNixpkgs.channel.name) {
+function formatNetworkName(holoNixpkgs: { channel: { name: string } }): string {
+  if (holoNixpkgs?.channel && holoNixpkgs.channel.name) {
     if (holoNixpkgs.channel.name === 'master') return 'alphaNet'
     else if (holoNixpkgs.channel.name === 'develop') return 'devNet'
     else return holoNixpkgs.channel.name
@@ -170,12 +176,12 @@ function formatNetworkName(holoNixpkgs): string {
   }
 }
 
-// Return firs 7 characters of holoport's revision
-function formatHposVersion(holoNixpkgs): string {
+// Return first 7 characters of holoport's revision
+function formatHposVersion(holoNixpkgs: { current_system: { rev: string } }): string {
   const strLen = 7
 
-  return holoNixpkgs && holoNixpkgs.current_system && holoNixpkgs.current_system.rev
-    ? holoNixpkgs.current_system.rev.substr(0, strLen)
+  return holoNixpkgs?.current_system && holoNixpkgs.current_system.rev
+    ? holoNixpkgs.current_system.rev.substring(0, strLen)
     : 'Unknown'
 }
 
@@ -242,6 +248,8 @@ export function useHposInterface(): HposInterface {
 
   async function hposAdminCall(args: HposCallArgs): Promise<HposAdminCallResponse> {
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return await hposCall({
         ...args,
         pathPrefix: '/api/v1'
@@ -349,12 +357,50 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getHostPreferences(): Promise<HposHolochainCallResponse> {
+    try {
+      return await hposHolochainCall({
+        method: 'get',
+        path: '/host_preferences'
+      })
+    } catch (error) {
+      console.error('getHostPreferences encountered an error: ', error)
+      throw error
+    }
+  }
+
+  async function setHostPreferences(hostPreferences): Promise<HposHolochainCallResponse> {
+    try {
+      const params: Record<string, unknown> = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'core-app',
+        zomeName: 'hha',
+        fnName: 'set_happ_preferences',
+        payload: hostPreferences
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   async function checkAuth(
     email: string,
     password: string,
     authToken: string
   ): Promise<Record<string, unknown> | string | boolean | null> {
-    const keypair = await getHpAdminKeypair(email, password)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const keypair: { sign: (authToken: string) => string } = await getHpAdminKeypair(
+      email,
+      password
+    )
 
     if (keypair === null) {
       return false
@@ -384,7 +430,7 @@ export function useHposInterface(): HposInterface {
       return { adminSignature }
     } catch (err) {
       // This will be executed if response.status === 401
-      console.log('User authentication failed', err)
+      console.error('User authentication failed', err)
       return null
     }
   }
@@ -399,7 +445,7 @@ export function useHposInterface(): HposInterface {
         hostPubKey: admin.public_key,
         registrationEmail: admin.email,
         deviceName:
-          // eslint-disable-next-line no-magic-numbers
+          // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
           deviceName || (admin.public_key && `...${admin.public_key.slice(-8)}`) || 'Your HP'
       }
     } catch (err) {
@@ -409,15 +455,19 @@ export function useHposInterface(): HposInterface {
 
   async function getHposStatus(): Promise<HPosStatus> {
     try {
-      // eslint-disable-next-line camelcase
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const { holo_nixpkgs, holoport } = await hposAdminCall({
         method: 'get',
         path: '/status'
       })
 
       return {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         networkFlavour: formatNetworkName(holo_nixpkgs),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         hposVersion: formatHposVersion(holo_nixpkgs),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         name: holoport.name
       }
     } catch (err) {
@@ -425,32 +475,51 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getHoloFuelProfile(): Promise<HoloFuelProfile> {
+  async function getHoloFuelProfileAttempt(): Promise<HoloFuelProfile> {
+    const params = {
+      appId: localStorage.getItem(kCoreAppVersionLSKey),
+      roleId: 'holofuel',
+      zomeName: 'profile',
+      fnName: 'get_my_profile',
+      payload: null
+    }
+
+    const {
+      agent_address: agentAddress,
+      nickname,
+      avatar_url: avatarUrl
+    } = await hposHolochainCall({
+      method: 'post',
+      path: '/zome_call',
+      params
+    })
+
+    return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+  }
+
+  function getHoloFuelProfile(): unknown {
+    const kRetries = 2
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    return retry(getHoloFuelProfileAttempt, kRetries)
+  }
+
+  async function getUser(): Promise<Record<string, unknown> | boolean> {
+    const user = await getSettings()
+    const holoport = await getHposStatus()
+    const holoFuelProfile = await getHoloFuelProfile()
+
+    return { user, holoport, holoFuelProfile }
+  }
+
+  async function updateHoloportName(name: string): Promise<void> {
     try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'profile',
-        fnName: 'get_my_profile',
-        payload: null
-      }
-
-      const {
-        agent_address: agentAddress,
-        nickname,
-        avatar_url: avatarUrl
-      } = await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
+      await hposAdminCall({
+        method: 'put',
+        path: '/holoport/name',
+        params: { name }
       })
-
-      return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
     } catch (error) {
-      return {
-        nickname: null,
-        avatarUrl: null
-      }
+      console.error('updateHoloportName failed: ', error)
     }
   }
 
@@ -461,6 +530,7 @@ export function useHposInterface(): HposInterface {
         roleId: 'holofuel',
         zomeName: 'profile',
         fnName: 'update_my_profile',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         payload: { nickname, avatarUrl }
       }
 
@@ -476,73 +546,34 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getUser(): Promise<Record<string, unknown> | boolean> {
+  async function getPaidInvoices(): Promise<HposHolochainCallResponse> {
     try {
-      const user = await getSettings()
-      const holoport = await getHposStatus()
-      const holoFuelProfile = await getHoloFuelProfile()
-
-      return { user, holoport, holoFuelProfile }
-    } catch (error) {
-      console.error('getUser failed', error)
-      return false
-    }
-  }
-
-  async function updateHoloportName(name: string): Promise<void> {
-    try {
-      await hposAdminCall({
-        method: 'put',
-        path: '/holoport/name',
-        params: { name }
-      })
-    } catch (error) {
-      console.error('updateHoloportName failed: ', error)
-    }
-  }
-
-  async function getCompletedTransactions(): Promise<PaidTransactions[] | boolean> {
-    try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'transactor',
-        fnName: 'get_completed_transactions',
-        payload: null
-      }
-
       return await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
+        method: 'get',
+        path: '/host_invoices',
+        params: { invoice_set: 'paid' }
       })
     } catch (error) {
       return false
     }
   }
 
-  async function getPendingTransactions(): Promise<PaidTransactions[] | boolean> {
+  async function getUnpaidInvoices(): Promise<HposHolochainCallResponse> {
     try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'transactor',
-        fnName: 'get_pending_transactions',
-        payload: null
-      }
-
       return await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
+        method: 'get',
+        path: '/host_invoices',
+        params: { invoice_set: 'unpaid' }
       })
     } catch (error) {
       return false
     }
   }
 
-  async function getCoreAppVersion(): Promise<CoreAppVersion> {
+  async function getCoreAppVersion(): Promise<HposHolochainCallResponse> {
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const { version: coreAppVersion } = await hposHolochainCall({
         method: 'get',
         path: '/core_app_version'
@@ -552,6 +583,7 @@ export function useHposInterface(): HposInterface {
         localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       return { coreAppVersion }
     } catch (error) {
       return {
@@ -571,9 +603,12 @@ export function useHposInterface(): HposInterface {
     updateHoloportName,
     getHoloFuelProfile,
     updateHoloFuelProfile,
-    getCompletedTransactions,
-    getPendingTransactions,
+    getPaidInvoices,
+    getUnpaidInvoices,
     getCoreAppVersion,
+    getHostPreferences,
+    setHostPreferences,
     HPOS_API_URL
   }
 }
+/* eslint-enable camelcase */
