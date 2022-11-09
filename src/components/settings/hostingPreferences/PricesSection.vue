@@ -39,22 +39,22 @@ const emit = defineEmits(['update:price'])
 const prices = computed(() => [
   {
     label: t('$.cpu'),
-    value: props.data.cpu,
+    value: props.data.cpu || 0,
     unit: 'HF per min',
     prop: 'cpu',
     isDisabled: true
   },
   {
     label: t('$.storage'),
-    value: props.data.storage,
-    unit: 'HF per GB',
+    value: props.data.storage ? formatPrice(props.data.storage).value : 0,
+    unit: props.data.storage ? formatPrice(props.data.storage).unit : '',
     prop: 'storage',
     isDisabled: true
   },
   {
     label: t('$.bandwidth'),
-    value: props.data.bandwidth,
-    unit: 'HF per GB',
+    value: props.data.bandwidth ? formatPrice(props.data.bandwidth).value : 0,
+    unit: props.data.bandwidth ? formatPrice(props.data.bandwidth).unit : '',
     prop: 'bandwidth',
     isDisabled: true
   }
@@ -62,6 +62,39 @@ const prices = computed(() => [
 
 function updatePrice({ prop, value }) {
   emit('update:price', { prop, value })
+}
+
+function formatPrice(pricePerByte) {
+  if (isNaN(pricePerByte)) {
+    return '-- GB'
+  }
+
+  if (pricePerByte === 0) {
+    return '0 GB'
+  }
+
+  const k = 1024
+  const sizes = ['byte', 'kB', 'MB', 'GB', 'TB']
+
+  // eslint-disable-next-line no-magic-numbers
+  const zerosAfterDecimal = -Math.floor(Math.log(pricePerByte) / Math.log(10))
+
+  if (zerosAfterDecimal <= 0) {
+    return {
+      // eslint-disable-next-line no-magic-numbers
+      value: parseFloat(pricePerByte).toFixed(0),
+      unit: `HF per ${sizes[0]}`
+    }
+  }
+
+  // eslint-disable-next-line no-magic-numbers
+  const unitIndex = Math.floor(zerosAfterDecimal / 3)
+
+  return {
+    // eslint-disable-next-line no-magic-numbers
+    value: parseFloat((pricePerByte * Math.pow(k, unitIndex)).toFixed(2)),
+    unit: `HF per ${sizes[unitIndex]}`
+  }
 }
 </script>
 

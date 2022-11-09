@@ -21,7 +21,7 @@
       :is-loading="isLoading"
       :is-error="isError"
       :headers="[...headersMap.values()]"
-      initial-sort-by="completed_date"
+      :initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
       :items="filteredData"
       :empty-message-translation-key="emptyMessageTranslationKey"
       @try-again-clicked="getInvoices"
@@ -29,7 +29,7 @@
       <InvoicesTableRow
         v-for="item in items"
         :key="item.id"
-        is-paid
+        :is-paid="isPaidInvoices"
         :invoice="item"
       />
     </BaseTable>
@@ -84,9 +84,9 @@ const headersMap = computed(
         }
       ],
       [
-        isPaidInvoices.value ? 'completed_date' : 'created_date',
+        isPaidInvoices.value ? 'completedDate' : 'createdDate',
         {
-          key: isPaidInvoices.value ? 'completed_date' : 'created_date',
+          key: isPaidInvoices.value ? 'completedDate' : 'createdDate',
           label: t(
             isPaidInvoices.value ? 'invoices.headers.completed' : 'invoices.headers.created'
           ),
@@ -95,9 +95,9 @@ const headersMap = computed(
         }
       ],
       [
-        'expiration_date',
+        'expirationDate',
         {
-          key: 'expiration_date',
+          key: 'expirationDate',
           label: t('invoices.headers.due'),
           isVisibleOnMobile: false,
           isSortable: true
@@ -149,15 +149,15 @@ const invoices = computed(() => {
     ? rawInvoices.map((invoice) => ({
       ...invoice,
       formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
-      happ: invoice.note.split(':')[1],
-      formattedExpirationDate: dayjs(new Date(invoice.expiration_date / kMsInSecond)).format(
+      happ: invoice.happ.name,
+      formattedExpirationDate: dayjs(new Date(invoice.expirationDate / kMsInSecond)).format(
         kDefaultDateFormat
       ),
       amount: Number(invoice.amount),
-      formattedCompletedDate: dayjs(invoice.completed_date / kMsInSecond).format(
+      formattedCompletedDate: dayjs(invoice.completedDate / kMsInSecond).format(
         kDefaultDateFormat
       ),
-      formattedCreatedDate: dayjs(invoice.created_date / kMsInSecond).format(kDefaultDateFormat),
+      formattedCreatedDate: dayjs(invoice.createdDate / kMsInSecond).format(kDefaultDateFormat),
       formattedAmount:
           invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
       status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')

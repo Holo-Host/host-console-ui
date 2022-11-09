@@ -18,7 +18,7 @@
         class="payment-row"
       >
         <div class="payment-amount">
-          {{ props.data && Number(payment.amount) ? formatCurrency(payment.amount) : 0 }} HF
+          {{ payment.amount && Number(payment.amount) ? formatCurrency(Number(payment.amount)) : 0 }} HF
         </div>
         <div class="payment-details">
           <div>

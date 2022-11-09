@@ -1,8 +1,7 @@
 // mock of normal hpos api responses
-const dayjs = require('dayjs')
+const createDate = require('./utils').createDate
 
-const kMsInSecond = 1000
-
+/* eslint-disable no-magic-numbers */
 const happs = [
   {
     id: '1',
@@ -191,219 +190,242 @@ const getMyProfile = {
   }
 }
 
-function createDate(year, month, day) {
-  return dayjs(`${year}-${month}-${day}`).valueOf() * kMsInSecond
-}
-
-/* eslint-disable no-magic-numbers */
 const mockPaidInvoicesData = [
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6H',
     amount: '1234567',
-    created_date: createDate(2022, 9, 20),
-    completed_date: createDate(2022, 9, 23),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k2EkZzuUESiw03zuRYoPh05vswcLsi566MC-Nxqtuc',
-    direction: { Outgoing: null },
-    status: { Completed: null },
+    createdDate: createDate(5, -1),
+    completedDate: createDate(1, -1),
+    counterparty: 'uhCAkDOc0jde0SS4CO3HRThx5_cee2Nm_w-T30bTNE-uLmMoOoZzX',
+    direction: 'Outgoing',
+    status: 'Completed',
     note: 'Holo Hosting Invoice <last 5 char of hha_id>:AAA',
-    proof_of_service_token: null,
+    proofOfServiceToken:
+      'osT+WBHXMNm+HXtLO3x4Bf6JARASF5cJvA/ywwAYj6YO8UZtFjD3iZsr6iGkEHaIPuESAUdlthPT9KtqXFSPPQ==',
     url: null,
-    expiration_date: createDate(2022, 9, 25)
+    happ: {
+      name: 'Test Chat',
+      id: 'uhCkk3BySOE9QOVcIa9OA6ClaPMJfnbjmdWGqhFQ6wFhk-FJrkUR6'
+    },
+    expirationDate: createDate(1, 1),
+    type: 'Request',
+    invoiceDetails: {
+      start: 1666828474041950,
+      end: 1666828475099560,
+      service_logs_range: {
+        quantity: 0,
+        price: 0
+      },
+      bandwidth: {
+        quantity: 0,
+        price: 0
+      },
+      compute: {
+        quantity: 0,
+        price: 0
+      },
+      storage: {
+        quantity: 0,
+        price: 0
+      }
+    }
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6I',
     amount: '1224567',
-    created_date: createDate(2022, 9, 21),
-    completed_date: createDate(2022, 9, 23),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:AAB',
-    proof_of_service_token: null,
+    createdDate: createDate(4, -1),
+    completedDate: createDate(2, -1),
+    counterparty: 'jDCAki7J39_k2EkZzbUESiA03zuRYoPh05vQjcLWi566MC-NMqtuz',
+    direction: 'Outgoing',
+    status: 'Completed',
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:AAA',
+    proofOfServiceToken:
+      'osT+WBHXMNm+HXtLO3x4Bf6JARASF5cJvA/ywwAYj6YO8UZtFjD3iZsr6iGkEHaIPuESAUdlthPT9KtqXFSjPQ==',
     url: null,
-    expiration_date: createDate(2022, 9, 27)
+    happ: {
+      name: 'AAA',
+      id: 'uhCkk3BySOE9QOVcIa9OA6ClaPMJfnbjmdWGqhFQ6wFhk-FJrkUR7'
+    },
+    expirationDate: createDate(2, 2),
+    type: 'Request',
+    invoiceDetails: {
+      start: 1666828474041950,
+      end: 1666828475099560,
+      service_logs_range: {
+        quantity: 0,
+        price: 0
+      },
+      bandwidth: {
+        quantity: 0,
+        price: 0
+      },
+      compute: {
+        quantity: 0,
+        price: 0
+      },
+      storage: {
+        quantity: 0,
+        price: 0
+      }
+    }
   },
   {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6J',
-    amount: '123469.89',
-    created_date: createDate(2022, 9, 20),
-    completed_date: createDate(2022, 9, 23),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:ABA',
-    proof_of_service_token: null,
-    url: null,
-    expiration_date: createDate(2022, 9, 27)
-  },
-  {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6K',
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE61',
     amount: '1234565.89',
-    created_date: createDate(2022, 9, 25),
-    completed_date: createDate(2022, 9, 26),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
+    createdDate: createDate(3, -1),
+    completedDate: createDate(1, -1),
+    counterparty: 'bhCAki0d39_k2EkZzuUESiw03zuRYoPh05vswcLsi566MC-Nxqtjz',
+    direction: 'Outgoing',
+    status: 'Completed',
     note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAA',
-    proof_of_service_token: null,
+    proofOfServiceToken:
+      'osT+WBHXMNm+HXtLO3x4Bf6JARASF5cJvA/ywwAYj6YO8UZtFjD3iZsr6iGkEHaIPuESAUdlthPT9KtqXFSjjQ==',
     url: null,
-    expiration_date: 1663999999999999
+    happ: {
+      name: 'BAA',
+      id: 'uhCkk3BySOE9QOVcIa9OA6ClaPMJfnbjmdWGqhFQ6wFhk-FJrkUR7ji'
+    },
+    expirationDate: createDate(2, 0),
+    type: 'Request',
+    invoiceDetails: {
+      start: 1666828474041950,
+      end: 1666828475099560,
+      service_logs_range: {
+        quantity: 0,
+        price: 0
+      },
+      bandwidth: {
+        quantity: 0,
+        price: 0
+      },
+      compute: {
+        quantity: 0,
+        price: 0
+      },
+      storage: {
+        quantity: 0,
+        price: 0
+      }
+    }
   },
   {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6L',
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE62',
     amount: '134561.89',
-    created_date: createDate(2022, 8, 20),
-    completed_date: createDate(2022, 8, 23),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
+    createdDate: createDate(3, -2),
+    completedDate: createDate(1, -1),
+    counterparty: 'uhCAkUppepDnLMkfHsF787MDOAbX8KOmF2PytK7TnZnEdYfNUL-ro',
+    direction: 'Outgoing',
+    status: 'Completed',
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAA',
+    proofOfServiceToken:
+      'osT+WBHXMNm+HXtLO3x4Bf6JARASF5cJvA/ywwAYj6YO8UZtFjD3iZsr6iGkEHaIPuESAUdlthPT9KtqXFShjQ==',
     url: null,
-    expiration_date: createDate(2022, 8, 25)
+    happ: {
+      name: 'BAA',
+      id: 'uhCkk3BySOE9QOVcIa9OA6ClaPMJfnbjmdWGqhFQ6wFhk-FJrkUR7ji'
+    },
+    expirationDate: createDate(1, 0),
+    type: 'Request',
+    invoiceDetails: {
+      start: 1666828474041950,
+      end: 1666828475099560,
+      service_logs_range: {
+        quantity: 0,
+        price: 0
+      },
+      bandwidth: {
+        quantity: 0,
+        price: 0
+      },
+      compute: {
+        quantity: 0,
+        price: 0
+      },
+      storage: {
+        quantity: 0,
+        price: 0
+      }
+    }
   },
   {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6M',
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE63',
     amount: '1234563.89',
-    created_date: createDate(2022, 8, 28),
-    completed_date: createDate(2022, 8, 30),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
+    createdDate: createDate(3, -2),
+    completedDate: createDate(1, -1),
+    counterparty: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj3',
+    direction: 'Outgoing',
+    status: 'Completed',
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAA',
+    proofOfServiceToken:
+      'osT+WBHXMNm+HXtLO3x4Bd6JARASF5cJvA/ywwAYj6YO8UZtFjD3iZsr6iGkEHaIPuESAUdlthPT9KtqXFShj3==',
     url: null,
-    expiration_date: createDate(2022, 8, 30)
+    happ: {
+      name: 'BAB',
+      id: 'uhCkk3BySOE9QOVcIa9OA6ClaPMJfnbjmdWGqhFQ6wFhk-FJrkUR7j3'
+    },
+    expirationDate: createDate(1, 0),
+    type: 'Request',
+    invoiceDetails: {
+      start: 1666828474041950,
+      end: 1666828475099560,
+      service_logs_range: {
+        quantity: 0,
+        price: 0
+      },
+      bandwidth: {
+        quantity: 0,
+        price: 0
+      },
+      compute: {
+        quantity: 0,
+        price: 0
+      },
+      storage: {
+        quantity: 0,
+        price: 0
+      }
+    }
   },
   {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6N',
-    amount: '124561.93',
-    created_date: createDate(2022, 9, 28),
-    completed_date: createDate(2022, 9, 29),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE64',
+    amount: '1234.89',
+    createdDate: createDate(1, 0),
+    completedDate: createDate(1, 0),
+    counterparty: 'uhCAki0d39_k2EkZzuUESiw93zuRYoPh05vswcLsi566MC-Nxqtj4',
+    direction: 'Outgoing',
+    status: 'Completed',
+    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAA',
+    proofOfServiceToken:
+      'osT+WBHXMNm+HXtLO3x4Bf6JARASF5cJvA/ywwAYj6YO8UZtFjD3iZsr6iGkEHaIPuESAUdlthPT9KtqXFShj4==',
     url: null,
-    expiration_date: createDate(2022, 9, 30)
-  },
-  {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6O',
-    amount: '1234568.89',
-    created_date: createDate(2022, 9, 1),
-    completed_date: createDate(2022, 9, 3),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
-    url: null,
-    expiration_date: createDate(2022, 9, 25)
-  },
-  {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6P',
-    amount: '1234568.89',
-    created_date: createDate(2022, 9, 3),
-    completed_date: createDate(2022, 9, 4),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
-    url: null,
-    expiration_date: createDate(2022, 9, 5)
-  },
-  {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6R',
-    amount: '2234569.89',
-    created_date: createDate(2022, 9, 3),
-    completed_date: createDate(2022, 9, 4),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
-    url: null,
-    expiration_date: createDate(2022, 9, 9)
-  },
-  {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6S',
-    amount: '234563.89',
-    created_date: createDate(2022, 9, 3),
-    completed_date: createDate(2022, 9, 4),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
-    url: null,
-    expiration_date: createDate(2022, 9, 10)
-  },
-  {
-    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6T',
-    amount: '1234565.89',
-    created_date: createDate(2022, 9, 7),
-    completed_date: createDate(2022, 9, 9),
-    transaction_type: { Request: null },
-    counterparty: 'uhCAki0d39_k9ZzuUESiw09zuRYoPh05vswcLsi566MC-Nxqtuz',
-    direction: { Outgoing: null },
-    status: { Completed: null },
-    note: 'Holo Hosting Invoice <last 5 char of hha_id>:BAB',
-    proof_of_service_token: null,
-    url: null,
-    expiration_date: createDate(2022, 9, 11)
+    happ: {
+      name: 'BAB',
+      id: 'uhCkk3BySOE9QOVcIa9OA6ClaPMJfnbjmdWGqhFQ6wFhk-FJrkUR7j4'
+    },
+    expirationDate: createDate(1, 1),
+    type: 'Request',
+    invoiceDetails: {
+      start: 1666828474041950,
+      end: 1666828475099560,
+      service_logs_range: {
+        quantity: 0,
+        price: 0
+      },
+      bandwidth: {
+        quantity: 0,
+        price: 0
+      },
+      compute: {
+        quantity: 0,
+        price: 0
+      },
+      storage: {
+        quantity: 0,
+        price: 0
+      }
+    }
   }
 ]
-
-const mockUnpaidInvoicesData = {
-  invoice_pending: [
-    {
-      id: 'uhCEk8JMlpIf-ITDT7uND_zvyGG2hp6VhnYzG6WUpwOxF6ya8105V',
-      amount: '3.23',
-      created_date: createDate(2022, 9, 7),
-      completed_date: null,
-      transaction_type: { Request: null },
-      counterparty: 'uhCAkDOc0jde0SS4CO3HRThx5_cee2Nm_w-T30bTNE-uLmMoOoZzX',
-      direction: { Outgoing: null },
-      status: { Pending: null },
-      note: 'Holo Hosting Invoice <last 5 char of hha_id>: <hApp_name>',
-      proof_of_service_token: null,
-      url: null,
-      expiration_date: createDate(2022, 9, 11)
-    }
-  ],
-  promise_pending: [
-    {
-      id: 'uhCEkoQQJ2Ksp_FcqEnatDYBLFQzzWzStQdXE5SDDI4a2rqZyh7ik',
-      amount: '1.23',
-      created_date: 1663688288964525,
-      completed_date: null,
-      transaction_type: { Offer: null },
-      counterparty: 'uhCAkDOc0jde0SS4CO3HRThx5_cee2Nm_w-T30bTNE-uLmMoOoZzX',
-      direction: { Outgoing: null },
-      status: { Pending: null },
-      note: 'Holo Hosting Invoice <last 5 char of hha_id>: <hApp_name>',
-      proof_of_service_token: null,
-      url: null,
-      expiration_date: 9007199254740991
-    }
-  ],
-  invoice_declined: [],
-  promise_declined: [],
-  accepted: []
-}
 
 const holoNixpkgs = {
   holo_nixpkgs: {
@@ -428,7 +450,8 @@ const data = {
     '/holochain-api/v1/hosted_happs': happs,
     '/holochain-api/v1/usage': usage,
     '/holochain-api/v1/host_earnings': earnings,
-    '/holochain-api/v1/core_app_version': coreAppVersion
+    '/holochain-api/v1/core_app_version': coreAppVersion,
+    '/holochain-api/v1/host_invoices': mockPaidInvoicesData
   },
   put: {
     '/api/v1/config': (args) => args,
@@ -439,10 +462,6 @@ const data = {
       switch (args.fnName) {
         case 'get_my_profile':
           return getMyProfile
-        case 'get_completed_transactions':
-          return mockPaidInvoicesData
-        case 'get_pending_transactions':
-          return mockUnpaidInvoicesData
       }
     }
   }
@@ -468,4 +487,4 @@ function defaultResponse(method, path, body) {
 
 module.exports = defaultResponse
 exports.mockPaidInvoicesData = mockPaidInvoicesData
-exports.mockUnpaidInvoicesData = mockUnpaidInvoicesData
+/* eslint-enable no-magic-numbers */

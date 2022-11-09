@@ -109,7 +109,10 @@ const translations = {
   },
   login: {
     ...commonTranslations.login,
-    title: 'Host Console Login'
+    title: 'Host Console Login',
+    errors: {
+      frozen_holochain: 'Holochain appears frozen, try re-loading the page and logging in again'
+    }
   },
   recent_payments: {
     title: 'Recent Payments',
@@ -149,7 +152,8 @@ const translations = {
     step_one_title: 'Welcome to Host Console',
     step_two_button_label: 'I understand',
     step_two_title: 'Your Address & Identity',
-    error: 'Oops, looks like we could not update the display name. Please try again.'
+    error:
+      'Oops, looks like we could not update your display name. Try refreshing this page and if the problem persists, please contact support.'
   }
 }
 

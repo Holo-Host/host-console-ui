@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { useHposInterface } from '@/interfaces/HposInterface'
 
-const { getCompletedTransactions, getPendingTransactions } = useHposInterface()
+const { getPaidInvoices, getUnpaidInvoices } = useHposInterface()
 
 export const useEarningsStore = defineStore('earnings', {
   state: () => ({
@@ -12,15 +12,15 @@ export const useEarningsStore = defineStore('earnings', {
 
   actions: {
     async getPaidInvoices() {
-      const completedTransactions = await getCompletedTransactions()
-      this.paidInvoices = completedTransactions
-      return completedTransactions
+      const paidInvoices = await getPaidInvoices()
+      this.paidInvoices = paidInvoices
+      return paidInvoices
     },
 
     async getUnpaidInvoices() {
-      const pendingTransactions = await getPendingTransactions()
-      this.unpaidInvoices = pendingTransactions.invoice_pending
-      return pendingTransactions
+      const unpaidInvoices = await getUnpaidInvoices()
+      this.unpaidInvoices = unpaidInvoices
+      return unpaidInvoices
     }
   }
 })

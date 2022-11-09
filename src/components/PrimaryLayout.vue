@@ -67,8 +67,9 @@ import TheSidebar from 'components/sidebar/TheSidebar.vue'
 import TopNav from 'components/TopNav.vue'
 import { useUserStore } from '@/store/user'
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
+import { kAuthTokenLSKey, kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
 import { EModal } from '@/constants/ui'
+import router, { kRoutes } from '@/router'
 
 const userStore = useUserStore()
 const { showLoadingOverlay, hideOverlay } = useOverlay()
@@ -124,15 +125,23 @@ onMounted(async () => {
       isLoading.value = true
 
       showLoadingOverlay()
-      await userStore.getUser()
+
+      try {
+        await userStore.getUser()
+      } catch (e) {
+        localStorage.removeItem(kAuthTokenLSKey)
+        await router.push({ name: kRoutes.login.name })
+      }
 
       hideOverlay()
       isLoading.value = false
     }
 
-    if (!userStore.holoFuel.nickname) {
-      showModal(EModal.welcome)
-    }
+    await nextTick(() => {
+      if (!userStore.holoFuel.nickname) {
+        showModal(EModal.welcome)
+      }
+    })
   })
 })
 </script>
