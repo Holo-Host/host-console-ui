@@ -1,10 +1,6 @@
 <template>
   <div class="container">
     <div class="error-banner">
-      <LoginErrorBanner
-        :is-visible="!!errors.api"
-        :message="errors.api"
-      />
     </div>
 
     <form
@@ -86,9 +82,7 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
-import LoginErrorBanner from 'components/LoginErrorBanner'
 import validator from 'email-validator'
-import { generateToken } from 'utils'
 import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -96,6 +90,7 @@ import HposInterface from '../interfaces/HposInterface'
 import { kAuthTokenLSKey } from '@/constants'
 import { kRoutes } from '@/router'
 import { useUserStore } from '@/store/user'
+import { generateToken } from '@/utils'
 
 const kMinPasswordLength = 5
 
