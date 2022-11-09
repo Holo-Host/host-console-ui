@@ -17,7 +17,7 @@
 
     <BaseEditableInput
       is-disabled
-      :value="data.frequency.amount"
+      :value="formatCurrency(Number(data.frequency.amount), 0)"
       unit="HF"
       class="invoices-frequency-section__amount"
       @update:value="onFrequencyAmountChange"
@@ -26,7 +26,8 @@
 </template>
 
 <script setup >
-import BaseEditableInput from 'components/BaseEditableInput'
+import { formatCurrency } from '@uicommon/utils/numbers'
+import BaseEditableInput from 'components/BaseEditableInput.vue'
 import TimeDropdownSelect from 'components/TimeDropdownSelect.vue'
 import SettingsRow from '../SettingsRow.vue'
 
@@ -60,6 +61,7 @@ function onFrequencyAmountChange(value) {
     margin-left: 4px;
     margin-top: -2px;
     text-decoration: underline;
+    text-underline-offset: 2px;
     font-weight: 700;
   }
 }
