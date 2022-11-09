@@ -1,5 +1,12 @@
 <template>
   <div class="container">
+    <div class="error-banner">
+      <LoginErrorBanner
+        :is-visible="!!errors.api"
+        :message="errors.api"
+      />
+    </div>
+
     <form
       class="form"
       @submit.prevent=""
@@ -78,32 +85,34 @@
 <script setup>
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
-import { useBanner } from '@uicommon/composables/useBanner'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
+import LoginErrorBanner from 'components/LoginErrorBanner'
 import validator from 'email-validator'
+import { generateToken } from 'utils'
 import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import HposInterface from '../interfaces/HposInterface'
-import { kRoutes } from '../router'
-import { useUserStore } from '../store/user'
-import { generateToken } from '../utils'
 import { kAuthTokenLSKey } from '@/constants'
+import { kRoutes } from '@/router'
+import { useUserStore } from '@/store/user'
 
 const kMinPasswordLength = 5
 
 const validateEmail = (email) => validator.validate(email)
 const validatePassword = (password) => password.length > kMinPasswordLength
 
+let errorTimeoutInstance = null
+const kErrorTimeout = 5000
+
 const router = useRouter()
 const { t } = useI18n()
-const { showBanner, hideBanner } = useBanner()
 
 const userStore = useUserStore()
 
 const email = ref('')
 const password = ref('')
-const errors = reactive({ email: '', password: '' })
+const errors = reactive({ email: '', password: '', api: '' })
 const isLoading = ref(false)
 
 const version = computed(() => process.env.VUE_APP_UI_VERSION)
@@ -120,7 +129,8 @@ onMounted(async () => {
 watch(
   () => email.value,
   (value) => {
-    hideBanner()
+    errors.api = ''
+    clearTimeout(errorTimeoutInstance)
 
     if (errors.email && validateEmail(value)) {
       errors.email = ''
@@ -131,7 +141,8 @@ watch(
 watch(
   () => password.value,
   (value) => {
-    hideBanner()
+    errors.api = ''
+    clearTimeout(errorTimeoutInstance)
 
     if (errors.password && validatePassword(value)) {
       errors.password = ''
@@ -150,6 +161,19 @@ async function createAuthHeaders(email, password) {
   } else {
     return null
   }
+}
+
+function showApiError(message) {
+  if (errors.api) {
+    errors.api = ''
+    clearTimeout(errorTimeoutInstance)
+  }
+
+  errors.api = message
+
+  errorTimeoutInstance = setTimeout(() => {
+    errors.api = ''
+  }, kErrorTimeout)
 }
 
 async function login() {
@@ -171,17 +195,22 @@ async function login() {
         if (authHeaders) {
           localStorage.setItem(kAuthTokenLSKey, authHeaders.authToken)
 
-          await userStore.getUser()
+          try {
+            await userStore.getUser()
+          } catch (e) {
+            localStorage.removeItem(kAuthTokenLSKey)
+            showApiError(t('login.errors.frozen_holochain'))
+          }
 
           await router.push({ name: kRoutes.dashboard.name })
         } else {
-          showBanner({ message: t('$.errors.login_failed') })
+          showApiError(t('$.errors.login_failed'))
         }
       } else {
         await router.push({ name: kRoutes.dashboard.name })
       }
     } catch (e) {
-      showBanner({ message: t('$.errors.login_failed') })
+      showApiError(t('$.errors.login_failed'))
     } finally {
       isLoading.value = false
     }
@@ -191,15 +220,20 @@ async function login() {
 
 <style scoped>
 .container {
-  padding-top: 70px;
-  margin-left: 78px;
-  margin-right: 78px;
+  padding: 24px;
   align-self: center;
+}
+
+.error-banner {
+  display: flex;
+  justify-content: center;
+  margin: 0;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .form-box {
@@ -208,16 +242,16 @@ async function login() {
   border-radius: 4px;
   display: flex;
   flex-direction: column;
-  margin-top: 60px;
+  margin-top: 30px;
   margin-bottom: 32px;
-  padding: 58px 62px 54px 62px;
+  padding: 42px 24px 38px;
 }
 
 .title {
+  text-align: center;
+  font-size: 26px;
   color: var(--grey-color);
-  align-self: center;
   font-weight: 600;
-  font-size: 28px;
   margin: 0;
 }
 
@@ -279,9 +313,32 @@ async function login() {
 }
 
 @media screen and (max-width: 1050px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 1050px) {
+  .container {
+    width: 720px;
+    padding-top: 64px;
+    margin-left: 78px;
+    margin-right: 78px;
+  }
+
+  .error-banner {
+    padding: 0 24px;
+  }
+
   .title {
-    text-align: center;
-    font-size: 26px;
+    font-size: 28px;
+  }
+
+  .form-box {
+    padding: 58px 62px 54px 62px;
   }
 }
 </style>
