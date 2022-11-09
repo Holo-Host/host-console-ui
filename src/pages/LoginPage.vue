@@ -1,6 +1,10 @@
 <template>
   <div class="container">
     <div class="error-banner">
+      <LoginErrorBanner
+        :is-visible="!!errors.api"
+        :message="errors.api"
+      />
     </div>
 
     <form
@@ -82,6 +86,7 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
+import LoginErrorBanner from 'components/LoginErrorBanner'
 import validator from 'email-validator'
 import { reactive, ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
