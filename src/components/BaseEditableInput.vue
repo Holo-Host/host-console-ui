@@ -1,7 +1,7 @@
 <template>
   <div class="editable-input">
     <span v-if="!isEditing">
-      {{ value }}
+      {{ value }} {{ unit }}
     </span>
 
     <div
@@ -27,7 +27,12 @@
         @click="cancel"
       />
     </div>
-    <span class="editable-input__unit">{{ unit }}</span>
+    <span
+      v-if="isEditing"
+      class="editable-input__unit"
+    >
+      {{ unit }}
+    </span>
     <PencilIcon
       v-if="!isEditing"
       class="editable-input__editable-value-icon"
@@ -86,7 +91,7 @@ function cancel() {
 .editable-input {
   display: flex;
   align-items: center;
-  color: var(--grey-dark-color);
+  color: var(--grey-color);
 
   &__editable-value {
     display: flex;
@@ -114,7 +119,6 @@ function cancel() {
 
   &__unit {
     margin-left: 3px;
-    color: var(--grey-color);
     font-weight: 700;
   }
 }

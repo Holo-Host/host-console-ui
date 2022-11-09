@@ -1,7 +1,7 @@
 import axios from 'axios'
-import stringify from 'fast-json-stable-stringify'
 import router from 'src/router'
-import { eraseHpAdminKeypair, getHpAdminKeypair, hashString } from 'src/utils/keyManagement'
+import { eraseHpAdminKeypair, getHpAdminKeypair } from 'src/utils/keyManagement'
+import { retry } from 'utils/functionUtils'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 
 require('dotenv').config()
@@ -230,22 +230,17 @@ const HposInterface = {
       return { adminSignature }
     } catch (err) {
       // This will be executed if response.status === 401
-      console.log('User authentication failed', err)
+      console.error('User authentication failed', err)
       return null
     }
   },
 
-  getUser: async () => {
-    try {
-      const user = await HposInterface.getSettings()
-      const holoport = await HposInterface.getHposStatus()
-      const holoFuelProfile = await HposInterface.getHoloFuelProfile()
+  async getUser() {
+    const user = await HposInterface.getSettings()
+    const holoport = await HposInterface.getHposStatus()
+    const holoFuelProfile = await HposInterface.getHoloFuelProfile()
 
-      return { user, holoport, holoFuelProfile }
-    } catch (error) {
-      console.error('getUser failed', error)
-      return false
-    }
+    return { user, holoport, holoFuelProfile }
   },
 
   getHposStatus: async () => {
@@ -277,7 +272,7 @@ const HposInterface = {
     }
   },
 
-  // Return firs 7 characters of holoport's revision
+  // Return first 7 characters of holoport's revision
   formatHposVersion: (holoNixpkgs) => {
     const strLen = 7
     return holoNixpkgs && holoNixpkgs.current_system && holoNixpkgs.current_system.rev
@@ -315,33 +310,31 @@ const HposInterface = {
     }
   },
 
-  getHoloFuelProfile: async () => {
-    try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'profile',
-        fnName: 'get_my_profile',
-        payload: null
-      }
-
-      const {
-        agent_address: agentAddress,
-        nickname,
-        avatar_url: avatarUrl
-      } = await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
-      })
-
-      return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
-    } catch (error) {
-      return {
-        nickname: null,
-        avatarUrl: null
-      }
+  async getHoloFuelProfileAttempt() {
+    const params = {
+      appId: localStorage.getItem(kCoreAppVersionLSKey),
+      roleId: 'holofuel',
+      zomeName: 'profile',
+      fnName: 'get_my_profile',
+      payload: null
     }
+
+    const {
+      agent_address: agentAddress,
+      nickname,
+      avatar_url: avatarUrl
+    } = await hposHolochainCall({
+      method: 'post',
+      path: '/zome_call',
+      params
+    })
+
+    return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+  },
+
+  getHoloFuelProfile() {
+    const kRetries = 2
+    return retry(HposInterface.getHoloFuelProfileAttempt, kRetries)
   },
 
   async updateHoloFuelProfile({ nickname, avatarUrl }) {
