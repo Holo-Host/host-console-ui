@@ -65,10 +65,11 @@ import MobileTopNav from 'components/MobileTopNav'
 import WelcomeModal from 'components/modals/WelcomeModal'
 import TheSidebar from 'components/sidebar/TheSidebar'
 import TopNav from 'components/TopNav'
-import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
+import { kAuthTokenLSKey, kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { EModal } from '@/constants/ui'
+import router, { kRoutes } from '@/router'
 
 const userStore = useUserStore()
 const { showLoadingOverlay, hideOverlay } = useOverlay()
@@ -124,7 +125,13 @@ onMounted(async () => {
       isLoading.value = true
 
       showLoadingOverlay()
-      await userStore.getUser()
+
+      try {
+        await userStore.getUser()
+      } catch (e) {
+        localStorage.removeItem(kAuthTokenLSKey)
+        await router.push({ name: kRoutes.login.name })
+      }
 
       hideOverlay()
       isLoading.value = false
