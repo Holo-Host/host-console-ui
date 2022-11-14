@@ -1,16 +1,17 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
-import { eraseHpAdminKeypair, getHpAdminKeypair } from 'src/utils/keyManagement'
-import { retry } from 'utils/functionUtils'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
+import { retry } from '@/utils/functionUtils'
+import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
 interface HposInterface {
   getUsage: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getTopHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getHostEarnings: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  getHostPreferences: () => Promise<HposHolochainCallResponse | { error: unknown }>
   checkAuth: (
     email: string,
     password: string,
@@ -51,7 +52,7 @@ interface HposConfigResponse {
 }
 
 interface HoloFuelProfileResponse {
-  agent_address: string
+  agent_address: number[]
   nickname: string
   avatar_url: string
 }
@@ -68,6 +69,7 @@ type HposHolochainCallResponse =
   | HoloFuelProfileResponse
   | CoreAppVersionResponse
   | Promise<PaidTransactions[] | boolean>
+  | CoreAppVersion
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -369,27 +371,27 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function setHostPreferences(hostPreferences): Promise<HposHolochainCallResponse> {
-    try {
-      const params: Record<string, unknown> = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'core-app',
-        zomeName: 'hha',
-        fnName: 'set_happ_preferences',
-        payload: hostPreferences
-      }
-
-      await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params
-      })
-
-      return true
-    } catch (error) {
-      return false
-    }
-  }
+  // async function setHostPreferences(hostPreferences): Promise<HposHolochainCallResponse> {
+  //   try {
+  //     const params: Record<string, unknown> = {
+  //       appId: localStorage.getItem(kCoreAppVersionLSKey),
+  //       roleId: 'core-app',
+  //       zomeName: 'hha',
+  //       fnName: 'set_happ_preferences',
+  //       payload: hostPreferences
+  //     }
+  //
+  //     await hposHolochainCall({
+  //       method: 'post',
+  //       path: '/zome_call',
+  //       params
+  //     })
+  //
+  //     return true
+  //   } catch (error) {
+  //     return false
+  //   }
+  // }
 
   async function checkAuth(
     email: string,
@@ -484,16 +486,17 @@ export function useHposInterface(): HposInterface {
       payload: null
     }
 
-    const {
-      agent_address: agentAddress,
-      nickname,
-      avatar_url: avatarUrl
-    } = await hposHolochainCall({
+    const response = await hposHolochainCall({
       method: 'post',
       path: '/zome_call',
       params
     })
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { agent_address: agentAddress, nickname, avatar_url: avatarUrl } = response
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
     return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
   }
 
@@ -607,7 +610,6 @@ export function useHposInterface(): HposInterface {
     getUnpaidInvoices,
     getCoreAppVersion,
     getHostPreferences,
-    setHostPreferences,
     HPOS_API_URL
   }
 }

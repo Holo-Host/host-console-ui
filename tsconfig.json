@@ -53,7 +53,7 @@
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
-    "src/interfaces/HposInterface.ts"
+    "src/interfaces/*"
   ],
   "ts-node": {
     "compilerOptions": {
