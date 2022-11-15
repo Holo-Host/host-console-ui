@@ -29,8 +29,8 @@
           </div>
         </div>
         <div class="payment-time">
-          {{ payment ? dayjs(payment.updatedAt).format('DD MMM') : '--' }}
-          {{ payment ? dayjs(payment.updatedAt).format('hh:mm') : '--' }}
+          {{ payment?.completedDate ? dayjs(payment.completedDate).format('DD MMM') : '--' }}
+          {{ payment?.completedDate ? dayjs(payment.updatedAt).format('HH:mm') : '' }}
         </div>
       </div>
     </div>
@@ -95,6 +95,7 @@ const isError = computed(() => !!props.data.error)
   font-size: 9px;
   line-height: 12px;
   margin-top: 4px;
+  margin-left: 3px;
 }
 
 .no-payments {
