@@ -94,8 +94,7 @@ const HposInterface = {
         method: 'get',
         path: '/usage',
         params: {
-          duration_unit: 'DAY',
-          amount: 1
+          usage_interval: 1
         }
       })
     } catch (error) {
@@ -111,8 +110,7 @@ const HposInterface = {
         method: 'get',
         path: '/hosted_happs',
         params: {
-          duration_unit: 'WEEK',
-          amount: 1,
+          usage_interval: 7,
           quantity: kTopHappsToDisplay
         }
       })
@@ -135,8 +133,7 @@ const HposInterface = {
         method: 'get',
         path: '/hosted_happs',
         params: {
-          duration_unit: 'WEEK',
-          amount: 1
+          usage_interval: 7
         }
       })
 

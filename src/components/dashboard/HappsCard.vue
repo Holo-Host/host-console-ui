@@ -27,7 +27,7 @@
             {{ happ.name }}
           </div>
           <div class="card-info-row margin-bottom">
-            {{ happ.sourceChains }} source chains
+            {{ happ.hostedAgents }} source chains
           </div>
         </div>
       </div>

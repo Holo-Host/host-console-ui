@@ -6,11 +6,11 @@ const mockHappData = {
   earnings: '-- ',
   sevenDayEarnings: '-- ',
   description: '',
-  sourceChains: '-- ',
-  storage: '-- ',
+  hostedAgents: '-- ',
   usage: {
     cpu: '-- ',
-    bandwidth: '-- '
+    bandwidth: '-- ',
+    storage: '-- '
   }
 }
 
