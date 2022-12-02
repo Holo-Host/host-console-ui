@@ -55,7 +55,7 @@
             <ClockIcon class="clock-icon" /> Hosted for:&nbsp;<span class="info">{{ happ.hostedDays }} days</span>
           </div>
           <div class="info-row chains-margin">
-            <ChainIcon class="chain-icon" /> Total source chains:&nbsp;<span class="info">{{ happ.sourceChains }}</span>
+            <ChainIcon class="chain-icon" /> Total source chains:&nbsp;<span class="info">{{ happ.hostedAgents }}</span>
           </div>
           <div class="usage-row">
             <span class="usage-label">Total usage:</span>
@@ -63,7 +63,7 @@
               <span class="usage-value">{{ presentMicroSeconds(happ.usage.cpu) }}</span> CPU
             </div>
             <div class="usage">
-              <span class="usage-value">{{ presentBytes(happ.storage) }}</span> Storage
+              <span class="usage-value">{{ presentBytes(happ.usage.storage) }}</span> Storage
             </div>
             <div class="usage">
               <span class="usage-value">{{ presentBytes(happ.usage.bandwidth) }}</span> Bandwidth

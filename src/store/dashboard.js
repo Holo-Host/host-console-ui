@@ -5,7 +5,7 @@ export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
     usage: {
       totalHostedHapps: 0,
-      totalSourceChains: 0,
+      totalHostedAgents: 0,
       currentTotalStorage: 0,
       totalUsage: {
         cpu: 0,
