@@ -58,7 +58,7 @@ const items = computed(() => [
   {
     label: t('holofuel.balance'),
     value:
-      props.data && Number(props.data.balance) ? formatCurrency(Number(props.data.balance)) : 0,
+      props.data && Number(props.data.available) ? formatCurrency(Number(props.data.available)) : 0,
     isActive: true
   },
   {
