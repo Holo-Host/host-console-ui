@@ -20,7 +20,7 @@
         <span
           class="bold"
           data-testid="sc-no"
-        >{{ data ? data.totalHostedAgents : 0 }}&nbsp;</span> {{ $t('usage.total_source_chains_hosted') }}
+        >{{ data ? data.totalHostedAgents : 0 }}&nbsp;</span> {{ $t('usage.total_users_hosted') }}
       </div>
 
       <router-link
