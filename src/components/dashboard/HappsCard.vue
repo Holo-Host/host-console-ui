@@ -27,7 +27,7 @@
             {{ happ.name }}
           </div>
           <div class="card-info-row margin-bottom">
-            {{ happ.hostedAgents }} source chains
+            {{ $t('usage.users', happ.hostedAgents, { count: happ.hostedAgents }) }}
           </div>
         </div>
       </div>
