@@ -8,11 +8,11 @@ const happs = [
     name: 'HoloFuel',
     enabled: true,
     isPaused: true,
-    sourceChains: 110,
-    storage: 3902834,
+    hostedAgents: 110,
     usage: {
       bandwidth: 349082,
-      cpu: 49083408432
+      cpu: 49083408432,
+      storage: 3902834
     }
   },
   {
@@ -20,11 +20,11 @@ const happs = [
     name: 'Community',
     enabled: true,
     isPaused: false,
-    sourceChains: 79,
-    storage: 709049842834,
+    hostedAgents: 79,
     usage: {
       bandwidth: 59084358,
-      cpu: 83408432
+      cpu: 83408432,
+      storage: 709049842834
     }
   },
   {
@@ -32,11 +32,11 @@ const happs = [
     name: 'Elemental Chat',
     enabled: true,
     isPaused: false,
-    sourceChains: 34,
-    storage: 50949882,
+    hostedAgents: 34,
     usage: {
       bandwidth: 98559083,
-      cpu: 595430
+      cpu: 595430,
+      storage: 50949882
     }
   },
   {
@@ -48,14 +48,14 @@ const happs = [
 
 const usage = {
   totalHostedHapps: 1,
-  totalSourceChains: 0,
+  totalHostedAgents: 0,
   currentTotalStorage: 0,
   totalUsage: { cpu: 0, bandwidth: 0 }
 }
 
 const earnings = {
   earnings: { last30days: 1343209.4, last7days: 447768.54, lastday: 34209.4 },
-  holofuel: { balance: '0' },
+  holofuel: { balance: '0', available: '0' },
   recentPayments: [
     {
       id: 1,

@@ -18,15 +18,16 @@
         :key="happ.id"
         class="top-happ-row"
       >
-        <div class="logo">
-          <MissingLogoExIcon class="ex-icon" />
-        </div>
+        <HAppImage
+          :happ="happ"
+          size="37px"
+        />
         <div class="top-happ-details">
           <div class="card-info-row">
             {{ happ.name }}
           </div>
           <div class="card-info-row margin-bottom">
-            {{ happ.sourceChains }} source chains
+            {{ $t('usage.users', happ.hostedAgents, { count: happ.hostedAgents }) }}
           </div>
         </div>
       </div>
@@ -34,9 +35,9 @@
   </BaseCard>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import BaseCard from '@uicommon/components/BaseCard.vue'
-import MissingLogoExIcon from 'components/icons/MissingLogoExIcon.vue'
+import HAppImage from '@uicommon/components/HAppImage.vue'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -56,7 +57,7 @@ const isError = computed(() => !!props.data.error)
 const emit = defineEmits(['try-again-clicked'])
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .body {
   height: 100%;
 }
@@ -68,15 +69,6 @@ const emit = defineEmits(['try-again-clicked'])
 
 .margin-bottom {
   margin-bottom: 10px;
-}
-
-.logo {
-  border: 1px solid #e7e9ed;
-  box-sizing: border-box;
-  border-radius: 5px;
-  width: 37px;
-  height: 37px;
-  margin: 0 16px;
 }
 
 .no-happs {

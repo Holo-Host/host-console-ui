@@ -32,7 +32,7 @@ describe('dashboard page', () => {
 
     const usageResult = {
       data: {
-        totalSourceChains: 387,
+        totalHostedAgents: 387,
         currentTotalStorage: 590348543805,
         totalUsage: {
           cpu: 39084998,
@@ -81,6 +81,6 @@ describe('dashboard page', () => {
     await wait(0)
 
     expect(getByTestId('happ-no').textContent === hostedHappsResult.data.length)
-    expect(getByTestId('sc-no').textContent === usageResult.data.totalSourceChains)
+    expect(getByTestId('sc-no').textContent === usageResult.data.totalHostedAgents)
   })
 })

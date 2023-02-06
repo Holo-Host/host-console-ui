@@ -88,7 +88,7 @@ import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
 import LoginErrorBanner from 'components/LoginErrorBanner'
 import validator from 'email-validator'
-import { reactive, ref, computed, watch, onMounted } from 'vue'
+import { reactive, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useHposInterface } from '@/interfaces/HposInterface'
@@ -204,12 +204,16 @@ async function login() {
             showApiError(t('login.errors.frozen_holochain'))
           }
 
-          await router.push({ name: kRoutes.dashboard.name })
+          await nextTick(async () => {
+            await router.push({ name: kRoutes.dashboard.name })
+          })
         } else {
           showApiError(t('$.errors.login_failed'))
         }
       } else {
-        await router.push({ name: kRoutes.dashboard.name })
+        await nextTick(async () => {
+          await router.push({ name: kRoutes.dashboard.name })
+        })
       }
     } catch (e) {
       showApiError(t('$.errors.login_failed'))

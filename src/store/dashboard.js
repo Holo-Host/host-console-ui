@@ -7,7 +7,7 @@ export const useDashboardStore = defineStore('dashboard', {
   state: () => ({
     usage: {
       totalHostedHapps: 0,
-      totalSourceChains: 0,
+      totalHostedAgents: 0,
       currentTotalStorage: 0,
       totalUsage: {
         cpu: 0,
@@ -16,7 +16,7 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     hostEarnings: {
       earnings: { last30days: '0', last7days: '0', lastday: '0' },
-      holofuel: { balance: '0' },
+      holofuel: { balance: '0', available: '0' },
       recentPayments: []
     },
     hostedHapps: []

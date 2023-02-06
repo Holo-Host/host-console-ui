@@ -140,7 +140,8 @@ const translations = {
     daily_snapshot: 'Daily Snapshot',
     title: 'Usage',
     total_happs_hosted: 'Total hApps hosted',
-    total_source_chains_hosted: 'Total source chains hosted'
+    total_users_hosted: 'Total users hosted',
+    users: '{count} user | {count} users'
   },
   welcome_modal: {
     first_paragraph:
