@@ -176,8 +176,8 @@ const kBaseRules = {
     }
   ],
   // good-practice
-  'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+  'no-console': import.meta.env.NODE_ENV === 'production' ? 'error' : 'off',
+  'no-debugger': import.meta.env.NODE_ENV === 'production' ? 'error' : 'off'
 }
 
 /*
@@ -483,7 +483,7 @@ module.exports = {
         '@typescript-eslint/naming-convention': ['error', {
           selector: ['typeProperty'],
           format: ['UPPER_CASE'],
-          filter: '^VUE_APP_'
+          filter: '^VITE_'
         }, ...kNamingConventions]
       }
     }, // Plain js

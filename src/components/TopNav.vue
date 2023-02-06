@@ -42,8 +42,8 @@
 </template>
 
 <script setup>
-import RightChevronIcon from 'components/icons/RightChevronIcon.vue'
-import TopNavMenu from 'components/TopNavMenu.vue'
+import RightChevronIcon from '@/components/icons/RightChevronIcon.vue'
+import TopNavMenu from '@/components/TopNavMenu.vue'
 import { computed } from 'vue'
 
 const props = defineProps({

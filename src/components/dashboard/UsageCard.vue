@@ -71,8 +71,8 @@
 
 <script setup lang="ts">
 import BaseCard from '@uicommon/components/BaseCard.vue'
-import GearIcon from 'components/icons/GearIcon.vue'
-import { presentMicroSeconds, presentBytes } from 'src/utils'
+import GearIcon from '@/components/icons/GearIcon.vue'
+import { presentMicroSeconds, presentBytes } from '@/utils'
 import { computed } from 'vue'
 
 const props = defineProps({

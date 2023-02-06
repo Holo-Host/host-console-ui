@@ -26,12 +26,12 @@
 
 <script setup>
 import CashIcon from '@uicommon/components/icons/CashIcon'
-import GearIcon from 'components/icons/GearIcon.vue'
-import HappsIcon from 'components/icons/HappsIcon.vue'
-import HomeIcon from 'components/icons/HomeIcon.vue'
-import TheSidebarAlphaBanner from 'components/sidebar/TheSidebarAlphaBanner'
-import TheSidebarFooter from 'components/sidebar/TheSidebarFooter'
-import TheSidebarItem from 'components/sidebar/TheSidebarItem'
+import GearIcon from '@/components/icons/GearIcon.vue'
+import HappsIcon from '@/components/icons/HappsIcon.vue'
+import HomeIcon from '@/components/icons/HomeIcon.vue'
+import TheSidebarAlphaBanner from '@/components/sidebar/TheSidebarAlphaBanner'
+import TheSidebarFooter from '@/components/sidebar/TheSidebarFooter'
+import TheSidebarItem from '@/components/sidebar/TheSidebarItem'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { kRoutes } from '@/router'

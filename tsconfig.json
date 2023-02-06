@@ -31,7 +31,6 @@
     "useUnknownInCatchVariables": true,
     "lib": ["esnext", "dom"],
 
-    // This defines paths used by alias-hq
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],

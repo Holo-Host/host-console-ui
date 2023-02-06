@@ -41,14 +41,14 @@ import BaseSearchInput from '@uicommon/components/BaseSearchInput'
 import BaseTable from '@uicommon/components/BaseTable'
 import { useFilter, EFilterTypes } from '@uicommon/composables/useFilter'
 import { formatCurrency } from '@uicommon/utils/numbers'
-import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
+import InvoicesTableRow from '@/components/invoices/InvoicesTableRow'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import dayjs from 'dayjs'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { kRoutes } from '../router'
-import { useEarningsStore } from '../store/earnings'
+import { kRoutes } from '@/router'
+import { useEarningsStore } from '@/store/earnings'
 
 const { t } = useI18n()
 const router = useRouter()

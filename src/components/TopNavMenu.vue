@@ -56,7 +56,7 @@
 
 <script setup>
 import Identicon from '@uicommon/components/Identicon.vue'
-import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
+import DownTriangleIcon from '@/components/icons/DownTriangleIcon.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'

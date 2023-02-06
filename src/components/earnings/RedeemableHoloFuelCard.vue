@@ -43,10 +43,10 @@
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
 import BaseLinkButton from '@uicommon/components/BaseLinkButton'
-import CardHeader from 'components/earnings/CardHeader'
-import RightArrowIcon from 'components/icons/FatArrowIcon'
-import RedemptionHistoryIcon from 'components/icons/RedemptionHistoryIcon'
-import TransferIcon from 'components/icons/TransferIcon'
+import CardHeader from '@/components/earnings/CardHeader'
+import RightArrowIcon from '@/components/icons/FatArrowIcon'
+import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon'
+import TransferIcon from '@/components/icons/TransferIcon'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 const emit = defineEmits(['try-again-clicked'])

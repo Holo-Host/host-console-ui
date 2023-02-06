@@ -54,7 +54,7 @@ import BaseTableRow from '@uicommon/components/BaseTableRow'
 import BaseTableRowItem from '@uicommon/components/BaseTableRowItem'
 import Identicon from '@uicommon/components/Identicon'
 import { decodeAgentId } from '@uicommon/utils/agent'
-import PaidInvoicesExpandableContent from 'components/invoices/PaidInvoicesExpandableContent'
+import PaidInvoicesExpandableContent from '@/components/invoices/PaidInvoicesExpandableContent'
 
 defineProps({
   invoice: {

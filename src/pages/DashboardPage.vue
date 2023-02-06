@@ -47,16 +47,16 @@
 </template>
 
 <script setup>
-import EarningsCard from 'components/dashboard/EarningsCard.vue'
-import HappsCard from 'components/dashboard/HappsCard.vue'
-import HoloFuelCard from 'components/dashboard/HoloFuelCard.vue'
-import RecentPaymentsCard from 'components/dashboard/RecentPaymentsCard.vue'
-import UsageCard from 'components/dashboard/UsageCard.vue'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import { useDashboardStore } from 'src/store/dashboard'
+import EarningsCard from '@/components/dashboard/EarningsCard.vue'
+import HappsCard from '@/components/dashboard/HappsCard.vue'
+import HoloFuelCard from '@/components/dashboard/HoloFuelCard.vue'
+import RecentPaymentsCard from '@/components/dashboard/RecentPaymentsCard.vue'
+import UsageCard from '@/components/dashboard/UsageCard.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import { useDashboardStore } from '@/store/dashboard'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { kRoutes } from '../router'
+import { kRoutes } from '@/router'
 
 const kPaymentsToDisplay = 3
 

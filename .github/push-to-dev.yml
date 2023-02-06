@@ -21,7 +21,7 @@
 #      - name: Deploy storybook to GitHub Pages
 #        run: |
 #          cat <<EOF >".env"
-#            VUE_APP_HPOS_PORT: 4567
+#            VITE_HPOS_PORT: 4567
 #          EOF
 #          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
 #          yarn deploy-storybook

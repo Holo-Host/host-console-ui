@@ -28,15 +28,15 @@ describe.skip('Login Flow', () => {
   let mockHposApi, router
 
   beforeAll(async () => {
-    if (!process.env.VUE_APP_HPOS_PORT) {
+    if (!import.meta.env.VITE_HPOS_PORT) {
       throw new Error(
-        'VUE_APP_HPOS_PORT env variable is undefined. Please provide a .env file or otherwise define it. See .env.example'
+        'VITE_HPOS_PORT env variable is undefined. Please provide a .env file or otherwise define it. See .env.example'
       )
     }
 
     // the +1 in this line depends on the +1 in the definition of HPOS_PORT in HposInterface.ts
     mockHposApi = await MockHposApi.start(
-      Number(process.env.VUE_APP_HPOS_PORT) + 1,
+      Number(import.meta.env.VITE_HPOS_PORT) + 1,
       email,
       password
     )

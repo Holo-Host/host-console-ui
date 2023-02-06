@@ -31,16 +31,16 @@ yarn
 Create the .env file in the root folder and add following value.
 
 ### Start UI server using real HoloPort as backend
-Set `VUE_APP_HOLOPORT_URL` value in .env file to the HoloPort URL.
+Set `VITE_HOLOPORT_URL` value in .env file to the HoloPort URL.
 
 ```
-VUE_APP_HOLOPORT_URL=your_holoport_url_here
+VITE_HOLOPORT_URL=your_holoport_url_here
 ```
 
 e.g.
 
 ```
-VUE_APP_HOLOPORT_URL=https://00000000000000000000.holohost.dev
+VITE_HOLOPORT_URL=https://00000000000000000000.holohost.dev
 ```
 
 Start UI server
@@ -53,8 +53,8 @@ Using this command, all requests to `localhost:8080/api/` and `localhost:8080/ho
 If you want to run it against mocked data you will need to run it as below.
 
 ### Start mock HPOS API server for development
-Remove `VUE_APP_HOLOPORT_URL` value from .env file.
-Set `VUE_APP_HPOS_PORT=4567` in .env file.
+Remove `VITE_HOLOPORT_URL` value from .env file.
+Set `VITE_HPOS_PORT=4567` in .env file.
 
 Run mock HPOS API server
 ```
@@ -76,7 +76,7 @@ and
 yarn test
 ```
 
-Note: you must have a .env file with `VUE_APP_HPOS_PORT` for tests to pass as it uses the mocked HPOS API server.
+Note: you must have a .env file with `VITE_HPOS_PORT` for tests to pass as it uses the mocked HPOS API server.
 
 ### Compiles and minifies for production
 ```

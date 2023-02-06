@@ -1,7 +1,7 @@
-const path = require('path')
-const webpack = require('webpack');
+const path = require('path-browserify')
+const webpack = require('webpack')
 
-const holoportUrl = process.env.VUE_APP_HOLOPORT_URL
+const holoportUrl = import.meta.env.VITE_HOLOPORT_URL
 
 module.exports = {
   lintOnSave: false,
@@ -17,6 +17,7 @@ module.exports = {
         types: path.resolve(__dirname, 'src/types'),
         vue: path.resolve(__dirname, '/node_modules/vue')
       },
+      extensions: ['.js', '.ts', '.vue', '.json'],
       fallback: {
         buffer: require.resolve('buffer/'),
         os: require.resolve('os-browserify/browser'),
@@ -32,7 +33,7 @@ module.exports = {
     plugins: [
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer']
-      }),
+      })
     ]
   },
   devServer: holoportUrl && {

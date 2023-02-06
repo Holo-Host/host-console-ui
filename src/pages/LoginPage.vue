@@ -78,6 +78,13 @@
       <div class="version">
         {{ $t('$.app_version', { app: 'Host Console', version }) }}
       </div>
+
+			<div
+				v-if="isDev"
+				class="version"
+			>
+				(DEVELOPMENT ONLY) currently using HP: {{ devHoloPortUrl }}
+      </div>
     </div>
   </div>
 </template>
@@ -86,7 +93,7 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
-import LoginErrorBanner from 'components/LoginErrorBanner'
+import LoginErrorBanner from '@/components/LoginErrorBanner'
 import validator from 'email-validator'
 import { reactive, ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -117,7 +124,10 @@ const password = ref('')
 const errors = reactive({ email: '', password: '', api: '' })
 const isLoading = ref(false)
 
-const version = computed(() => process.env.VUE_APP_UI_VERSION)
+const version = computed(() => import.meta.env.VITE_UI_VERSION)
+
+const isDev = computed(() => import.meta.env.MODE === 'development')
+const devHoloPortUrl = computed(() => import.meta.env.VITE_HOLOPORT_URL)
 
 onMounted(async () => {
   // redirect from login page if user already logged in
@@ -193,6 +203,8 @@ async function login() {
     try {
       if (localStorage.getItem(kAuthTokenLSKey) === null) {
         const authHeaders = await createAuthHeaders(email.value, password.value)
+
+				console.log('authHeaders', authHeaders)
 
         if (authHeaders) {
           localStorage.setItem(kAuthTokenLSKey, authHeaders.authToken)

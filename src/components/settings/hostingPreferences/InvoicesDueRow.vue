@@ -18,7 +18,7 @@
 </template>
 
 <script setup >
-import TimeDropdownSelect from 'components/TimeDropdownSelect.vue'
+import TimeDropdownSelect from '@/components/TimeDropdownSelect.vue'
 import SettingsRow from '../SettingsRow.vue'
 
 const props = defineProps({

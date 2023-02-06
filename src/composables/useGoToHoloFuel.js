@@ -1,5 +1,5 @@
-import { useModals } from '@uicommon/composables/useModals'
-import { EModal } from '@uicommon/types/ui'
+import { useModals } from '@uicommon/composables/useModals.js'
+import { EModal } from '@uicommon/types/ui.js'
 import { kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
 
 const { showModal } = useModals()

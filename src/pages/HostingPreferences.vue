@@ -19,10 +19,10 @@
 </template>
 
 <script setup>
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import HAppSelectionSection from 'components/settings/hostingPreferences/HAppSelectionSection'
-import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
-import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import HAppSelectionSection from '@/components/settings/hostingPreferences/HAppSelectionSection'
+import InvoicesSection from '@/components/settings/hostingPreferences/InvoicesSection.vue'
+import PricesSection from '@/components/settings/hostingPreferences/PricesSection.vue'
 import { ref, computed, onMounted } from 'vue'
 import { usePreferencesStore } from '@/store/preferences'
 

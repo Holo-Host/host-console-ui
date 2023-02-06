@@ -44,10 +44,10 @@
 <script setup>
 import BaseCard from '@uicommon/components/BaseCard'
 import BaseLinkButton from '@uicommon/components/BaseLinkButton'
-import WeeklyEarningsData from 'components/earnings/WeeklyEarningsData'
-import FilledExclamationIcon from 'components/icons/FilledExclamationIcon'
-import PaymentIcon from 'components/icons/PaymentIcon'
-import UnpaidLateIcon from 'components/icons/UnpaidLateIcon'
+import WeeklyEarningsData from '@/components/earnings/WeeklyEarningsData'
+import FilledExclamationIcon from '@/components/icons/FilledExclamationIcon'
+import PaymentIcon from '@/components/icons/PaymentIcon'
+import UnpaidLateIcon from '@/components/icons/UnpaidLateIcon'
 import { kRoutes } from '@/router'
 
 const emit = defineEmits(['try-again-clicked'])

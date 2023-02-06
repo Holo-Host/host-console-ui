@@ -33,8 +33,8 @@
 </template>
 
 <script setup >
-import InvoicesDueRow from 'components/settings/hostingPreferences/InvoicesDueRow.vue'
-import InvoicesFrequencyRow from 'components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
+import InvoicesDueRow from '@/components/settings/hostingPreferences/InvoicesDueRow.vue'
+import InvoicesFrequencyRow from '@/components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
 import SettingsSection from '../SettingsSection.vue'
 
 defineProps({

@@ -1,9 +1,9 @@
 // Parse window.location to retrieve holoPort's HC public key (3rd level subdomain in URL)
 const getHcPubkey = () => {
-  if (process.env.VUE_APP_USE_REAL_PUB_KEY === 'true') {
+  if (import.meta.env.VITE_USE_REAL_PUB_KEY === 'true') {
     return window.location.hostname.split('.')[0]
-  } else if (process.env.VUE_APP_HOLOPORT_URL) {
-    return new URL(process.env.VUE_APP_HOLOPORT_URL).hostname.split('.')[0]
+  } else if (import.meta.env.VITE_HOLOPORT_URL) {
+    return new URL(import.meta.env.VITE_HOLOPORT_URL).hostname.split('.')[0]
   } else {
     return '5m5srup6m3b2iilrsqmxu6ydp8p8cr0rdbh4wamupk3s4sxqr5'
   }

@@ -1,13 +1,13 @@
-import Earnings from 'pages/EarningsPage.vue'
-import HappDetails from 'pages/HappDetails.vue'
-import HAppsPage from 'pages/HAppsPage.vue'
-import HostingPreferences from 'pages/HostingPreferences.vue'
-import InvoicesPage from 'pages/InvoicesPage.vue'
-import DashboardPage from 'src/pages/DashboardPage.vue'
-import LoginPage from 'src/pages/LoginPage.vue'
-import SettingsPage from 'src/pages/SettingsPage.vue'
 import { createWebHistory, createRouter, Router } from 'vue-router'
-import { kAuthTokenLSKey } from '@/constants'
+import { kAuthTokenLSKey } from './constants'
+import DashboardPage from './pages/DashboardPage.vue'
+import Earnings from './pages/EarningsPage.vue'
+import HappDetails from './pages/HappDetails.vue'
+import HAppsPage from './pages/HAppsPage.vue'
+import HostingPreferences from './pages/HostingPreferences.vue'
+import InvoicesPage from './pages/InvoicesPage.vue'
+import LoginPage from './pages/LoginPage.vue'
+import SettingsPage from './pages/SettingsPage.vue'
 
 export const kRoutes = {
   login: {

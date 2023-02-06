@@ -37,7 +37,7 @@
 </template>
 
 <script setup >
-import PencilIcon from 'components/icons/PencilIcon.vue'
+import PencilIcon from '@/components/icons/PencilIcon.vue'
 import SettingsSection from '../SettingsSection.vue'
 </script>
 

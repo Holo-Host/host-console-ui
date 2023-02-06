@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import MenuIcon from 'components/icons/MenuIcon.vue'
-import TheSidebar from 'components/sidebar/TheSidebar.vue'
-import TopNavMenu from 'components/TopNavMenu.vue'
+import MenuIcon from '@/components/icons/MenuIcon.vue'
+import TheSidebar from '@/components/sidebar/TheSidebar.vue'
+import TopNavMenu from '@/components/TopNavMenu.vue'
 import { ref } from 'vue'
 
 withDefaults(

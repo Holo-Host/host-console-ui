@@ -197,11 +197,11 @@ export function useHposInterface(): HposInterface {
 
   const kTopHappsToDisplay = 3
 
-  // bump port number by 1 for tests so we can run tests with the UI open
+  // bump port number by 1 for tests, so we can run tests with the UI open
   const HPOS_PORT =
-    process.env.NODE_ENV === 'test'
-      ? Number(process.env.VUE_APP_HPOS_PORT) + 1
-      : process.env.VUE_APP_HPOS_PORT
+    import.meta.env.NODE_ENV === 'test'
+      ? Number(import.meta.env.VITE_HPOS_PORT) + 1
+      : import.meta.env.VITE_HPOS_PORT
 
   const HPOS_API_URL = HPOS_PORT
     ? `http://localhost:${HPOS_PORT}`
@@ -225,6 +225,8 @@ export function useHposInterface(): HposInterface {
     }
 
     let response
+
+    console.log('hposCall', fullUrl, method, headers, params)
 
     switch (method) {
     case 'get':
@@ -289,8 +291,7 @@ export function useHposInterface(): HposInterface {
         method: 'get',
         path: '/usage',
         params: {
-          duration_unit: 'DAY',
-          amount: 1
+          usage_interval: 1
         }
       })
     } catch (error) {
@@ -306,8 +307,7 @@ export function useHposInterface(): HposInterface {
         method: 'get',
         path: '/hosted_happs',
         params: {
-          duration_unit: 'WEEK',
-          amount: 1,
+          usage_interval: 7,
           quantity: kTopHappsToDisplay
         }
       })
@@ -330,8 +330,7 @@ export function useHposInterface(): HposInterface {
         method: 'get',
         path: '/hosted_happs',
         params: {
-          duration_unit: 'WEEK',
-          amount: 1
+          usage_interval: 7
         }
       })
 

@@ -27,8 +27,8 @@
 
 <script setup >
 import { formatCurrency } from '@uicommon/utils/numbers'
-import BaseEditableInput from 'components/BaseEditableInput.vue'
-import TimeDropdownSelect from 'components/TimeDropdownSelect.vue'
+import BaseEditableInput from '@/components/BaseEditableInput.vue'
+import TimeDropdownSelect from '@/components/TimeDropdownSelect.vue'
 import SettingsRow from '../SettingsRow.vue'
 
 const props = defineProps({
