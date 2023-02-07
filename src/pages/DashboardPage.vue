@@ -1,9 +1,13 @@
 <template>
-  <PrimaryLayout title="Dashboard">
+  <PrimaryLayout
+		title="Dashboard"
+		data-test-dashboard-layout
+	>
     <div class="row">
       <UsageCard
         :is-loading="isLoadingUsage"
         :data="usage"
+				data-test-dashboard-usage-card
         @try-again-clicked="getUsage"
       />
 
@@ -11,6 +15,7 @@
         :is-loading="isLoadingEarnings"
         :data="holoFuel"
         class="holofuel-card"
+				data-test-dashboard-holo-fuel-card
         @try-again-clicked="getEarnings"
       />
     </div>
@@ -21,6 +26,7 @@
         :is-loading="isLoadingHostedHapps"
         with-more-button
         class="happs-card"
+				data-test-dashboard-happs-card
         @more-clicked="() => router.push({ name: kRoutes.happs.name })"
         @try-again-clicked="getTopHostedHapps"
       />
@@ -30,6 +36,7 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="earnings-card"
+				data-test-dashboard-earnings-card
         @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
         @try-again-clicked="getEarnings"
       />
@@ -39,6 +46,7 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="payments-card"
+				data-test-dashboard-payments-card
         @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
         @try-again-clicked="getEarnings"
       />

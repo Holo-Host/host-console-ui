@@ -1,26 +1,30 @@
 import { createTestingPinia } from '@pinia/testing'
-import { render } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from '@/router'
 import { createI18n } from 'vue-i18n'
-import wait from 'waait'
 import HAppsPage from '../HAppsPage.vue'
-import locales from '@/locales'
+import { messages } from '@/locales'
 import { useHposInterface } from '@/interfaces/HposInterface'
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
+import { rest } from 'msw'
+
+const clickOutside = vi.fn()
 
 const { HPOS_API_URL } = useHposInterface()
-
-const clickOutside = jest.fn()
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
-jest.mock('axios')
+vi.mock('axios', () => {
+
+})
+
 mockGlobalCrypto()
 
 describe('happs page', () => {
@@ -29,18 +33,44 @@ describe('happs page', () => {
     axios.put.mockClear()
   })
 
-  it('calls the hosted_happs endpoint', async () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
+  const setup = () => {
+    return mount(HAppsPage, {
+      global: {
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            createSpy() {
+              return () => {
+                return Promise.resolve()
+              }
+            }
+          }),
+        ],
+        directives: {
+          clickOutside
+        }
+      }
+    })
+  }
+
+
+  describe('renders', async () => {
     const hostedHappsResult = {
       data: []
     }
 
     axios.get.mockImplementation((path) => {
       if (path.endsWith('/api/v1/config')) {
-        return Promise.resolve(defaultSettingsResult)
+        return defaultSettingsResult
       }
 
       if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
-        return Promise.resolve(defaultSshAccessResult)
+        return defaultSshAccessResult
       }
 
       if (path.endsWith('hosted_happs')) {
@@ -50,17 +80,10 @@ describe('happs page', () => {
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
-    render(HAppsPage, {
-      global: {
-        plugins: [router, createTestingPinia(), i18n],
-        directives: {
-          clickOutside
-        }
-      }
+    setup()
+
+    it('calls the hosted_happs endpoint', async () => {
+      expect(axios.get.mock).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
     })
-
-    await wait(0)
-
-    expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
   })
 })

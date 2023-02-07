@@ -1,5 +1,8 @@
 <template>
-  <div class="sidebar-alpha-banner">
+  <div
+		class="sidebar-alpha-banner"
+		data-test-sidebar-alpha-banner
+	>
     <div class="sidebar-alpha-banner__flag">
       {{ $t('sidebar.alpha.title') }}
       <div class="sidebar-alpha-banner__triangle" />

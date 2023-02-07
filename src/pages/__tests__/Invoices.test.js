@@ -9,6 +9,7 @@ import InvoicesPage from '@/pages/InvoicesPage.vue'
 import router from '@/router'
 import { useEarningsStore } from '@/store/earnings'
 import { useHposInterface } from '@/interfaces/HposInterface'
+import { describe, it, expect } from 'vitest'
 
 const { HPOS_API_URL } = useHposInterface()
 

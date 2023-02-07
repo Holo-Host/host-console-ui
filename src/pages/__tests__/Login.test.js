@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import wait from 'waait'
 import Login from '../LoginPage.vue'
 import locales from '@/locales'
+import { describe, it, expect } from 'vitest'
 
 const i18n = createI18n({
   legacy: false,

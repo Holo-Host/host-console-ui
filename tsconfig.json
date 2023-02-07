@@ -29,7 +29,7 @@
     ],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
-    "lib": ["esnext", "dom"],
+    "lib": ["vite/client", "@types/jest","esnext", "dom"],
 
     "baseUrl": ".",
     "paths": {

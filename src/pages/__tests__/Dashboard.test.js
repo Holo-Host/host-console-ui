@@ -1,23 +1,25 @@
 import { createTestingPinia } from '@pinia/testing'
-import { render } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants.js'
 import { mockGlobalCrypto } from 'src/__tests__/utils.js'
 import router from '@/router'
 import { createI18n } from 'vue-i18n'
-import wait from 'waait'
 import DashboardPage from '../DashboardPage.vue'
-import locales from '@/locales'
-const clickOutside = jest.fn()
+import { messages } from '@/locales'
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
+import {useDashboardStore} from '@/store/dashboard';
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
-jest.mock('axios')
+vi.mock('axios')
 mockGlobalCrypto()
+
+const clickOutside = vi.fn()
 
 describe('dashboard page', () => {
   beforeEach(() => {
@@ -25,7 +27,35 @@ describe('dashboard page', () => {
     axios.put.mockClear()
   })
 
-  it('shows the proper data', async () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
+  const setup = () => {
+    return mount(DashboardPage, {
+      global: {
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            createSpy() {
+              return () => {
+                return Promise.resolve()
+              }
+            }
+          }),
+        ],
+        directives: {
+          clickOutside
+        }
+      }
+    })
+  }
+
+
+  describe('renders', () => {
+    const wrapper = setup()
+
     const hostedHappsResult = {
       data: [{ enabled: true }, { enabled: true }, { enabled: true }] // this page just cares about length
     }
@@ -69,18 +99,28 @@ describe('dashboard page', () => {
       throw new Error(`axios mock doesn't recognise this path: ${path}`)
     })
 
-    const { getByTestId } = render(DashboardPage, {
-      global: {
-        plugins: [router, createTestingPinia(), i18n],
-        directives: {
-          clickOutside
-        }
-      }
+    it('with primary layout', async () => {
+      expect(wrapper.findAll('[data-test-dashboard-layout]')).toHaveLength(1)
     })
 
-    await wait(0)
+    it('with usage card', async () => {
+      expect(wrapper.findAll('[data-test-dashboard-usage-card]')).toHaveLength(1)
+    })
 
-    expect(getByTestId('happ-no').textContent === hostedHappsResult.data.length)
-    expect(getByTestId('sc-no').textContent === usageResult.data.totalHostedAgents)
+    it('with HoloFuel card', async () => {
+      expect(wrapper.findAll('[data-test-dashboard-holo-fuel-card]')).toHaveLength(1)
+    })
+
+    it('with hApps card', async () => {
+      expect(wrapper.findAll('[data-test-dashboard-happs-card]')).toHaveLength(1)
+    })
+
+    it('with earnings card', async () => {
+      expect(wrapper.findAll('[data-test-dashboard-earnings-card]')).toHaveLength(1)
+    })
+
+    it('with payments card', async () => {
+      expect(wrapper.findAll('[data-test-dashboard-payments-card]')).toHaveLength(1)
+    })
   })
 })

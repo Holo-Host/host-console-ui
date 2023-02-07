@@ -1,13 +1,14 @@
 <template>
   <PrimaryLayout
     :title="$t('$.earnings')"
-    data-testid="earnings-page"
-  >
+		data-test-earnings-layout
+	>
     <div>
       <WeeklyEarningsCard
         :data="weeklyEarnings"
         :is-loading="isLoading"
         :is-error="isError"
+				data-test-earnings-weekly-earnings-card
         @try-again-clicked="getEarnings"
       />
 
@@ -15,6 +16,7 @@
         :data="redeemableHoloFuel"
         :is-loading="false"
         :is-error="false"
+				data-test-earnings-redeemable-holo-fuel-card
         class="redeemable-holofuel-card"
         @try-again-clicked="getEarnings"
       />

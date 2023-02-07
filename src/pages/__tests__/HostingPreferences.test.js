@@ -9,6 +9,7 @@ import wait from 'waait'
 import HostingPreferences from '../HostingPreferences.vue'
 import locales from '@/locales'
 const clickOutside = jest.fn()
+import { describe, it, expect } from 'vitest'
 
 const i18n = createI18n({
   legacy: false,

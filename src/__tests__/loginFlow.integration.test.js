@@ -6,6 +6,7 @@ import { routerFactory } from '../router'
 import { eraseHpAdminKeypair } from '../utils/keyManagement'
 import { kDefaultWaitTime } from './constants'
 require('dotenv').config()
+import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest'
 
 Object.defineProperty(global, 'crypto', {
   value: {
@@ -18,7 +19,7 @@ Object.defineProperty(global, 'crypto', {
 // These tests have to use @vue/test-utils currently because @testing-library/vue does not yet have full support for
 // testing vue router in Vue 3. Once @testing-library/vue has caught up, we can rewrite these tests using that so that
 // 1) all tests use the same library and
-// 2) these tests will be user centric and not depend on class querySelectors.
+// 2) these tests will be user-centric and not depend on class querySelectors.
 
 // skipping flaky tests for now. This is tracked on the board as tech debt
 describe.skip('Login Flow', () => {

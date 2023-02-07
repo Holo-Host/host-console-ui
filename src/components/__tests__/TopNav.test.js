@@ -5,6 +5,7 @@ import { kRoutes } from '@/router.ts'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from '../TopNav.vue'
+import { it } from 'vitest'
 
 const clickOutside = jest.fn()
 
