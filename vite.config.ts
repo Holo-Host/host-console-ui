@@ -11,6 +11,14 @@ import { configDefaults } from 'vitest/config'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
+  const envVariables = {
+    VITE_HOLOPORT_URL: env.VITE_HOLOPORT_URL,
+    VITE_HPOS_PORT: env.VITE_HPOS_PORT,
+    VITE_UI_VERSION: env.VITE_UI_VERSION
+  }
+
+  console.log(envVariables)
+
   return {
     resolve: {
       alias: {
@@ -28,6 +36,7 @@ export default defineConfig(({ mode }) => {
       })
     ],
     server: env.VITE_HOLOPORT_URL && {
+      port: 8080,
       proxy: {
         '/api/*': {
           target: env.VITE_HOLOPORT_URL,

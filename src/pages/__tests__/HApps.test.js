@@ -9,7 +9,6 @@ import HAppsPage from '../HAppsPage.vue'
 import { messages } from '@/locales'
 import { useHposInterface } from '@/interfaces/HposInterface'
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
-import { rest } from 'msw'
 
 const clickOutside = vi.fn()
 
@@ -57,7 +56,6 @@ describe('happs page', () => {
       }
     })
   }
-
 
   describe('renders', async () => {
     const hostedHappsResult = {

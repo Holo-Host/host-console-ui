@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-const { version } = require('../../../package.json')
+import { version } from '../../../package.json'
 </script>
 
 <style lang="scss" scoped>
