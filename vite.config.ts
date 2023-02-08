@@ -38,11 +38,11 @@ export default defineConfig(({ mode }) => {
     server: env.VITE_HOLOPORT_URL && {
       port: 8080,
       proxy: {
-        '/api/*': {
+        '^/api/*': {
           target: env.VITE_HOLOPORT_URL,
           changeOrigin: true
         },
-        '/holochain-api/*': {
+        '^/holochain-api/*': {
           target: env.VITE_HOLOPORT_URL,
           changeOrigin: true
         }

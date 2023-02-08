@@ -78,13 +78,6 @@
       <div class="version">
         {{ $t('$.app_version', { app: 'Host Console', version }) }}
       </div>
-
-			<div
-				v-if="isDev"
-				class="version"
-			>
-				(DEVELOPMENT ONLY) currently using HP: {{ devHoloPortUrl }}
-      </div>
     </div>
   </div>
 </template>
@@ -125,9 +118,6 @@ const errors = reactive({ email: '', password: '', api: '' })
 const isLoading = ref(false)
 
 const version = computed(() => import.meta.env.VITE_UI_VERSION)
-
-const isDev = computed(() => import.meta.env.MODE === 'development')
-const devHoloPortUrl = computed(() => import.meta.env.VITE_HOLOPORT_URL)
 
 onMounted(async () => {
   // redirect from login page if user already logged in
@@ -203,8 +193,6 @@ async function login() {
     try {
       if (localStorage.getItem(kAuthTokenLSKey) === null) {
         const authHeaders = await createAuthHeaders(email.value, password.value)
-
-				console.log('authHeaders', authHeaders)
 
         if (authHeaders) {
           localStorage.setItem(kAuthTokenLSKey, authHeaders.authToken)
@@ -328,6 +316,14 @@ async function login() {
 
 .version {
   margin-top: 20px;
+}
+
+.dev-notes {
+	position: absolute;
+	display: flex;
+	justify-items: center;
+	bottom: 20px;
+	color: var(--grey-color);
 }
 
 @media screen and (max-width: 1050px) {

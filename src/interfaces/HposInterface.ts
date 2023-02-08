@@ -226,8 +226,6 @@ export function useHposInterface(): HposInterface {
 
     let response
 
-    console.log('hposCall', fullUrl, method, headers, params)
-
     switch (method) {
     case 'get':
       response = await axios.get(fullUrl, { params, headers })
