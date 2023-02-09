@@ -1,18 +1,14 @@
 import { createTestingPinia } from '@pinia/testing'
 import { mount } from '@vue/test-utils'
 import axios from 'axios'
-import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from '@/router'
 import { createI18n } from 'vue-i18n'
 import HAppsPage from '../HAppsPage.vue'
 import { messages } from '@/locales'
-import { useHposInterface } from '@/interfaces/HposInterface'
-import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
+import { expect, describe, it, vi } from 'vitest'
 
 const clickOutside = vi.fn()
-
-const { HPOS_API_URL } = useHposInterface()
 
 const i18n = createI18n({
   legacy: false,
@@ -20,27 +16,10 @@ const i18n = createI18n({
   messages
 })
 
-vi.mock("axios", () => {
-  return {
-    default: {
-      get: vi.fn()
-    }
-  }
-})
-
-// const axiosGetSpy = vi.spyOn(axios, 'get')
-
+vi.mock('axios')
 mockGlobalCrypto()
 
 describe('happs page', () => {
-  beforeEach(() => {
-    axios.get.mockClear()
-  })
-
-  afterEach(() => {
-    vi.clearAllMocks()
-  })
-
   const setup = () => {
     return mount(HAppsPage, {
       global: {
@@ -67,29 +46,14 @@ describe('happs page', () => {
       data: []
     }
 
-    // axios.get.mockResolvedValue(hostedHappsResult)
+    axios.get.mockResolvedValue({
+      data: hostedHappsResult,
+    })
 
-    // axios.get.mockImplementation((path) => {
-    //   if (path.endsWith('/api/v1/config')) {
-    //     return defaultSettingsResult
-    //   }
-    //
-    //   if (path.endsWith('/holochain-api/v1/hosted_happs')) {
-    //     return hostedHappsResult
-    //   }
-    //
-    //   throw new Error(`axios mock doesn't recognise this path: ${path}`)
-    // })
-
-    const wrapper = setup()
-
-    wrapper.
+    setup()
 
     it('calls the /holochain-api/v1/hosted_happs endpoint', async () => {
-      // expect(axios.get).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
-      // expect(axiosGetSpy).toHaveBeenCalledTimes(1)
-      expect(axios.get).toHaveBeenCalledTimes(1)
-      // expect(spy).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
+      expect(axios.get.mock.calls[0][0]).toContain('/holochain-api/v1/hosted_happs')
     })
   })
 })
