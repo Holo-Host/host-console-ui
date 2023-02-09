@@ -3,6 +3,7 @@ import axios from 'axios'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
+import type { CheckAuthResponse } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
@@ -12,11 +13,7 @@ interface HposInterface {
   getHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getHostEarnings: () => Promise<HposHolochainCallResponse | { error: unknown }>
   getHostPreferences: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  checkAuth: (
-    email: string,
-    password: string,
-    authToken: string
-  ) => Promise<Record<string, unknown> | string | boolean | null>
+  checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
   getUser: () => Promise<Record<string, unknown> | boolean>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
@@ -394,7 +391,7 @@ export function useHposInterface(): HposInterface {
     email: string,
     password: string,
     authToken: string
-  ): Promise<Record<string, unknown> | string | boolean | null> {
+  ): Promise<CheckAuthResponse> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const keypair: { sign: (authToken: string) => string } = await getHpAdminKeypair(
       email,

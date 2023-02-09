@@ -22,6 +22,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": false,
+    "strictNullChecks": true,
     "target": "esnext",
     "types": [
       "node",
@@ -29,8 +30,7 @@
     ],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
-    "lib": ["vite/client", "@types/jest","esnext", "dom"],
-
+    "lib": ["ESNext", "dom"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],

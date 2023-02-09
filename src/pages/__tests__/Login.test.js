@@ -1,20 +1,16 @@
-// @testing-library/vue has not caught up all features of Vue 3 yet, specifically their support for tests involving routing
-// is not there. So while waiting for them, I'm using '@vue/test-utils' for routing tests.
 import { createTestingPinia } from '@pinia/testing'
-import { render, waitFor, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import { kRoutes } from '@/router'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
-import wait from 'waait'
 import Login from '../LoginPage.vue'
-import locales from '@/locales'
-import { describe, it, expect } from 'vitest'
+import { messages } from '@/locales'
+import { expect, describe, it, vi } from 'vitest'
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
 const router = createRouter({
@@ -39,112 +35,156 @@ const invalidPassword = '2shrt'
 const validEmail = 'test@test.com'
 const invalidEmail = 'invalidemail'
 
-jest.mock('src/interfaces/HposInterface')
+vi.mock('src/interfaces/HposInterface')
 
-it('shows a login button as disabled when no inputs provided', () => {
-  const { getByText } = render(Login, {
-    global: { plugins: [router, i18n, createTestingPinia()] }
-  })
-  const loginButton = getByText('Login').closest('button')
-  expect(loginButton).toHaveProperty('disabled', true)
-})
-
-it('shows a login button as disabled when only email is provided', async () => {
-  const { getByText, getByLabelText } = render(Login, {
-    global: { plugins: [router, i18n, createTestingPinia()] }
-  })
-
-  const emailField = getByLabelText('Email:')
-  await fireEvent.update(emailField, validEmail)
-
-  const loginButton = getByText('Login').closest('button')
-  expect(loginButton).toHaveProperty('disabled', true)
-})
-
-it('shows a login button as disabled when only password is provided', async () => {
-  const { getByText, getByLabelText } = render(Login, {
-    global: { plugins: [router, i18n, createTestingPinia()] }
-  })
-
-  const passwordField = getByLabelText('Password:')
-  await fireEvent.update(passwordField, validPassword)
-
-  const loginButton = getByText('Login').closest('button')
-  expect(loginButton).toHaveProperty('disabled', true)
-})
-
-it('shows an error when given a bad email', async () => {
-  const { getByLabelText, getByText } = render(Login, {
-    global: { plugins: [router, i18n, createTestingPinia()] }
-  })
-
-  const emailField = getByLabelText('Email:')
-  await fireEvent.update(emailField, invalidEmail)
-
-  const passwordField = getByLabelText('Password:')
-  await fireEvent.update(passwordField, validPassword)
-
-  const loginButton = getByText('Login')
-  await fireEvent.click(loginButton)
-
-  await waitFor(() => getByText('Please enter a valid email.'))
-})
-
-it('shows an error when given a bad password', async () => {
-  const { getByLabelText, getByText } = render(Login, {
-    global: { plugins: [router, i18n, createTestingPinia()] }
-  })
-
-  const emailField = getByLabelText('Email:')
-  await fireEvent.update(emailField, validEmail)
-
-  const passwordField = getByLabelText('Password:')
-  await fireEvent.update(passwordField, invalidPassword)
-
-  const loginButton = getByText('Login')
-  await fireEvent.click(loginButton)
-
-  await waitFor(() => getByText('Password must have at least 6 characters.'))
-})
-
-// skipping flakey tests for now. This is tracked on the board as tech debt
-it.skip('sets local storage and pushes the happs route on login', async () => {
-  const email = 'good@email.com'
-  const password = 'agoodpassword'
-
-  const mockRoute = {
-    params: {
-      nextUrl: null
-    }
-  }
-  const mockRouter = {
-    push: jest.fn()
-  }
-
-  HposInterface.useHposInterface.getUser.mockImplementationOnce(() => Promise.resolve(true))
-
-  const wrapper = mount(Login, {
-    global: {
-      mocks: {
-        $route: mockRoute,
-        $router: mockRouter
+describe('login page', () => {
+  const setup = () => {
+    return mount(Login, {
+      global: {
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            createSpy() {
+              return () => {
+                return Promise.resolve()
+              }
+            }
+          })
+        ]
       }
-    }
+    })
+  }
+
+  describe('initial render', async () => {
+    const wrapper = setup()
+
+    it('renders error banner', () => {
+      expect(wrapper.findAll('[data-test-login-page-error-banner]')).toHaveLength(1)
+    })
+
+    it('renders login form', () => {
+      expect(wrapper.findAll('[data-test-login-page-form]')).toHaveLength(1)
+    })
+
+    it('renders title', () => {
+      expect(wrapper.findAll('[data-test-login-page-form-title]')).toHaveLength(1)
+    })
+
+    it('renders subtitle', () => {
+      expect(wrapper.findAll('[data-test-login-page-form-subtitle]')).toHaveLength(1)
+    })
+
+    it('renders email input', () => {
+      expect(wrapper.find('[data-test-login-page-form-email-input]')).to.exist
+    })
+
+    it('renders password input', () => {
+      expect(wrapper.find('[data-test-login-page-form-password-input]')).to.exist
+    })
+
+    it('renders submit button', () => {
+      expect(wrapper.findAll('[data-test-login-page-form-submit-button]')).toHaveLength(1)
+    })
+
+    it('renders footer', () => {
+      expect(wrapper.findAll('[data-test-login-page-footer]')).toHaveLength(1)
+    })
   })
 
-  const emailField = wrapper.find('input[type="email"]')
-  await emailField.setValue(email)
+  describe('login button', async () => {
+    it('shows login button as disabled when no inputs provided', () => {
+      const wrapper = setup()
 
-  const passwordField = wrapper.find('input[type="password"]')
-  await passwordField.setValue(password)
+      expect(wrapper.findAll('[data-test-login-page-form-submit-button]')).toHaveLength(1)
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
 
-  const loginButton = wrapper.find('.login-button')
+      expect(button.attributes().disabled).toContain('')
+    })
 
-  await loginButton.trigger('click')
+    it('shows login button as disabled when only email is provided', async () => {
+      const wrapper = setup()
 
-  // eslint-disable-next-line no-magic-numbers
-  await wait(1000)
+      const emailInput = wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-input]')
+      await emailInput.setValue(validEmail)
 
-  expect(mockRouter.push).toHaveBeenCalledWith('/happs')
-  expect(localStorage.getItem('isAuthed')).toEqual('true')
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
+
+      expect(button.attributes().disabled).toContain('')
+    })
+
+    it('shows login button as disabled when only password is provided', async () => {
+      const wrapper = setup()
+
+      const passwordInput = wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-input]')
+      await passwordInput.setValue(validPassword)
+
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
+
+      expect(button.attributes().disabled).toContain('')
+    })
+
+    it('shows login button as enabled when email and password is provided', async () => {
+      const wrapper = setup()
+
+      const emailInput = wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-input]')
+      await emailInput.setValue(validEmail)
+      const passwordInput = wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-input]')
+      await passwordInput.setValue(validPassword)
+
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
+
+      expect(button.attributes().disabled).toBeFalsy()
+    })
+  })
+
+  describe('error state', async () => {
+    it('shows an error when bad email was given', async () => {
+      const wrapper = setup()
+
+      const emailInput = wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-input]')
+      await emailInput.setValue(invalidEmail)
+      const passwordInput = wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-input]')
+      await passwordInput.setValue(validPassword)
+
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
+      await button.trigger('click')
+
+      expect(wrapper.findAll('[data-test-login-page-form-email-input] [data-test-base-input-errors]')).toHaveLength(1)
+      expect(wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-errors]').text()).toContain('Please enter a valid email.')
+    })
+
+    it('shows an error when bad password was given', async () => {
+      const wrapper = setup()
+
+      const emailInput = wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-input]')
+      await emailInput.setValue(validEmail)
+      const passwordInput = wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-input]')
+      await passwordInput.setValue(invalidPassword)
+
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
+      await button.trigger('click')
+
+      expect(wrapper.findAll('[data-test-login-page-form-password-input] [data-test-base-input-errors]')).toHaveLength(1)
+      expect(wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-errors]').text()).toContain('Password must have at least 6 characters.')
+    })
+
+    it('does not show an error when valid email and password was given', async () => {
+      const wrapper = setup()
+
+      const emailInput = wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-input]')
+      await emailInput.setValue(validEmail)
+      const passwordInput = wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-input]')
+      await passwordInput.setValue(validPassword)
+
+      const button = wrapper.find('[data-test-login-page-form-submit-button]')
+      await button.trigger('click')
+
+      expect(wrapper.findAll('[data-test-login-page-form-email-input] [data-test-base-input-errors]')).toHaveLength(1)
+      expect(wrapper.find('[data-test-login-page-form-email-input] [data-test-base-input-errors]').text()).toContain('')
+
+      expect(wrapper.findAll('[data-test-login-page-form-password-input] [data-test-base-input-errors]')).toHaveLength(1)
+      expect(wrapper.find('[data-test-login-page-form-password-input] [data-test-base-input-errors]').text()).toContain('')
+    })
+  })
 })

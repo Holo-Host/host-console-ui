@@ -175,9 +175,6 @@ const kBaseRules = {
       avoidEscape: true
     }
   ],
-  // good-practice
-  'no-console': import.meta.env.NODE_ENV === 'production' ? 'error' : 'off',
-  'no-debugger': import.meta.env.NODE_ENV === 'production' ? 'error' : 'off'
 }
 
 /*
@@ -331,7 +328,7 @@ module.exports = {
   env: {
     node: true,
     browser: true,
-    es2021: true
+    es2022: true
   },
   extends: [
     'plugin:vue/vue3-essential',
@@ -373,8 +370,8 @@ module.exports = {
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:@typescript-eslint/eslint-recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking'],
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: './tsconfig.json',
-        sourceType: 'module'
+        sourceType: 'module',
+        project: './tsconfig.json'
       },
       rules: { ...kTypeScriptRules },
       excludedFiles: ['@/src/interfaces/*']
@@ -386,6 +383,7 @@ module.exports = {
       extends: ['plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking'],
       parser: 'vue-eslint-parser',
       parserOptions: {
+        extraFileExtensions: ['.vue'],
         parser: {
           // Script parser for `<script>`
           js: 'espree',

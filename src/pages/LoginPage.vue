@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="error-banner">
+    <div
+      class="error-banner"
+      data-test-login-page-error-banner
+    >
       <LoginErrorBanner
         :is-visible="!!errors.api"
         :message="errors.api"
@@ -9,14 +12,21 @@
 
     <form
       class="form"
+      data-test-login-page-form
       @submit.prevent=""
     >
       <div class="form-box">
-        <h1 class="title">
+        <h1
+          class="title"
+          data-test-login-page-form-title
+        >
           {{ $t('login.title') }}
         </h1>
 
-        <span class="subtitle">
+        <span
+          class="subtitle"
+          data-test-login-page-form-subtitle
+        >
           {{ $t('login.subtitle') }}
         </span>
 
@@ -30,6 +40,7 @@
           name="email"
           :message="errors.email"
           class="login-input"
+          data-test-login-page-form-email-input
         />
 
         <BaseLoginInput
@@ -41,6 +52,7 @@
           :label="$t('login.password')"
           name="password"
           :message="errors.password"
+          data-test-login-page-form-password-input
         />
 
         <BaseButton
@@ -48,6 +60,7 @@
           :is-busy="isLoading"
           :type="EButtonType.gray"
           class="login-button"
+          data-test-login-page-form-submit-button
           @click="login"
         >
           {{ $t('$.login') }}
@@ -55,56 +68,37 @@
       </div>
     </form>
 
-    <div class="footer">
-      <div>{{ $t('$.hosted_by') }}</div>
-      <div class="logo-row">
-        <img
-          src="/images/holo-logo-bw.png"
-          alt="holo logo"
-        /> {{ $t('$.holo') }}
-      </div>
-      <div>
-        {{ $t('login.password_reminder') }}
-      </div>
-      <div>
-        <a
-          href="https://holo.host/control-your-data"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {{ $t('$.learn_more') }}
-        </a> {{ $t('login.controlling_your_data') }}
-      </div>
-      <div class="version">
-        {{ $t('$.app_version', { app: 'Host Console', version }) }}
-      </div>
-    </div>
+    <LoginFooter data-test-login-page-footer />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
 import { EButtonType, EInputType } from '@uicommon/types/ui'
-import LoginErrorBanner from '@/components/LoginErrorBanner'
 import validator from 'email-validator'
-import { reactive, ref, computed, watch, onMounted, nextTick } from 'vue'
+import { reactive, ref, watch, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useHposInterface } from '@/interfaces/HposInterface'
+import LoginErrorBanner from '@/components/LoginErrorBanner'
+import LoginFooter from '@/components/LoginFooter.vue'
 import { kAuthTokenLSKey } from '@/constants'
+import { useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
 import { useUserStore } from '@/store/user'
+import { isAdminSignature } from '@/types/predicates'
+import type { AuthHeaders } from '@/types/types'
 import { generateToken } from '@/utils'
 
 const { checkAuth } = useHposInterface()
 
 const kMinPasswordLength = 5
 
-const validateEmail = (email) => validator.validate(email)
-const validatePassword = (password) => password.length > kMinPasswordLength
+const validateEmail = (email: string): boolean => validator.validate(email)
+const validatePassword = (password: string): boolean => password.length > kMinPasswordLength
 
-let errorTimeoutInstance = null
+// eslint-disable-next-line no-undef
+let errorTimeoutInstance: NodeJS.Timeout | null = null
 const kErrorTimeout = 5000
 
 const router = useRouter()
@@ -116,8 +110,6 @@ const email = ref('')
 const password = ref('')
 const errors = reactive({ email: '', password: '', api: '' })
 const isLoading = ref(false)
-
-const version = computed(() => import.meta.env.VITE_UI_VERSION)
 
 onMounted(async () => {
   // redirect from login page if user already logged in
@@ -132,7 +124,10 @@ watch(
   () => email.value,
   (value) => {
     errors.api = ''
-    clearTimeout(errorTimeoutInstance)
+
+    if (errorTimeoutInstance) {
+      clearTimeout(errorTimeoutInstance)
+    }
 
     if (errors.email && validateEmail(value)) {
       errors.email = ''
@@ -144,7 +139,10 @@ watch(
   () => password.value,
   (value) => {
     errors.api = ''
-    clearTimeout(errorTimeoutInstance)
+
+    if (errorTimeoutInstance) {
+      clearTimeout(errorTimeoutInstance)
+    }
 
     if (errors.password && validatePassword(value)) {
       errors.password = ''
@@ -152,23 +150,26 @@ watch(
   }
 )
 
-async function createAuthHeaders(email, password) {
+async function createAuthHeaders(): Promise<AuthHeaders | null> {
   const authToken = generateToken()
 
   // make a call to API to check if it passes auth
-  const { adminSignature } = await checkAuth(email.toLowerCase(), password, authToken)
+  const checkAuthResult = await checkAuth(email.value.toLowerCase(), password.value, authToken)
 
-  if (adminSignature) {
-    return { authToken, adminSignature }
+  if (isAdminSignature(checkAuthResult)) {
+    return { authToken, adminSignature: checkAuthResult.adminSignature }
   } else {
     return null
   }
 }
 
-function showApiError(message) {
+function showApiError(message: string): void {
   if (errors.api) {
     errors.api = ''
-    clearTimeout(errorTimeoutInstance)
+
+    if (errorTimeoutInstance) {
+      clearTimeout(errorTimeoutInstance)
+    }
   }
 
   errors.api = message
@@ -178,7 +179,7 @@ function showApiError(message) {
   }, kErrorTimeout)
 }
 
-async function login() {
+async function login(): Promise<void> {
   if (!validateEmail(email.value.toLowerCase())) {
     errors.email = t('$.errors.email')
   }
@@ -192,7 +193,7 @@ async function login() {
 
     try {
       if (localStorage.getItem(kAuthTokenLSKey) === null) {
-        const authHeaders = await createAuthHeaders(email.value, password.value)
+        const authHeaders = await createAuthHeaders()
 
         if (authHeaders) {
           localStorage.setItem(kAuthTokenLSKey, authHeaders.authToken)
@@ -204,14 +205,16 @@ async function login() {
             showApiError(t('login.errors.frozen_holochain'))
           }
 
-          await nextTick(async () => {
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          await nextTick(async (): Promise<void> => {
             await router.push({ name: kRoutes.dashboard.name })
           })
         } else {
           showApiError(t('$.errors.login_failed'))
         }
       } else {
-        await nextTick(async () => {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        await nextTick(async (): Promise<void> => {
           await router.push({ name: kRoutes.dashboard.name })
         })
       }
@@ -277,53 +280,6 @@ async function login() {
   align-self: center;
   width: 192px;
   margin-top: 24px;
-}
-
-.footer {
-  font-size: 12px;
-  line-height: 16px;
-
-  color: #000000;
-}
-
-.footer img {
-  width: 30px;
-  margin-right: 8px;
-}
-
-.footer .logo-row {
-  display: flex;
-  align-items: center;
-  font-family: 'Raleway', sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 23px;
-  letter-spacing: 0.6em;
-  color: #000000;
-  margin-top: 2px;
-  margin-bottom: 15px;
-}
-
-.footer div {
-  margin-bottom: 3px;
-}
-
-.footer a,
-.footer a:visited {
-  color: #000000;
-}
-
-.version {
-  margin-top: 20px;
-}
-
-.dev-notes {
-	position: absolute;
-	display: flex;
-	justify-items: center;
-	bottom: 20px;
-	color: var(--grey-color);
 }
 
 @media screen and (max-width: 1050px) {

@@ -20,16 +20,21 @@ const i18n = createI18n({
   messages
 })
 
-vi.mock('axios', () => {
-
+vi.mock("axios", () => {
+  return {
+    default: {
+      get: vi.fn()
+    }
+  }
 })
+
+// const axiosGetSpy = vi.spyOn(axios, 'get')
 
 mockGlobalCrypto()
 
 describe('happs page', () => {
   beforeEach(() => {
     axios.get.mockClear()
-    axios.put.mockClear()
   })
 
   afterEach(() => {
@@ -62,26 +67,29 @@ describe('happs page', () => {
       data: []
     }
 
-    axios.get.mockImplementation((path) => {
-      if (path.endsWith('/api/v1/config')) {
-        return defaultSettingsResult
-      }
+    // axios.get.mockResolvedValue(hostedHappsResult)
 
-      if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
-        return defaultSshAccessResult
-      }
+    // axios.get.mockImplementation((path) => {
+    //   if (path.endsWith('/api/v1/config')) {
+    //     return defaultSettingsResult
+    //   }
+    //
+    //   if (path.endsWith('/holochain-api/v1/hosted_happs')) {
+    //     return hostedHappsResult
+    //   }
+    //
+    //   throw new Error(`axios mock doesn't recognise this path: ${path}`)
+    // })
 
-      if (path.endsWith('hosted_happs')) {
-        return hostedHappsResult
-      }
+    const wrapper = setup()
 
-      throw new Error(`axios mock doesn't recognise this path: ${path}`)
-    })
+    wrapper.
 
-    setup()
-
-    it('calls the hosted_happs endpoint', async () => {
-      expect(axios.get.mock).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
+    it('calls the /holochain-api/v1/hosted_happs endpoint', async () => {
+      // expect(axios.get).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
+      // expect(axiosGetSpy).toHaveBeenCalledTimes(1)
+      expect(axios.get).toHaveBeenCalledTimes(1)
+      // expect(spy).toEqual(`${HPOS_API_URL}/holochain-api/v1/hosted_happs`)
     })
   })
 })
