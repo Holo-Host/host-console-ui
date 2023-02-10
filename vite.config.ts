@@ -1,6 +1,7 @@
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'url'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
+import inject from '@rollup/plugin-inject'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 import topLevelAwait from 'vite-plugin-top-level-await'
@@ -22,8 +23,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolve(dirname(fileURLToPath(import.meta.url)), './src'),
-        '@uicommon': resolve(dirname(fileURLToPath(import.meta.url)), './ui-common-library/src'),
-        buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6'
+        '@uicommon': resolve(dirname(fileURLToPath(import.meta.url)), './ui-common-library/src')
       },
       extensions: ['.js', '.ts', '.vue', '.json']
     },
@@ -33,6 +33,9 @@ export default defineConfig(({ mode }) => {
       vue(),
       VueI18nPlugin({
         include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**')
+      }),
+      inject({
+        Buffer: ['buffer', 'Buffer']
       })
     ],
     optimizeDeps: {
