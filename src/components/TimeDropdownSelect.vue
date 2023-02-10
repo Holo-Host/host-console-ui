@@ -15,23 +15,12 @@
   </select>
 </template>
 
-<script setup>
-defineProps({
-  options: {
-    type: Array,
-    required: true
-  },
-
-  value: {
-    type: [Number, String],
-    required: true
-  },
-
-  isDisabled: {
-    type: Boolean,
-    required: false
-  }
-})
+<script setup lang="ts">
+defineProps<{
+  options: []
+  value: number | string
+  isDisabled: boolean
+}>()
 
 defineEmits(['update:selected-value'])
 </script>

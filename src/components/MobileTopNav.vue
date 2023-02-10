@@ -19,18 +19,18 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import MenuIcon from '@/components/icons/MenuIcon.vue'
 import TheSidebar from '@/components/sidebar/TheSidebar.vue'
 import TopNavMenu from '@/components/TopNavMenu.vue'
-import { ref } from 'vue'
 
 withDefaults(
   defineProps<{
     nickname: string
-    agentAddress?: number[]
+    agentAddress?: typeof Uint8Array | null
   }>(),
   {
-    agentAddress: []
+    agentAddress: null
   }
 )
 

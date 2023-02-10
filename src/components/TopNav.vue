@@ -6,7 +6,7 @@
     <h1
       v-if="!path"
       class="main-title"
-			data-test-top-nav-title
+      data-test-top-nav-title
     >
       {{ mainTitle }}
     </h1>
@@ -15,7 +15,7 @@
       v-if="!!path"
       class="main-title"
       :to="path"
-			data-test-top-nav-link
+      data-test-top-nav-link
     >
       {{ mainTitle }}
     </router-link>
@@ -23,13 +23,13 @@
     <RightChevronIcon
       v-if="isSubtitleVisible"
       class="chevron"
-			data-test-top-nav-chevron-icon
+      data-test-top-nav-chevron-icon
     />
 
     <div
       v-if="isSubtitleVisible"
       class="sub-title"
-			data-test-top-nav-subtitle
+      data-test-top-nav-subtitle
     >
       {{ subTitle }}
     </div>
@@ -37,46 +37,41 @@
     <TopNavMenu
       :nickname="nickname"
       :agent-address="agentAddress"
-			data-test-top-nav-menu
+      data-test-top-nav-menu
     />
 
     <div
-			class="alpha-flag"
-			data-test-top-nav-alpha-flag
-		>
+      class="alpha-flag"
+      data-test-top-nav-alpha-flag
+    >
       {{ $t('sidebar.alpha.short') }}
     </div>
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { computed } from 'vue'
 import RightChevronIcon from '@/components/icons/RightChevronIcon.vue'
 import TopNavMenu from '@/components/TopNavMenu.vue'
-import { computed } from 'vue'
+import type { BreadCrumb } from '@/types/types'
 
-const props = defineProps({
-  breadcrumbs: {
-    type: Array,
-    default: () => [{}, {}]
-  },
-
-  nickname: {
-    type: String,
-    required: true
-  },
-
-  agentAddress: {
-    type: Uint8Array,
-    default: []
+const props = withDefaults(
+  defineProps<{
+    breadcrumbs: BreadCrumb[]
+    agentAddress?: typeof Uint8Array | null
+    nickname: string
+  }>(),
+  {
+    agentAddress: null
   }
-})
+)
 
-const mainTitle = computed(() => props.breadcrumbs[0].label)
-const subTitle = computed(() => props.breadcrumbs[1].label)
-const path = computed(() => props.breadcrumbs[0].path)
+const mainTitle = computed((): string | undefined => props.breadcrumbs[0]?.label)
+const subTitle = computed((): string | undefined => props.breadcrumbs[1]?.label)
+const path = computed((): string | undefined => props.breadcrumbs[0]?.path)
 
 const isSubtitleVisible = computed(
-  () => props.breadcrumbs.length > 1 && !!props.breadcrumbs[1].label
+  (): boolean => props.breadcrumbs.length > 1 && !!props.breadcrumbs[1]?.label
 )
 </script>
 

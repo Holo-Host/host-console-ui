@@ -51,6 +51,7 @@ import InvoicesTableRow from '@/components/invoices/InvoicesTableRow'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kRoutes } from '@/router'
 import { useEarningsStore } from '@/store/earnings'
+import type {BreadCrumb} from "@/types/types";
 
 const { t } = useI18n()
 const router = useRouter()
@@ -219,11 +220,6 @@ const pageHeaderTranslationKey = computed((): string =>
 const emptyMessageTranslationKey = computed((): string =>
   isPaidInvoices.value ? 'invoices.errors.no_paid_invoices' : 'invoices.errors.no_unpaid_invoices'
 )
-
-interface BreadCrumb {
-  label: string
-  path?: string
-}
 
 const breadcrumbs = computed((): BreadCrumb[] => [
   {
