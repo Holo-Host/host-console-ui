@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
+import 'vite/client'
+
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'
 

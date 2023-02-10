@@ -1,10 +1,10 @@
-export const presentHolofuelAmount = (amount) =>
+export const presentHolofuelAmount = (amount: number): string =>
   isNaN(amount) ? '-- ' : Number(amount).toLocaleString()
 
-export const presentShortHolofuelAmount = (amount) =>
+export const presentShortHolofuelAmount = (amount: number): string =>
   isNaN(amount) ? '-- ' : Math.floor(Number(amount)).toLocaleString()
 
-export const presentBytes = (bytes) => {
+export const presentBytes = (bytes: number): string => {
   if (isNaN(bytes)) {
     return '-- GB'
   }
@@ -23,7 +23,7 @@ export const presentBytes = (bytes) => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
 }
 
-export const presentMicroSeconds = (ms) => {
+export const presentMicroSeconds = (ms: number): string => {
   if (isNaN(ms)) {
     return '-- ms'
   }
@@ -43,12 +43,13 @@ export const presentMicroSeconds = (ms) => {
 }
 
 // eslint-disable-next-line no-magic-numbers
-export const presentPublisherHash = (hash) => `...${hash.slice(-5)}`
+export const presentPublisherHash = (hash: string): string => `...${hash.slice(-5)}`
 
 // Create random string with 128 bit entropy
 // String has to be url safe because token is passed in url as query param
-export const generateToken = () => {
-  const randomArrayBuffer = crypto.getRandomValues(new Uint8Array(128)) // entorpy 2^128
+export const generateToken = (): string => {
+  const entropy = 128 // entropy 2^128
+  const randomArrayBuffer = crypto.getRandomValues(new Uint8Array(entropy))
   const base64String = btoa(String.fromCharCode(...new Uint8Array(randomArrayBuffer)))
   return base64String.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
