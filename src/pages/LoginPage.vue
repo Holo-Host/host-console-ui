@@ -111,7 +111,7 @@ const password = ref('')
 const errors = reactive({ email: '', password: '', api: '' })
 const isLoading = ref(false)
 
-onMounted(async () => {
+onMounted(async (): Promise<void> => {
   // redirect from login page if user already logged in
   // To prevent infinite loop of redirects code will erase authToken
   // from localStorage whenever 401 from server is detected
@@ -121,8 +121,8 @@ onMounted(async () => {
 })
 
 watch(
-  () => email.value,
-  (value) => {
+  (): string => email.value,
+  (value: string): void => {
     errors.api = ''
 
     if (errorTimeoutInstance) {
@@ -136,8 +136,8 @@ watch(
 )
 
 watch(
-  () => password.value,
-  (value) => {
+  (): string => password.value,
+  (value: string): void => {
     errors.api = ''
 
     if (errorTimeoutInstance) {

@@ -22,7 +22,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': resolve(dirname(fileURLToPath(import.meta.url)), './src'),
-        '@uicommon': resolve(dirname(fileURLToPath(import.meta.url)), './ui-common-library/src')
+        '@uicommon': resolve(dirname(fileURLToPath(import.meta.url)), './ui-common-library/src'),
+        buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6'
       },
       extensions: ['.js', '.ts', '.vue', '.json']
     },
@@ -34,6 +35,9 @@ export default defineConfig(({ mode }) => {
         include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**')
       })
     ],
+    optimizeDeps: {
+      exclude: ['@syntect/wasm']
+    },
     server:
       env.NODE_ENV === 'production' || env.NODE_ENV === 'test'
         ? {}
@@ -43,16 +47,13 @@ export default defineConfig(({ mode }) => {
             '^/api/*': {
               target: env.VITE_HOLOPORT_URL,
               changeOrigin: true
-            },
+              },
             '^/holochain-api/*': {
               target: env.VITE_HOLOPORT_URL,
               changeOrigin: true
-            }
+              }
           }
         },
-    optimizeDeps: {
-      exclude: ['@syntect/wasm']
-    },
     test: {
       environment: 'happy-dom',
       exclude: [...configDefaults.exclude, '**/ui-common-library/**']

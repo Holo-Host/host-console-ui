@@ -1,14 +1,14 @@
 <template>
   <PrimaryLayout
     :title="$t('$.earnings')"
-		data-test-earnings-layout
-	>
+    data-test-earnings-layout
+  >
     <div>
       <WeeklyEarningsCard
         :data="weeklyEarnings"
         :is-loading="isLoading"
         :is-error="isError"
-				data-test-earnings-weekly-earnings-card
+        data-test-earnings-weekly-earnings-card
         @try-again-clicked="getEarnings"
       />
 
@@ -16,7 +16,7 @@
         :data="redeemableHoloFuel"
         :is-loading="false"
         :is-error="false"
-				data-test-earnings-redeemable-holo-fuel-card
+        data-test-earnings-redeemable-holo-fuel-card
         class="redeemable-holofuel-card"
         @try-again-clicked="getEarnings"
       />
@@ -24,37 +24,38 @@
   </PrimaryLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed, onMounted, ref } from 'vue'
 import RedeemableHoloFuelCard from '@/components/earnings/RedeemableHoloFuelCard.vue'
 import WeeklyEarningsCard from '@/components/earnings/WeeklyEarningsCard.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { useDashboardStore } from '@/store/dashboard'
+import { isError as isErrorPredicate } from '@/types/predicates'
 
 const dashboardStore = useDashboardStore()
 
 const isLoading = ref(false)
-
 const isError = computed(() => !!dashboardStore.hostEarnings.error)
 
-const rawWeeklyEarnings = computed(() => dashboardStore.hostEarnings.earnings?.last7days)
-
-const weeklyEarnings = computed(() =>
-  rawWeeklyEarnings.value && Number(rawWeeklyEarnings.value)
-    ? formatCurrency(Number(rawWeeklyEarnings.value))
+const rawWeeklyEarnings = computed((): string | number =>
+  !isErrorPredicate(dashboardStore.hostEarnings)
+    ? dashboardStore.hostEarnings.earnings?.last7days
     : 0
 )
 
-const redeemableHoloFuel = computed(() => 0)
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+const weeklyEarnings = computed((): number => formatCurrency(Number(rawWeeklyEarnings.value)) || 0)
 
-async function getEarnings() {
+const redeemableHoloFuel = computed((): number => 0)
+
+async function getEarnings(): Promise<void> {
   isLoading.value = true
   await dashboardStore.getEarnings()
   isLoading.value = false
 }
 
-onMounted(async () => {
+onMounted(async (): Promise<void> => {
   if (!weeklyEarnings.value) {
     await getEarnings()
   }

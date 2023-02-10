@@ -29,12 +29,7 @@ module.exports = {
     },
     experiments: {
       asyncWebAssembly: true
-    },
-    plugins: [
-      new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer']
-      })
-    ]
+    }
   },
   devServer: holoportUrl && {
     proxy: {

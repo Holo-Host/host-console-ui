@@ -8,3 +8,7 @@ export interface AdminSignature {
 }
 
 export type CheckAuthResponse = AdminSignature | boolean | null
+
+export interface Error {
+  error: unknown
+}

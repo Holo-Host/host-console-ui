@@ -8,10 +8,10 @@ import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
 interface HposInterface {
-  getUsage: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  getTopHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  getHostedHapps: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  getHostEarnings: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  getUsage: () => Promise<UsageResponse | { error: unknown }>
+  getTopHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HposHolochainCallResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
   getUser: () => Promise<Record<string, unknown> | boolean>
@@ -70,9 +70,9 @@ type HposHolochainCallResponse =
 
 type HposAdminCallResponse = HposConfigResponse
 
-interface UsageResponse {
+export interface UsageResponse {
   totalHostedHapps: number
-  totalSourceChains: number
+  totalHostedAgents: number
   currentTotalStorage: number
   totalUsage: {
     cpu: number
@@ -80,7 +80,7 @@ interface UsageResponse {
   }
 }
 
-interface HApp {
+export interface HApp {
   id: string
   name: string
   enabled: boolean
@@ -93,16 +93,17 @@ interface HApp {
   }
 }
 
-interface HostEarnings {
+export interface HostEarnings {
   earnings: {
-    last30days: number
-    last7days: number
-    lastday: number
+    last30days: number | string
+    last7days: number | string
+    lastday: number | string
   }
   holofuel: {
-    balance: number
+    available: number | string
+    balance: number | string
   }
-  recentPayments
+  recentPayments: unknown[]
 }
 
 interface Settings {
@@ -121,7 +122,7 @@ interface CoreAppVersion {
   coreAppVersion: string | null
 }
 
-interface PaidTransactions {
+export interface PaidTransactions {
   id: string
   amount: string
   created_date: string

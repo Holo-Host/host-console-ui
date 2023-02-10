@@ -21,12 +21,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": false,
+    "strict": true,
     "strictNullChecks": true,
     "target": "esnext",
     "types": [
-      "node",
-      "jest"
+      "node"
     ],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
