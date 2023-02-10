@@ -2,11 +2,11 @@
   <PrimaryLayout
     :title="$t(pageHeaderTranslationKey)"
     :breadcrumbs="breadcrumbs"
-    data-testid="invoices-page"
+    data-test-invoices-page-layout
   >
     <div
       class="controls"
-      data-testid="invoices-page-filters"
+      data-test-invoices-page-filters
     >
       <BaseSearchInput
         :value="filterValue"
@@ -16,23 +16,25 @@
       />
     </div>
 
-    <BaseTable
-      v-slot="{ items }"
-      :is-loading="isLoading"
-      :is-error="isError"
-      :headers="[...headersMap.values()]"
-      :initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
-      :items="filteredData"
-      :empty-message-translation-key="emptyMessageTranslationKey"
-      @try-again-clicked="getInvoices"
-    >
-      <InvoicesTableRow
-        v-for="item in items"
-        :key="item.id"
-        :is-paid="isPaidInvoices"
-        :invoice="item"
-      />
-    </BaseTable>
+		<div data-test-invoices-page-table>
+			<BaseTable
+				v-slot="{ items }"
+				:is-loading="isLoading"
+				:is-error="isError"
+				:headers="[...headersMap.values()]"
+				:initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
+				:items="filteredData"
+				:empty-message-translation-key="emptyMessageTranslationKey"
+				@try-again-clicked="getInvoices"
+			>
+				<InvoicesTableRow
+					v-for="item in items"
+					:key="item.id"
+					:is-paid="isPaidInvoices"
+					:invoice="item"
+				/>
+			</BaseTable>
+		</div>
   </PrimaryLayout>
 </template>
 

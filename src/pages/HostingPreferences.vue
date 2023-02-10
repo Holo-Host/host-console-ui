@@ -3,17 +3,25 @@
     :is-content-loading="isLoading"
     :is-content-error="isError"
     :title="$t('hosting_preferences.header')"
+		data-test-hosting-preferences-layout
     @try-again-clicked="getHostPreferences"
   >
     <template v-if="!isLoading && !isError">
-      <PricesSection :data="pricesSettings" />
+      <PricesSection
+				:data="pricesSettings"
+				data-test-hosting-preferences-prices-section
+			/>
 
       <InvoicesSection
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
+				data-test-hosting-preferences-invoices-section
       />
 
-      <HAppSelectionSection class="hosting-preferences__happ-selection" />
+      <HAppSelectionSection
+				class="hosting-preferences__happ-selection"
+				data-test-hosting-preferences-happ-selection-section
+			/>
     </template>
   </PrimaryLayout>
 </template>

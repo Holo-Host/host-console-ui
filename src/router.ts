@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter, Router } from 'vue-router'
+import { createWebHistory, createRouter, Router, RouteRecordRaw } from 'vue-router'
 import { kAuthTokenLSKey } from './constants'
 import DashboardPage from './pages/DashboardPage.vue'
 import Earnings from './pages/EarningsPage.vue'
@@ -9,7 +9,20 @@ import InvoicesPage from './pages/InvoicesPage.vue'
 import LoginPage from './pages/LoginPage.vue'
 import SettingsPage from './pages/SettingsPage.vue'
 
-export const kRoutes = {
+interface Routes {
+  login: RouteRecordRaw
+  dashboard: RouteRecordRaw
+  happs: RouteRecordRaw
+  happ: RouteRecordRaw
+  accountSettings: RouteRecordRaw
+  earnings: RouteRecordRaw
+  paidInvoices: RouteRecordRaw
+  unpaidInvoices: RouteRecordRaw
+  hostingPreferences: RouteRecordRaw
+  default: RouteRecordRaw
+}
+
+export const kRoutes: Routes = {
   login: {
     path: '/login',
     name: 'Login',
@@ -148,4 +161,4 @@ const router = routerFactory()
 
 export default router
 
-export const happDetailsPath = ({ id }: { id: string }) => `/happ/${encodeURIComponent(id)}`
+export const happDetailsPath = ({ id }: { id: string }): string => `/happ/${encodeURIComponent(id)}`

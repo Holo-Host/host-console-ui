@@ -1,11 +1,12 @@
 <template>
   <section
     class="top-nav"
-    data-testid="top-nav"
+    data-test-top-nav
   >
     <h1
       v-if="!path"
       class="main-title"
+			data-test-top-nav-title
     >
       {{ mainTitle }}
     </h1>
@@ -14,6 +15,7 @@
       v-if="!!path"
       class="main-title"
       :to="path"
+			data-test-top-nav-link
     >
       {{ mainTitle }}
     </router-link>
@@ -21,11 +23,13 @@
     <RightChevronIcon
       v-if="isSubtitleVisible"
       class="chevron"
+			data-test-top-nav-chevron-icon
     />
 
     <div
       v-if="isSubtitleVisible"
       class="sub-title"
+			data-test-top-nav-subtitle
     >
       {{ subTitle }}
     </div>
@@ -33,9 +37,13 @@
     <TopNavMenu
       :nickname="nickname"
       :agent-address="agentAddress"
+			data-test-top-nav-menu
     />
 
-    <div class="alpha-flag">
+    <div
+			class="alpha-flag"
+			data-test-top-nav-alpha-flag
+		>
       {{ $t('sidebar.alpha.short') }}
     </div>
   </section>

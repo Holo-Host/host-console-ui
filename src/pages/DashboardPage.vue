@@ -1,6 +1,6 @@
 <template>
   <PrimaryLayout
-		title="Dashboard"
+		:title="$t('$.dashboard')"
 		data-test-dashboard-layout
 	>
     <div class="row">

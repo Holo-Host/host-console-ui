@@ -8,8 +8,6 @@ import HAppsPage from '../HAppsPage.vue'
 import { messages } from '@/locales'
 import { expect, describe, it, vi } from 'vitest'
 
-const clickOutside = vi.fn()
-
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
@@ -18,6 +16,8 @@ const i18n = createI18n({
 
 vi.mock('axios')
 mockGlobalCrypto()
+
+const clickOutside = vi.fn()
 
 describe('happs page', () => {
   const setup = () => {

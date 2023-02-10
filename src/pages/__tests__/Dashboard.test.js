@@ -8,7 +8,6 @@ import { createI18n } from 'vue-i18n'
 import DashboardPage from '../DashboardPage.vue'
 import { messages } from '@/locales'
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
-import {useDashboardStore} from '@/store/dashboard';
 
 const i18n = createI18n({
   legacy: false,
@@ -43,7 +42,7 @@ describe('dashboard page', () => {
                 return Promise.resolve()
               }
             }
-          }),
+          })
         ],
         directives: {
           clickOutside
@@ -51,7 +50,6 @@ describe('dashboard page', () => {
       }
     })
   }
-
 
   describe('renders', () => {
     const wrapper = setup()
@@ -101,6 +99,12 @@ describe('dashboard page', () => {
 
     it('with primary layout', async () => {
       expect(wrapper.findAll('[data-test-dashboard-layout]')).toHaveLength(1)
+    })
+
+    it('with proper title in the top nav', () => {
+      const layout = wrapper.find('[data-test-dashboard-layout]')
+
+      expect(layout.text()).toContain(messages.en.$.dashboard)
     })
 
     it('with usage card', async () => {

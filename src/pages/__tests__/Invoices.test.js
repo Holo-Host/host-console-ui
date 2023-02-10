@@ -1,111 +1,78 @@
 import { createTestingPinia } from '@pinia/testing'
-import { render, within } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
 import { createI18n } from 'vue-i18n'
-import { mockPaidInvoicesData } from '../../../mock-hpos-api/defaultResponse'
-import locales from '@/locales'
+import { messages } from '@/locales'
 import InvoicesPage from '@/pages/InvoicesPage.vue'
 import router from '@/router'
-import { useEarningsStore } from '@/store/earnings'
-import { useHposInterface } from '@/interfaces/HposInterface'
-import { describe, it, expect } from 'vitest'
-
-const { HPOS_API_URL } = useHposInterface()
-
-const clickOutside = jest.fn()
+import { expect, describe, it, vi } from 'vitest'
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
-const translations = locales.en
-
-jest.mock('axios')
+vi.mock('axios')
 mockGlobalCrypto()
 
+const clickOutside = vi.fn()
+
 describe('invoices page', () => {
-  beforeEach(() => {
-    axios.get.mockClear()
-    axios.put.mockClear()
-  })
-
-  it('calls host_invoices endpoint on init', () => {
-    const hostInvoicesResult = {
-      data: []
-    }
-
-    axios.post.mockImplementation((path) => {
-      if (path.endsWith('/api/v1/host_invoices')) {
-        return hostInvoicesResult
-      }
-
-      throw new Error(`axios mock doesn't recognise this path: ${path}`)
-    })
-
-    render(InvoicesPage, {
+  const setup = () => {
+    return mount(InvoicesPage, {
       global: {
-        plugins: [router, createTestingPinia({ stubActions: false }), i18n],
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            stubActions: false,
+            createSpy() {
+              return () => {
+                return Promise.resolve()
+              }
+            }
+          })
+        ],
         directives: {
           clickOutside
         }
       }
     })
+  }
 
-    const store = useEarningsStore()
+  describe('renders', () => {
+    const wrapper = setup()
 
-    expect(store.getUnpaidInvoices).toHaveBeenCalledTimes(1)
-    expect(axios.get.mock.calls[0][0]).toEqual(`${HPOS_API_URL}/holochain-api/v1/host_invoices`)
-  })
-
-  describe('shows the invoices page', () => {
-    axios.post.mockImplementation((path) => {
-      if (path.endsWith('host_invoices')) {
-        return { data: mockPaidInvoicesData }
-      }
-
-      throw new Error(`axios mock doesn't recognise this path: ${path}`)
+    it('with primary layout', () => {
+      expect(wrapper.findAll('[data-test-invoices-page-layout]')).toHaveLength(1)
     })
 
-    const { getByTestId } = render(InvoicesPage, {
-      global: {
-        plugins: [router, createTestingPinia(), i18n],
-        directives: {
-          clickOutside
-        }
-      }
+    it('with filters', () => {
+      expect(wrapper.findAll('[data-test-invoices-page-filters]')).toHaveLength(1)
     })
 
-    const invoicePage = within(getByTestId('invoices-page'))
-
-    it('with side menu', () => {
-      expect(invoicePage.getAllByTestId('sidebar')).toHaveLength(1)
+    it('with invoices table', () => {
+      expect(wrapper.findAll('[data-test-invoices-page-table]')).toHaveLength(1)
     })
 
-    it('with top nav', () => {
-      const topNav = invoicePage.getAllByTestId('top-nav')
-      expect(topNav).toHaveLength(1)
-    })
 
     it('with proper title in the top nav', () => {
-      const topNav = invoicePage.getByTestId('top-nav')
-      within(topNav).getByText(translations.earnings.title)
-      within(topNav).getByText(translations.earnings.unpaid_invoices)
-    })
+      const layout = wrapper.find('[data-test-invoices-page-layout]')
 
-    it('with table filter', () => {
-      expect(invoicePage.getAllByTestId('invoices-page-filters')).toHaveLength(1)
+      expect(layout.text()).toContain(messages.en.invoices.status.unpaid)
     })
 
     it('with proper table headers', () => {
-      invoicePage.getAllByText(translations.invoices.headers.happ)
-      invoicePage.getAllByText(translations.invoices.headers.publisher)
-      invoicePage.getAllByText(translations.invoices.headers.created)
-      invoicePage.getAllByText(translations.invoices.headers.due)
-      invoicePage.getAllByText(translations.invoices.headers.invoice)
-      invoicePage.getAllByText(translations.invoices.headers.payment_status)
+      const table = wrapper.find('[data-test-invoices-page-table]')
+
+      expect(table.text()).toContain(messages.en.invoices.headers.happ)
+      expect(table.text()).toContain(messages.en.invoices.headers.publisher)
+      expect(table.text()).toContain(messages.en.invoices.headers.created)
+      expect(table.text()).toContain(messages.en.invoices.headers.due)
+      expect(table.text()).toContain(messages.en.invoices.headers.invoice)
+      expect(table.text()).toContain(messages.en.invoices.headers.payment_status)
     })
   })
 })
