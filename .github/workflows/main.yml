@@ -15,15 +15,15 @@ jobs:
       matrix:
         node-version: [18.x]
     steps:
-    - name: Fetch source code
+    - name: 🦴 Fetch source code
       uses: actions/checkout@v3
       with:
         submodules: recursive
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: 🫁 Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install node-modules
+    - name: 🦾 Install node-modules
       run: yarn install
-    - name: Run tests
+    - name: 👀 Run tests
       run: yarn test
