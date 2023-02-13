@@ -19,7 +19,7 @@
   </SettingsSection>
 </template>
 
-<script setup >
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
@@ -27,16 +27,80 @@ import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
 
 const { t } = useI18n()
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  }
-})
+interface Data {
+  storage: number
+  bandwidth: number
+  cpu: number
+}
+
+const props = defineProps<{
+  data: Data
+}>()
 
 const emit = defineEmits(['update:price'])
 
-const prices = computed(() => [
+interface UpdatePricePayload {
+  prop: string
+  value: number
+}
+
+function updatePrice({ prop, value }: UpdatePricePayload): void {
+  emit('update:price', { prop, value })
+}
+
+interface FormattedPrice {
+  value: number | string
+  unit: string
+}
+
+function formatPrice(pricePerByte: number): FormattedPrice {
+  if (isNaN(pricePerByte)) {
+    return {
+      value: '--',
+      unit: 'HF per GB'
+    }
+  }
+
+  if (pricePerByte === 0) {
+    return {
+      value: 0,
+      unit: 'HF per GB'
+    }
+  }
+
+  const k = 1024
+  const sizes = ['byte', 'kB', 'MB', 'GB', 'TB']
+
+  // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
+  const zerosAfterDecimal = -Math.floor(Math.log(pricePerByte) / Math.log(10))
+
+  if (zerosAfterDecimal <= 0) {
+    return {
+      // eslint-disable-next-line no-magic-numbers
+      value: parseFloat(pricePerByte).toFixed(0),
+      unit: `HF per ${sizes[0]}`
+    }
+  }
+
+  // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
+  const unitIndex = Math.floor(zerosAfterDecimal / 3)
+
+  return {
+    // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
+    value: parseFloat((pricePerByte * Math.pow(k, unitIndex)).toFixed(2)),
+    unit: `HF per ${sizes[unitIndex]}`
+  }
+}
+
+interface PriceItem {
+  label: string
+  value: string | number
+  unit: string
+  prop: string
+  isDisabled: boolean
+}
+
+const prices = computed((): PriceItem[] => [
   {
     label: t('$.cpu'),
     value: props.data.cpu || 0,
@@ -59,43 +123,6 @@ const prices = computed(() => [
     isDisabled: true
   }
 ])
-
-function updatePrice({ prop, value }) {
-  emit('update:price', { prop, value })
-}
-
-function formatPrice(pricePerByte) {
-  if (isNaN(pricePerByte)) {
-    return '-- GB'
-  }
-
-  if (pricePerByte === 0) {
-    return '0 GB'
-  }
-
-  const k = 1024
-  const sizes = ['byte', 'kB', 'MB', 'GB', 'TB']
-
-  // eslint-disable-next-line no-magic-numbers
-  const zerosAfterDecimal = -Math.floor(Math.log(pricePerByte) / Math.log(10))
-
-  if (zerosAfterDecimal <= 0) {
-    return {
-      // eslint-disable-next-line no-magic-numbers
-      value: parseFloat(pricePerByte).toFixed(0),
-      unit: `HF per ${sizes[0]}`
-    }
-  }
-
-  // eslint-disable-next-line no-magic-numbers
-  const unitIndex = Math.floor(zerosAfterDecimal / 3)
-
-  return {
-    // eslint-disable-next-line no-magic-numbers
-    value: parseFloat((pricePerByte * Math.pow(k, unitIndex)).toFixed(2)),
-    unit: `HF per ${sizes[unitIndex]}`
-  }
-}
 </script>
 
 <style lang="scss" scoped>

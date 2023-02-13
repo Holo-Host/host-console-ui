@@ -2,9 +2,9 @@
   <div class="settings-section">
     <h3
       class="settings-section__title"
-      :class="{ 'disabled': isDisabled }"
+      :class="{ 'disabled': props.isDisabled }"
     >
-      {{ title }}
+      {{ props.title }}
     </h3>
 
     <div class="settings-section__content">
@@ -13,18 +13,16 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-
-  isDisabled: {
-    type: Boolean,
-    default: false
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    title: string
+    isDisabled?: boolean
+  }>(),
+  {
+    isDisabled: false
   }
-})
+)
 </script>
 
 <style lang="scss" scoped>

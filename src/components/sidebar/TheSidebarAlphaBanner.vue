@@ -1,8 +1,8 @@
 <template>
   <div
-		class="sidebar-alpha-banner"
-		data-test-sidebar-alpha-banner
-	>
+    class="sidebar-alpha-banner"
+    data-test-sidebar-alpha-banner
+  >
     <div class="sidebar-alpha-banner__flag">
       {{ $t('sidebar.alpha.title') }}
       <div class="sidebar-alpha-banner__triangle" />
@@ -18,6 +18,8 @@
     </p>
   </div>
 </template>
+
+<script setup lang="ts" />
 
 <style lang="scss" scoped>
 .sidebar-alpha-banner {

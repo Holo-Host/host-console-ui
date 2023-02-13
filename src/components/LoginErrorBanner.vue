@@ -5,7 +5,7 @@
       class="login-error-banner"
     >
       <AlertTriangleIcon class="login-error-banner__icon" />
-      <span class="login-error-banner__label">{{ message }}</span>
+      <span class="login-error-banner__label">{{ props.message }}</span>
     </div>
   </Transition>
   <div
@@ -13,20 +13,19 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AlertTriangleIcon from './icons/AlertTriangleIcon.vue'
 
-defineProps({
-  isVisible: {
-    type: Boolean,
-    default: false
-  },
-
-  message: {
-    type: String,
-    default: ''
+const props = withDefaults(
+  defineProps<{
+    isVisible?: boolean
+    message?: string
+  }>(),
+  {
+    isVisible: false,
+    message: ''
   }
-})
+)
 </script>
 
 <style lang="scss" scoped>

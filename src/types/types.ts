@@ -17,3 +17,9 @@ export interface BreadCrumb {
   label: string
   path?: string
 }
+
+export interface HoloFuelProfile {
+  agentAddress: Uint8Array | null
+  nickname: string
+  avatarUrl: string
+}

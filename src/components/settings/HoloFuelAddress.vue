@@ -7,16 +7,16 @@
     <div class="holofuel-address__address">
       <span class="holofuel-address__identicon">
         <Identicon
-          v-if="agentAddress"
+          v-if="props.agentAddress"
           size="40"
-          :agent-key="agentAddress"
+          :agent-key="props.agentAddress"
           role="img"
           aria-label="Agent Identity Icon"
         />
       </span>
 
       <span class="holofuel-address__hash-id">
-        {{ encodeAgentId(agentAddress) }}
+        {{ encodeAgentId(props.agentAddress) }}
       </span>
     </div>
 
@@ -36,18 +36,20 @@
   </div>
 </template>
 
-<script setup>
-import Identicon from '@uicommon/components/Identicon'
+<script setup lang="ts">
+import Identicon from '@uicommon/components/Identicon.vue'
 import { encodeAgentId } from '@uicommon/utils/agent'
-import LeaveSiteIcon from '../icons/LeaveSiteIcon'
+import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
-defineProps({
-  agentAddress: {
-    type: [Uint8Array, null],
-    default: null
+const props = withDefaults(
+  defineProps<{
+    agentAddress?: Uint8Array | null
+  }>(),
+  {
+    agentAddress: null
   }
-})
+)
 
 const { goToHoloFuel } = useGoToHoloFuel()
 </script>

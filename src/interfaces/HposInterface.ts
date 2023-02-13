@@ -14,15 +14,20 @@ interface HposInterface {
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HposHolochainCallResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
-  getUser: () => Promise<Record<string, unknown> | boolean>
+  getUser: () => Promise<User>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
   getHoloFuelProfile: () => unknown
-  updateHoloFuelProfile: ({ nickname, avatarUrl }) => Promise<boolean>
+  updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
-  getCoreAppVersion: () => Promise<HposHolochainCallResponse>
+  getCoreAppVersion: () => Promise<CoreAppVersion>
   HPOS_API_URL: string
+}
+
+export interface UpdateHoloFuelProfilePayload {
+  nickname: string
+  avatarUrl: string
 }
 
 interface HposStatusResponse {
@@ -163,6 +168,12 @@ interface HoloFuelProfile {
   agentAddress?: Uint8Array
   nickname: string
   avatarUrl: string
+}
+
+export interface User {
+  user: Settings
+  holoport: HPosStatus
+  holoFuelProfile: HoloFuelProfile | unknown
 }
 
 // Return devNet for channel develop, alphaNet for channel master, otherwise channel name
@@ -501,7 +512,7 @@ export function useHposInterface(): HposInterface {
     return retry(getHoloFuelProfileAttempt, kRetries)
   }
 
-  async function getUser(): Promise<Record<string, unknown> | boolean> {
+  async function getUser(): Promise<User | boolean> {
     const user = await getSettings()
     const holoport = await getHposStatus()
     const holoFuelProfile = await getHoloFuelProfile()
@@ -568,7 +579,7 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getCoreAppVersion(): Promise<HposHolochainCallResponse> {
+  async function getCoreAppVersion(): Promise<CoreAppVersion> {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

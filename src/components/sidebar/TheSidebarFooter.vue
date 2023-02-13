@@ -1,8 +1,8 @@
 <template>
   <div
-		class="sidebar-footer"
-		data-test-sidebar-footer
-	>
+    class="sidebar-footer"
+    data-test-sidebar-footer
+  >
     <a
       class="sidebar-footer__holo-brand"
       href="https://holo.host/"
@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { version } from '../../../package.json'
 </script>
 

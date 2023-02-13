@@ -5,12 +5,12 @@
   >
     <SettingsRow
       :label="$t('settings.hpos_version')"
-      :value="settings.hposVersion"
+      :value="props.settings.hposVersion"
     />
 
     <SettingsRow
       :label="$t('settings.device_name')"
-      :value="!isEditingDeviceName ? settings.deviceName : ''"
+      :value="!isEditingDeviceName ? props.settings.deviceName : ''"
     >
       <PencilIcon
         v-if="!isEditingDeviceName"
@@ -44,14 +44,14 @@
 
     <SettingsRow
       :label="$t('$.network')"
-      :value="settings.networkFlavour"
+      :value="props.settings.networkFlavour"
     />
 
     <SettingsRow :label="$t('settings.ssh_access')">
       <BaseCheckbox
         id="sshAccess"
         is-disabled
-        :checked="settings.sshAccess"
+        :checked="props.settings.sshAccess"
       />
     </SettingsRow>
 
@@ -73,35 +73,33 @@
   </SettingsSection>
 </template>
 
-<script setup >
-import BaseCheckbox from '@uicommon/components/BaseCheckbox'
-import BaseInput from '@uicommon/components/BaseInput'
+<script setup lang="ts">
+import BaseCheckbox from '@uicommon/components/BaseCheckbox.vue'
+import BaseInput from '@uicommon/components/BaseInput.vue'
 import { ref } from 'vue'
-import CircledExIcon from '../icons/CircledExIcon'
-import FilledCheckIcon from '../icons/FilledCheckIcon'
-import LeaveSiteIcon from '../icons/LeaveSiteIcon'
-import PencilIcon from '../icons/PencilIcon'
-import SettingsRow from './SettingsRow'
-import SettingsSection from './SettingsSection'
+import CircledExIcon from '../icons/CircledExIcon.vue'
+import FilledCheckIcon from '../icons/FilledCheckIcon.vue'
+import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
+import PencilIcon from '../icons/PencilIcon.vue'
+import SettingsRow from './SettingsRow.vue'
+import SettingsSection from './SettingsSection.vue'
 
-const props = defineProps({
-  settings: {
-    type: Object,
-    required: true
-  },
-
-  isLoading: {
-    type: Boolean,
-    default: false
+const props = withDefaults(
+  defineProps<{
+    settings: Record<string, unknown>
+    isLoading?: boolean
+  }>(),
+  {
+    isLoading: false
   }
-})
+)
 
 const emit = defineEmits(['update:device-name'])
 
 const isEditingDeviceName = ref(false)
 const editedDeviceName = ref('')
 
-function editDeviceName() {
+function editDeviceName(): void {
   editedDeviceName.value = props.settings.deviceName
   isEditingDeviceName.value = true
 }

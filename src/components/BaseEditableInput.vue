@@ -1,7 +1,7 @@
 <template>
   <div class="editable-input">
     <span v-if="!isEditing">
-      {{ value }} {{ unit }}
+      {{ props.value }} {{ props.unit }}
     </span>
 
     <div
@@ -36,7 +36,7 @@
     <PencilIcon
       v-if="!isEditing"
       class="editable-input__editable-value-icon"
-      :class="{ 'disabled': isDisabled }"
+      :class="{ 'disabled': props.isDisabled }"
       @click="edit"
     />
   </div>
