@@ -104,12 +104,12 @@ function editDeviceName(): void {
   isEditingDeviceName.value = true
 }
 
-function saveDeviceName() {
+function saveDeviceName(): void {
   emit('update:device-name', editedDeviceName.value)
   isEditingDeviceName.value = false
 }
 
-function cancelEditDeviceName() {
+function cancelEditDeviceName(): void {
   isEditingDeviceName.value = false
   editedDeviceName.value = ''
 }

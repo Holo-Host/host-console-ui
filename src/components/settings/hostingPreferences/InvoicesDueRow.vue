@@ -8,7 +8,7 @@
 
     <TimeDropdownSelect
       is-disabled
-      :value="data.due.period"
+      :value="props.data.due.period"
       :options="['N/A', 7, 30]"
       @update:selected-value="onDueChange"
     />
@@ -17,20 +17,18 @@
   </SettingsRow>
 </template>
 
-<script setup >
-import TimeDropdownSelect from '@/components/TimeDropdownSelect.vue'
+<script setup lang="ts">
 import SettingsRow from '../SettingsRow.vue'
+import TimeDropdownSelect from '@/components/TimeDropdownSelect.vue'
+import { InvoicesData } from '@/types/types'
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  data: InvoicesData
+}>()
 
 const emit = defineEmits(['update:due'])
 
-function onDueChange(value) {
+function onDueChange(value: number | string): void {
   emit('update:due', {
     ...props.data.due,
     period: Number(value)

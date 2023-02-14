@@ -1,7 +1,7 @@
 <template>
   <SettingsRow
     :label="label"
-    :value="!isEditing ? value : ''"
+    :value="!isEditing ? props.value : ''"
     grid-columns="110px auto"
   >
     <div
@@ -28,17 +28,17 @@
         @click="cancel"
       />
     </div>
-    <span class="editable-price-row__unit">{{ unit }}</span>
+    <span class="editable-price-row__unit">{{ props.unit }}</span>
     <PencilIcon
       v-if="!isEditing"
       class="editable-price-row__editable-value-icon"
-      :class="{ 'disabled': isDisabled }"
+      :class="{ 'disabled': props.isDisabled }"
       @click="edit"
     />
   </SettingsRow>
 </template>
 
-<script setup >
+<script setup lang="ts">
 import BaseInput from '@uicommon/components/BaseInput.vue'
 import { EInputType } from '@uicommon/types/ui'
 import { ref } from 'vue'
@@ -47,49 +47,35 @@ import FilledCheckIcon from '../../icons/FilledCheckIcon.vue'
 import PencilIcon from '../../icons/PencilIcon.vue'
 import SettingsRow from '../SettingsRow.vue'
 
-const props = defineProps({
-  label: {
-    type: String,
-    required: true
-  },
-
-  value: {
-    type: [Number, String],
-    required: true
-  },
-
-  unit: {
-    type: String,
-    required: true
-  },
-
-  prop: {
-    type: String,
-    required: true
-  },
-
-  isDisabled: {
-    type: Boolean,
-    default: false
+const props = withDefaults(
+  defineProps<{
+    label: string
+    value: number | string
+    unit: string
+    prop: string
+    isDisabled?: boolean
+  }>(),
+  {
+    isDisabled: false
   }
-})
+)
 
 const emit = defineEmits(['update:value'])
 
 const isEditing = ref(false)
 const editedValue = ref('')
 
-function edit() {
+function edit(): void {
   editedValue.value = `${props.value}`
   isEditing.value = true
 }
 
-function save() {
+function save(): void {
   emit('update:value', { prop: props.prop, value: Number(editedValue.value) })
   isEditing.value = false
 }
 
-function cancel() {
+function cancel(): void {
   isEditing.value = false
   editedValue.value = ''
 }

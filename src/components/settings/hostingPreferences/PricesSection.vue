@@ -24,17 +24,12 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
+import type { PricesData } from '@/types/types'
 
 const { t } = useI18n()
 
-interface Data {
-  storage: number
-  bandwidth: number
-  cpu: number
-}
-
 const props = defineProps<{
-  data: Data
+  data: PricesData
 }>()
 
 const emit = defineEmits(['update:price'])
@@ -87,7 +82,7 @@ function formatPrice(pricePerByte: number): FormattedPrice {
 
   return {
     // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
-    value: parseFloat((pricePerByte * Math.pow(k, unitIndex)).toFixed(2)),
+    value: parseFloat((pricePerByte * Math.pow(k, unitIndex)).toFixed(3)),
     unit: `HF per ${sizes[unitIndex]}`
   }
 }
