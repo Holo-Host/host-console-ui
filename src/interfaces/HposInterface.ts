@@ -12,7 +12,7 @@ interface HposInterface {
   getTopHostedHapps: () => Promise<HApp[] | { error: unknown }>
   getHostedHapps: () => Promise<HApp[] | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
-  getHostPreferences: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
   getUser: () => Promise<User>
   getHposStatus: () => Promise<HPosStatus>
@@ -63,6 +63,14 @@ interface CoreAppVersionResponse {
   version: string
 }
 
+export interface HostPreferencesResponse {
+  max_fuel_before_invoice: string
+  max_time_before_invoice: [number, number]
+  price_bandwidth: string
+  price_compute: string
+  price_storage: string
+}
+
 type HposHolochainCallResponse =
   | HostEarnings
   | HApp[]
@@ -70,8 +78,9 @@ type HposHolochainCallResponse =
   | HposStatusResponse
   | HoloFuelProfileResponse
   | CoreAppVersionResponse
-  | Promise<PaidTransactions[] | boolean>
+  | Promise<Transactions[] | boolean>
   | CoreAppVersion
+  | HostPreferencesResponse
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -98,12 +107,14 @@ export interface HApp {
   }
 }
 
+export interface Earnings {
+  last30days: number | string
+  last7days: number | string
+  lastday: number | string
+}
+
 export interface HostEarnings {
-  earnings: {
-    last30days: number | string
-    last7days: number | string
-    lastday: number | string
-  }
+  earnings: Earnings
   holofuel: {
     available: number | string
     balance: number | string
@@ -127,7 +138,7 @@ interface CoreAppVersion {
   coreAppVersion: string | null
 }
 
-export interface PaidTransactions {
+export interface Transactions {
   id: string
   amount: string
   created_date: string
@@ -365,7 +376,7 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getHostPreferences(): Promise<HposHolochainCallResponse> {
+  async function getHostPreferences(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       return await hposHolochainCall({
         method: 'get',

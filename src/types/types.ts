@@ -23,3 +23,19 @@ export interface HoloFuelProfile {
   nickname: string
   avatarUrl: string
 }
+
+export interface PricesData {
+  storage: number
+  bandwidth: number
+  cpu: number
+}
+
+export interface InvoicesData {
+  due: {
+    period: string
+  }
+  frequency: {
+    amount: number
+    period: string
+  }
+}

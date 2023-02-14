@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia'
 import { useHposInterface } from '@/interfaces/HposInterface'
+import { isHostPreferencesResponse } from '@/types/predicates'
+import type { InvoicesData, PricesData } from '@/types/types'
 
 const { getHostPreferences } = useHposInterface()
 
+interface State {
+  isLoaded: boolean
+  pricesSettings: PricesData
+  invoicesSettings: InvoicesData
+}
+
 export const usePreferencesStore = defineStore('preferences', {
-  state: () => ({
+  state: (): State => ({
     isLoaded: false,
     pricesSettings: {
       cpu: 0,
@@ -23,20 +31,26 @@ export const usePreferencesStore = defineStore('preferences', {
   }),
 
   actions: {
-    async getHostPreferences() {
+    async getHostPreferences(): Promise<void> {
+      const response = await getHostPreferences()
+
+      if (!isHostPreferencesResponse(response)) {
+        return
+      }
+
       const {
         max_fuel_before_invoice: amount,
         max_time_before_invoice: durationThreshold,
         price_compute: cpu,
         price_storage: storage,
         price_bandwidth: bandwidth
-      } = await getHostPreferences()
+      } = response
 
       if (cpu && storage && bandwidth) {
         this.pricesSettings = {
-          cpu,
-          storage,
-          bandwidth: 1
+          cpu: Number(cpu),
+          storage: Number(storage),
+          bandwidth: Number(bandwidth)
         }
       }
 
@@ -46,7 +60,7 @@ export const usePreferencesStore = defineStore('preferences', {
 
         this.invoicesSettings = {
           frequency: {
-            amount,
+            amount: Number(amount),
             period: 'N/A' // durationThreshold
           },
           due: {

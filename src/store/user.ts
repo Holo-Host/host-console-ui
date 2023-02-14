@@ -37,11 +37,7 @@ export const useUserStore = defineStore('user', {
       const { coreAppVersion } = await getCoreAppVersion()
       const getUserResponse = await getUser()
 
-      if (
-        getUserResponse.user &&
-        isHoloFuelProfile(getUserResponse.holoFuelProfile) &&
-        coreAppVersion
-      ) {
+      if (getUserResponse.user && isHoloFuelProfile(getUserResponse.holoFuelProfile)) {
         const { user, holoport, holoFuelProfile } = getUserResponse
         this.publicKey = user.hostPubKey
         this.email = user.registrationEmail ?? ''
@@ -49,6 +45,9 @@ export const useUserStore = defineStore('user', {
         this.deviceName = holoport.name ?? ''
         this.hposVersion = holoport.hposVersion ?? ''
         this.holoFuel = holoFuelProfile
+      }
+
+      if (coreAppVersion) {
         this.coreAppVersion = coreAppVersion
       }
     },
