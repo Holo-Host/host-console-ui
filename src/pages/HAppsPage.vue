@@ -98,17 +98,21 @@ const filteredHapps = computed((): HApp[] => {
       ? (a: HApp, b: HApp): number => (a.sourceChains < b.sourceChains ? 1 : -1)
       : (a: HApp, b: HApp): number => (a.name > b.name ? 1 : -1)
 
-  if (isErrorPredicate(happs.value)) {
+  if (isErrorPredicate(happs.value) && happs.value.error) {
     return []
   }
 
-  if (filterIsActive.value && filterValue.value) {
+  if (!isErrorPredicate(happs.value) && filterIsActive.value && filterValue.value) {
     return happs.value
-      .filter(({ name }) => name.toLowerCase().includes(filterValue.value.toLowerCase()))
+      .filter((hApp: HApp) => hApp.name.toLowerCase().includes(filterValue.value.toLowerCase()))
       .sort(sortByLogic)
   }
 
-  return [...happs.value].sort(sortByLogic)
+  if (!isErrorPredicate(happs.value)) {
+    return [...happs.value].sort(sortByLogic)
+  }
+
+  return []
 })
 
 type SortOption = 'alphabetical' | 'earnings'
@@ -123,7 +127,7 @@ async function getData(): Promise<void> {
 
   happs.value = await getHostedHapps()
 
-  if (isErrorPredicate(happs.value)) {
+  if (isErrorPredicate(happs.value) && happs.value.error) {
     isError.value = true
   }
 

@@ -100,7 +100,7 @@ export interface HApp {
   enabled: boolean
   isPaused: boolean
   sourceChains: number
-  hostedAgents: number
+  hostedAgents?: number
   storage: number
   usage: {
     bandwidth: number

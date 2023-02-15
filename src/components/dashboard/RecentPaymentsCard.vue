@@ -46,7 +46,7 @@ import { computed } from 'vue'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
 const props = defineProps<{
-  data: unknown[]
+  data: unknown[] | { error: string }
   isLoading: boolean
 }>()
 
