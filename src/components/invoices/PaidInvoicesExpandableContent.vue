@@ -1,5 +1,8 @@
 <template>
-  <td colspan="4" class="paid-invoices-expandable-content">
+  <td
+    colspan="4"
+    class="paid-invoices-expandable-content"
+  >
     <div
       class="paid-invoices-expandable-content__item"
     >
@@ -31,22 +34,30 @@
   </td>
 </template>
 
-<script setup>
-import Identicon from '@uicommon/components/Identicon'
+<script setup lang="ts">
+import Identicon from '@uicommon/components/Identicon.vue'
 import { decodeAgentId } from '@uicommon/utils/agent'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { Transaction } from '@/interfaces/HposInterface'
 
 const { t } = useI18n()
 
-const props = defineProps({
-  invoice: {
-    type: Object,
-    required: true
-  }
-})
+interface ExtendedTransaction extends Transaction {
+  formattedId: string
+}
 
-const items = ref([
+const props = defineProps<{
+  invoice: ExtendedTransaction
+}>()
+
+interface Item {
+  key: string
+  label: string
+  value: string
+}
+
+const items = ref<Item[]>([
   {
     key: 'expiration_date',
     label: t('invoices.headers.due'),

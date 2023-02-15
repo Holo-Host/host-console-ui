@@ -1,11 +1,11 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
-    :is-error="isError"
+    :is-loading="props.isLoading"
+    :is-error="props.isError"
     @try-again-clicked="emit('try-again-clicked')"
   >
     <template #left>
-      <WeeklyEarningsData :weekly-earnings="data" />
+      <WeeklyEarningsData :weekly-earnings="props.data" />
     </template>
 
     <template #right>
@@ -41,33 +41,22 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
-import BaseLinkButton from '@uicommon/components/BaseLinkButton'
-import WeeklyEarningsData from '@/components/earnings/WeeklyEarningsData'
-import FilledExclamationIcon from '@/components/icons/FilledExclamationIcon'
-import PaymentIcon from '@/components/icons/PaymentIcon'
-import UnpaidLateIcon from '@/components/icons/UnpaidLateIcon'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import BaseLinkButton from '@uicommon/components/BaseLinkButton.vue'
+import WeeklyEarningsData from '@/components/earnings/WeeklyEarningsData.vue'
+import FilledExclamationIcon from '@/components/icons/FilledExclamationIcon.vue'
+import PaymentIcon from '@/components/icons/PaymentIcon.vue'
+import UnpaidLateIcon from '@/components/icons/UnpaidLateIcon.vue'
 import { kRoutes } from '@/router'
 
 const emit = defineEmits(['try-again-clicked'])
 
-defineProps({
-  data: {
-    type: [Number, String],
-    required: true
-  },
-
-  isLoading: {
-    type: Boolean,
-    required: true
-  },
-
-  isError: {
-    type: Boolean,
-    required: true
-  }
-})
+const props = defineProps<{
+  data: string | number
+  isLoading: boolean
+  isError: boolean
+}>()
 </script>
 
 <style lang="scss" scoped>

@@ -1,19 +1,19 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
+    :is-loading="props.isLoading"
     :is-error="isError"
     :title="$t('hosted_happs.title')"
     @try-again-clicked="emit('try-again-clicked')"
   >
     <div class="body">
       <div
-        v-if="!data || data.length === 0"
+        v-if="!props.data || props.data.length === 0"
         class="no-happs"
       >
         {{ $t('hosted_happs.no_happs') }}
       </div>
       <div
-        v-for="happ in data"
+        v-for="happ in props.data"
         v-else
         :key="happ.id"
         class="top-happ-row"
@@ -35,24 +35,19 @@
   </BaseCard>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseCard from '@uicommon/components/BaseCard.vue'
 import HAppImage from '@uicommon/components/HAppImage.vue'
 import { computed } from 'vue'
+import type { HApp } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  },
+const props = defineProps<{
+  data: HApp[] | { error: unknown }
+  isLoading: boolean
+}>()
 
-  isLoading: {
-    type: Boolean,
-    required: true
-  }
-})
-
-const isError = computed(() => !!props.data.error)
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
 
 const emit = defineEmits(['try-again-clicked'])
 </script>

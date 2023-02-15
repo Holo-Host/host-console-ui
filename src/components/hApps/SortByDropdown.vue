@@ -2,18 +2,18 @@
   <div class="sort-by-dropdown">
     <div
       class="sort-by-dropdown__label"
-      :class="{ 'sort-by-dropdown--disabled': isDisabled }"
+      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
     >
       {{ $t('$.sort_by') }}:&nbsp;
     </div>
     <select
-      :value="value"
+      :value="props.value"
       class="sort-by-dropdown__sort"
-      :class="{ 'sort-by-dropdown--disabled': isDisabled }"
+      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
       @change="onChange"
     >
       <option
-        v-for="option in options"
+        v-for="option in props.options"
         :key="option.value"
         :value="option.value"
       >
@@ -26,22 +26,22 @@
 <script setup lang="ts">
 import { kSortOptions } from '@/constants/ui'
 
-defineProps({
-  value: {
-    type: String,
-    required: true
-  },
+interface Option {
+  label: string
+  value: string
+}
 
-  isDisabled: {
-    type: Boolean,
-    default: false
-  },
-
-  options: {
-    type: Array,
-    default: Object.values(kSortOptions)
+const props = withDefaults(
+  defineProps<{
+    value: string
+    isDisabled?: boolean
+    options?: Option[]
+  }>(),
+  {
+    isDisabled: false,
+    options: Object.values(kSortOptions)
   }
-})
+)
 
 const emit = defineEmits(['update:value'])
 

@@ -1,6 +1,6 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
+    :is-loading="props.isLoading"
     :is-error="isError"
     :title="$t('holofuel.title')"
     @try-again-clicked="emit('try-again-clicked')"
@@ -35,41 +35,46 @@ import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { isError as isErrorPredicate } from '@/types/predicates'
+import type { DashboardCardItem } from '@/types/types'
 
 const { t } = useI18n()
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  },
+const props = defineProps<{
+  data: Data | { error: unknown }
+  isLoading: boolean
+}>()
 
-  isLoading: {
-    type: Boolean,
-    required: true
-  }
-})
-
-const isError = computed(() => !!props.data.error)
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
 
 const emit = defineEmits(['try-again-clicked'])
 
-const items = computed(() => [
+interface Data {
+  available: string
+  redeemable: string
+}
+
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
+const items = computed((): DashboardCardItem[] => [
   {
     label: t('holofuel.balance'),
     value:
-      props.data && Number(props.data.available) ? formatCurrency(Number(props.data.available)) : 0,
+      !isErrorPredicate(props.data) && Number(props.data.available)
+        ? formatCurrency(Number(props.data.available))
+        : 0,
     isActive: true
   },
   {
     label: t('holofuel.redeemable'),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     value:
-      props.data && Number(props.data.redeemable)
+      !isErrorPredicate(props.data) && Number(props.data.available) && Number(props.data.redeemable)
         ? formatCurrency(Number(props.data.redeemable))
         : 0,
     isActive: false
   }
 ])
+/* eslint-enable @typescript-eslint/no-unsafe-assignment */
 </script>
 
 <style scoped>

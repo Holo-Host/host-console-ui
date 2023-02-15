@@ -39,19 +39,19 @@
 </template>
 
 <script setup lang="ts">
-import BaseSearchInput from '@uicommon/components/BaseSearchInput'
-import BaseTable from '@uicommon/components/BaseTable'
-import { useFilter, EFilterTypes } from '@uicommon/composables/useFilter'
+import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
+import BaseTable from '@uicommon/components/BaseTable.vue'
+import { useFilter } from '@uicommon/composables/useFilter'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import dayjs from 'dayjs'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import InvoicesTableRow from '@/components/invoices/InvoicesTableRow'
+import InvoicesTableRow from '@/components/invoices/InvoicesTableRow.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kRoutes } from '@/router'
 import { useEarningsStore } from '@/store/earnings'
-import type {BreadCrumb} from "@/types/types";
+import type { BreadCrumb } from '@/types/types'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -208,6 +208,7 @@ const kFilterCriteria: FilterCriteria[] = [
   }
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { filteredData, setFilter, filterValue } = useFilter({
   data: invoices,
   criteria: kFilterCriteria

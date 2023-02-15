@@ -39,3 +39,27 @@ export interface InvoicesData {
     period: string
   }
 }
+
+export interface TableHeader {
+  key: string
+  isSortable: boolean
+  isVisibleOnMobile: boolean
+  label: string
+  align: string
+}
+
+export enum ESortDirection {
+  asc = 'asc',
+  desc = 'desc'
+}
+
+export interface SortByProps {
+  key: string
+  direction: ESortDirection
+}
+
+export interface DashboardCardItem {
+  label: string
+  value: number
+  isActive?: boolean
+}

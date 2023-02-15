@@ -26,8 +26,8 @@ interface HposInterface {
 }
 
 export interface UpdateHoloFuelProfilePayload {
-  nickname: string
-  avatarUrl: string
+  nickname?: string
+  avatarUrl?: string
 }
 
 interface HposStatusResponse {
@@ -78,7 +78,7 @@ type HposHolochainCallResponse =
   | HposStatusResponse
   | HoloFuelProfileResponse
   | CoreAppVersionResponse
-  | Promise<Transactions[] | boolean>
+  | Promise<Transaction[] | boolean>
   | CoreAppVersion
   | HostPreferencesResponse
 
@@ -100,6 +100,7 @@ export interface HApp {
   enabled: boolean
   isPaused: boolean
   sourceChains: number
+  hostedAgents: number
   storage: number
   usage: {
     bandwidth: number
@@ -138,7 +139,7 @@ interface CoreAppVersion {
   coreAppVersion: string | null
 }
 
-export interface Transactions {
+export interface Transaction {
   id: string
   amount: string
   created_date: string
@@ -543,7 +544,10 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function updateHoloFuelProfile({ nickname, avatarUrl }): Promise<boolean> {
+  async function updateHoloFuelProfile({
+    nickname,
+    avatarUrl
+  }: UpdateHoloFuelProfilePayload): Promise<boolean> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),

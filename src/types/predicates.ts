@@ -1,4 +1,4 @@
-import type { HostPreferencesResponse, Transactions } from '@/interfaces/HposInterface'
+import type { HostPreferencesResponse, Transaction } from '@/interfaces/HposInterface'
 import type { AdminSignature, CheckAuthResponse, Error, HoloFuelProfile } from '@/types/types'
 
 export function isAdminSignature(target: CheckAuthResponse): target is AdminSignature {
@@ -21,6 +21,6 @@ export function isNumber(target: unknown): target is number {
   return typeof target === 'number'
 }
 
-export function isTransactionsArray(target: unknown): target is Transactions[] {
+export function isTransactionsArray(target: unknown): target is Transaction[] {
   return target !== undefined
 }

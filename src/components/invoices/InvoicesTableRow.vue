@@ -1,70 +1,78 @@
 <template>
   <BaseTableRow>
     <BaseTableRowItem
-      :value="invoice.happ"
+      :value="props.invoice.happ"
       is-visible-on-mobile
       is-bold
     />
 
     <BaseTableRowItem>
       <Identicon
-        v-if="invoice.counterparty"
+        v-if="props.invoice.counterparty"
         size="27"
-        :agent-key="decodeAgentId(invoice.counterparty)"
+        :agent-key="decodeAgentId(props.invoice.counterparty)"
         role="img"
         aria-label="Agent Identity Icon"
       />
     </BaseTableRowItem>
 
     <BaseTableRowItem
-      :value="isPaid ? invoice.formattedCompletedDate : invoice.formattedCreatedDate"
+      :value="isPaid ? props.invoice.formattedCompletedDate : props.invoice.formattedCreatedDate"
       is-visible-on-mobile
     />
 
     <BaseTableRowItem
-      :value="invoice.formattedExpirationDate"
+      :value="props.invoice.formattedExpirationDate"
     />
 
     <BaseTableRowItem
-      :value="invoice.formattedId"
+      :value="props.invoice.formattedId"
     />
 
     <BaseTableRowItem
-      :value="invoice.formattedAmount"
+      :value="props.invoice.formattedAmount"
       is-visible-on-mobile
       is-bold
       align="end"
     />
 
     <BaseTableRowItem
-      :value="invoice.status"
+      :value="props.invoice.status"
       is-visible-on-mobile
     />
 
     <template #expanded-content>
       <PaidInvoicesExpandableContent
-        :invoice="invoice"
+        :invoice="props.invoice"
       />
     </template>
   </BaseTableRow>
 </template>
 
-<script setup>
-import BaseTableRow from '@uicommon/components/BaseTableRow'
-import BaseTableRowItem from '@uicommon/components/BaseTableRowItem'
-import Identicon from '@uicommon/components/Identicon'
+<script setup lang="ts">
+import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
+import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
+import Identicon from '@uicommon/components/Identicon.vue'
 import { decodeAgentId } from '@uicommon/utils/agent'
-import PaidInvoicesExpandableContent from '@/components/invoices/PaidInvoicesExpandableContent'
+import PaidInvoicesExpandableContent from '@/components/invoices/PaidInvoicesExpandableContent.vue'
+import type { Transaction } from '@/interfaces/HposInterface'
 
-defineProps({
-  invoice: {
-    type: Object,
-    required: true
-  },
+interface ExtendedTransaction extends Transaction {
+  formattedId: string
+  happ: string
+  formattedCompletedDate: string
+  formattedCreatedDate: string
+  formattedExpirationDate: string
+  formattedAmount: string
+}
 
-  isPaid: {
-    type: Boolean,
-    default: false
+const props = withDefaults(
+  defineProps<{
+    invoice: ExtendedTransaction
+    isPaid?: boolean
+  }>(),
+  {
+    isPaid: false
   }
-})
+)
 </script>

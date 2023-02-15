@@ -1,6 +1,6 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
+    :is-loading="props.isLoading"
     :is-error="isError"
     :title="$t('usage.title')"
     @try-again-clicked="emit('try-again-clicked')"
@@ -13,14 +13,14 @@
         <span
           class="bold"
           data-testid="happ-no"
-        >{{ data ? data.totalHostedHapps : 0 }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
+        >{{ props.data ? props.data.totalHostedHapps : 0 }}&nbsp;</span> {{ $t('usage.total_happs_hosted') }}
       </div>
 
       <div class="info-row usage-row">
         <span
           class="bold"
           data-testid="sc-no"
-        >{{ data ? data.totalHostedAgents : 0 }}&nbsp;</span> {{ $t('usage.total_users_hosted') }}
+        >{{ props.data ? props.data.totalHostedAgents : 0 }}&nbsp;</span> {{ $t('usage.total_users_hosted') }}
       </div>
 
       <router-link
@@ -46,7 +46,7 @@
           {{ $t('$.cpu') }}
         </span>
         <span class="bold">
-          {{ presentMicroSeconds(data ? data.totalUsage?.cpu : 0 ) }}
+          {{ presentMicroSeconds(props.data ? props.data.totalUsage?.cpu : 0 ) }}
         </span>
       </div>
 
@@ -55,14 +55,14 @@
           {{ $t('$.storage') }}
         </span>
         <span class="bold">
-          {{ presentBytes(data ? data.currentTotalStorage : 0) }}
+          {{ presentBytes(props.data ? props.data.currentTotalStorage : 0) }}
         </span>
       </div>
       <div class="info-row daily-row">
         <span class="daily-label">
           {{ $t('$.bandwidth') }}
         </span>
-        <span class="bold">{{ presentBytes(data ? data.totalUsage?.bandwidth : 0) }}
+        <span class="bold">{{ presentBytes(props.data ? props.data.totalUsage?.bandwidth : 0) }}
         </span>
       </div>
     </template>
@@ -71,25 +71,20 @@
 
 <script setup lang="ts">
 import BaseCard from '@uicommon/components/BaseCard.vue'
-import GearIcon from '@/components/icons/GearIcon.vue'
-import { presentMicroSeconds, presentBytes } from '@/utils'
 import { computed } from 'vue'
+import GearIcon from '@/components/icons/GearIcon.vue'
+import type { UsageResponse } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
+import { presentMicroSeconds, presentBytes } from '@/utils'
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  },
-
-  isLoading: {
-    type: Boolean,
-    required: true
-  }
-})
+const props = defineProps<{
+  data: UsageResponse | { error: unknown }
+  isLoading: boolean
+}>()
 
 const emit = defineEmits(['try-again-clicked'])
 
-const isError = computed(() => !!props.data.error)
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
 </script>
 
 <style scoped>

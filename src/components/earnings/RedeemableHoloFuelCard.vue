@@ -1,14 +1,14 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
-    :is-error="isError"
+    :is-loading="props.isLoading"
+    :is-error="props.isError"
     class="redeemable-holofuel"
     @try-again-clicked="emit('try-again-clicked')"
   >
     <CardHeader
       is-disabled
       :label="$t('earnings.redeemable_holofuel')"
-      :amount="data"
+      :amount="props.data"
       class="redeemable-holofuel__header"
     />
 
@@ -40,35 +40,24 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
-import BaseLinkButton from '@uicommon/components/BaseLinkButton'
-import CardHeader from '@/components/earnings/CardHeader'
-import RightArrowIcon from '@/components/icons/FatArrowIcon'
-import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon'
-import TransferIcon from '@/components/icons/TransferIcon'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import BaseLinkButton from '@uicommon/components/BaseLinkButton.vue'
+import CardHeader from '@/components/earnings/CardHeader.vue'
+import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
+import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon.vue'
+import TransferIcon from '@/components/icons/TransferIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
 const emit = defineEmits(['try-again-clicked'])
 
 const { goToHoloFuel } = useGoToHoloFuel()
 
-defineProps({
-  data: {
-    type: Number,
-    required: true
-  },
-
-  isLoading: {
-    type: Boolean,
-    required: true
-  },
-
-  isError: {
-    type: Boolean,
-    required: true
-  }
-})
+const props = defineProps<{
+  data: number
+  isLoading: boolean
+  isError: boolean
+}>()
 </script>
 
 <style lang="scss" scoped>
