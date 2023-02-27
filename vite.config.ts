@@ -4,6 +4,7 @@ import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import inject from '@rollup/plugin-inject'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
+import vitePluginRequire from 'vite-plugin-require'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import { configDefaults } from 'vitest/config'
@@ -34,6 +35,7 @@ export default defineConfig(({ mode }) => {
       VueI18nPlugin({
         include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**')
       }),
+      vitePluginRequire(),
       inject({
         Buffer: ['buffer', 'Buffer']
       })

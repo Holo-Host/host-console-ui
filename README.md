@@ -88,15 +88,6 @@ yarn build
 yarn lint
 ```
 
-### Storybook
-This project contains Storybook stories. To run storybook in the development mode:
-
-1. Run storybook `yarn storybook`
-2. Visit `http://localhost:6006/`
-
-Storybook is automatically deployed to `https://holo-host.github.io/host-console-ui` on every merge to the
-`develop` branch.
-
 ### User authentication mechanism
 See [Token authentication](https://hackmd.io/Evi5CVFqTI22UD8_OrDgYA?view) description.
 
