@@ -33,7 +33,8 @@ export default defineConfig(({ mode }) => {
       topLevelAwait(),
       vue(),
       VueI18nPlugin({
-        include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**')
+        include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
+        runtimeOnly: false
       }),
       vitePluginRequire(),
       inject({
