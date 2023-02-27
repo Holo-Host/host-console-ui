@@ -15,7 +15,10 @@ const getHcPubkey = (): string | undefined => {
 // This import has to be async because of the way that dumb webpack interacts with wasm
 // It took me more than 2 days to make it work so DO NOT even try to touch this code!
 const importHpAdminKeypairClass = async (): Promise<typeof HpAdminKeypair> => {
+  console.log('importing wasm module...')
   const wasm = await import('@holo-host/hp-admin-keypair')
+  console.log('wasm module imported', wasm)
+  console.log('wasm.HpAdminKeypair', wasm.HpAdminKeypair)
   return wasm.HpAdminKeypair
 }
 
@@ -43,7 +46,10 @@ export const getHpAdminKeypair = async (
   }
 
   const HpAdminKeypair = await importHpAdminKeypairClass()
-  HpAdminKeypairInstance = new HpAdminKeypair(hcKey, email, password)
+  console.log('HpAdminKeypair', HpAdminKeypair)
+  console.log(hcKey, email, password)
+  HpAdminKeypairInstance = new HpAdminKeypair('5zvezgwyz5robqc9s20n9655be0ot9vxmgqwm8g4iy5ite9a4', email, password)
+  console.log('HpAdminKeypairInstance', HpAdminKeypairInstance)
 
   return HpAdminKeypairInstance
 }

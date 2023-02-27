@@ -40,9 +40,6 @@ export default defineConfig(({ mode }) => {
         Buffer: ['buffer', 'Buffer']
       })
     ],
-    optimizeDeps: {
-      exclude: ['@syntect/wasm']
-    },
     server:
       env.NODE_ENV === 'production' || env.NODE_ENV === 'test'
         ? {}

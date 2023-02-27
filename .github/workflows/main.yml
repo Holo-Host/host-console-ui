@@ -13,7 +13,7 @@ jobs:
       VITE_HPOS_PORT: 4567
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [16.x, 17.x, 18.x]
     steps:
     - name: 🦴 Fetch source code
       uses: actions/checkout@v3
