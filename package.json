@@ -5,7 +5,7 @@
   "homepage": "https://holo-host.github.io/host-console-ui/",
   "scripts": {
     "dev": "VITE_UI_VERSION=$npm_package_version vite",
-    "preview": "VITE_UI_VERSION=$npm_package_version vite preview",
+    "preview": "VITE_UI_VERSION=$npm_package_version vite build && vite preview",
     "build": "VITE_UI_VERSION=$npm_package_version VITE_USE_REAL_PUB_KEY=true vite build",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "test": "yarn vitest",
@@ -36,11 +36,10 @@
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^0.8.2",
-    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@pinia/testing": "^0.0.15",
     "@rollup/plugin-inject": "^5.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/parser": "^5.53.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitest/ui": "^0.29.1",
     "@vue/compiler-sfc": "^3.2.47",
