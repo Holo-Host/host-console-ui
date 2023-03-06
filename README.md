@@ -1,7 +1,7 @@
 # host-console-ui
 
 ## Ownership Info
-Codeowner: @mateusz
+Codeowner: @mateuszRybczonek
 Consulted: None
 Informed: @robbie
 
