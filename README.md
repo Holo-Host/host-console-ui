@@ -1,5 +1,10 @@
 # host-console-ui
 
+## Ownership Info
+Codeowner: @mateusz
+Consulted: None
+Informed: @robbie
+
 ## Git Submodules
 This project contains git submodules, remember to initialize submodules after cloning.
 
