@@ -3,7 +3,7 @@
 ## Ownership Info
 Codeowner: @mateuszRybczonek
 Consulted: None
-Informed: @robbie
+Informed: @robbiecarlton
 
 ## Git Submodules
 This project contains git submodules, remember to initialize submodules after cloning.
