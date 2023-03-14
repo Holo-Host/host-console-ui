@@ -1,5 +1,5 @@
 // mock of normal hpos api responses
-const createDate = require('./utils').createDate
+import { createDate } from './utils'
 
 /* eslint-disable no-magic-numbers */
 const happs = [

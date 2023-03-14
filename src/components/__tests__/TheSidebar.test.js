@@ -1,47 +1,90 @@
 import { createTestingPinia } from '@pinia/testing'
-import { render } from '@testing-library/vue'
+import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
-import router from 'src/router'
+import router from '@/router'
 import { createI18n } from 'vue-i18n'
-import wait from 'waait'
 import TheSidebar from '../sidebar/TheSidebar'
-import locales from '@/locales'
+import { messages } from '@/locales'
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
-jest.mock('axios')
+vi.mock('axios')
 mockGlobalCrypto()
 
-describe('earnings page', () => {
+describe('sidebar', () => {
   beforeEach(() => {
     axios.get.mockClear()
     axios.put.mockClear()
   })
 
-  it('sidebar renders alpha flag', async () => {
-    axios.get.mockImplementation((path) => {
-      if (path.endsWith('/api/v1/config')) {
-        return Promise.resolve(defaultSettingsResult)
-      }
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
 
-      if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
-        return Promise.resolve(defaultSshAccessResult)
+  const setup = () => {
+    return mount(TheSidebar, {
+      global: {
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            createSpy: vi.fn(),
+          }),
+        ]
       }
+    })
+  }
 
-      throw new Error(`axios mock doesn't recognise this path: ${path}`)
+  describe('renders', () => {
+    const wrapper = setup()
+
+    it('with sidebar section', async () => {
+      expect(wrapper.findAll('[data-test-sidebar]')).toHaveLength(1)
     })
 
-    const { getByText } = render(TheSidebar, {
-      global: { plugins: [router, createTestingPinia(), i18n] }
+    it('with header', async () => {
+      expect(wrapper.findAll('[data-test-sidebar-header]')).toHaveLength(1)
     })
-    await wait(0)
 
-    getByText('ALPHA: HoloFuel = Test Fuel')
+    it('with proper header content', () => {
+      expect(wrapper.find('[data-test-sidebar-header]').text()).toContain(
+        messages.en.$.host_console
+      )
+    })
+
+    it('with menu', async () => {
+      expect(wrapper.findAll('[data-test-sidebar-menu]')).toHaveLength(1)
+    })
+
+    it('with proper number of menu items', async () => {
+      expect(wrapper.findAll('[data-test-sidebar-menu-item]')).toHaveLength(4)
+    })
+
+    it('with footer', async () => {
+      expect(wrapper.findAll('[data-test-sidebar-footer]')).toHaveLength(1)
+    })
+
+    it('with alpha flag', async () => {
+      axios.get.mockImplementation((path) => {
+        if (path.endsWith('/api/v1/config')) {
+          return Promise.resolve(defaultSettingsResult)
+        }
+
+        if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
+          return Promise.resolve(defaultSshAccessResult)
+        }
+
+        throw new Error(`axios mock doesn't recognise this path: ${path}`)
+      })
+
+      expect(wrapper.findAll('[data-test-sidebar-alpha-banner]')).toHaveLength(1)
+    })
   })
 })

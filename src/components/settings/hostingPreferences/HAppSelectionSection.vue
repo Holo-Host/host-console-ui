@@ -36,9 +36,9 @@
   </SettingsSection>
 </template>
 
-<script setup >
-import PencilIcon from 'components/icons/PencilIcon.vue'
+<script setup lang="ts">
 import SettingsSection from '../SettingsSection.vue'
+import PencilIcon from '@/components/icons/PencilIcon.vue'
 </script>
 
 <style lang="scss" scoped>

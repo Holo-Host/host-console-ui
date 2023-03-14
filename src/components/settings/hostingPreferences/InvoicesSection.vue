@@ -5,12 +5,12 @@
   >
     <div class="invoices-section">
       <InvoicesFrequencyRow
-        :data="data"
+        :data="props.data"
         @update:frequency="updateFrequency"
       />
 
       <InvoicesDueRow
-        :data="data"
+        :data="props.data"
         class="invoices-section__due-row"
         @update:due="updateDue"
       />
@@ -18,13 +18,13 @@
       <div class="invoices-section__notes">
         <div>
           <span>{{ $t('hosting_preferences.invoices.note_one.part_one') }}</span>
-          <span class="invoices-section__notes-value">{{ 2 * data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
+          <span class="invoices-section__notes-value">{{ 2 * props.data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
           <span>{{ $t('hosting_preferences.invoices.note_one.part_two') }}</span>
         </div>
 
         <div class="invoices-section__note-two">
           <span>{{ $t('hosting_preferences.invoices.note_two.part_one') }}</span>
-          <span class="invoices-section__notes-value">{{ 4 * data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
+          <span class="invoices-section__notes-value">{{ 4 * props.data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
           <span>{{ $t('hosting_preferences.invoices.note_two.part_two') }}</span>
         </div>
       </div>
@@ -32,21 +32,19 @@
   </SettingsSection>
 </template>
 
-<script setup >
-import InvoicesDueRow from 'components/settings/hostingPreferences/InvoicesDueRow.vue'
-import InvoicesFrequencyRow from 'components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
+<script setup lang="ts">
 import SettingsSection from '../SettingsSection.vue'
+import InvoicesDueRow from '@/components/settings/hostingPreferences/InvoicesDueRow.vue'
+import InvoicesFrequencyRow from '@/components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
+import type { InvoicesData } from '@/types/types'
 
-defineProps({
-  data: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  data: InvoicesData
+}>()
 
 const emit = defineEmits(['update:frequency', 'update:due'])
 
-function updateFrequency(value) {
+function updateFrequency(value: number | string): void {
   emit('update:frequency', value)
 }
 

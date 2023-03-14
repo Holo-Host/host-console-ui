@@ -8,7 +8,7 @@
 
     <TimeDropdownSelect
       is-disabled
-      :value="data.frequency.period"
+      :value="props.data.frequency.period"
       :options="['N/A', 7, 30]"
       @update:selected-value="onFrequencyPeriodChange"
     />
@@ -17,7 +17,7 @@
 
     <BaseEditableInput
       is-disabled
-      :value="formatCurrency(Number(data.frequency.amount), 0)"
+      :value="formatCurrency(Number(props.data.frequency.amount), 0)"
       unit="HF"
       class="invoices-frequency-section__amount"
       @update:value="onFrequencyAmountChange"
@@ -25,29 +25,27 @@
   </SettingsRow>
 </template>
 
-<script setup >
+<script setup lang="ts">
 import { formatCurrency } from '@uicommon/utils/numbers'
-import BaseEditableInput from 'components/BaseEditableInput.vue'
-import TimeDropdownSelect from 'components/TimeDropdownSelect.vue'
 import SettingsRow from '../SettingsRow.vue'
+import BaseEditableInput from '@/components/BaseEditableInput.vue'
+import TimeDropdownSelect from '@/components/TimeDropdownSelect.vue'
+import { InvoicesData } from '@/types/types'
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  data: InvoicesData
+}>()
 
 const emit = defineEmits(['update:frequency'])
 
-function onFrequencyPeriodChange(value) {
+function onFrequencyPeriodChange(value: number | string): void {
   emit('update:frequency', {
     ...props.data.frequency,
     period: Number(value)
   })
 }
 
-function onFrequencyAmountChange(value) {
+function onFrequencyAmountChange(value: number): void {
   emit('update:frequency', {
     ...props.data.frequency,
     amount: value

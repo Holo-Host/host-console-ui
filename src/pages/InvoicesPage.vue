@@ -2,11 +2,11 @@
   <PrimaryLayout
     :title="$t(pageHeaderTranslationKey)"
     :breadcrumbs="breadcrumbs"
-    data-testid="invoices-page"
+    data-test-invoices-page-layout
   >
     <div
       class="controls"
-      data-testid="invoices-page-filters"
+      data-test-invoices-page-filters
     >
       <BaseSearchInput
         :value="filterValue"
@@ -16,39 +16,42 @@
       />
     </div>
 
-    <BaseTable
-      v-slot="{ items }"
-      :is-loading="isLoading"
-      :is-error="isError"
-      :headers="[...headersMap.values()]"
-      :initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
-      :items="filteredData"
-      :empty-message-translation-key="emptyMessageTranslationKey"
-      @try-again-clicked="getInvoices"
-    >
-      <InvoicesTableRow
-        v-for="item in items"
-        :key="item.id"
-        :is-paid="isPaidInvoices"
-        :invoice="item"
-      />
-    </BaseTable>
+    <div data-test-invoices-page-table>
+      <BaseTable
+        v-slot="{ items }"
+        :is-loading="isLoading"
+        :is-error="isError"
+        :headers="[...headersMap.values()]"
+        :initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
+        :items="filteredData"
+        :empty-message-translation-key="emptyMessageTranslationKey"
+        @try-again-clicked="getInvoices"
+      >
+        <InvoicesTableRow
+          v-for="item in items"
+          :key="item.id"
+          :is-paid="isPaidInvoices"
+          :invoice="item"
+        />
+      </BaseTable>
+    </div>
   </PrimaryLayout>
 </template>
 
-<script setup>
-import BaseSearchInput from '@uicommon/components/BaseSearchInput'
-import BaseTable from '@uicommon/components/BaseTable'
-import { useFilter, EFilterTypes } from '@uicommon/composables/useFilter'
+<script setup lang="ts">
+import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
+import BaseTable from '@uicommon/components/BaseTable.vue'
+import { useFilter } from '@uicommon/composables/useFilter'
 import { formatCurrency } from '@uicommon/utils/numbers'
-import InvoicesTableRow from 'components/invoices/InvoicesTableRow'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
 import dayjs from 'dayjs'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { kRoutes } from '../router'
-import { useEarningsStore } from '../store/earnings'
+import InvoicesTableRow from '@/components/invoices/InvoicesTableRow.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import { kRoutes } from '@/router'
+import { useEarningsStore } from '@/store/earnings'
+import type { BreadCrumb } from '@/types/types'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -56,11 +59,9 @@ const router = useRouter()
 const isLoading = ref(false)
 const isError = ref(false)
 
-const isFilteringEnabled = computed(
-  () => !isLoading.value && !isError.value && invoices.value.length > 0
-)
-
 const earningsStore = useEarningsStore()
+
+const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
 const headersMap = computed(
   () =>
@@ -138,8 +139,6 @@ const kMsInSecond = 1000
 const kDefaultDateFormat = 'DD MMM YYYY'
 const kVisibleHashLength = 6
 
-const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
-
 const invoices = computed(() => {
   const rawInvoices = isPaidInvoices.value
     ? earningsStore.paidInvoices
@@ -165,47 +164,65 @@ const invoices = computed(() => {
     : []
 })
 
-const kFilterCriteria = [
+// Filtering
+const isFilteringEnabled = computed(
+  (): boolean => !isLoading.value && !isError.value && invoices.value.length > 0
+)
+
+enum EFilterType {
+  string,
+  number
+}
+
+interface FilterCriteria {
+  key: string
+  type: EFilterType
+  minLength: number
+  exact: boolean
+}
+
+const kFilterCriteria: FilterCriteria[] = [
   {
     key: 'happ',
-    type: EFilterTypes.string,
+    type: EFilterType.string,
     minLength: 3,
     exact: false
   },
   {
     key: 'counterparty',
-    type: EFilterTypes.string,
+    type: EFilterType.string,
     minLength: 15,
     exact: true
   },
   {
     key: 'id',
-    type: EFilterTypes.string,
+    type: EFilterType.string,
     minLength: 15,
     exact: true
   },
   {
     key: 'amount',
-    type: EFilterTypes.number,
+    type: EFilterType.number,
     minLength: 3,
     exact: false
   }
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { filteredData, setFilter, filterValue } = useFilter({
   data: invoices,
   criteria: kFilterCriteria
 })
 
-const pageHeaderTranslationKey = computed(() =>
+const pageHeaderTranslationKey = computed((): string =>
   isPaidInvoices.value ? 'earnings.paid_invoices' : 'earnings.unpaid_invoices'
 )
 
-const emptyMessageTranslationKey = computed(() =>
+const emptyMessageTranslationKey = computed((): string =>
   isPaidInvoices.value ? 'invoices.errors.no_paid_invoices' : 'invoices.errors.no_unpaid_invoices'
 )
 
-const breadcrumbs = computed(() => [
+const breadcrumbs = computed((): BreadCrumb[] => [
   {
     label: t('$.earnings'),
     path: '/earnings'
@@ -215,7 +232,7 @@ const breadcrumbs = computed(() => [
   }
 ])
 
-async function getInvoices() {
+async function getInvoices(): Promise<void> {
   isError.value = false
   isLoading.value = true
 
@@ -230,7 +247,7 @@ async function getInvoices() {
   }
 }
 
-onMounted(async () => {
+onMounted(async (): Promise<void> => {
   await getInvoices()
 })
 </script>

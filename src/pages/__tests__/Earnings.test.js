@@ -1,50 +1,63 @@
 import { createTestingPinia } from '@pinia/testing'
-import { within, render } from '@testing-library/vue'
-import axios from 'axios'
-import { defaultSettingsResult } from 'src/__tests__/constants'
+import { mount } from '@vue/test-utils'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
-import router from 'src/router'
+import router from '@/router'
 import { createI18n } from 'vue-i18n'
-import wait from 'waait'
 import Earnings from '../EarningsPage.vue'
-import locales from '@/locales'
-const clickOutside = jest.fn()
+import { messages } from '@/locales'
+import { expect, describe, it, vi } from 'vitest'
+
+const clickOutside = vi.fn()
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
-jest.mock('axios')
 mockGlobalCrypto()
 
 describe('earnings page', () => {
-  beforeEach(() => {
-    axios.get.mockClear()
-    axios.put.mockClear()
-  })
-
-  it('renders page header', async () => {
-    axios.get.mockImplementation((path) => {
-      if (path.endsWith('/api/v1/config')) {
-        return Promise.resolve(defaultSettingsResult)
-      }
-
-      throw new Error(`axios mock doesn't recognise this path: ${path}`)
-    })
-
-    const { getByTestId } = render(Earnings, {
+  const setup = () => {
+    return mount(Earnings, {
       global: {
-        plugins: [router, createTestingPinia(), i18n],
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            createSpy() {
+              return () => {
+                return Promise.resolve()
+              }
+            }
+          }),
+        ],
         directives: {
           clickOutside
         }
       }
     })
+  }
 
-    await wait(0)
+  describe('renders', async () => {
+    const wrapper = setup()
 
-    within(getByTestId('earnings-page')).getAllByText('Earnings')
+    it('with primary layout', () => {
+      expect(wrapper.findAll('[data-test-earnings-layout]')).toHaveLength(1)
+    })
+
+    it('with weekly earnings card', () => {
+      expect(wrapper.findAll('[data-test-earnings-weekly-earnings-card]')).toHaveLength(1)
+    })
+
+    it('with redeemable holo fuel card', () => {
+      expect(wrapper.findAll('[data-test-earnings-redeemable-holo-fuel-card]')).toHaveLength(1)
+    })
+
+    it('with proper title in the top nav', () => {
+      const layout = wrapper.find('[data-test-earnings-layout]')
+
+      expect(layout.text()).toContain(messages.en.$.earnings)
+    })
   })
 })

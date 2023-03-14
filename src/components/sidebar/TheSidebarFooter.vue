@@ -1,5 +1,8 @@
 <template>
-  <div class="sidebar-footer">
+  <div
+    class="sidebar-footer"
+    data-test-sidebar-footer
+  >
     <a
       class="sidebar-footer__holo-brand"
       href="https://holo.host/"
@@ -26,8 +29,8 @@
   </div>
 </template>
 
-<script setup>
-const { version } = require('../../../package.json')
+<script setup lang="ts">
+import { version } from '../../../package.json'
 </script>
 
 <style lang="scss" scoped>

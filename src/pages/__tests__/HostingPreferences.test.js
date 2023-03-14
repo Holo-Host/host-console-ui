@@ -1,23 +1,23 @@
 import { createTestingPinia } from '@pinia/testing'
-import { render } from '@testing-library/vue'
-import axios from 'axios'
-import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
+import { mount } from '@vue/test-utils'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
-import router from 'src/router'
+import router from '@/router.ts'
 import { createI18n } from 'vue-i18n'
-import wait from 'waait'
 import HostingPreferences from '../HostingPreferences.vue'
-import locales from '@/locales'
-const clickOutside = jest.fn()
+import { messages } from '@/locales'
+import {expect, describe, it, vi, beforeEach, afterEach} from 'vitest'
+import axios from 'axios';
 
 const i18n = createI18n({
   legacy: false,
   locale: 'en',
-  messages: locales
+  messages
 })
 
-jest.mock('axios')
+vi.mock('axios')
 mockGlobalCrypto()
+
+const clickOutside = vi.fn()
 
 describe('hosting preferences page', () => {
   beforeEach(() => {
@@ -25,32 +25,54 @@ describe('hosting preferences page', () => {
     axios.put.mockClear()
   })
 
-  it('renders all card titles', async () => {
-    axios.get.mockImplementation((path) => {
-      if (path.endsWith('/api/v1/config')) {
-        return Promise.resolve(defaultSettingsResult)
-      }
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
 
-      if (path.endsWith('/api/v1/profiles/development/features/ssh')) {
-        return Promise.resolve(defaultSshAccessResult)
-      }
-
-      throw new Error(`axios mock doesn't recognise this path: ${path}`)
-    })
-
-    const { getByText } = render(HostingPreferences, {
+  const setup = () => {
+    return mount(HostingPreferences, {
       global: {
-        plugins: [router, createTestingPinia(), i18n],
+        plugins: [
+          i18n,
+          router,
+          createTestingPinia({
+            createSpy() {
+              return () => {
+                return Promise.resolve()
+              }
+            }
+          })
+        ],
         directives: {
           clickOutside
         }
       }
     })
+  }
 
-    await wait(0)
+  describe('renders', async () => {
+    const wrapper = setup()
 
-    getByText('Price Configuration')
-    getByText('Invoice & Payment Terms')
-    getByText('hApp Selection')
+    it('with primary layout', () => {
+      expect(wrapper.findAll('[data-test-hosting-preferences-layout]')).toHaveLength(1)
+    })
+
+    it('with prices section', () => {
+      expect(wrapper.findAll('[data-test-hosting-preferences-prices-section]')).toHaveLength(1)
+    })
+
+    it('with invoices section', () => {
+      expect(wrapper.findAll('[data-test-hosting-preferences-invoices-section]')).toHaveLength(1)
+    })
+
+    it('with happ selection section', () => {
+      expect(wrapper.findAll('[data-test-hosting-preferences-happ-selection-section]')).toHaveLength(1)
+    })
+
+    it('with proper title in the top nav', () => {
+      const layout = wrapper.find('[data-test-hosting-preferences-layout]')
+
+      expect(layout.text()).toContain(messages.en.hosting_preferences.header)
+    })
   })
 })

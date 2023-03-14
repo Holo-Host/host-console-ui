@@ -1,15 +1,28 @@
-import Earnings from 'pages/EarningsPage.vue'
-import HappDetails from 'pages/HappDetails.vue'
-import HAppsPage from 'pages/HAppsPage.vue'
-import HostingPreferences from 'pages/HostingPreferences.vue'
-import InvoicesPage from 'pages/InvoicesPage.vue'
-import DashboardPage from 'src/pages/DashboardPage.vue'
-import LoginPage from 'src/pages/LoginPage.vue'
-import SettingsPage from 'src/pages/SettingsPage.vue'
-import { createWebHistory, createRouter } from 'vue-router'
-import { kAuthTokenLSKey } from '@/constants'
+import { createWebHistory, createRouter, Router, RouteRecordRaw } from 'vue-router'
+import { kAuthTokenLSKey } from './constants'
+import DashboardPage from './pages/DashboardPage.vue'
+import Earnings from './pages/EarningsPage.vue'
+import HappDetails from './pages/HappDetails.vue'
+import HAppsPage from './pages/HAppsPage.vue'
+import HostingPreferences from './pages/HostingPreferences.vue'
+import InvoicesPage from './pages/InvoicesPage.vue'
+import LoginPage from './pages/LoginPage.vue'
+import SettingsPage from './pages/SettingsPage.vue'
 
-export const kRoutes = {
+interface Routes {
+  login: RouteRecordRaw
+  dashboard: RouteRecordRaw
+  happs: RouteRecordRaw
+  happ: RouteRecordRaw
+  accountSettings: RouteRecordRaw
+  earnings: RouteRecordRaw
+  paidInvoices: RouteRecordRaw
+  unpaidInvoices: RouteRecordRaw
+  hostingPreferences: RouteRecordRaw
+  default: RouteRecordRaw
+}
+
+export const kRoutes: Routes = {
   login: {
     path: '/login',
     name: 'Login',
@@ -98,7 +111,7 @@ export const kRoutes = {
 }
 
 // used in loginFlow.integration.test.js
-export const routerFactory = () => {
+export const routerFactory = (): Router => {
   const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -115,7 +128,7 @@ export const routerFactory = () => {
     ]
   })
 
-  router.beforeEach((to, from, next) => {
+  router.beforeEach((to, _, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // page only visible when logged in
 
@@ -148,4 +161,4 @@ const router = routerFactory()
 
 export default router
 
-export const happDetailsPath = ({ id }) => `/happ/${encodeURIComponent(id)}`
+export const happDetailsPath = ({ id }: { id: string }): string => `/happ/${encodeURIComponent(id)}`

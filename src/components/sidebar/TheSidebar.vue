@@ -1,13 +1,19 @@
 <template>
   <section
     class="sidebar"
-    data-testid="sidebar"
+    data-test-sidebar
   >
-    <h1 class="sidebar__header">
+    <h1
+      class="sidebar__header"
+      data-test-sidebar-header
+    >
       {{ $t('$.host_console') }}
     </h1>
 
-    <section class="sidebar__menu">
+    <section
+      class="sidebar__menu"
+      data-test-sidebar-menu
+    >
       <TheSidebarItem
         v-for="item in items"
         :key="item.to"
@@ -15,6 +21,7 @@
         :label="item.label"
         :icon="item.icon"
         :icon-style="item.iconStyle"
+        data-test-sidebar-menu-item
       />
 
       <TheSidebarAlphaBanner />
@@ -24,21 +31,28 @@
   </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import CashIcon from '@uicommon/components/icons/CashIcon'
-import GearIcon from 'components/icons/GearIcon.vue'
-import HappsIcon from 'components/icons/HappsIcon.vue'
-import HomeIcon from 'components/icons/HomeIcon.vue'
-import TheSidebarAlphaBanner from 'components/sidebar/TheSidebarAlphaBanner'
-import TheSidebarFooter from 'components/sidebar/TheSidebarFooter'
-import TheSidebarItem from 'components/sidebar/TheSidebarItem'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import GearIcon from '@/components/icons/GearIcon.vue'
+import HappsIcon from '@/components/icons/HappsIcon.vue'
+import HomeIcon from '@/components/icons/HomeIcon.vue'
+import TheSidebarAlphaBanner from '@/components/sidebar/TheSidebarAlphaBanner'
+import TheSidebarFooter from '@/components/sidebar/TheSidebarFooter'
+import TheSidebarItem from '@/components/sidebar/TheSidebarItem'
 import { kRoutes } from '@/router'
 
 const { t } = useI18n()
 
-const items = computed(() => [
+interface SidebarItem {
+  to: string
+  label: string
+  icon: string | null | Record<string, unknown>
+  iconStyle?: Record<string, unknown>
+}
+
+const items = computed((): SidebarItem[] => [
   {
     to: kRoutes.dashboard.path,
     label: t('$.dashboard'),

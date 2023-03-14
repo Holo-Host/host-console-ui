@@ -1,9 +1,13 @@
 <template>
-  <PrimaryLayout title="Dashboard">
+  <PrimaryLayout
+    :title="$t('$.dashboard')"
+    data-test-dashboard-layout
+  >
     <div class="row">
       <UsageCard
         :is-loading="isLoadingUsage"
         :data="usage"
+        data-test-dashboard-usage-card
         @try-again-clicked="getUsage"
       />
 
@@ -11,6 +15,7 @@
         :is-loading="isLoadingEarnings"
         :data="holoFuel"
         class="holofuel-card"
+        data-test-dashboard-holo-fuel-card
         @try-again-clicked="getEarnings"
       />
     </div>
@@ -21,6 +26,7 @@
         :is-loading="isLoadingHostedHapps"
         with-more-button
         class="happs-card"
+        data-test-dashboard-happs-card
         @more-clicked="() => router.push({ name: kRoutes.happs.name })"
         @try-again-clicked="getTopHostedHapps"
       />
@@ -30,6 +36,7 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="earnings-card"
+        data-test-dashboard-earnings-card
         @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
         @try-again-clicked="getEarnings"
       />
@@ -39,6 +46,7 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="payments-card"
+        data-test-dashboard-payments-card
         @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
         @try-again-clicked="getEarnings"
       />
@@ -46,17 +54,18 @@
   </PrimaryLayout>
 </template>
 
-<script setup>
-import EarningsCard from 'components/dashboard/EarningsCard.vue'
-import HappsCard from 'components/dashboard/HappsCard.vue'
-import HoloFuelCard from 'components/dashboard/HoloFuelCard.vue'
-import RecentPaymentsCard from 'components/dashboard/RecentPaymentsCard.vue'
-import UsageCard from 'components/dashboard/UsageCard.vue'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import { useDashboardStore } from 'src/store/dashboard'
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { kRoutes } from '../router'
+import EarningsCard from '@/components/dashboard/EarningsCard.vue'
+import HappsCard from '@/components/dashboard/HappsCard.vue'
+import HoloFuelCard from '@/components/dashboard/HoloFuelCard.vue'
+import RecentPaymentsCard from '@/components/dashboard/RecentPaymentsCard.vue'
+import UsageCard from '@/components/dashboard/UsageCard.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import { kRoutes } from '@/router'
+import { useDashboardStore } from '@/store/dashboard'
+import { isError } from '@/types/predicates'
 
 const kPaymentsToDisplay = 3
 
@@ -68,7 +77,7 @@ const isLoadingUsage = ref(false)
 const isLoadingHostedHapps = ref(false)
 
 const holoFuel = computed(() =>
-  dashboardStore.hostEarnings.error
+  isError(dashboardStore.hostEarnings)
     ? dashboardStore.hostEarnings
     : dashboardStore.hostEarnings.holofuel
 )
@@ -76,38 +85,38 @@ const holoFuel = computed(() =>
 const topHostedHapps = computed(() => dashboardStore.hostedHapps)
 
 const earnings = computed(() =>
-  dashboardStore.hostEarnings.error
+  isError(dashboardStore.hostEarnings)
     ? dashboardStore.hostEarnings
     : dashboardStore.hostEarnings.earnings
 )
 
 const recentPayments = computed(() =>
-  dashboardStore.hostEarnings.error
+  isError(dashboardStore.hostEarnings)
     ? dashboardStore.hostEarnings
     : dashboardStore.hostEarnings.recentPayments.slice(0, kPaymentsToDisplay)
 )
 
 const usage = computed(() => dashboardStore.usage)
 
-async function getTopHostedHapps() {
+async function getTopHostedHapps(): Promise<void> {
   isLoadingHostedHapps.value = true
   await dashboardStore.getTopHostedHapps()
   isLoadingHostedHapps.value = false
 }
 
-async function getEarnings() {
+async function getEarnings(): Promise<void> {
   isLoadingEarnings.value = true
   await dashboardStore.getEarnings()
   isLoadingEarnings.value = false
 }
 
-async function getUsage() {
+async function getUsage(): Promise<void> {
   isLoadingUsage.value = true
   await dashboardStore.getUsage()
   isLoadingUsage.value = false
 }
 
-onMounted(async () => {
+onMounted(async (): Promise<void> => {
   isLoadingEarnings.value = true
   isLoadingUsage.value = true
   isLoadingHostedHapps.value = true

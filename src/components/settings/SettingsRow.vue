@@ -2,37 +2,33 @@
   <div
     class="settings-row"
     :style="{
-      'grid-template-columns': gridColumns || '280px auto'
+      'grid-template-columns': props.gridColumns || '280px auto'
     }"
   >
     <div class="settings-row__label">
-      {{ label }}
+      {{ props.label }}
       <slot name="label" />
     </div>
     <div class="settings-row__value">
-      {{ value }}
+      {{ props.value }}
       <slot />
     </div>
   </div>
 </template>
 
-<script setup>
-defineProps({
-  label: {
-    type: String,
-    default: ''
-  },
-
-  value: {
-    type: [String, Number],
-    default: ''
-  },
-
-  gridColumns: {
-    type: String,
-    default: ''
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    label?: string
+    value?: string | number
+    gridColumns?: string
+  }>(),
+  {
+    label: '',
+    value: '',
+    gridColumns: ''
   }
-})
+)
 </script>
 
 <style lang="scss" scoped>

@@ -1,15 +1,15 @@
 <template>
   <div
     class="earnings-card-header"
-    :class="{ 'disabled': isDisabled }"
+    :class="{ 'disabled': props.isDisabled }"
   >
     <div class="earnings-card-header__label">
       <span>
-        {{ label }}
+        {{ props.label }}
       </span>
 
       <span class="earnings-card-header__amount">
-        {{ amount }} HF
+        {{ props.amount }} HF
       </span>
     </div>
 
@@ -17,23 +17,17 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  label: {
-    type: String,
-    required: true
-  },
-
-  amount: {
-    type: [Number, String],
-    required: true
-  },
-
-  isDisabled: {
-    type: Boolean,
-    default: false
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    label: string
+    amount: string | number
+    isDisabled?: boolean
+  }>(),
+  {
+    isDisabled: false
   }
-})
+)
 </script>
 
 <style lang="scss" scoped>

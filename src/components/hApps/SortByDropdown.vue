@@ -2,18 +2,18 @@
   <div class="sort-by-dropdown">
     <div
       class="sort-by-dropdown__label"
-      :class="{ 'sort-by-dropdown--disabled': isDisabled }"
+      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
     >
       {{ $t('$.sort_by') }}:&nbsp;
     </div>
     <select
-      :value="value"
+      :value="props.value"
       class="sort-by-dropdown__sort"
-      :class="{ 'sort-by-dropdown--disabled': isDisabled }"
+      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
       @change="onChange"
     >
       <option
-        v-for="option in options"
+        v-for="option in props.options"
         :key="option.value"
         :value="option.value"
       >
@@ -23,30 +23,30 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { kSortOptions } from '@/constants/ui'
 
-defineProps({
-  value: {
-    type: String,
-    required: true
-  },
+interface Option {
+  label: string
+  value: string
+}
 
-  isDisabled: {
-    type: Boolean,
-    default: false
-  },
-
-  options: {
-    type: Array,
-    default: Object.values(kSortOptions)
+const props = withDefaults(
+  defineProps<{
+    value: string
+    isDisabled?: boolean
+    options?: Option[]
+  }>(),
+  {
+    isDisabled: false,
+    options: Object.values(kSortOptions)
   }
-})
+)
 
 const emit = defineEmits(['update:value'])
 
-const onChange = (e) => {
-  emit('update:value', e.target.value)
+function onChange(event: { target: { value: string } }): void {
+  emit('update:value', event.target.value)
 }
 </script>
 
@@ -72,7 +72,7 @@ const onChange = (e) => {
     font-weight: 600;
     color: var(--grey-dark-color);
     padding: 4px 16px 4px 4px;
-    background-image: url(/images/chevron.svg);
+    background-image: url('../../assets/images/chevron.svg');
     background-repeat: no-repeat;
     background-position: right;
   }

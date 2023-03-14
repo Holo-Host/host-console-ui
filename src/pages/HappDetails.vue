@@ -116,17 +116,19 @@
 
 <script>
 import HAppImage from '@uicommon/components/HAppImage.vue'
-import AlertCircleIcon from 'components/icons/AlertCircleIcon.vue'
-import ChainIcon from 'components/icons/ChainIcon.vue'
-import ClockIcon from 'components/icons/ClockIcon.vue'
-import LeftChevronIcon from 'components/icons/LeftChevronIcon.vue'
-import PencilIcon from 'components/icons/PencilIcon.vue'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import StopHostingModal from 'components/StopHostingModal.vue'
-import HposInterface from 'src/interfaces/HposInterface'
-import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from 'src/utils'
+import AlertCircleIcon from '@/components/icons/AlertCircleIcon.vue'
+import ChainIcon from '@/components/icons/ChainIcon.vue'
+import ClockIcon from '@/components/icons/ClockIcon.vue'
+import LeftChevronIcon from '@/components/icons/LeftChevronIcon.vue'
+import PencilIcon from '@/components/icons/PencilIcon.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import StopHostingModal from '@/components/StopHostingModal.vue'
+import { useHposInterface } from '@/interfaces/HposInterface'
+import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from '@/utils'
 
 const kInitialsLength = 2
+
+const { getHostedHapps } = useHposInterface()
 
 export default {
   name: 'HappDetails',
@@ -174,7 +176,7 @@ export default {
   },
 
   async created() {
-    const happs = await HposInterface.getHostedHapps()
+    const happs = await getHostedHapps()
     const happId = decodeURIComponent(this.$route.params.id)
     const happ = happs.find(({ id }) => id === happId)
 

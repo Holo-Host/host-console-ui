@@ -1,7 +1,7 @@
-function retry(fn, maxAttempts) {
-  const execute = async (attempt) => {
+async function retry(fn: () => unknown, maxAttempts: number): Promise<unknown> {
+  const execute = async (attempt: number): Promise<unknown> => {
     try {
-      return await fn()
+      return fn()
     } catch (err) {
       if (attempt <= maxAttempts) {
         const nextAttempt = attempt + 1

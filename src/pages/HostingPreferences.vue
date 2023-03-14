@@ -3,27 +3,35 @@
     :is-content-loading="isLoading"
     :is-content-error="isError"
     :title="$t('hosting_preferences.header')"
+    data-test-hosting-preferences-layout
     @try-again-clicked="getHostPreferences"
   >
     <template v-if="!isLoading && !isError">
-      <PricesSection :data="pricesSettings" />
+      <PricesSection
+        :data="pricesSettings"
+        data-test-hosting-preferences-prices-section
+      />
 
       <InvoicesSection
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
+        data-test-hosting-preferences-invoices-section
       />
 
-      <HAppSelectionSection class="hosting-preferences__happ-selection" />
+      <HAppSelectionSection
+        class="hosting-preferences__happ-selection"
+        data-test-hosting-preferences-happ-selection-section
+      />
     </template>
   </PrimaryLayout>
 </template>
 
-<script setup>
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import HAppSelectionSection from 'components/settings/hostingPreferences/HAppSelectionSection'
-import InvoicesSection from 'components/settings/hostingPreferences/InvoicesSection.vue'
-import PricesSection from 'components/settings/hostingPreferences/PricesSection.vue'
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import HAppSelectionSection from '@/components/settings/hostingPreferences/HAppSelectionSection'
+import InvoicesSection from '@/components/settings/hostingPreferences/InvoicesSection.vue'
+import PricesSection from '@/components/settings/hostingPreferences/PricesSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
 
 const preferencesStore = usePreferencesStore()
@@ -34,7 +42,7 @@ const isError = ref(false)
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
 
-async function getHostPreferences() {
+async function getHostPreferences(): Promise<void> {
   try {
     isError.value = false
     isLoading.value = true
@@ -46,7 +54,7 @@ async function getHostPreferences() {
   }
 }
 
-onMounted(async () => {
+onMounted(async (): Promise<void> => {
   if (!preferencesStore.isLoaded) {
     await getHostPreferences()
   }

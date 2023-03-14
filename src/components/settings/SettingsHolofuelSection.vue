@@ -2,34 +2,32 @@
   <SettingsSection :title="$t('$.holofuel')">
     <SettingsRow
       :label="$t('settings.account_display_name')"
-      :value="nickname"
+      :value="props.nickname"
     />
 
     <SettingsRow
       :label="$t('settings.holofuel_address')"
     >
       <HoloFuelAddress
-        v-if="agentAddress"
-        :agent-address="agentAddress"
+        v-if="props.agentAddress"
+        :agent-address="props.agentAddress"
       />
     </SettingsRow>
   </SettingsSection>
 </template>
 
-<script setup >
+<script setup lang="ts">
 import HoloFuelAddress from './HoloFuelAddress.vue'
 import SettingsRow from './SettingsRow.vue'
 import SettingsSection from './SettingsSection.vue'
 
-defineProps({
-  nickname: {
-    type: String,
-    required: true
-  },
-
-  agentAddress: {
-    type: [Uint8Array, null],
-    default: null
+const props = withDefaults(
+  defineProps<{
+    nickname: string
+    agentAddress?: Uint8Array | null
+  }>(),
+  {
+    agentAddress: null
   }
-})
+)
 </script>

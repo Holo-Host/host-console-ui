@@ -1,6 +1,6 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
+    :is-loading="props.isLoading"
     :is-error="isError"
     :title="$t('earnings.title')"
     @try-again-clicked="emit('try-again-clicked')"
@@ -18,48 +18,50 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { Earnings } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
+import type { DashboardCardItem } from '@/types/types'
 
 const { t } = useI18n()
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true
-  },
-
-  isLoading: {
-    type: Boolean,
-    required: true
-  }
-})
-
+const props = defineProps<{
+  data: Earnings | { error: unknown }
+  isLoading: boolean
+}>()
 const emit = defineEmits(['try-again-clicked'])
 
-const isError = computed(() => !!props.data.error)
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
 
-const items = computed(() => [
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
+const items = computed((): DashboardCardItem[] => [
   {
     label: t('earnings.last_30_days'),
     value:
-      props.data && Number(props.data.last30days)
+      !isErrorPredicate(props.data) && Number(props.data.last30days)
         ? formatCurrency(Number(props.data.last30days))
         : 0
   },
   {
     label: t('earnings.last_7_days'),
     value:
-      props.data && Number(props.data.last7days) ? formatCurrency(Number(props.data.last7days)) : 0
+      !isErrorPredicate(props.data) && Number(props.data.last7days)
+        ? formatCurrency(Number(props.data.last7days))
+        : 0
   },
   {
     label: t('earnings.last_day'),
-    value: props.data && Number(props.data.lastday) ? formatCurrency(Number(props.data.lastday)) : 0
+    value:
+      !isErrorPredicate(props.data) && Number(props.data.lastday)
+        ? formatCurrency(Number(props.data.lastday))
+        : 0
   }
 ])
+/* eslint-enable @typescript-eslint/no-unsafe-assignment */
 </script>
 
 <style scoped>

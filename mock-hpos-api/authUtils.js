@@ -1,7 +1,7 @@
-const stringify = require('fast-json-stable-stringify')
-const sha512 = require('js-sha512')
+import stringify from 'fast-json-stable-stringify'
+import sha512 from'js-sha512'
 
-// there's some duplication between this file and src/utils/keyManagement.js
+// there's some duplication between this file and src/utils/keyManagement.ts
 
 const verifySignedRequest = (givenSignature, payload, keypair) => {
   const expectedSignature = keypair.sign(payload)

@@ -57,16 +57,19 @@
   </PrimaryLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseChip from '@uicommon/components/BaseChip.vue'
 import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import HAppCard from '@uicommon/components/HAppCard.vue'
 import { EChipType } from '@uicommon/types/ui'
-import SortByDropdown from 'components/hApps/SortByDropdown.vue'
-import PrimaryLayout from 'components/PrimaryLayout.vue'
-import HposInterface from 'src/interfaces/HposInterface'
 import { computed, onMounted, ref } from 'vue'
+import SortByDropdown from '@/components/hApps/SortByDropdown.vue'
+import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kSortOptions } from '@/constants/ui'
+import { HApp, useHposInterface } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
+
+const { getHostedHapps } = useHposInterface()
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -74,40 +77,57 @@ const isError = ref(false)
 const filterValue = ref('')
 const filterIsActive = ref(false)
 
-function onFilterChange({ value, isActive }) {
+interface FilterChangeProps {
+  value: string
+  isActive: boolean
+}
+
+function onFilterChange({ value, isActive }: FilterChangeProps): void {
   filterIsActive.value = isActive
   filterValue.value = value
 }
 
-const happs = ref([])
+const happs = ref<HApp[] | { error: unknown }>([])
 const sortBy = ref(kSortOptions.alphabetical.value)
 
-const filteredHapps = computed(() => {
-  const sortByLogic =
+const filteredHapps = computed((): HApp[] => {
+  const sortByLogic: (a: HApp, b: HApp) => number =
+    // Sorting by earnings is not available now as we don't have a property
+    // like that in the HApp, we use 'sourceChains' for now
     sortBy.value === kSortOptions.earnings.value
-      ? (a, b) => (a.sevenDayEarnings < b.sevenDayEarnings ? 1 : -1)
-      : (a, b) => (a.name > b.name ? 1 : -1)
+      ? (a: HApp, b: HApp): number => (a.sourceChains < b.sourceChains ? 1 : -1)
+      : (a: HApp, b: HApp): number => (a.name > b.name ? 1 : -1)
 
-  if (filterIsActive.value && filterValue.value) {
+  if (isErrorPredicate(happs.value) && happs.value.error) {
+    return []
+  }
+
+  if (!isErrorPredicate(happs.value) && filterIsActive.value && filterValue.value) {
     return happs.value
-      .filter(({ name }) => name.toLowerCase().includes(filterValue.value.toLowerCase()))
+      .filter((hApp: HApp) => hApp.name.toLowerCase().includes(filterValue.value.toLowerCase()))
       .sort(sortByLogic)
   }
 
-  return [...happs.value].sort(sortByLogic)
+  if (!isErrorPredicate(happs.value)) {
+    return [...happs.value].sort(sortByLogic)
+  }
+
+  return []
 })
 
-function onSortByChange(value) {
+type SortOption = 'alphabetical' | 'earnings'
+
+function onSortByChange(value: SortOption): void {
   sortBy.value = value
 }
 
-async function getData() {
+async function getData(): Promise<void> {
   isError.value = false
   isLoading.value = true
 
-  happs.value = await HposInterface.getHostedHapps()
+  happs.value = await getHostedHapps()
 
-  if (happs.value.error) {
+  if (isErrorPredicate(happs.value) && happs.value.error) {
     isError.value = true
   }
 

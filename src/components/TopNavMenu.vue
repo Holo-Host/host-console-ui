@@ -54,54 +54,50 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Identicon from '@uicommon/components/Identicon.vue'
-import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import DownTriangleIcon from '@/components/icons/DownTriangleIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
-import { kAuthTokenLSKey } from '@/constants'
+import { kAuthTokenLSKey } from '@/constants.ts'
 import { kRoutes } from '@/router'
 
 const { goToHoloFuel } = useGoToHoloFuel()
 
 const router = useRouter()
 
-const props = defineProps({
-  nickname: {
-    type: String,
-    required: true
-  },
-
-  agentAddress: {
-    type: Uint8Array,
-    default: []
-  },
-
-  white: {
-    type: Boolean,
-    default: false
+const props = withDefaults(
+  defineProps<{
+    nickname: string
+    agentAddress?: typeof Uint8Array | null
+    white?: boolean
+  }>(),
+  {
+    agentAddress: null,
+    white: false
   }
-})
+)
 
 const isMenuOpen = ref(false)
 
-function toggleMenu() {
+function toggleMenu(): void {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-function closeDropdown() {
+function closeDropdown(): void {
   isMenuOpen.value = false
 }
 
-function logout() {
+async function logout(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   localStorage.removeItem(kAuthTokenLSKey)
-  router.push({ name: kRoutes.login.name })
+  await router.push({ name: kRoutes.login.name })
 }
 
-function openSettingsAndCloseMenu() {
+async function openSettingsAndCloseMenu(): Promise<void> {
   isMenuOpen.value = false
-  router.push({ name: kRoutes.accountSettings.name })
+  await router.push({ name: kRoutes.accountSettings.name })
 }
 </script>
 

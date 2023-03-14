@@ -45,8 +45,8 @@
 <script>
 import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
-import BigCheckIcon from 'components/icons/BigCheckIcon'
-import ExclamationIcon from 'components/icons/ExclamationIcon'
+import BigCheckIcon from '@/components/icons/BigCheckIcon'
+import ExclamationIcon from '@/components/icons/ExclamationIcon'
 
 export default {
   name: 'StopHostingModal',

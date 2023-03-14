@@ -1,29 +1,23 @@
 <template>
   <BaseTableHeader
-    :headers="headers"
-    :sort-by="sortBy"
+    :headers="props.headers"
+    :sort-by="props.sortBy"
     @sort-by-changed="onSortByChanged"
   />
 </template>
 
-<script setup>
-import BaseTableHeader from '@uicommon/components/BaseTableHeader'
+<script setup lang="ts">
+import BaseTableHeader from '@uicommon/components/BaseTableHeader.vue'
+import type { SortByProps, TableHeader } from '@/types/types'
 
-defineProps({
-  headers: {
-    type: Array,
-    required: true
-  },
-
-  sortBy: {
-    type: String,
-    required: true
-  }
-})
+const props = defineProps<{
+  headers: TableHeader[]
+  sortBy: string
+}>()
 
 const emit = defineEmits(['sortByChanged'])
 
-function onSortByChanged(props) {
-  emit('sortByChanged', props)
+function onSortByChanged(sortProps: SortByProps): void {
+  emit('sortByChanged', sortProps)
 }
 </script>

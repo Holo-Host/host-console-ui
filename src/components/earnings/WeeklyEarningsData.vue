@@ -2,7 +2,7 @@
   <div class="weekly-earnings-data">
     <CardHeader
       :label="$t('earnings.last_7_days')"
-      :amount="weeklyEarnings"
+      :amount="props.weeklyEarnings"
     >
       <BaseButton
         class="weekly-earnings-data__holofuel-button"
@@ -16,18 +16,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import CardHeader from './CardHeader.vue'
 import TmpGraphIcon from '@/components/icons/TmpGraphIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 
-defineProps({
-  weeklyEarnings: {
-    type: [Number, String],
-    required: true
-  }
-})
+const props = defineProps<{
+  weeklyEarnings: string | number
+}>()
 
 const { goToHoloFuel } = useGoToHoloFuel()
 </script>

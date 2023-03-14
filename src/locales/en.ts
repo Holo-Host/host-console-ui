@@ -1,3 +1,5 @@
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
 import commonTranslations from '@uicommon/locales/en'
 
 const translations = {

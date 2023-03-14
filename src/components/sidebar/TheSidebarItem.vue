@@ -1,49 +1,39 @@
 <template>
   <router-link
-    :to="to"
+    :to="props.to"
     class="sidebar-menu-item"
     active-class="active-link"
   >
     <component
-      :is="icon"
+      :is="props.icon"
       class="sidebar-menu-item__icon"
       :color="color"
-      :style="iconStyle"
+      :style="props.iconStyle"
     />
-    {{ label }}
+    {{ props.label }}
   </router-link>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-const props = defineProps({
-  to: {
-    type: String,
-    required: true
-  },
-
-  icon: {
-    type: Object,
-    required: true
-  },
-
-  iconStyle: {
-    type: Object,
-    default: () => ({})
-  },
-
-  label: {
-    type: String,
-    required: true
+const props = withDefaults(
+  defineProps<{
+    to: string
+    icon: string | null | Record<string, unknown>
+    iconStyle?: Record<string, unknown>
+    label: string
+  }>(),
+  {
+    iconStyle: () => ({})
   }
-})
+)
 
 const route = useRoute()
 
-const color = computed(() => {
-  return route.path.match(props.to) ? '#00CAD9' : '#313C59'
+const color = computed((): string => {
+  return RegExp(props.to).exec(route.path) ? '#00CAD9' : '#313C59'
 })
 </script>
 

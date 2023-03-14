@@ -18,23 +18,21 @@
   </section>
 </template>
 
-<script setup>
-import MenuIcon from 'components/icons/MenuIcon'
-import TheSidebar from 'components/sidebar/TheSidebar'
-import TopNavMenu from 'components/TopNavMenu'
+<script setup lang="ts">
 import { ref } from 'vue'
+import MenuIcon from '@/components/icons/MenuIcon.vue'
+import TheSidebar from '@/components/sidebar/TheSidebar.vue'
+import TopNavMenu from '@/components/TopNavMenu.vue'
 
-defineProps({
-  nickname: {
-    type: String,
-    required: true
-  },
-
-  agentAddress: {
-    type: Uint8Array,
-    default: []
+withDefaults(
+  defineProps<{
+    nickname: string
+    agentAddress?: typeof Uint8Array | null
+  }>(),
+  {
+    agentAddress: null
   }
-})
+)
 
 const isMobileSidebarVisible = ref(false)
 </script>

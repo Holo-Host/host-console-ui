@@ -1,19 +1,19 @@
 <template>
   <BaseCard
-    :is-loading="isLoading"
+    :is-loading="props.isLoading"
     :is-error="isError"
     :title="$t('recent_payments.title')"
   >
     <div class="body">
       <div
-        v-if="!data || data.length === 0"
+        v-if="!props.data || props.data.length === 0"
         class="no-payments"
       >
         {{ $t('recent_payments.no_payments') }}
       </div>
 
       <div
-        v-for="payment in data"
+        v-for="payment in props.data"
         :key="payment.id"
         class="payment-row"
       >
@@ -37,26 +37,20 @@
   </BaseCard>
 </template>
 
-<script setup>
-import BaseCard from '@uicommon/components/BaseCard'
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { capitalizeWord } from '@uicommon/utils/stringUtils'
 import dayjs from 'dayjs'
 import { computed } from 'vue'
+import { isError as isErrorPredicate } from '@/types/predicates'
 
-const props = defineProps({
-  data: {
-    type: Array,
-    default: () => []
-  },
+const props = defineProps<{
+  data: unknown[] | { error: string }
+  isLoading: boolean
+}>()
 
-  isLoading: {
-    type: Boolean,
-    required: true
-  }
-})
-
-const isError = computed(() => !!props.data.error)
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
 </script>
 
 <style scoped>
