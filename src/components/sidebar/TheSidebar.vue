@@ -25,7 +25,6 @@
 </template>
 
 <script setup>
-import CashIcon from '@uicommon/components/icons/CashIcon'
 import GearIcon from 'components/icons/GearIcon.vue'
 import HappsIcon from 'components/icons/HappsIcon.vue'
 import HomeIcon from 'components/icons/HomeIcon.vue'
@@ -48,12 +47,6 @@ const items = computed(() => [
     to: kRoutes.happs.path,
     label: t('$.happs'),
     icon: HappsIcon
-  },
-  {
-    to: kRoutes.earnings.path,
-    label: t('$.earnings'),
-    icon: CashIcon,
-    iconStyle: { marginTop: '10px' }
   },
   {
     to: kRoutes.hostingPreferences.path,

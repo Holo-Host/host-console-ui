@@ -4,19 +4,12 @@
       :settings="user"
       @update:device-name="onDeviceNameUpdate"
     />
-
-    <SettingsHolofuelSection
-      :nickname="user.holoFuel.nickname"
-      :agent-address="user.holoFuel.agentAddress"
-      class="settings__holofuel-section"
-    />
   </PrimaryLayout>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import PrimaryLayout from '../components/PrimaryLayout.vue'
-import SettingsHolofuelSection from '../components/settings/SettingsHolofuelSection.vue'
 import SettingsHoloportSection from '../components/settings/SettingsHoloportSection.vue'
 import { useUserStore } from '../store/user'
 

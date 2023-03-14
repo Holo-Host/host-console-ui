@@ -136,12 +136,6 @@ onMounted(async () => {
       hideOverlay()
       isLoading.value = false
     }
-
-    await nextTick(() => {
-      if (!userStore.holoFuel.nickname) {
-        showModal(EModal.welcome)
-      }
-    })
   })
 })
 </script>

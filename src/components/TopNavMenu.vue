@@ -39,13 +39,6 @@
 
       <div
         class="menu-item"
-        @click="goToHoloFuel"
-      >
-        {{ $t('$.holofuel') }}
-      </div>
-
-      <div
-        class="menu-item"
         @click="logout"
       >
         {{ $t('$.logout') }}
@@ -59,11 +52,8 @@ import Identicon from '@uicommon/components/Identicon.vue'
 import DownTriangleIcon from 'components/icons/DownTriangleIcon.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 import { kAuthTokenLSKey } from '@/constants'
 import { kRoutes } from '@/router'
-
-const { goToHoloFuel } = useGoToHoloFuel()
 
 const router = useRouter()
 

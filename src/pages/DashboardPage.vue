@@ -30,8 +30,6 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="earnings-card"
-        @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
-        @try-again-clicked="getEarnings"
       />
 
       <RecentPaymentsCard
@@ -126,6 +124,8 @@ onMounted(async () => {
 }
 
 .earnings-card {
+  opacity: 0.25;
+  pointer-events: none;
   min-width: 250px;
   margin-left: 30px;
 }
