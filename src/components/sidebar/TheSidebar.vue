@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import CashIcon from '@uicommon/components/icons/CashIcon'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GearIcon from '@/components/icons/GearIcon.vue'
@@ -62,12 +61,6 @@ const items = computed((): SidebarItem[] => [
     to: kRoutes.happs.path,
     label: t('$.happs'),
     icon: HappsIcon
-  },
-  {
-    to: kRoutes.earnings.path,
-    label: t('$.earnings'),
-    icon: CashIcon,
-    iconStyle: { marginTop: '10px' }
   },
   {
     to: kRoutes.hostingPreferences.path,

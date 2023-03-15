@@ -37,8 +37,6 @@
         with-more-button
         class="earnings-card"
         data-test-dashboard-earnings-card
-        @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
-        @try-again-clicked="getEarnings"
       />
 
       <RecentPaymentsCard
@@ -47,8 +45,6 @@
         with-more-button
         class="payments-card"
         data-test-dashboard-payments-card
-        @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
-        @try-again-clicked="getEarnings"
       />
     </div>
   </PrimaryLayout>
@@ -137,6 +133,8 @@ onMounted(async (): Promise<void> => {
 .earnings-card {
   min-width: 250px;
   margin-left: 30px;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .happs-card {
@@ -146,6 +144,8 @@ onMounted(async (): Promise<void> => {
 .payments-card {
   min-width: 320px;
   margin-left: 30px;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .holofuel-card {

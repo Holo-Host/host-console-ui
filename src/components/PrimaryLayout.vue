@@ -58,7 +58,6 @@
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
 import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal.vue'
-import { useModals } from '@uicommon/composables/useModals.js'
 import { useOverlay } from '@uicommon/composables/useOverlay.js'
 import { EButtonType } from '@uicommon/types/ui.js'
 import { computed, nextTick, onMounted, ref } from 'vue'
@@ -67,7 +66,6 @@ import WelcomeModal from '@/components/modals/WelcomeModal.vue'
 import TheSidebar from '@/components/sidebar/TheSidebar.vue'
 import TopNav from '@/components/TopNav.vue'
 import { kAuthTokenLSKey, kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from '@/constants'
-import { EModal } from '@/constants/ui'
 import router, { kRoutes } from '@/router'
 import { useUserStore } from '@/store/user'
 import type { BreadCrumb } from '@/types/types'
@@ -76,7 +74,6 @@ const userStore = useUserStore()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showLoadingOverlay, hideOverlay } = useOverlay()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-const { showModal } = useModals()
 
 const props = withDefaults(
   defineProps<{
@@ -134,13 +131,6 @@ onMounted(async () => {
       hideOverlay()
       isLoading.value = false
     }
-
-    await nextTick(() => {
-      if (!userStore.holoFuel.nickname) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        showModal(EModal.welcome)
-      }
-    })
   })
 })
 </script>
