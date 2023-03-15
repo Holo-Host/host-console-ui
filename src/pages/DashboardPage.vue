@@ -37,8 +37,6 @@
         :is-loading="isLoadingEarnings"
         with-more-button
         class="payments-card"
-        @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
-        @try-again-clicked="getEarnings"
       />
     </div>
   </PrimaryLayout>
@@ -124,10 +122,10 @@ onMounted(async () => {
 }
 
 .earnings-card {
-  opacity: 0.25;
-  pointer-events: none;
   min-width: 250px;
   margin-left: 30px;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .happs-card {
@@ -137,6 +135,8 @@ onMounted(async () => {
 .payments-card {
   min-width: 320px;
   margin-left: 30px;
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 .holofuel-card {

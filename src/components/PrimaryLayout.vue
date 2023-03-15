@@ -58,7 +58,6 @@
 import BaseButton from '@uicommon/components/BaseButton'
 import CircleSpinner from '@uicommon/components/CircleSpinner'
 import GoToHoloFuelModal from '@uicommon/components/GoToHoloFuelModal'
-import { useModals } from '@uicommon/composables/useModals'
 import { useOverlay } from '@uicommon/composables/useOverlay'
 import { EButtonType } from '@uicommon/types/ui'
 import MobileTopNav from 'components/MobileTopNav'
@@ -68,12 +67,10 @@ import TopNav from 'components/TopNav'
 import { kAuthTokenLSKey, kDontShowGoToHoloFuelModalAgainLSKey, kHoloFuelUrl } from 'src/constants'
 import { useUserStore } from 'src/store/user'
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { EModal } from '@/constants/ui'
 import router, { kRoutes } from '@/router'
 
 const userStore = useUserStore()
 const { showLoadingOverlay, hideOverlay } = useOverlay()
-const { showModal } = useModals()
 
 const props = defineProps({
   title: {
