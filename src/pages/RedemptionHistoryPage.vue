@@ -11,7 +11,7 @@
         :headers="[...headersMap.values()]"
         :initial-sort-by="'createdDate'"
         :items="redemptions"
-        empty-message-translation-key="'redemption_history.errors.no_redemptions'"
+        empty-message-translation-key="redemption_history.errors.no_redemptions"
         @try-again-clicked="getRedemptionHistory"
       >
         <RedemptionHistoryTableRow
