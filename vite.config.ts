@@ -18,7 +18,9 @@ export default defineConfig(({ mode }) => {
     VITE_UI_VERSION: env.VITE_UI_VERSION
   }
 
-  console.log(envVariables)
+  if (env.NODE_ENV === 'development') {
+    console.log(envVariables)
+  }
 
   return {
     resolve: {
