@@ -435,7 +435,7 @@ const mockRedemptionHistoryData = [
     completedAmount: '1421002.0398',
     redemptionAmount: '1421002.0398',
     transactionId: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj3',
-    status: 'Completed',
+    status: 'completed',
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE64',
@@ -444,7 +444,43 @@ const mockRedemptionHistoryData = [
     completedAmount: '1421002',
     redemptionAmount: '1421002',
     transactionId: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj4',
-    status: 'Completed',
+    status: 'completed',
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE65',
+    createdDate: createDate(0, -2),
+    requestedAmount: '142100',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE66',
+    createdDate: createDate(2, -2),
+    requestedAmount: '2421002',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE67',
+    createdDate: createDate(2, -2),
+    requestedAmount: '3421002',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE68',
+    createdDate: createDate(3, -2),
+    requestedAmount: '4421002',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
   }
 ]
 

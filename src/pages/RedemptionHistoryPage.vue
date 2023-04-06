@@ -1,5 +1,6 @@
 <template>
   <PrimaryLayout
+    title="earnings.redemption_history"
     :breadcrumbs="breadcrumbs"
     data-test-redemption-history-page-layout
   >
@@ -72,6 +73,7 @@ const headersMap = computed(
           label: t('redemption_history.headers.redemption_amount'),
           isVisibleOnMobile: false,
           isSortable: true,
+          align: 'end',
           type: 'string'
         }
       ],
@@ -82,7 +84,6 @@ const headersMap = computed(
           label: t('redemption_history.headers.transaction_id'),
           isVisibleOnMobile: true,
           isSortable: true,
-          align: 'end',
           type: 'string'
         }
       ],
@@ -112,17 +113,21 @@ const redemptions = computed(() => {
       formattedCreatedDate: dayjs(redemption.createdDate / kMsInSecond).format(
         kDefaultDateFormat
       ),
-      formattedCompletedAmount:
+      formattedHfAmount:
           redemption.completedAmount && Number(redemption.completedAmount)
             ? formatCurrency(Number(redemption.completedAmount))
-            : 0,
+            : redemption.requestedAmount && Number(redemption.requestedAmount)
+              ? formatCurrency(Number(redemption.requestedAmount))
+              : 0,
       formattedRedemptionAmount:
           redemption.redemptionAmount && Number(redemption.redemptionAmount)
             ? formatCurrency(Number(redemption.redemptionAmount))
-            : 0,
-      formattedTransactionId: `...${redemption.transactionId.substring(
-        redemption.transactionId.length - kVisibleHashLength
-      )}`
+            : '---',
+      formattedTransactionId: redemption.transactionId
+          ? `...${redemption.transactionId.substring(
+              redemption.transactionId.length - kVisibleHashLength
+            )}`
+        : '---'
     }))
     : []
 })
