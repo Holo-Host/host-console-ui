@@ -1218,6 +1218,11 @@
   resolved "https://registry.yarnpkg.com/@fal-works/esbuild-plugin-global-externals/-/esbuild-plugin-global-externals-2.1.2.tgz#c05ed35ad82df8e6ac616c68b92c2282bd083ba4"
   integrity sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==
 
+"@heroicons/vue@^2.0.17":
+  version "2.0.17"
+  resolved "https://registry.yarnpkg.com/@heroicons/vue/-/vue-2.0.17.tgz#4c23f26a715c2931c0d4fd5d2e77f8ede7a6a77b"
+  integrity sha512-M5P6Y9tmctbtv/IC1dO5vTw9xqppYxm/5BKuL4hGlxxLvaxbnTmMAoxTIzezSdYAaLh63emgOCBMa+mxphRxUQ==
+
 "@holo-host/hp-admin-keypair@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@holo-host/hp-admin-keypair/-/hp-admin-keypair-0.3.0.tgz#7906bc39167a5f9714fd02ca304007ed9a70b491"

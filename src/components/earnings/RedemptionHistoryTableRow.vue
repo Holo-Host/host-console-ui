@@ -26,7 +26,16 @@
       is-visible-on-mobile
       is-bold
       :is-italic="props.redemption.status === 'pending'"
-    />
+    >
+      <a
+        v-if="props.redemption.transactionId"
+        :href="`https://goerli.etherscan.io/tx/${props.redemption.transactionId}`"
+        target="_blank"
+        class="redemption-history-table-row__transaction-link"
+      >
+        <ArrowTopRightOnSquareIcon class="redemption-history-table-row__transaction-link-icon" />
+      </a>
+    </BaseTableRowItem>
 
     <BaseTableRowItem
       :value="props.redemption.status"
@@ -37,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
 import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
 import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
 import type { Redemption } from '@/interfaces/HposInterface'
@@ -60,6 +70,17 @@ const props = defineProps<{
   &__amount-unit {
     margin-left: 35px;
     margin-right: 12px;
+  }
+
+  &__transaction-link {
+    height: 22px;
+  }
+
+  &__transaction-link-icon {
+    width: 17px;
+    margin-top: 2px;
+    margin-left: 4px;
+    color: var(--grey-dark-color);
   }
 }
 </style>

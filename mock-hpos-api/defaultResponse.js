@@ -434,7 +434,7 @@ const mockRedemptionHistoryData = [
     requestedAmount: '1421002.0398',
     completedAmount: '1421002.0398',
     redemptionAmount: '1421002.0398',
-    transactionId: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj3',
+    transactionId: '0xaf88712107800f829599a220ee6ac866c9b3cc9941fc0d3e6af3f8745f76155f',
     status: 'completed',
   },
   {
@@ -443,7 +443,7 @@ const mockRedemptionHistoryData = [
     requestedAmount: '1421002',
     completedAmount: '1421002',
     redemptionAmount: '1421002',
-    transactionId: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj4',
+    transactionId: '0xaf88712107800f829599a220ee6ac866c9b3cc9941fc0d3e6af3f8745f76155f',
     status: 'completed',
   },
   {
