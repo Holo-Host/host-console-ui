@@ -1,5 +1,5 @@
 // mock of normal hpos api responses
-import { createDate } from './utils'
+const createDate = require('./utils')
 
 /* eslint-disable no-magic-numbers */
 const happs = [
@@ -427,6 +427,27 @@ const mockPaidInvoicesData = [
   }
 ]
 
+const mockRedemptionHistoryData = [
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE63',
+    createdDate: createDate(1, -1),
+    requestedAmount: '1421002.0398',
+    completedAmount: '1421002.0398',
+    redemptionAmount: '1421002.0398',
+    transactionId: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj3',
+    status: 'Completed',
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE64',
+    createdDate: createDate(1, -2),
+    requestedAmount: '1421002',
+    completedAmount: '1421002',
+    redemptionAmount: '1421002',
+    transactionId: 'uhCAki0d39_k2EkZzuUEaiw03ruRYoGh05vswcLsi566MC-Nxqtj4',
+    status: 'Completed',
+  }
+]
+
 const holoNixpkgs = {
   holo_nixpkgs: {
     channel: {
@@ -451,7 +472,8 @@ const data = {
     '/holochain-api/v1/usage': usage,
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion,
-    '/holochain-api/v1/host_invoices': mockPaidInvoicesData
+    '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
+    '/holochain-api/v1/redemption_history': mockRedemptionHistoryData
   },
   put: {
     '/api/v1/config': (args) => args,

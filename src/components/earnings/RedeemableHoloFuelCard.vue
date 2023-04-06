@@ -6,7 +6,6 @@
     @try-again-clicked="emit('try-again-clicked')"
   >
     <CardHeader
-      is-disabled
       :label="$t('earnings.redeemable_holofuel')"
       :amount="props.data"
       class="redeemable-holofuel__header"
@@ -14,8 +13,7 @@
 
     <div class="redeemable-holofuel__links">
       <BaseLinkButton
-        is-disabled
-        to=""
+        :to="kRoutes.redemptionHistory.path"
         :icon="RedemptionHistoryIcon"
         :label="$t('earnings.redemption_history')"
         class="redeemable-holofuel__link"
@@ -48,6 +46,7 @@ import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
 import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon.vue'
 import TransferIcon from '@/components/icons/TransferIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
+import { kRoutes } from '@/router'
 
 const emit = defineEmits(['try-again-clicked'])
 

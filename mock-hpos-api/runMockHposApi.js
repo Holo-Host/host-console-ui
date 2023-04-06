@@ -10,7 +10,7 @@ let port
 if (argv.port) {
   port = argv.port
 } else {
-  port = import.meta.env.VITE_HPOS_PORT
+  port = 4567
 }
 
 if (!port) {

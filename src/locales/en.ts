@@ -118,6 +118,18 @@ const translations = {
     title: 'Recent Payments',
     no_payments: 'You have no payments'
   },
+  redemption_history: {
+    errors: {
+      no_redemptions: 'You have no redemptions.'
+    },
+    headers: {
+      created: 'Date Submitted',
+      hf_amount: 'HF Amount',
+      redemption_amount: 'Redemption Amount',
+      transaction_id: 'Transaction ID',
+      status: 'Status'
+    }
+  },
   settings: {
     account_display_name: 'Account Display Name',
     device_name: 'Device Name',

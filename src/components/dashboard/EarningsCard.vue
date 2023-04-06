@@ -33,6 +33,7 @@ const props = defineProps<{
   data: Earnings | { error: unknown }
   isLoading: boolean
 }>()
+
 const emit = defineEmits(['try-again-clicked'])
 
 const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
