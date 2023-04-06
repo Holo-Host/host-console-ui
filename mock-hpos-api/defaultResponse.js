@@ -432,10 +432,11 @@ const mockRedemptionHistoryData = [
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE63',
     createdDate: createDate(1, -1),
     requestedAmount: '1421002.0398',
-    completedAmount: '1421002.0398',
-    redemptionAmount: '1421002.0398',
+    completedAmount: '1000000.00',
+    redemptionAmount: '1000000.00',
     transactionId: '0xaf88712107800f829599a220ee6ac866c9b3cc9941fc0d3e6af3f8745f76155f',
     status: 'completed',
+    isPartial: true,
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE64',
@@ -445,6 +446,7 @@ const mockRedemptionHistoryData = [
     redemptionAmount: '1421002',
     transactionId: '0xaf88712107800f829599a220ee6ac866c9b3cc9941fc0d3e6af3f8745f76155f',
     status: 'completed',
+    isPartial: false,
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE65',
@@ -454,6 +456,7 @@ const mockRedemptionHistoryData = [
     redemptionAmount: '0',
     transactionId: '',
     status: 'pending',
+    isPartial: false,
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE66',
@@ -463,6 +466,7 @@ const mockRedemptionHistoryData = [
     redemptionAmount: '0',
     transactionId: '',
     status: 'pending',
+    isPartial: false,
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE67',
@@ -472,6 +476,7 @@ const mockRedemptionHistoryData = [
     redemptionAmount: '0',
     transactionId: '',
     status: 'pending',
+    isPartial: false,
   },
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE68',
@@ -481,6 +486,7 @@ const mockRedemptionHistoryData = [
     redemptionAmount: '0',
     transactionId: '',
     status: 'pending',
+    isPartial: false,
   }
 ]
 

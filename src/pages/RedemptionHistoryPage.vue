@@ -119,7 +119,11 @@ const redemptions = computed(() => {
             : redemption.requestedAmount && Number(redemption.requestedAmount)
               ? formatCurrency(Number(redemption.requestedAmount))
               : 0,
-      formattedRedemptionAmount:
+      formattedRequestedAmount:
+          redemption.requestedAmount && Number(redemption.requestedAmount)
+            ? formatCurrency(Number(redemption.requestedAmount))
+            : '---',
+			formattedRedemptionAmount:
           redemption.redemptionAmount && Number(redemption.redemptionAmount)
             ? formatCurrency(Number(redemption.redemptionAmount))
             : '---',
