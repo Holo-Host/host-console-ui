@@ -6,8 +6,10 @@
       :is-italic="props.redemption.status === 'pending'"
     />
 
-
-    <div v-element-hover="onHover">
+    <div
+      v-element-hover="onHover"
+      class="redemption-history-table-row__hf-amount"
+    >
       <BaseTableRowItem
         :value="props.redemption.formattedHfAmount"
         is-bold
@@ -22,16 +24,16 @@
             v-if="isPartialInfoVisible"
             class="redemption-history-table-row__partial-info-popover"
           >
-            Requested amount: {{ props.redemption.formattedRequestedAmount }}
+            Original requested amount: {{ props.redemption.formattedRequestedAmount }}
           </div>
         </div>
       </BaseTableRowItem>
     </div>
 
-
     <BaseTableRowItem
       :value="props.redemption.formattedRedemptionAmount"
       is-bold
+      is-visible-on-mobile
       :is-italic="props.redemption.status === 'pending'"
       align="end"
     >
@@ -119,9 +121,9 @@ function onHover(state: boolean): void {
   &__partial-info-popover {
     position: absolute;
     z-index: 50;
-    right: -120px;
+    right: -155px;
     top: 20px;
-    width: 120px;
+    width: 155px;
     background: var(--white-color);
     border-radius: 2px;
     font-size: 12px;
@@ -142,6 +144,12 @@ function onHover(state: boolean): void {
       border-style: solid;
       border-width: 0 6px 6px 6px;
       border-color: transparent transparent white transparent;
+    }
+  }
+
+  @media screen and (max-width: 1050px) {
+    &__hf-amount {
+      display: none;
     }
   }
 }

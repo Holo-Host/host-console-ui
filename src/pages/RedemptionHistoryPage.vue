@@ -4,13 +4,16 @@
     :breadcrumbs="breadcrumbs"
     data-test-redemption-history-page-layout
   >
-    <div data-test-redemption-history-page-table>
+    <div
+      class="redemption-history-page__table"
+      data-test-redemption-history-page-table
+    >
       <BaseTable
         v-slot="{ items }"
         :is-loading="isLoading"
         :is-error="isError"
         :headers="[...headersMap.values()]"
-        :initial-sort-by="'createdDate'"
+        initial-sort-by="createdDate"
         :items="redemptions"
         empty-message-translation-key="redemption_history.errors.no_redemptions"
         @try-again-clicked="getRedemptionHistory"
@@ -21,6 +24,10 @@
           :redemption="item"
         />
       </BaseTable>
+
+      <tr class="redemption-history-page__table-legend">
+        <td>*partial redemption</td>
+      </tr>
     </div>
   </PrimaryLayout>
 </template>
@@ -71,7 +78,7 @@ const headersMap = computed(
         {
           key: 'redemptionAmount',
           label: t('redemption_history.headers.redemption_amount'),
-          isVisibleOnMobile: false,
+          isVisibleOnMobile: true,
           isSortable: true,
           align: 'end',
           type: 'string'
@@ -123,7 +130,7 @@ const redemptions = computed(() => {
           redemption.requestedAmount && Number(redemption.requestedAmount)
             ? formatCurrency(Number(redemption.requestedAmount))
             : '---',
-			formattedRedemptionAmount:
+      formattedRedemptionAmount:
           redemption.redemptionAmount && Number(redemption.redemptionAmount)
             ? formatCurrency(Number(redemption.redemptionAmount))
             : '---',
@@ -163,3 +170,21 @@ onMounted(async (): Promise<void> => {
   await getRedemptionHistory()
 })
 </script>
+
+<style lang="scss">
+.redemption-history-page {
+  &__table {
+    position: relative;
+  }
+
+  &__table-legend {
+    position: absolute;
+    bottom: 20px;
+    left: 264px;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 600;
+    color: var(--grey-dark-color);
+  }
+}
+</style>
