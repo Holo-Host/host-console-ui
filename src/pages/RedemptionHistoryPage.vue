@@ -1,33 +1,3 @@
-<template>
-  <PrimaryLayout
-    title="earnings.redemption_history"
-    :breadcrumbs="breadcrumbs"
-    data-test-redemption-history-page-layout
-  >
-    <div
-      class="redemption-history-page__table"
-      data-test-redemption-history-page-table
-    >
-      <BaseTable
-        v-slot="{ items }"
-        :is-loading="isLoading"
-        :is-error="isError"
-        :headers="[...headersMap.values()]"
-        initial-sort-by="createdDate"
-        :items="redemptions"
-        empty-message-translation-key="redemption_history.errors.no_redemptions"
-        @try-again-clicked="getRedemptionHistory"
-      >
-        <RedemptionHistoryTableRow
-          v-for="item in items"
-          :key="item.id"
-          :redemption="item"
-        />
-      </BaseTable>
-    </div>
-  </PrimaryLayout>
-</template>
-
 <script setup lang="ts">
 import BaseTable from '@uicommon/components/BaseTable.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
@@ -55,30 +25,30 @@ const redemptions = computed(() => {
 
   return Array.isArray(rawRedemptions)
     ? rawRedemptions.map((redemption) => ({
-      ...redemption,
-      formattedCreatedDate: dayjs(redemption.createdDate / kMsInSecond).format(
-        kDefaultDateFormat
-      ),
-      formattedHfAmount:
+        ...redemption,
+        formattedCreatedDate: dayjs(redemption.createdDate / kMsInSecond).format(
+          kDefaultDateFormat
+        ),
+        formattedHfAmount:
           redemption.completedAmount && Number(redemption.completedAmount)
             ? formatCurrency(Number(redemption.completedAmount))
             : redemption.requestedAmount && Number(redemption.requestedAmount)
-              ? formatCurrency(Number(redemption.requestedAmount))
-              : 0,
-      formattedRequestedAmount:
+            ? formatCurrency(Number(redemption.requestedAmount))
+            : 0,
+        formattedRequestedAmount:
           redemption.requestedAmount && Number(redemption.requestedAmount)
             ? formatCurrency(Number(redemption.requestedAmount))
             : '---',
-      formattedRedemptionAmount:
+        formattedRedemptionAmount:
           redemption.redemptionAmount && Number(redemption.redemptionAmount)
             ? formatCurrency(Number(redemption.redemptionAmount))
             : '---',
-      formattedTransactionId: redemption.transactionId
-        ? `...${redemption.transactionId.substring(
-          redemption.transactionId.length - kVisibleHashLength
-        )}`
-        : '---'
-    }))
+        formattedTransactionId: redemption.transactionId
+          ? `...${redemption.transactionId.substring(
+              redemption.transactionId.length - kVisibleHashLength
+            )}`
+          : '---'
+      }))
     : []
 })
 
@@ -171,6 +141,36 @@ onMounted(async (): Promise<void> => {
   await getRedemptionHistory()
 })
 </script>
+
+<template>
+  <PrimaryLayout
+    title="earnings.redemption_history"
+    :breadcrumbs="breadcrumbs"
+    data-test-redemption-history-page-layout
+  >
+    <div
+      class="redemption-history-page__table"
+      data-test-redemption-history-page-table
+    >
+      <BaseTable
+        v-slot="{ items }"
+        :is-loading="isLoading"
+        :is-error="isError"
+        :headers="[...headersMap.values()]"
+        initial-sort-by="createdDate"
+        :items="redemptions"
+        empty-message-translation-key="redemption_history.errors.no_redemptions"
+        @try-again-clicked="getRedemptionHistory"
+      >
+        <RedemptionHistoryTableRow
+          v-for="item in items"
+          :key="item.id"
+          :redemption="item"
+        />
+      </BaseTable>
+    </div>
+  </PrimaryLayout>
+</template>
 
 <style lang="scss">
 .redemption-history-page {

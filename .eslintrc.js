@@ -433,7 +433,7 @@ module.exports = {
         }, ...kNamingConventions],
         'vue/block-spacing': 'error',
         'vue/component-tags-order': ['error', {
-          order: ['template', 'script', 'style']
+          order: ['script', 'template', 'style']
         }],
         'vue/component-name-in-template-casing': ['error', 'PascalCase', {
           registeredComponentsOnly: true,

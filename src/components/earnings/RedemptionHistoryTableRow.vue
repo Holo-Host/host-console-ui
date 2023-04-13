@@ -1,3 +1,38 @@
+<script setup lang="ts">
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
+import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
+import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
+import { ref } from 'vue'
+import type { Redemption } from '@/interfaces/HposInterface'
+
+interface ExtendedRedemption extends Redemption {
+  formattedCreatedDate: string
+  formattedHfAmount: string
+  formattedRequestedAmount: string
+  formattedRedemptionAmount: string
+  formattedTransactionId: string
+}
+
+const props = defineProps<{
+  redemption: ExtendedRedemption
+}>()
+
+const isPartialInfoVisible = ref(false)
+const isPriceVisible = ref(false)
+
+function showPartialInfo(state: boolean): void {
+  if (props.redemption.isPartial) {
+    isPartialInfoVisible.value = state
+  }
+}
+
+function showTransactionPrice(state: boolean): void {
+  if (props.redemption.formattedRedemptionAmount !== '---') {
+    isPriceVisible.value = state
+  }
+}
+</script>
+
 <template>
   <BaseTableRow>
     <BaseTableRowItem
@@ -84,41 +119,6 @@
     />
   </BaseTableRow>
 </template>
-
-<script setup lang="ts">
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
-import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
-import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
-import { ref } from 'vue'
-import type { Redemption } from '@/interfaces/HposInterface'
-
-interface ExtendedRedemption extends Redemption {
-  formattedCreatedDate: string
-  formattedHfAmount: string
-  formattedRequestedAmount: string
-  formattedRedemptionAmount: string
-  formattedTransactionId: string
-}
-
-const props = defineProps<{
-  redemption: ExtendedRedemption
-}>()
-
-const isPartialInfoVisible = ref(false)
-const isPriceVisible = ref(false)
-
-function showPartialInfo(state: boolean): void {
-  if (props.redemption.isPartial) {
-    isPartialInfoVisible.value = state
-  }
-}
-
-function showTransactionPrice(state: boolean): void {
-  if (props.redemption.formattedRedemptionAmount !== '---') {
-    isPriceVisible.value = state
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 .redemption-history-table-row {
