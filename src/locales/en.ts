@@ -128,7 +128,9 @@ const translations = {
       redemption_amount: 'Redemption Amount',
       transaction_id: 'Transaction ID',
       status: 'Status'
-    }
+    },
+    original_requested_amount: 'Original Requested Amount: {amount}',
+    transaction_price: 'Transaction Price: {hf} HF = {hot} HOT'
   },
   settings: {
     account_display_name: 'Account Display Name',

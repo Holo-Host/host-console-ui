@@ -162,6 +162,7 @@ export interface Redemption {
   redemptionAmount: string
   transactionId: string
   status: string
+  isPartial: boolean
 }
 
 interface Error {

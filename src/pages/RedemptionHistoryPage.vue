@@ -24,10 +24,6 @@
           :redemption="item"
         />
       </BaseTable>
-
-      <tr class="redemption-history-page__table-legend">
-        <td>*partial redemption</td>
-      </tr>
     </div>
   </PrimaryLayout>
 </template>
@@ -50,6 +46,56 @@ const isError = ref(false)
 
 const earningsStore = useEarningsStore()
 
+const kMsInSecond = 1000
+const kDefaultDateFormat = 'DD MMM YYYY'
+const kVisibleHashLength = 6
+
+const redemptions = computed(() => {
+  const rawRedemptions = earningsStore.redemptions
+
+  return Array.isArray(rawRedemptions)
+    ? rawRedemptions.map((redemption) => ({
+      ...redemption,
+      formattedCreatedDate: dayjs(redemption.createdDate / kMsInSecond).format(
+        kDefaultDateFormat
+      ),
+      formattedHfAmount:
+          redemption.completedAmount && Number(redemption.completedAmount)
+            ? formatCurrency(Number(redemption.completedAmount))
+            : redemption.requestedAmount && Number(redemption.requestedAmount)
+              ? formatCurrency(Number(redemption.requestedAmount))
+              : 0,
+      formattedRequestedAmount:
+          redemption.requestedAmount && Number(redemption.requestedAmount)
+            ? formatCurrency(Number(redemption.requestedAmount))
+            : '---',
+      formattedRedemptionAmount:
+          redemption.redemptionAmount && Number(redemption.redemptionAmount)
+            ? formatCurrency(Number(redemption.redemptionAmount))
+            : '---',
+      formattedTransactionId: redemption.transactionId
+        ? `...${redemption.transactionId.substring(
+          redemption.transactionId.length - kVisibleHashLength
+        )}`
+        : '---'
+    }))
+    : []
+})
+
+const breadcrumbs = computed((): BreadCrumb[] => [
+  {
+    label: t('$.earnings'),
+    path: '/earnings'
+  },
+  {
+    label: t('earnings.redemption_history')
+  }
+])
+
+const hasPartialRedemption = computed(() => {
+  return redemptions.value.some((redemption) => redemption.isPartial)
+})
+
 const headersMap = computed(
   () =>
     new Map([
@@ -68,6 +114,7 @@ const headersMap = computed(
         {
           key: 'completedAmount',
           label: t('redemption_history.headers.hf_amount'),
+          description: hasPartialRedemption.value ? '*partial redemption' : '',
           isVisibleOnMobile: false,
           isSortable: true,
           type: 'string'
@@ -106,52 +153,6 @@ const headersMap = computed(
       ]
     ])
 )
-
-const kMsInSecond = 1000
-const kDefaultDateFormat = 'DD MMM YYYY'
-const kVisibleHashLength = 6
-
-const redemptions = computed(() => {
-  const rawRedemptions = earningsStore.redemptions
-
-  return Array.isArray(rawRedemptions)
-    ? rawRedemptions.map((redemption) => ({
-      ...redemption,
-      formattedCreatedDate: dayjs(redemption.createdDate / kMsInSecond).format(
-        kDefaultDateFormat
-      ),
-      formattedHfAmount:
-          redemption.completedAmount && Number(redemption.completedAmount)
-            ? formatCurrency(Number(redemption.completedAmount))
-            : redemption.requestedAmount && Number(redemption.requestedAmount)
-              ? formatCurrency(Number(redemption.requestedAmount))
-              : 0,
-      formattedRequestedAmount:
-          redemption.requestedAmount && Number(redemption.requestedAmount)
-            ? formatCurrency(Number(redemption.requestedAmount))
-            : '---',
-      formattedRedemptionAmount:
-          redemption.redemptionAmount && Number(redemption.redemptionAmount)
-            ? formatCurrency(Number(redemption.redemptionAmount))
-            : '---',
-      formattedTransactionId: redemption.transactionId
-          ? `...${redemption.transactionId.substring(
-              redemption.transactionId.length - kVisibleHashLength
-            )}`
-        : '---'
-    }))
-    : []
-})
-
-const breadcrumbs = computed((): BreadCrumb[] => [
-  {
-    label: t('$.earnings'),
-    path: '/earnings'
-  },
-  {
-    label: t('earnings.redemption_history')
-  }
-])
 
 async function getRedemptionHistory(): Promise<void> {
   isError.value = false

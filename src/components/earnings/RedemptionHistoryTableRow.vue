@@ -6,29 +6,32 @@
       :is-italic="props.redemption.status === 'pending'"
     />
 
-    <div
-      v-element-hover="onHover"
+    <td
       class="redemption-history-table-row__hf-amount"
     >
       <BaseTableRowItem
         :value="props.redemption.formattedHfAmount"
         is-bold
         :is-italic="props.redemption.status === 'pending'"
+        is-hoverable
+        @hover="showPartialInfo"
       >
         <div
           v-if="props.redemption.isPartial"
-          class="redemption-history-table-row__partial-info"
+          class="redemption-history-table-row__info"
         >
           *
-          <div
-            v-if="isPartialInfoVisible"
-            class="redemption-history-table-row__partial-info-popover"
-          >
-            Original requested amount: {{ props.redemption.formattedRequestedAmount }}
-          </div>
+          <Transition>
+            <div
+              v-if="isPartialInfoVisible"
+              class="redemption-history-table-row__info-popover redemption-history-table-row__partial-info-popover"
+            >
+              {{ $t('redemption_history.original_requested_amount', { amount: props.redemption.formattedRequestedAmount }) }}
+            </div>
+          </Transition>
         </div>
       </BaseTableRowItem>
-    </div>
+    </td>
 
     <BaseTableRowItem
       :value="props.redemption.formattedRedemptionAmount"
@@ -36,8 +39,26 @@
       is-visible-on-mobile
       :is-italic="props.redemption.status === 'pending'"
       align="end"
+      is-hoverable
+      @hover="showTransactionPrice"
     >
-      <span class="redemption-history-table-row__amount-unit">HOT</span>
+      <span
+        v-if="props.redemption.formattedRedemptionAmount"
+        class="redemption-history-table-row__amount-unit"
+      >
+        HOT
+      </span>
+
+      <div class="redemption-history-table-row__info">
+        <Transition>
+          <div
+            v-if="isPriceVisible"
+            class="redemption-history-table-row__info-popover redemption-history-table-row__price-info-popover"
+          >
+            {{ $t('redemption_history.transaction_price', { hf: 1, hot: 1 }) }}
+          </div>
+        </Transition>
+      </div>
     </BaseTableRowItem>
 
     <BaseTableRowItem
@@ -68,19 +89,15 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
 import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
 import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
-import { vElementHover } from '@vueuse/components'
 import { ref } from 'vue'
 import type { Redemption } from '@/interfaces/HposInterface'
 
 interface ExtendedRedemption extends Redemption {
-  id: string
   formattedCreatedDate: string
   formattedHfAmount: string
   formattedRequestedAmount: string
   formattedRedemptionAmount: string
   formattedTransactionId: string
-  status: string
-  isPartial: boolean
 }
 
 const props = defineProps<{
@@ -88,10 +105,17 @@ const props = defineProps<{
 }>()
 
 const isPartialInfoVisible = ref(false)
+const isPriceVisible = ref(false)
 
-function onHover(state: boolean): void {
+function showPartialInfo(state: boolean): void {
   if (props.redemption.isPartial) {
     isPartialInfoVisible.value = state
+  }
+}
+
+function showTransactionPrice(state: boolean): void {
+  if (props.redemption.formattedRedemptionAmount !== '---') {
+    isPriceVisible.value = state
   }
 }
 </script>
@@ -114,16 +138,13 @@ function onHover(state: boolean): void {
     color: var(--grey-dark-color);
   }
 
-  &__partial-info {
+  &__info {
     position: relative;
   }
 
-  &__partial-info-popover {
+  &__info-popover {
     position: absolute;
     z-index: 50;
-    right: -155px;
-    top: 20px;
-    width: 155px;
     background: var(--white-color);
     border-radius: 2px;
     font-size: 12px;
@@ -147,10 +168,32 @@ function onHover(state: boolean): void {
     }
   }
 
+  &__price-info-popover {
+    top: 15px;
+    right: -20px;
+    width: 100px;
+  }
+
+  &__partial-info-popover {
+    top: 20px;
+    right: -160px;
+    width: 160px;
+  }
+
   @media screen and (max-width: 1050px) {
     &__hf-amount {
       display: none;
     }
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 150ms ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
