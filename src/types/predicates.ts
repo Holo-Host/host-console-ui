@@ -5,8 +5,9 @@ export function isAdminSignature(target: CheckAuthResponse): target is AdminSign
   return target !== null
 }
 
-export function isError(error: Error | unknown): error is Error {
-  return error !== undefined
+export function isError(target: Error | unknown): target is Error {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- This is the only way to check for an Error
+  return (target as Error)?.error !== undefined
 }
 
 export function isHoloFuelProfile(target: unknown): target is HoloFuelProfile {

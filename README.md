@@ -68,7 +68,7 @@ yarn start-mock-hpos-api
 
 Start UI server in another terminal
 ```
-yarn serve
+yarn dev
 ```
 
 The login email and password for this server are in the package.json script
