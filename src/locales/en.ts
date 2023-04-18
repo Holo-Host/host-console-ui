@@ -6,6 +6,7 @@ const translations = {
   $: {
     ...commonTranslations.$,
     app_name: 'Host Console',
+    back: 'Back',
     dashboard: 'Dashboard',
     days: 'days',
     earnings: 'Earnings',

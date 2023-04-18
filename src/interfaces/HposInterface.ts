@@ -120,6 +120,7 @@ export interface HostEarnings {
   holofuel: {
     available: number | string
     balance: number | string
+    redeemable: number | string
   }
   recentPayments: unknown[]
 }
