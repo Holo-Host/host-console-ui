@@ -1,46 +1,8 @@
-<template>
-  <BaseCard
-    :is-loading="props.isLoading"
-    :is-error="props.isError"
-    class="redeemable-holofuel"
-    @try-again-clicked="emit('try-again-clicked')"
-  >
-    <CardHeader
-      :label="$t('earnings.redeemable_holofuel')"
-      :amount="props.data"
-      class="redeemable-holofuel__header"
-    />
-
-    <div class="redeemable-holofuel__links">
-      <BaseLinkButton
-        :to="kRoutes.redemptionHistory.path"
-        :icon="RedemptionHistoryIcon"
-        :label="$t('earnings.redemption_history')"
-        class="redeemable-holofuel__link"
-      />
-
-      <BaseLinkButton
-        is-disabled
-        to=""
-        :icon="RightArrowIcon"
-        :label="$t('earnings.redeem_holofuel')"
-        class="redeemable-holofuel__link"
-      />
-
-      <BaseLinkButton
-        to=""
-        :icon="TransferIcon"
-        :label="$t('earnings.transfer_holofuel')"
-        class="redeemable-holofuel__link"
-        @click="goToHoloFuel"
-      />
-    </div>
-  </BaseCard>
-</template>
-
 <script setup lang="ts">
 import BaseCard from '@uicommon/components/BaseCard.vue'
 import BaseLinkButton from '@uicommon/components/BaseLinkButton.vue'
+import { formatCurrency } from '@uicommon/utils/numbers'
+import { computed } from 'vue'
 import CardHeader from '@/components/earnings/CardHeader.vue'
 import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
 import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon.vue'
@@ -57,7 +19,52 @@ const props = defineProps<{
   isLoading: boolean
   isError: boolean
 }>()
+
+const redeemableHoloFuel = computed((): number =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+  formatCurrency(Number(props.data) || 0)
+)
 </script>
+
+<template>
+  <BaseCard
+    :is-loading="props.isLoading"
+    :is-error="props.isError"
+    class="redeemable-holofuel"
+    @try-again-clicked="emit('try-again-clicked')"
+  >
+    <CardHeader
+      :label="$t('earnings.redeemable_holofuel')"
+      :amount="redeemableHoloFuel"
+      class="redeemable-holofuel__header"
+    />
+
+    <div class="redeemable-holofuel__links">
+      <BaseLinkButton
+        :to="kRoutes.redemptionHistory.path"
+        :icon="RedemptionHistoryIcon"
+        :label="$t('earnings.redemption_history')"
+        class="redeemable-holofuel__link"
+      />
+
+      <BaseLinkButton
+        :is-disabled="props.data === 0"
+        :to="kRoutes.redeemHoloFuel.path"
+        :icon="RightArrowIcon"
+        :label="$t('earnings.redeem_holofuel')"
+        class="redeemable-holofuel__link"
+      />
+
+      <BaseLinkButton
+        to=""
+        :icon="TransferIcon"
+        :label="$t('earnings.transfer_holofuel')"
+        class="redeemable-holofuel__link"
+        @click="goToHoloFuel"
+      />
+    </div>
+  </BaseCard>
+</template>
 
 <style lang="scss" scoped>
 .redeemable-holofuel {
