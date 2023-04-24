@@ -18,6 +18,7 @@ const translations = {
       'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
     learn_more: 'Learn more',
     logout: 'Logout',
+    next: 'Next',
     terms_of_service: 'Terms of Service',
     try_again: 'Try again'
   },
@@ -118,6 +119,24 @@ const translations = {
   recent_payments: {
     title: 'Recent Payments',
     no_payments: 'You have no payments'
+  },
+  redeem_holofuel: {
+    available_to_redeem: 'available to redeem.',
+    amount_input_label: 'Redemption Amount',
+    amount_input_placeholder: 'Enter HF amount, up to 18 decimals',
+    amount_input_error: 'Amount exceeds redeemable balance.',
+    amount_input_tip: '*Note: HoloFuel and HOT are currently 1:1',
+    confirm_and_redeem: 'Confirm & Redeem',
+    holo_fuel_amount: 'HF Amount',
+    recipient_address_input_label: 'Recipient HOT Address',
+    recipient_address_input_placeholder: 'Enter HOT wallet address',
+    recipient_address_input_error: 'HOT address not valid, please check it and try again.',
+    redemption_amount: 'Redemption Amount',
+    redemption_currency: 'Redemption Currency',
+    redemption_price: 'Redemption Price',
+    review_and_confirm: 'Please review and confirm:',
+    title: 'Redeem HoloFuel',
+    you_have: 'You have'
   },
   redemption_history: {
     errors: {

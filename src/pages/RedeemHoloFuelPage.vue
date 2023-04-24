@@ -29,11 +29,13 @@ async function getRedeemableHoloFuel(): Promise<void> {
   isLoading.value = false
 }
 
-const redeemableHoloFuel = computed(() =>
-  isError(dashboardStore.hostEarnings)
-    ? dashboardStore.hostEarnings
-    : dashboardStore.hostEarnings.holofuel.redeemable
-)
+const redeemableHoloFuel = computed(() => {
+  if (isError(dashboardStore.hostEarnings)) {
+    return dashboardStore.hostEarnings
+  }
+
+  return dashboardStore.hostEarnings.holofuel.redeemable || 0
+})
 
 onMounted(async (): Promise<void> => {
   await getRedeemableHoloFuel()
@@ -47,7 +49,7 @@ onMounted(async (): Promise<void> => {
   >
     <RedeemHoloFuelCard
       :is-loading="isLoading"
-      :data="redeemableHoloFuel"
+      :redeemable-holo-fuel="redeemableHoloFuel"
     />
   </primarylayout>
 </template>
