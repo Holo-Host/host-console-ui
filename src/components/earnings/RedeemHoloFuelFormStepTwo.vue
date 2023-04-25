@@ -1,25 +1,17 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import RedeemHoloFuelFormStepTwoItem from './RedeemHoloFuelFormStepTwoItem.vue'
 
 const props = defineProps<{
   amount: number
   hotAddress: string
+  partialRedemptionTermsAccepted: boolean
 }>()
 
 const emit = defineEmits(['update'])
 
-const partialRedemptionTermsAccepted = ref(false)
-
-const canSubmit = computed(() => partialRedemptionTermsAccepted.value)
-
-watch(
-  () => canSubmit.value,
-  () => {
-    if (canSubmit.value) {
-      emit('update', { partialRedemptionTermsAccepted: partialRedemptionTermsAccepted.value })
-    }
-  }
-)
+function updatePartialRedemptionTermsAccepted(event: Event): void {
+  emit('update', { partialRedemptionTermsAccepted: event.target?.checked })
+}
 </script>
 
 <template>
@@ -28,19 +20,40 @@ watch(
       <span>{{ $t('redeem_holofuel.review_and_confirm') }}</span>
     </div>
 
-    <div class="form-step-two__item">
-      <span class="form-step-two__item-label">{{ $t('redeem_holofuel.holo_fuel_amount') }}</span>
-      <span class="form-step-two__item-value">{{ props.amount }} <span class="form-step-two__item-value--unit">HF</span></span>
-    </div>
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.holo_fuel_amount')">
+      {{ props.amount }} <span class="form-step-two__item-value--unit">HF</span>
+    </RedeemHoloFuelFormStepTwoItem>
 
-    <div class="form-step-two__item">
-      <span class="form-step-two__item-label">{{ $t('redeem_holofuel.redemption_currency') }}</span>
-      <span class="form-step-two__item-value form-step-two__item-value--unit">HOT</span>
-    </div>
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.redemption_currency')">
+      <span class="form-step-two__item-value--unit">HOT</span>
+    </RedeemHoloFuelFormStepTwoItem>
 
-    <div class="form-step-two__item">
-      <span class="form-step-two__item-label">{{ $t('redeem_holofuel.redemption_amount') }}</span>
-      <span class="form-step-two__item-value">{{ props.amount }} <span class="form-step-two__item-value--unit">HOT</span></span>
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.redemption_amount')">
+      {{ props.amount }} <span class="form-step-two__item-value--unit">HOT</span>
+    </RedeemHoloFuelFormStepTwoItem>
+
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.redemption_amount')">
+      1 <span class="form-step-two__item-value--unit">HF</span> = 1 <span class="form-step-two__item-value--unit">HOT</span>
+    </RedeemHoloFuelFormStepTwoItem>
+
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.recipient_address_input_label')">
+      <span class="form-step-two__item-value--address">{{ props.hotAddress }}</span>
+    </RedeemHoloFuelFormStepTwoItem>
+
+    <div class="form-step-two__terms">
+      <input
+        id="partialRedemptionTermsAccepted"
+        :value="partialRedemptionTermsAccepted"
+        type="checkbox"
+        class="form-step-two__terms-checkbox"
+        @change="updatePartialRedemptionTermsAccepted"
+      />
+      <label
+        for="partialRedemptionTermsAccepted"
+        class="form-step-two__terms-label"
+      >
+        {{ $t('redeem_holofuel.partial_redemption_terms') }}
+      </label>
     </div>
   </div>
 </template>
@@ -56,19 +69,35 @@ watch(
     font-weight: 700;
   }
 
-  &__item {
+  &__item-value {
+    &--unit {
+      color: var(--grey-color);
+    }
+
+    &--address {
+      color: var(--grey-color);
+      font-weight: 400;
+    }
+  }
+
+  &__terms {
     display: flex;
-    flex-direction: column;
+    align-items: start;
     margin-top: 30px;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
+    font-style: italic;
+    max-width: 620px;
     color: var(--grey-dark-color);
+    cursor: pointer;
 
-    &-value {
-      margin-top: 8px;
-      &--unit {
-        color: var(--grey-color);
-      }
+    &-checkbox:checked {
+      accent-color: var(--primary-light-color);
+    }
+
+    &-label {
+      margin-left: 10px;
+      cursor: pointer;
     }
   }
 }

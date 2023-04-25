@@ -17,36 +17,41 @@ const props = defineProps<{
 
 const amount = ref('')
 const hotAddress = ref('')
-
+const partialRedemptionTermsAccepted = ref(false)
 const step = ref(1)
 
 const canSubmit = computed((): boolean => {
   if (step.value === 1) {
     return amount.value !== '' && hotAddress.value !== ''
+  } else {
+    return partialRedemptionTermsAccepted.value
   }
-
-  return true
 })
 
-interface SubmitProps {
-  amount?: string
-  hotAddress?: string
-}
-
 interface StepOneProps {
-  amount?: string
-  hotAddress?: string
+  amount: string
+  hotAddress: string
 }
 
-function handleSubmit(props: SubmitProps): void {
+interface StepTwoProps {
+  partialRedemptionTermsAccepted: boolean
+}
+
+function handleSubmit(): void {
   if (step.value === 1) {
     step.value = 2
+  } else {
+    // TODO: submit form
   }
 }
 
-function updateData(updateProps: StepOneProps): void {
-  amount.value = updateProps.amount ?? ''
-  hotAddress.value = updateProps.hotAddress ?? ''
+function updateData(updateProps: StepOneProps & StepTwoProps): void {
+  if (step.value === 1) {
+    amount.value = updateProps.amount
+    hotAddress.value = updateProps.hotAddress
+  } else {
+    partialRedemptionTermsAccepted.value = updateProps.partialRedemptionTermsAccepted
+  }
 }
 </script>
 
@@ -78,11 +83,18 @@ function updateData(updateProps: StepOneProps): void {
           v-if="step === 2"
           :amount="amount"
           :hot-address="hotAddress"
+          :partial-redemption-terms-accepted="partialRedemptionTermsAccepted"
           @update="updateData"
         />
       </div>
 
-      <div class="redeem-card-content__buttons">
+      <div
+        class="redeem-card-content__buttons"
+        :class="[
+          { 'redeem-card-content__buttons--step-1': step === 1 },
+          { 'redeem-card-content__buttons--step-2': step === 2 }
+        ]"
+      >
         <span
           class="redeem-card-content__cancel-button"
           @click="router.push({ name: kRoutes.earnings.name })"
@@ -136,6 +148,14 @@ function updateData(updateProps: StepOneProps): void {
   &__buttons {
     margin-top: 54px;
     margin-left: 40px;
+
+    &--step-1 {
+      margin-bottom: 228px;
+    }
+
+    &--step-2 {
+      margin-bottom: 75px;
+    }
   }
 
   &__cancel-button {
@@ -146,6 +166,12 @@ function updateData(updateProps: StepOneProps): void {
 
   &__submit-button {
     margin-left: 20px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .redeem-card-content {
+    margin-left: 0;
   }
 }
 </style>

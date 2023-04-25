@@ -127,4 +127,10 @@ function activateHotAddressValidation(): void {
     width: 520px;
   }
 }
+
+@media screen and (max-width: 1050px) {
+  .form-step-one__input {
+    width: calc(100vw - 180px);
+  }
+}
 </style>

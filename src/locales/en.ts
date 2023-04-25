@@ -123,11 +123,13 @@ const translations = {
   redeem_holofuel: {
     available_to_redeem: 'available to redeem.',
     amount_input_label: 'Redemption Amount',
-    amount_input_placeholder: 'Enter HF amount, up to 18 decimals',
+    amount_input_placeholder: 'Enter HF amount',
     amount_input_error: 'Amount exceeds redeemable balance.',
     amount_input_tip: '*Note: HoloFuel and HOT are currently 1:1',
     confirm_and_redeem: 'Confirm & Redeem',
     holo_fuel_amount: 'HF Amount',
+    partial_redemption_terms:
+      'Redemptions are processed first come, first serve. By checking this box, you accept a partial redemption if 1) there isn’t enough HOT in the reserve to fulfill your entire request or 2) the price surpasses the minimum you have chosen.',
     recipient_address_input_label: 'Recipient HOT Address',
     recipient_address_input_placeholder: 'Enter HOT wallet address',
     recipient_address_input_error: 'HOT address not valid, please check it and try again.',
