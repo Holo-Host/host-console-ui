@@ -21,6 +21,7 @@ interface HposInterface {
   updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
+  getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   HPOS_API_URL: string
 }
@@ -78,7 +79,7 @@ type HposHolochainCallResponse =
   | HposStatusResponse
   | HoloFuelProfileResponse
   | CoreAppVersionResponse
-  | Promise<Transaction[] | boolean>
+  | Promise<Transaction[] | Redemption[] | boolean>
   | CoreAppVersion
   | HostPreferencesResponse
 
@@ -152,6 +153,16 @@ export interface Transaction {
   proof_of_service_token: string | null
   url: string | null
   expiration_date: string
+}
+
+export interface Redemption {
+  id: string
+  createdDate: string
+  completedAmount: string
+  redemptionAmount: string
+  transactionId: string
+  status: string
+  isPartial: boolean
 }
 
 interface Error {
@@ -594,6 +605,17 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getRedemptionHistory(): Promise<HposHolochainCallResponse> {
+    try {
+      return await hposHolochainCall({
+        method: 'get',
+        path: '/redemption_history'
+      })
+    } catch (error) {
+      return false
+    }
+  }
+
   async function getCoreAppVersion(): Promise<CoreAppVersion> {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -629,6 +651,7 @@ export function useHposInterface(): HposInterface {
     updateHoloFuelProfile,
     getPaidInvoices,
     getUnpaidInvoices,
+    getRedemptionHistory,
     getCoreAppVersion,
     getHostPreferences,
     HPOS_API_URL

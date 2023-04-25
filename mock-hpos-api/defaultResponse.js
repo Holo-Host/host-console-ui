@@ -1,5 +1,5 @@
 // mock of normal hpos api responses
-import { createDate } from './utils'
+const createDate = require('./utils')
 
 /* eslint-disable no-magic-numbers */
 const happs = [
@@ -427,6 +427,69 @@ const mockPaidInvoicesData = [
   }
 ]
 
+const mockRedemptionHistoryData = [
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE63',
+    createdDate: createDate(1, -1),
+    requestedAmount: '1421002.0398',
+    completedAmount: '1000000.00',
+    redemptionAmount: '1000000.00',
+    transactionId: '0xaf88712107800f829599a220ee6ac866c9b3cc9941fc0d3e6af3f8745f76155f',
+    status: 'completed',
+    isPartial: true,
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE64',
+    createdDate: createDate(1, -2),
+    requestedAmount: '1421002',
+    completedAmount: '1421002',
+    redemptionAmount: '1421002',
+    transactionId: '0xaf88712107800f829599a220ee6ac866c9b3cc9941fc0d3e6af3f8745f76155f',
+    status: 'completed',
+    isPartial: false,
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE65',
+    createdDate: createDate(0, -2),
+    requestedAmount: '142100',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+    isPartial: false,
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE66',
+    createdDate: createDate(2, -2),
+    requestedAmount: '2421002',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+    isPartial: false,
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE67',
+    createdDate: createDate(2, -2),
+    requestedAmount: '3421002',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+    isPartial: false,
+  },
+  {
+    id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE68',
+    createdDate: createDate(3, -2),
+    requestedAmount: '4421002',
+    completedAmount: '0',
+    redemptionAmount: '0',
+    transactionId: '',
+    status: 'pending',
+    isPartial: false,
+  }
+]
+
 const holoNixpkgs = {
   holo_nixpkgs: {
     channel: {
@@ -451,7 +514,8 @@ const data = {
     '/holochain-api/v1/usage': usage,
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion,
-    '/holochain-api/v1/host_invoices': mockPaidInvoicesData
+    '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
+    '/holochain-api/v1/redemption_history': mockRedemptionHistoryData
   },
   put: {
     '/api/v1/config': (args) => args,

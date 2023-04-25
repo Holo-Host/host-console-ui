@@ -72,7 +72,8 @@ const headersMap = computed(
           key: 'happ',
           label: t('invoices.headers.happ'),
           isVisibleOnMobile: true,
-          isSortable: true
+          isSortable: true,
+          type: 'string'
         }
       ],
       [
@@ -81,7 +82,8 @@ const headersMap = computed(
           key: 'counterparty',
           label: t('invoices.headers.publisher'),
           isVisibleOnMobile: false,
-          isSortable: true
+          isSortable: true,
+          type: 'string'
         }
       ],
       [
@@ -92,7 +94,8 @@ const headersMap = computed(
             isPaidInvoices.value ? 'invoices.headers.completed' : 'invoices.headers.created'
           ),
           isVisibleOnMobile: true,
-          isSortable: true
+          isSortable: true,
+          type: 'date'
         }
       ],
       [
@@ -101,7 +104,8 @@ const headersMap = computed(
           key: 'expirationDate',
           label: t('invoices.headers.due'),
           isVisibleOnMobile: false,
-          isSortable: true
+          isSortable: true,
+          type: 'date'
         }
       ],
       [
@@ -110,7 +114,8 @@ const headersMap = computed(
           key: 'formattedId',
           label: t('invoices.headers.invoice'),
           isVisibleOnMobile: false,
-          isSortable: true
+          isSortable: true,
+          type: 'string'
         }
       ],
       [
@@ -129,7 +134,8 @@ const headersMap = computed(
           key: 'payment_status',
           label: t('invoices.headers.payment_status'),
           isVisibleOnMobile: true,
-          isSortable: false
+          isSortable: false,
+          type: 'string'
         }
       ]
     ])

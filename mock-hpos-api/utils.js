@@ -1,8 +1,8 @@
-import dayjs from 'dayjs'
+const dayjs = require('dayjs')
 
 const kMsInSecond = 1000
 
-export function createDate(dayOfWeek, weeksAhead = 1) {
+function createDate(dayOfWeek, weeksAhead = 1) {
   const day = new Date()
   const currentDayOfMonth = day.getDate()
   const currentDayOfWeek = day.getDay()
@@ -12,3 +12,5 @@ export function createDate(dayOfWeek, weeksAhead = 1) {
 
   return dayjs(day).valueOf() * kMsInSecond
 }
+
+module.exports = createDate

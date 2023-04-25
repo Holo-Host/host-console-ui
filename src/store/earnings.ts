@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia'
-import { Earnings, Transaction, useHposInterface } from '@/interfaces/HposInterface'
-import { isTransactionsArray } from '@/types/predicates'
+import { Earnings, Redemption, Transaction, useHposInterface } from '@/interfaces/HposInterface'
+import { isRedemptionsArray, isTransactionsArray } from '@/types/predicates'
 
-const { getPaidInvoices, getUnpaidInvoices } = useHposInterface()
+const { getPaidInvoices, getUnpaidInvoices, getRedemptionHistory } = useHposInterface()
 
 interface State {
   earnings: Earnings
   paidInvoices: Transaction[]
   unpaidInvoices: Transaction[]
+  redemptions: Redemption[]
 }
 
 export const useEarningsStore = defineStore('earnings', {
@@ -18,7 +19,8 @@ export const useEarningsStore = defineStore('earnings', {
       lastday: 0
     },
     paidInvoices: [],
-    unpaidInvoices: []
+    unpaidInvoices: [],
+    redemptions: []
   }),
 
   actions: {
@@ -39,6 +41,17 @@ export const useEarningsStore = defineStore('earnings', {
       if (isTransactionsArray(unpaidInvoices)) {
         this.unpaidInvoices = unpaidInvoices
         return unpaidInvoices
+      }
+
+      return []
+    },
+
+    async getRedemptionHistory(): Promise<Redemption[]> {
+      const redemptions = await getRedemptionHistory()
+
+      if (isRedemptionsArray(redemptions)) {
+        this.redemptions = redemptions
+        return redemptions
       }
 
       return []
