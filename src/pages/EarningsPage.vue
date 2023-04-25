@@ -23,7 +23,7 @@ const weeklyEarnings = computed((): number => formatCurrency(Number(rawWeeklyEar
 
 const redeemableHoloFuel = computed((): number =>
   !isErrorPredicate(dashboardStore.hostEarnings)
-    ? Number(dashboardStore.hostEarnings.holofuel.redeemable)
+    ? Number(dashboardStore.hostEarnings.holofuel.redeemable || 0)
     : 0
 )
 

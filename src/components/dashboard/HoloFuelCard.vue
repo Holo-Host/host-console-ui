@@ -23,6 +23,8 @@ interface Data {
   redeemable: string
 }
 
+const canRedeem = computed((): boolean => !isError.value && Number(props.data.redeemable) > 0)
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
 const items = computed((): DashboardCardItem[] => [
   {
@@ -73,6 +75,7 @@ const items = computed((): DashboardCardItem[] => [
     </div>
 
     <button
+      :disabled="!canRedeem"
       class="redeem-button"
       @click="router.push({ name: kRoutes.redeemHoloFuel.name })"
     >
@@ -81,7 +84,7 @@ const items = computed((): DashboardCardItem[] => [
   </BaseCard>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .redeem-button {
   margin-top: 10px;
   align-self: center;
@@ -95,6 +98,11 @@ const items = computed((): DashboardCardItem[] => [
   padding: 0 25px;
   cursor: pointer;
   margin-bottom: 10px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .margin-bottom {

@@ -18,7 +18,12 @@ const isAmountValid = computed(() => Number(amount.value) <= Number(props.redeem
 const isHotAddressValid = computed(() => /^0x[a-fA-F0-9]{40}$/.test(hotAddress.value))
 
 const canSubmit = computed(
-  () => amount.value && isAmountValid.value && hotAddress.value && isHotAddressValid.value
+  () =>
+    amount.value &&
+    Number(amount.value) > 0 &&
+    isAmountValid.value &&
+    hotAddress.value &&
+    isHotAddressValid.value
 )
 
 const formattedRedeemableHoloFuel = computed((): number =>
