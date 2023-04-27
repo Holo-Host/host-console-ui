@@ -1,59 +1,3 @@
-<template>
-  <section class="layout">
-    <TheSidebar />
-
-    <section
-      v-if="!isLoading"
-      class="main-column"
-    >
-      <MobileTopNav
-        :nickname="nickname"
-        :agent-address="agentAddress"
-      />
-
-      <TopNav
-        :breadcrumbs="breadcrumbsOrTitle"
-        :nickname="nickname"
-        :agent-address="agentAddress"
-      />
-
-      <WelcomeModal />
-
-      <GoToHoloFuelModal
-        :app-name="$t('$.app_name')"
-        :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
-        :holo-fuel-url="kHoloFuelUrl"
-      />
-
-      <section class="content">
-        <slot />
-
-        <div
-          v-if="props.isContentLoading || props.isContentError"
-          class="content__overlay"
-        >
-          <CircleSpinner
-            v-if="props.isContentLoading"
-            class="content__overlay-spinner"
-          />
-
-          <div
-            v-else-if="props.isContentError"
-            class="content__overlay-error-message"
-          >
-            <p>{{ $t('$.generic_error') }}</p>
-            <BaseButton
-              :type="EButtonType.gray"
-              :title="$t('$.try_again')"
-              @click="emit('try-again-clicked')"
-            />
-          </div>
-        </div>
-      </section>
-    </section>
-  </section>
-</template>
-
 <script setup lang="ts">
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
@@ -63,6 +7,7 @@ import { useOverlay } from '@uicommon/composables/useOverlay.js'
 import { EButtonType } from '@uicommon/types/ui.js'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import MobileTopNav from '@/components/MobileTopNav.vue'
+import RedemptionInitiatedModal from '@/components/modals/RedemptionInitiatedModal.vue'
 import WelcomeModal from '@/components/modals/WelcomeModal.vue'
 import TheSidebar from '@/components/sidebar/TheSidebar.vue'
 import TopNav from '@/components/TopNav.vue'
@@ -144,6 +89,64 @@ onMounted(async () => {
   })
 })
 </script>
+
+<template>
+  <section class="layout">
+    <TheSidebar />
+
+    <section
+      v-if="!isLoading"
+      class="main-column"
+    >
+      <MobileTopNav
+        :nickname="nickname"
+        :agent-address="agentAddress"
+      />
+
+      <TopNav
+        :breadcrumbs="breadcrumbsOrTitle"
+        :nickname="nickname"
+        :agent-address="agentAddress"
+      />
+
+      <WelcomeModal />
+
+      <GoToHoloFuelModal
+        :app-name="$t('$.app_name')"
+        :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
+        :holo-fuel-url="kHoloFuelUrl"
+      />
+
+      <RedemptionInitiatedModal />
+
+      <section class="content">
+        <slot />
+
+        <div
+          v-if="props.isContentLoading || props.isContentError"
+          class="content__overlay"
+        >
+          <CircleSpinner
+            v-if="props.isContentLoading"
+            class="content__overlay-spinner"
+          />
+
+          <div
+            v-else-if="props.isContentError"
+            class="content__overlay-error-message"
+          >
+            <p>{{ $t('$.generic_error') }}</p>
+            <BaseButton
+              :type="EButtonType.gray"
+              :title="$t('$.try_again')"
+              @click="emit('try-again-clicked')"
+            />
+          </div>
+        </div>
+      </section>
+    </section>
+  </section>
+</template>
 
 <style lang="scss" scoped>
 .layout {

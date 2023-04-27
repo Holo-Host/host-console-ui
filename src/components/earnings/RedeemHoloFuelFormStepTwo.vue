@@ -2,7 +2,7 @@
 import RedeemHoloFuelFormStepTwoItem from './RedeemHoloFuelFormStepTwoItem.vue'
 
 const props = defineProps<{
-  amount: number
+  amount: string
   hotAddress: string
   partialRedemptionTermsAccepted: boolean
 }>()

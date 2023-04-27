@@ -23,7 +23,34 @@ interface HposInterface {
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
+  redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<HposHolochainCallResponse>
   HPOS_API_URL: string
+}
+
+interface RedeemHoloFuelPayload {
+  amount: string
+  note: string
+}
+
+export interface RedemptionTransaction {
+  id: string
+  amount: number
+  fee: string
+  completed_date: number
+  created_date: number
+  transaction_type: string
+  counterparty: string
+  direction: string
+  status: string
+  note?: string // The `eth_hash` will be stored here in Redemption Transactions
+  url?: string
+  expiration_date?: number
+}
+
+interface ReserveSettingsResponse {
+  hash: string
+  pub_key: string
+  info: Recoird<string, string>
 }
 
 export interface UpdateHoloFuelProfilePayload {
@@ -82,6 +109,8 @@ type HposHolochainCallResponse =
   | Promise<Transaction[] | Redemption[] | boolean>
   | CoreAppVersion
   | HostPreferencesResponse
+  | RedemptionTransaction
+  | ReserveSettingsResponse
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -639,6 +668,48 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function redeemHoloFuel(payload: RedeemHoloFuelPayload): Promise<Transaction | boolean> {
+    try {
+      const getReserveDetailsParams = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'reserves',
+        fnName: 'get_all_reserve_accounts_details',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        payload: null
+      }
+
+      const reserveAccountsDetails: ReserveSettingsResponse = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params: getReserveDetailsParams
+      })
+
+      const initiateRedemptionParams = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'holofuel',
+        zomeName: 'transactor',
+        fnName: 'redemption',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        payload: {
+          reserve_id: reserveAccountsDetails.hash,
+          amount: payload.amount,
+          note: payload.note
+        }
+      }
+
+      const transaction: RedemptionTransaction = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params: initiateRedemptionParams
+      })
+
+      return transaction
+    } catch (error) {
+      return false
+    }
+  }
+
   return {
     getUsage,
     getTopHostedHapps,
@@ -655,6 +726,7 @@ export function useHposInterface(): HposInterface {
     getRedemptionHistory,
     getCoreAppVersion,
     getHostPreferences,
+    redeemHoloFuel,
     HPOS_API_URL
   }
 }

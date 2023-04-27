@@ -1,59 +1,3 @@
-<template>
-  <PrimaryLayout
-    :title="$t('$.dashboard')"
-    data-test-dashboard-layout
-  >
-    <div class="row">
-      <UsageCard
-        :is-loading="isLoadingUsage"
-        :data="usage"
-        data-test-dashboard-usage-card
-        @try-again-clicked="getUsage"
-      />
-
-      <HoloFuelCard
-        :is-loading="isLoadingEarnings"
-        :data="holoFuel"
-        class="holofuel-card"
-        data-test-dashboard-holo-fuel-card
-        @try-again-clicked="getEarnings"
-      />
-    </div>
-
-    <div class="row">
-      <HappsCard
-        :data="topHostedHapps"
-        :is-loading="isLoadingHostedHapps"
-        with-more-button
-        class="happs-card"
-        data-test-dashboard-happs-card
-        @more-clicked="() => router.push({ name: kRoutes.happs.name })"
-        @try-again-clicked="getTopHostedHapps"
-      />
-
-      <EarningsCard
-        :data="earnings"
-        :is-loading="isLoadingEarnings"
-        with-more-button
-        class="earnings-card"
-        data-test-dashboard-earnings-card
-        @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
-        @try-again-clicked="getEarnings"
-      />
-
-      <RecentPaymentsCard
-        :data="recentPayments"
-        :is-loading="isLoadingEarnings"
-        with-more-button
-        class="payments-card"
-        data-test-dashboard-payments-card
-        @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
-        @try-again-clicked="getEarnings"
-      />
-    </div>
-  </PrimaryLayout>
-</template>
-
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -126,6 +70,62 @@ onMounted(async (): Promise<void> => {
   await getTopHostedHapps()
 })
 </script>
+
+<template>
+  <PrimaryLayout
+    :title="$t('$.dashboard')"
+    data-test-dashboard-layout
+  >
+    <div class="row">
+      <UsageCard
+        :is-loading="isLoadingUsage"
+        :data="usage"
+        data-test-dashboard-usage-card
+        @try-again-clicked="getUsage"
+      />
+
+      <HoloFuelCard
+        :is-loading="isLoadingEarnings"
+        :data="holoFuel"
+        class="holofuel-card"
+        data-test-dashboard-holo-fuel-card
+        @try-again-clicked="getEarnings"
+      />
+    </div>
+
+    <div class="row">
+      <HappsCard
+        :data="topHostedHapps"
+        :is-loading="isLoadingHostedHapps"
+        with-more-button
+        class="happs-card"
+        data-test-dashboard-happs-card
+        @more-clicked="() => router.push({ name: kRoutes.happs.name })"
+        @try-again-clicked="getTopHostedHapps"
+      />
+
+      <EarningsCard
+        :data="earnings"
+        :is-loading="isLoadingEarnings"
+        with-more-button
+        class="earnings-card"
+        data-test-dashboard-earnings-card
+        @more-clicked="() => router.push({ name: kRoutes.earnings.name })"
+        @try-again-clicked="getEarnings"
+      />
+
+      <RecentPaymentsCard
+        :data="recentPayments"
+        :is-loading="isLoadingEarnings"
+        with-more-button
+        class="payments-card"
+        data-test-dashboard-payments-card
+        @more-clicked="() => router.push({ name: kRoutes.paidInvoices.name })"
+        @try-again-clicked="getEarnings"
+      />
+    </div>
+  </PrimaryLayout>
+</template>
 
 <style scoped>
 .row {

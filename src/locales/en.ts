@@ -8,6 +8,7 @@ const translations = {
     app_name: 'Host Console',
     back: 'Back',
     dashboard: 'Dashboard',
+    date: 'Date',
     days: 'days',
     earnings: 'Earnings',
     generic_error: 'Sorry, we couldn’t fetch this data.',
@@ -135,7 +136,9 @@ const translations = {
     recipient_address_input_error: 'HOT address not valid, please check it and try again.',
     redemption_amount: 'Redemption Amount',
     redemption_currency: 'Redemption Currency',
+    redemption_initiated: 'Redemption Initiated!',
     redemption_price: 'Redemption Price',
+    request_id: 'Request ID',
     review_and_confirm: 'Please review and confirm:',
     title: 'Redeem HoloFuel',
     you_have: 'You have'

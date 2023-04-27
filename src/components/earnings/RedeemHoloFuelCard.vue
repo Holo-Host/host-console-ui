@@ -6,7 +6,10 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import RedeemHoloFuelFormStepOne from './RedeemHoloFuelFormStepOne.vue'
 import RedeemHoloFuelFormStepTwo from './RedeemHoloFuelFormStepTwo.vue'
+import {RedemptionTransaction, useHposInterface} from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
+
+const { redeemHoloFuel } = useHposInterface()
 
 const router = useRouter()
 
@@ -15,10 +18,13 @@ const props = defineProps<{
   isLoading: boolean
 }>()
 
+const emit = defineEmits(['submitted'])
+
 const amount = ref('')
 const hotAddress = ref('')
 const partialRedemptionTermsAccepted = ref(false)
 const step = ref(1)
+const isLoading = ref(false)
 
 const canSubmit = computed((): boolean => {
   if (step.value === 1) {
@@ -37,11 +43,19 @@ interface StepTwoProps {
   partialRedemptionTermsAccepted: boolean
 }
 
-function handleSubmit(): void {
+async function handleSubmit(): Promise<void> {
   if (step.value === 1) {
     step.value = 2
   } else {
     // TODO: submit form
+    isLoading.value = true
+
+    const transaction: RedemptionTransaction = await redeemHoloFuel({
+      amount: amount.value,
+      note: JSON.stringify({ eth_address: hotAddress })
+    })
+
+    emit('submitted', { ...transaction, hotAddress })
   }
 }
 
@@ -104,6 +118,7 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
 
         <BaseButton
           :is-disabled="!canSubmit"
+          :is-busy="isLoading"
           class="redeem-card-content__submit-button"
           @click="handleSubmit"
         >

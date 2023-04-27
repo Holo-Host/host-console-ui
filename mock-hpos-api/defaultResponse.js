@@ -190,6 +190,40 @@ const getMyProfile = {
   }
 }
 
+const getAllReserveAccountsDetails = {
+  hash: 'QmYXJ5Y2FyZG9uLmNvbS9ob2xvZnVsb2c=',
+  pub_key: {
+    type: 'Buffer',
+    data: [
+      132, 32, 36, 157, 32, 140, 24, 241, 10, 28, 222, 179, 158, 62, 209, 80, 229, 227, 114, 241,
+      62, 210, 166, 100, 55, 151, 238, 176, 36, 80, 111, 82, 43, 225, 83, 139, 240, 203, 176
+    ]
+  },
+  info: {
+    external_reserve_currency: '',
+    external_account_number: '',
+    external_signing_key: '',
+    default_promise_expiry: '',
+    min_external_currency_tx_size: '',
+    max_external_currency_tx_size: '',
+    note: '',
+  }
+}
+
+const redemptionTransaction = {
+  id: 'dit7373ddjlg9204hfnfvu749506mvjshss7306mvjsd8',
+  amount: 1000000,
+  fee: 0,
+  completed_date: createDate(1, 1),
+  created_date: createDate(1, 1),
+  transaction_type: '',
+  counterparty: '',
+  direction: '',
+  status: '',
+  note: '',
+  proof_of_service: '',
+}
+
 const mockPaidInvoicesData = [
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6H',
@@ -526,6 +560,10 @@ const data = {
       switch (args.fnName) {
         case 'get_my_profile':
           return getMyProfile
+        case 'get_all_reserve_accounts_details':
+          return getAllReserveAccountsDetails
+        case 'redemption':
+          return redemptionTransaction
       }
     }
   }
