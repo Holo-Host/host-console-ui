@@ -6,7 +6,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import RedeemHoloFuelFormStepOne from './RedeemHoloFuelFormStepOne.vue'
 import RedeemHoloFuelFormStepTwo from './RedeemHoloFuelFormStepTwo.vue'
-import {RedemptionTransaction, useHposInterface} from '@/interfaces/HposInterface'
+import { RedemptionTransaction, useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
 
 const { redeemHoloFuel } = useHposInterface()
