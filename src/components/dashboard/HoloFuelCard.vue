@@ -32,8 +32,7 @@ const items = computed((): DashboardCardItem[] => [
     value:
       !isErrorPredicate(props.data) && Number(props.data.available)
         ? formatCurrency(Number(props.data.available))
-        : 0,
-    isActive: true
+        : 0
   },
   {
     label: t('holofuel.redeemable'),
@@ -41,8 +40,7 @@ const items = computed((): DashboardCardItem[] => [
     value:
       !isErrorPredicate(props.data) && Number(props.data.redeemable)
         ? formatCurrency(Number(props.data.redeemable))
-        : 0,
-    isActive: true
+        : 0
   }
 ])
 /* eslint-enable @typescript-eslint/no-unsafe-assignment */
@@ -56,19 +54,17 @@ const items = computed((): DashboardCardItem[] => [
     @try-again-clicked="emit('try-again-clicked')"
   >
     <div
-      v-for="{ label, value, isActive } in items"
+      v-for="{ label, value } in items"
       :key="label"
       class="margin-bottom"
     >
       <span
         class="card-info-row"
-        :class="{ 'inactive': !isActive }"
       >
         {{ label }}
       </span>
       <span
         class="card-info-row bold"
-        :class="{ 'inactive': !isActive }"
       >
         {{ value }} HF
       </span>

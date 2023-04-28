@@ -8,7 +8,7 @@ const props = defineProps<{
   redeemableAmount: number
 }>()
 
-const emit = defineEmits(['update'])
+const emit = defineEmits(['update', 'update:is-valid'])
 
 const amount = ref('')
 const hotAddress = ref('')
@@ -33,8 +33,10 @@ const formattedRedeemableHoloFuel = computed((): number =>
 
 watch(
   () => canSubmit.value,
-  () => {
-    if (canSubmit.value) {
+  (value) => {
+    emit('update:is-valid', value)
+
+    if (value) {
       emit('update', { amount: amount.value, hotAddress: hotAddress.value })
     }
   }
