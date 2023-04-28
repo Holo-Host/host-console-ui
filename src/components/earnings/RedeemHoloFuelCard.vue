@@ -2,19 +2,25 @@
 import { ChevronLeftIcon } from '@heroicons/vue/20/solid'
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseCard from '@uicommon/components/BaseCard.vue'
+import { useBanner } from '@uicommon/composables/useBanner'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import RedeemHoloFuelFormStepOne from './RedeemHoloFuelFormStepOne.vue'
 import RedeemHoloFuelFormStepTwo from './RedeemHoloFuelFormStepTwo.vue'
 import { RedemptionTransaction, useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
+import { useDashboardStore } from '@/store/dashboard'
+import { isError } from '@/types/predicates'
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showBanner } = useBanner()
+const { t } = useI18n()
 const { redeemHoloFuel } = useHposInterface()
-
 const router = useRouter()
+const dashboardStore = useDashboardStore()
 
 const props = defineProps<{
-  redeemableHoloFuel: string
   isLoading: boolean
 }>()
 
@@ -24,8 +30,7 @@ const amount = ref('')
 const hotAddress = ref('')
 const partialRedemptionTermsAccepted = ref(false)
 const step = ref(1)
-const isLoading = ref(false)
-
+const isBusy = ref(false)
 const isStepOneValid = ref(false)
 
 const canSubmit = computed((): boolean => {
@@ -34,6 +39,14 @@ const canSubmit = computed((): boolean => {
   } else {
     return partialRedemptionTermsAccepted.value
   }
+})
+
+const redeemableHoloFuel = computed(() => {
+  if (isError(dashboardStore.hostEarnings)) {
+    return dashboardStore.hostEarnings
+  }
+
+  return dashboardStore.hostEarnings.holofuel.redeemable || '0'
 })
 
 interface StepOneProps {
@@ -49,14 +62,30 @@ async function handleSubmit(): Promise<void> {
   if (step.value === 1) {
     step.value = 2
   } else {
-    isLoading.value = true
+    isBusy.value = true
+
+    await dashboardStore.getEarnings()
+
+    if (Number(redeemableHoloFuel.value) < Number(amount.value)) {
+      partialRedemptionTermsAccepted.value = false
+      step.value = 1
+      isBusy.value = false
+      return
+    }
 
     const transaction: RedemptionTransaction = await redeemHoloFuel({
       amount: amount.value,
       note: JSON.stringify({ eth_address: hotAddress })
     })
 
-    emit('submitted', { ...transaction, hotAddress })
+    if (transaction) {
+      emit('submitted', { ...transaction, hotAddress })
+    } else {
+      step.value = 1
+      isBusy.value = false
+
+      showBanner({ message: t('redeem_holofuel.errors.redemption_failed') })
+    }
   }
 }
 
@@ -90,7 +119,9 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
       <div class="redeem-card-content__form">
         <RedeemHoloFuelFormStepOne
           v-if="step === 1"
-          :redeemable-amount="Number(props.redeemableHoloFuel)"
+          :redeemable-amount="Number(redeemableHoloFuel)"
+          :amount="amount"
+          :hot-address="hotAddress"
           @update="updateData"
           @update:is-valid="isStepOneValid = $event"
         />
@@ -120,7 +151,7 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
 
         <BaseButton
           :is-disabled="!canSubmit"
-          :is-busy="isLoading"
+          :is-busy="isBusy"
           class="redeem-card-content__submit-button"
           @click="handleSubmit"
         >

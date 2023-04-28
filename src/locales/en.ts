@@ -128,6 +128,9 @@ const translations = {
     amount_input_error: 'Amount exceeds redeemable balance.',
     amount_input_tip: '*Note: HoloFuel and HOT are currently 1:1',
     confirm_and_redeem: 'Confirm & Redeem',
+    errors: {
+      redemption_failed: 'Something went wrong, please try again.'
+    },
     holo_fuel_amount: 'HF Amount',
     partial_redemption_terms:
       'Redemptions are processed first come, first serve. By checking this box, you accept a partial redemption if 1) there isn’t enough HOT in the reserve to fulfill your entire request or 2) the price surpasses the minimum you have chosen.',

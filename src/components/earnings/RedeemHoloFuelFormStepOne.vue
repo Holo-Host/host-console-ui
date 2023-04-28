@@ -5,13 +5,15 @@ import { formatCurrency } from '@uicommon/utils/numbers'
 import { ref, computed, watch } from 'vue'
 
 const props = defineProps<{
-  redeemableAmount: number
+  redeemableAmount: string
+  amount: string
+  hotAddress: string
 }>()
 
 const emit = defineEmits(['update', 'update:is-valid'])
 
-const amount = ref('')
-const hotAddress = ref('')
+const amount = ref(`${props.amount}` || '')
+const hotAddress = ref(`${props.hotAddress}` || '')
 const hotAddressValidationIsActive = ref(false)
 
 const isAmountValid = computed(() => Number(amount.value) <= Number(props.redeemableAmount))
@@ -32,14 +34,12 @@ const formattedRedeemableHoloFuel = computed((): number =>
 )
 
 watch(
-  () => canSubmit.value,
-  (value) => {
-    emit('update:is-valid', value)
-
-    if (value) {
-      emit('update', { amount: amount.value, hotAddress: hotAddress.value })
-    }
-  }
+  () => [canSubmit.value, amount.value, hotAddress.value],
+  ([canSubmit, amount, hotAddress]) => {
+    emit('update:is-valid', canSubmit)
+    emit('update', { amount, hotAddress })
+  },
+  { immediate: true }
 )
 
 function activateHotAddressValidation(): void {

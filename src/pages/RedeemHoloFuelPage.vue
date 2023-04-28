@@ -8,7 +8,6 @@ import { EModal } from '@/constants/ui'
 import type { RedemptionTransaction } from '@/interfaces/HposInterface'
 import router, { kRoutes } from '@/router'
 import { useDashboardStore } from '@/store/dashboard'
-import { isError } from '@/types/predicates'
 import type { BreadCrumb } from '@/types/types'
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
@@ -55,14 +54,6 @@ async function handleRedemptionSubmitted(
   })
 }
 
-const redeemableHoloFuel = computed(() => {
-  if (isError(dashboardStore.hostEarnings)) {
-    return dashboardStore.hostEarnings
-  }
-
-  return dashboardStore.hostEarnings.holofuel.redeemable || '0'
-})
-
 onMounted(async (): Promise<void> => {
   await getRedeemableHoloFuel()
 })
@@ -75,7 +66,6 @@ onMounted(async (): Promise<void> => {
   >
     <RedeemHoloFuelCard
       :is-loading="isLoading"
-      :redeemable-holo-fuel="redeemableHoloFuel"
       @submitted="handleRedemptionSubmitted"
     />
   </primarylayout>
