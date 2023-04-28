@@ -144,76 +144,10 @@ const items = computed((): Item[] => [
     display: flex;
     flex-direction: column;
     margin-top: 40px;
-
-    &-item {
-      display: grid;
-      grid-template-columns: 170px 1fr;
-      text-align: start;
-      margin-top: 16px;
-
-      &-label {
-        font-weight: 800;
-        color: var(--grey-dark-color);
-      }
-
-      &-value {
-        font-weight: 600;
-        color: var(--grey-color);
-        position: relative;
-      }
-    }
   }
 
   &__button {
     margin-top: 24px;
   }
-
-  &__info-popover {
-    position: absolute;
-    top: 25px;
-    left: 0px;
-    width: 100px;
-    z-index: 50;
-    background: var(--white-color);
-    border-radius: 2px;
-    font-size: 12px;
-    line-height: 19px;
-    color: var(--grey-color);
-    margin-top: 1px;
-    padding: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-
-    &:before {
-      position: absolute;
-      left: 7px;
-      top: -5px;
-      content: '';
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 6px 6px 6px;
-      border-color: transparent transparent white transparent;
-    }
-  }
-
-  @media screen and (max-width: 1050px) {
-    &__description-item {
-      display: grid;
-      grid-template-columns: 170px;
-      text-align: start;
-      margin-top: 16px;
-    }
-  }
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 150ms ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 </style>

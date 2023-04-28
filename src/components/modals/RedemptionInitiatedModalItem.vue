@@ -97,14 +97,14 @@ watch(isHovered, (value) => {
       border-color: transparent transparent white transparent;
     }
   }
+}
 
-  @media screen and (max-width: 1050px) {
-    &__description-item {
-      display: grid;
-      grid-template-columns: 170px;
-      text-align: start;
-      margin-top: 16px;
-    }
+@media screen and (max-width: 1050px) {
+  .description-item {
+    display: grid;
+    grid-template-columns: 170px;
+    text-align: start;
+    margin-top: 16px;
   }
 }
 

@@ -49,7 +49,6 @@ async function handleSubmit(): Promise<void> {
   if (step.value === 1) {
     step.value = 2
   } else {
-    // TODO: submit form
     isLoading.value = true
 
     const transaction: RedemptionTransaction = await redeemHoloFuel({
