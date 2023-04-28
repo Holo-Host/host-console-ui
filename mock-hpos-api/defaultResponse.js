@@ -55,7 +55,7 @@ const usage = {
 
 const earnings = {
   earnings: { last30days: 1343209.4, last7days: 447768.54, lastday: 34209.4 },
-  holofuel: { balance: '0', available: '0' },
+  holofuel: { balance: '0', available: '0', redeemable: '2990348.42' },
   recentPayments: [
     {
       id: 1,
