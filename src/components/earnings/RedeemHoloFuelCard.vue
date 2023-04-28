@@ -14,7 +14,7 @@ const { redeemHoloFuel } = useHposInterface()
 const router = useRouter()
 
 const props = defineProps<{
-  redeemableHoloFuel: string | number
+  redeemableHoloFuel: string
   isLoading: boolean
 }>()
 
@@ -26,9 +26,11 @@ const partialRedemptionTermsAccepted = ref(false)
 const step = ref(1)
 const isLoading = ref(false)
 
+const isStepOneValid = ref(false)
+
 const canSubmit = computed((): boolean => {
   if (step.value === 1) {
-    return amount.value !== '' && hotAddress.value !== ''
+    return isStepOneValid.value
   } else {
     return partialRedemptionTermsAccepted.value
   }
@@ -91,6 +93,7 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
           v-if="step === 1"
           :redeemable-amount="Number(props.redeemableHoloFuel)"
           @update="updateData"
+          @update:is-valid="isStepOneValid = $event"
         />
 
         <RedeemHoloFuelFormStepTwo

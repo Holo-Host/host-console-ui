@@ -60,7 +60,7 @@ const redeemableHoloFuel = computed(() => {
     return dashboardStore.hostEarnings
   }
 
-  return dashboardStore.hostEarnings.holofuel.redeemable || 0
+  return dashboardStore.hostEarnings.holofuel.redeemable || '0'
 })
 
 onMounted(async (): Promise<void> => {
