@@ -1,3 +1,43 @@
+<script setup lang="ts">
+import BaseInput from '@uicommon/components/BaseInput.vue'
+import { ref } from 'vue'
+import CircledExIcon from './icons/CircledExIcon.vue'
+import FilledCheckIcon from './icons/FilledCheckIcon.vue'
+import PencilIcon from './icons/PencilIcon.vue'
+
+const isEditing = ref(false)
+const editedValue = ref<string | number>('')
+
+const props = withDefaults(
+  defineProps<{
+    value: string | number
+    unit?: string
+    isDisabled?: boolean
+  }>(),
+  {
+    unit: '',
+    isDisabled: false
+  }
+)
+
+const emit = defineEmits(['update:value'])
+
+function edit(): void {
+  editedValue.value = props.value
+  isEditing.value = true
+}
+
+function save(): void {
+  emit('update:value', editedValue.value)
+  isEditing.value = false
+}
+
+function cancel(): void {
+  isEditing.value = false
+  editedValue.value = ''
+}
+</script>
+
 <template>
   <div class="editable-input">
     <span v-if="!isEditing">
@@ -41,46 +81,6 @@
     />
   </div>
 </template>
-
-<script setup lang="ts">
-import BaseInput from '@uicommon/components/BaseInput.vue'
-import { ref } from 'vue'
-import CircledExIcon from './icons/CircledExIcon.vue'
-import FilledCheckIcon from './icons/FilledCheckIcon.vue'
-import PencilIcon from './icons/PencilIcon.vue'
-
-const isEditing = ref(false)
-const editedValue = ref<string | number>('')
-
-const props = withDefaults(
-  defineProps<{
-    value: string | number
-    unit?: string
-    isDisabled?: boolean
-  }>(),
-  {
-    unit: '',
-    isDisabled: false
-  }
-)
-
-const emit = defineEmits(['update:value'])
-
-function edit(): void {
-  editedValue.value = props.value
-  isEditing.value = true
-}
-
-function save(): void {
-  emit('update:value', editedValue.value)
-  isEditing.value = false
-}
-
-function cancel(): void {
-  isEditing.value = false
-  editedValue.value = ''
-}
-</script>
 
 <style lang="scss" scoped>
 .editable-input {

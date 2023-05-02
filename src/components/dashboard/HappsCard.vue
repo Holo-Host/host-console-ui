@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import HAppImage from '@uicommon/components/HAppImage.vue'
+import { computed } from 'vue'
+import type { HApp } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
+
+const props = defineProps<{
+  data: HApp[] | { error: unknown }
+  isLoading: boolean
+}>()
+
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
+
+const emit = defineEmits(['try-again-clicked'])
+</script>
+
 <template>
   <BaseCard
     :is-loading="props.isLoading"
@@ -34,23 +51,6 @@
     </div>
   </BaseCard>
 </template>
-
-<script setup lang="ts">
-import BaseCard from '@uicommon/components/BaseCard.vue'
-import HAppImage from '@uicommon/components/HAppImage.vue'
-import { computed } from 'vue'
-import type { HApp } from '@/interfaces/HposInterface'
-import { isError as isErrorPredicate } from '@/types/predicates'
-
-const props = defineProps<{
-  data: HApp[] | { error: unknown }
-  isLoading: boolean
-}>()
-
-const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
-
-const emit = defineEmits(['try-again-clicked'])
-</script>
 
 <style lang="scss" scoped>
 .body {

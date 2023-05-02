@@ -1,23 +1,3 @@
-<template>
-  <BaseCard
-    :is-loading="props.isLoading"
-    :is-error="isError"
-    :title="$t('earnings.title')"
-    @try-again-clicked="emit('try-again-clicked')"
-  >
-    <div>
-      <div
-        v-for="{ label, value } in items"
-        :key="label"
-        class="earnings-info-row"
-      >
-        <span class="earnings-label">{{ label }}</span>
-        <span class="bold">{{ value }} HF</span>
-      </div>
-    </div>
-  </BaseCard>
-</template>
-
 <script setup lang="ts">
 import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
@@ -64,6 +44,26 @@ const items = computed((): DashboardCardItem[] => [
 ])
 /* eslint-enable @typescript-eslint/no-unsafe-assignment */
 </script>
+
+<template>
+  <BaseCard
+    :is-loading="props.isLoading"
+    :is-error="isError"
+    :title="$t('earnings.title')"
+    @try-again-clicked="emit('try-again-clicked')"
+  >
+    <div>
+      <div
+        v-for="{ label, value } in items"
+        :key="label"
+        class="earnings-info-row"
+      >
+        <span class="earnings-label">{{ label }}</span>
+        <span class="bold">{{ value }} HF</span>
+      </div>
+    </div>
+  </BaseCard>
+</template>
 
 <style scoped>
 .earnings-info-row {

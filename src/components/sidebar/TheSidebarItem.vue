@@ -1,19 +1,3 @@
-<template>
-  <router-link
-    :to="props.to"
-    class="sidebar-menu-item"
-    active-class="active-link"
-  >
-    <component
-      :is="props.icon"
-      class="sidebar-menu-item__icon"
-      :color="color"
-      :style="props.iconStyle"
-    />
-    {{ props.label }}
-  </router-link>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -36,6 +20,22 @@ const color = computed((): string => {
   return RegExp(props.to).exec(route.path) ? '#00CAD9' : '#313C59'
 })
 </script>
+
+<template>
+  <router-link
+    :to="props.to"
+    class="sidebar-menu-item"
+    active-class="active-link"
+  >
+    <component
+      :is="props.icon"
+      class="sidebar-menu-item__icon"
+      :color="color"
+      :style="props.iconStyle"
+    />
+    {{ props.label }}
+  </router-link>
+</template>
 
 <style lang="scss" scoped>
 .sidebar-menu-item {

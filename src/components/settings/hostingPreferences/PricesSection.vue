@@ -1,24 +1,3 @@
-<template>
-  <SettingsSection
-    :title="$t('hosting_preferences.prices.header')"
-    class="prices-section"
-  >
-    <span class="prices-section__subtitle">
-      {{ $t('hosting_preferences.prices.subheader') }}
-    </span>
-
-    <div class="prices-section__prices">
-      <HostingPreferencesEditablePriceRow
-        v-for="price in prices"
-        :key="price.label"
-        v-bind="price"
-        class="prices-section__price"
-        @update:value="updatePrice"
-      />
-    </div>
-  </SettingsSection>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -119,6 +98,27 @@ const prices = computed((): PriceItem[] => [
   }
 ])
 </script>
+
+<template>
+  <SettingsSection
+    :title="$t('hosting_preferences.prices.header')"
+    class="prices-section"
+  >
+    <span class="prices-section__subtitle">
+      {{ $t('hosting_preferences.prices.subheader') }}
+    </span>
+
+    <div class="prices-section__prices">
+      <HostingPreferencesEditablePriceRow
+        v-for="price in prices"
+        :key="price.label"
+        v-bind="price"
+        class="prices-section__price"
+        @update:value="updatePrice"
+      />
+    </div>
+  </SettingsSection>
+</template>
 
 <style lang="scss" scoped>
 .prices-section {

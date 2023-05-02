@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import { formatCurrency } from '@uicommon/utils/numbers'
+import { capitalizeWord } from '@uicommon/utils/stringUtils'
+import dayjs from 'dayjs'
+import { computed } from 'vue'
+import { isError as isErrorPredicate } from '@/types/predicates'
+
+const props = defineProps<{
+  data: unknown[] | { error: string }
+  isLoading: boolean
+}>()
+
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
+</script>
+
 <template>
   <BaseCard
     :is-loading="props.isLoading"
@@ -36,22 +52,6 @@
     </div>
   </BaseCard>
 </template>
-
-<script setup lang="ts">
-import BaseCard from '@uicommon/components/BaseCard.vue'
-import { formatCurrency } from '@uicommon/utils/numbers'
-import { capitalizeWord } from '@uicommon/utils/stringUtils'
-import dayjs from 'dayjs'
-import { computed } from 'vue'
-import { isError as isErrorPredicate } from '@/types/predicates'
-
-const props = defineProps<{
-  data: unknown[] | { error: string }
-  isLoading: boolean
-}>()
-
-const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
-</script>
 
 <style scoped>
 .body {

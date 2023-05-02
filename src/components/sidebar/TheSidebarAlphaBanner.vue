@@ -1,3 +1,5 @@
+<script setup lang="ts" />
+
 <template>
   <div
     class="sidebar-alpha-banner"
@@ -18,8 +20,6 @@
     </p>
   </div>
 </template>
-
-<script setup lang="ts" />
 
 <style lang="scss" scoped>
 .sidebar-alpha-banner {

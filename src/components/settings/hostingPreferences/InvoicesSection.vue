@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import SettingsSection from '../SettingsSection.vue'
+import InvoicesDueRow from '@/components/settings/hostingPreferences/InvoicesDueRow.vue'
+import InvoicesFrequencyRow from '@/components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
+import type { InvoicesData } from '@/types/types'
+
+const props = defineProps<{
+  data: InvoicesData
+}>()
+
+const emit = defineEmits(['update:frequency', 'update:due'])
+
+function updateFrequency(value: number | string): void {
+  emit('update:frequency', value)
+}
+
+function updateDue(value) {
+  emit('update:due', value)
+}
+</script>
+
 <template>
   <SettingsSection
     :title="$t('hosting_preferences.invoices.header')"
@@ -31,27 +52,6 @@
     </div>
   </SettingsSection>
 </template>
-
-<script setup lang="ts">
-import SettingsSection from '../SettingsSection.vue'
-import InvoicesDueRow from '@/components/settings/hostingPreferences/InvoicesDueRow.vue'
-import InvoicesFrequencyRow from '@/components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
-import type { InvoicesData } from '@/types/types'
-
-const props = defineProps<{
-  data: InvoicesData
-}>()
-
-const emit = defineEmits(['update:frequency', 'update:due'])
-
-function updateFrequency(value: number | string): void {
-  emit('update:frequency', value)
-}
-
-function updateDue(value) {
-  emit('update:due', value)
-}
-</script>
 
 <style lang="scss" scoped>
 .invoices-section {

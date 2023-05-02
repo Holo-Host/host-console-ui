@@ -1,30 +1,3 @@
-<template>
-  <SettingsRow
-    :label="`${$t('hosting_preferences.invoices.frequency.label')}:`"
-    grid-columns="190px auto"
-    class="invoices-frequency-section"
-  >
-    <span>{{ $t('hosting_preferences.invoices.frequency.part_one') }}</span>
-
-    <TimeDropdownSelect
-      is-disabled
-      :value="props.data.frequency.period"
-      :options="['N/A', 7, 30]"
-      @update:selected-value="onFrequencyPeriodChange"
-    />
-
-    <span>{{ $t('hosting_preferences.invoices.frequency.part_two') }}</span>
-
-    <BaseEditableInput
-      is-disabled
-      :value="formatCurrency(Number(props.data.frequency.amount), 0)"
-      unit="HF"
-      class="invoices-frequency-section__amount"
-      @update:value="onFrequencyAmountChange"
-    />
-  </SettingsRow>
-</template>
-
 <script setup lang="ts">
 import { formatCurrency } from '@uicommon/utils/numbers'
 import SettingsRow from '../SettingsRow.vue'
@@ -52,6 +25,33 @@ function onFrequencyAmountChange(value: number): void {
   })
 }
 </script>
+
+<template>
+  <SettingsRow
+    :label="`${$t('hosting_preferences.invoices.frequency.label')}:`"
+    grid-columns="190px auto"
+    class="invoices-frequency-section"
+  >
+    <span>{{ $t('hosting_preferences.invoices.frequency.part_one') }}</span>
+
+    <TimeDropdownSelect
+      is-disabled
+      :value="props.data.frequency.period"
+      :options="['N/A', 7, 30]"
+      @update:selected-value="onFrequencyPeriodChange"
+    />
+
+    <span>{{ $t('hosting_preferences.invoices.frequency.part_two') }}</span>
+
+    <BaseEditableInput
+      is-disabled
+      :value="formatCurrency(Number(props.data.frequency.amount), 0)"
+      unit="HF"
+      class="invoices-frequency-section__amount"
+      @update:value="onFrequencyAmountChange"
+    />
+  </SettingsRow>
+</template>
 
 <style lang="scss" scoped>
 .invoices-frequency-section {

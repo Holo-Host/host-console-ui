@@ -1,22 +1,3 @@
-<template>
-  <SettingsRow
-    :label="`${$t('hosting_preferences.invoices.due.label')}:`"
-    grid-columns="190px auto"
-    class="invoices-frequency-section"
-  >
-    <span>{{ $t('hosting_preferences.invoices.due.part_one') }}</span>
-
-    <TimeDropdownSelect
-      is-disabled
-      :value="props.data.due.period"
-      :options="['N/A', 7, 30]"
-      @update:selected-value="onDueChange"
-    />
-
-    <span>{{ $t('hosting_preferences.invoices.due.part_two') }}</span>
-  </SettingsRow>
-</template>
-
 <script setup lang="ts">
 import SettingsRow from '../SettingsRow.vue'
 import TimeDropdownSelect from '@/components/TimeDropdownSelect.vue'
@@ -35,3 +16,22 @@ function onDueChange(value: number | string): void {
   })
 }
 </script>
+
+<template>
+  <SettingsRow
+    :label="`${$t('hosting_preferences.invoices.due.label')}:`"
+    grid-columns="190px auto"
+    class="invoices-frequency-section"
+  >
+    <span>{{ $t('hosting_preferences.invoices.due.part_one') }}</span>
+
+    <TimeDropdownSelect
+      is-disabled
+      :value="props.data.due.period"
+      :options="['N/A', 7, 30]"
+      @update:selected-value="onDueChange"
+    />
+
+    <span>{{ $t('hosting_preferences.invoices.due.part_two') }}</span>
+  </SettingsRow>
+</template>

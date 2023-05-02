@@ -1,3 +1,15 @@
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    title: string
+    isDisabled?: boolean
+  }>(),
+  {
+    isDisabled: false
+  }
+)
+</script>
+
 <template>
   <div class="settings-section">
     <h3
@@ -12,18 +24,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const props = withDefaults(
-  defineProps<{
-    title: string
-    isDisabled?: boolean
-  }>(),
-  {
-    isDisabled: false
-  }
-)
-</script>
 
 <style lang="scss" scoped>
 .settings-section {

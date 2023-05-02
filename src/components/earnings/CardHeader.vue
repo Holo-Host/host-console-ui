@@ -1,3 +1,16 @@
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    label: string
+    amount: string | number
+    isDisabled?: boolean
+  }>(),
+  {
+    isDisabled: false
+  }
+)
+</script>
+
 <template>
   <div
     class="earnings-card-header"
@@ -16,19 +29,6 @@
     <slot />
   </div>
 </template>
-
-<script setup lang="ts">
-const props = withDefaults(
-  defineProps<{
-    label: string
-    amount: string | number
-    isDisabled?: boolean
-  }>(),
-  {
-    isDisabled: false
-  }
-)
-</script>
 
 <style lang="scss" scoped>
 .earnings-card-header {

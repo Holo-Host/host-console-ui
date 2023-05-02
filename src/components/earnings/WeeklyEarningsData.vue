@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import CardHeader from './CardHeader.vue'
+import TmpGraphIcon from '@/components/icons/TmpGraphIcon.vue'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
+
+const props = defineProps<{
+  weeklyEarnings: string | number
+}>()
+
+const { goToHoloFuel } = useGoToHoloFuel()
+</script>
+
 <template>
   <div class="weekly-earnings-data">
     <CardHeader
@@ -15,19 +28,6 @@
     <TmpGraphIcon class="weekly-earnings-data__graph" />
   </div>
 </template>
-
-<script setup lang="ts">
-import BaseButton from '@uicommon/components/BaseButton.vue'
-import CardHeader from './CardHeader.vue'
-import TmpGraphIcon from '@/components/icons/TmpGraphIcon.vue'
-import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
-
-const props = defineProps<{
-  weeklyEarnings: string | number
-}>()
-
-const { goToHoloFuel } = useGoToHoloFuel()
-</script>
 
 <style lang="scss" scoped>
 .weekly-earnings-data {

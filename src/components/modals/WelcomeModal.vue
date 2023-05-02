@@ -1,3 +1,70 @@
+<script setup lang="ts">
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import BaseInput from '@uicommon/components/BaseInput.vue'
+import BaseModal from '@uicommon/components/BaseModal.vue'
+import Identicon from '@uicommon/components/Identicon.vue'
+import { useModals } from '@uicommon/composables/useModals'
+import { encodeAgentId } from '@uicommon/utils/agent'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useUserStore } from '../../store/user'
+import { EModal } from '@/constants/ui'
+
+const { t } = useI18n()
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { visibleModal, hideModal } = useModals()
+
+const userStore = useUserStore()
+
+const nickname = ref('')
+
+const step = ref(1)
+const isLoading = ref(false)
+const isError = ref(false)
+
+const agentAddress = computed(() => userStore.holoFuel.agentAddress ?? null)
+
+interface ModalContent {
+  title: string
+  buttonLabel: string
+}
+
+const modalContent = computed((): ModalContent => {
+  return step.value === 1
+    ? {
+        title: t('welcome_modal.step_one_title'),
+        buttonLabel: t('welcome_modal.step_one_button_label')
+    }
+    : {
+      title: t('welcome_modal.step_two_title'),
+      buttonLabel: t('welcome_modal.step_two_button_label')
+    }
+})
+
+async function handleSubmit(): Promise<void> {
+  if (step.value === 1) {
+    if (isError.value) {
+      isError.value = false
+    }
+
+    isLoading.value = true
+
+    const isSuccess = await userStore.updateHoloFuelProfile({ nickname: nickname.value })
+
+    isLoading.value = false
+
+    if (isSuccess) {
+      step.value = 2
+    } else {
+      isError.value = true
+    }
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    hideModal()
+  }
+}
+</script>
+
 <template>
   <BaseModal
     :title="modalContent.title"
@@ -71,73 +138,6 @@
     </template>
   </BaseModal>
 </template>
-
-<script setup lang="ts">
-import BaseButton from '@uicommon/components/BaseButton.vue'
-import BaseInput from '@uicommon/components/BaseInput.vue'
-import BaseModal from '@uicommon/components/BaseModal.vue'
-import Identicon from '@uicommon/components/Identicon.vue'
-import { useModals } from '@uicommon/composables/useModals'
-import { encodeAgentId } from '@uicommon/utils/agent'
-import { computed, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useUserStore } from '../../store/user'
-import { EModal } from '@/constants/ui'
-
-const { t } = useI18n()
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-const { visibleModal, hideModal } = useModals()
-
-const userStore = useUserStore()
-
-const nickname = ref('')
-
-const step = ref(1)
-const isLoading = ref(false)
-const isError = ref(false)
-
-const agentAddress = computed(() => userStore.holoFuel.agentAddress ?? null)
-
-interface ModalContent {
-  title: string
-  buttonLabel: string
-}
-
-const modalContent = computed((): ModalContent => {
-  return step.value === 1
-    ? {
-      title: t('welcome_modal.step_one_title'),
-      buttonLabel: t('welcome_modal.step_one_button_label')
-      }
-    : {
-        title: t('welcome_modal.step_two_title'),
-        buttonLabel: t('welcome_modal.step_two_button_label')
-      }
-})
-
-async function handleSubmit(): Promise<void> {
-  if (step.value === 1) {
-    if (isError.value) {
-      isError.value = false
-    }
-
-    isLoading.value = true
-
-    const isSuccess = await userStore.updateHoloFuelProfile({ nickname: nickname.value })
-
-    isLoading.value = false
-
-    if (isSuccess) {
-      step.value = 2
-    } else {
-      isError.value = true
-    }
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    hideModal()
-  }
-}
-</script>
 
 <style scoped lang="scss">
 .welcome-modal {

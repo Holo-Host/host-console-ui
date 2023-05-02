@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+const version = computed(() => import.meta.env.VITE_UI_VERSION)
+</script>
+
 <template>
   <div
     class="footer"
@@ -27,13 +34,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const version = computed(() => import.meta.env.VITE_UI_VERSION)
-</script>
 
 <style scoped>
 .footer {

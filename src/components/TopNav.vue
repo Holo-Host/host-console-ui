@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import RightChevronIcon from '@/components/icons/RightChevronIcon.vue'
+import TopNavMenu from '@/components/TopNavMenu.vue'
+import type { BreadCrumb } from '@/types/types'
+
+const props = withDefaults(
+  defineProps<{
+    breadcrumbs: BreadCrumb[]
+    agentAddress?: typeof Uint8Array | null
+    nickname: string
+  }>(),
+  {
+    agentAddress: null
+  }
+)
+
+const mainTitle = computed((): string | undefined => props.breadcrumbs[0]?.label)
+const subTitle = computed((): string | undefined => props.breadcrumbs[1]?.label)
+const path = computed((): string | undefined => props.breadcrumbs[0]?.path)
+
+const isSubtitleVisible = computed(
+  (): boolean => props.breadcrumbs.length > 1 && !!props.breadcrumbs[1]?.label
+)
+</script>
+
 <template>
   <section
     class="top-nav"
@@ -48,32 +74,6 @@
     </div>
   </section>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import RightChevronIcon from '@/components/icons/RightChevronIcon.vue'
-import TopNavMenu from '@/components/TopNavMenu.vue'
-import type { BreadCrumb } from '@/types/types'
-
-const props = withDefaults(
-  defineProps<{
-    breadcrumbs: BreadCrumb[]
-    agentAddress?: typeof Uint8Array | null
-    nickname: string
-  }>(),
-  {
-    agentAddress: null
-  }
-)
-
-const mainTitle = computed((): string | undefined => props.breadcrumbs[0]?.label)
-const subTitle = computed((): string | undefined => props.breadcrumbs[1]?.label)
-const path = computed((): string | undefined => props.breadcrumbs[0]?.path)
-
-const isSubtitleVisible = computed(
-  (): boolean => props.breadcrumbs.length > 1 && !!props.breadcrumbs[1]?.label
-)
-</script>
 
 <style scoped>
 .top-nav {

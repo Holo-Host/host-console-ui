@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { version } from '../../../package.json'
+</script>
+
 <template>
   <div
     class="sidebar-footer"
@@ -28,10 +32,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { version } from '../../../package.json'
-</script>
 
 <style lang="scss" scoped>
 .sidebar-footer {
