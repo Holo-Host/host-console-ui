@@ -36,7 +36,8 @@ export default defineConfig(({ mode }) => {
       vue(),
       VueI18nPlugin({
         include: resolve(dirname(fileURLToPath(import.meta.url)), './src/locales/**'),
-        runtimeOnly: false
+        runtimeOnly: false,
+        bridge: true
       }),
       vitePluginRequire(),
       inject({
