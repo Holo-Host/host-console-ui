@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { version } from '../../../package.json'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+const version = computed(() => import.meta.env.VITE_UI_VERSION)
 </script>
 
 <template>
@@ -17,18 +23,18 @@ import { version } from '../../../package.json'
         class="sidebar-footer__holo-logo"
         alt="holo-logo"
       />
-      {{ $t('$.holo') }}
+      {{ t('$.holo') }}
     </a>
     <a
       class="sidebar-footer__footer-link"
       href="https://forum.holo.host/t/alpha-testnet-terms-conditions/193"
       target="_blank"
     >
-      {{ $t('$.terms_of_service') }}
+      {{ t('$.terms_of_service') }}
     </a>
 
     <div class="sidebar-footer__version">
-      {{ $t('$.app_version', { app: $t('$.app_name'), version }) }}
+      {{ t('$.app_version', { app: t('$.app_name'), version }) }}
     </div>
   </div>
 </template>
