@@ -7,6 +7,7 @@ import { formatCurrency } from '@uicommon/utils/numbers'
 import { useElementHover } from '@vueuse/core'
 import dayjs from 'dayjs'
 import { computed, ref, watch } from 'vue'
+import type { Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import RedemptionInitiatedModalItem from './RedemptionInitiatedModalItem.vue'
 import { EModal, kDefaultDateTimeFormat, kMsInSecond } from '@/constants/ui'
@@ -18,20 +19,28 @@ const { visibleModal, hideModal, modalProps } = useModals()
 
 const isPriceVisible = ref(false)
 
-const formattedRedemptionAmount = computed((): number | string => {
-  const rawRedemptionAmount: string = modalProps.value.redemptionAmount
-  return rawRedemptionAmount && Number(rawRedemptionAmount)
-    ? formatCurrency(Number(rawRedemptionAmount))
-    : 0
-})
+interface Props {
+  requestId: string
+  date: string
+  hfAmount: string
+  currency: string
+  redemptionAmount: string
+  hotAddress: string
+}
 
-const formattedHfAmount = computed((): number | string => {
-  const rawHfAmount: string = modalProps.value.hfAmount
-  return rawHfAmount && Number(rawHfAmount) ? formatCurrency(Number(rawHfAmount)) : 0
-})
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+const props = modalProps as Ref<Props>
+
+const formattedRedemptionAmount = computed((): string =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+  formatCurrency(Number(props.value.redemptionAmount))
+)
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+const formattedHfAmount = computed((): string => formatCurrency(Number(props.value.hfAmount)))
 
 const formattedDate = computed((): string =>
-  dayjs(new Date(modalProps.value.date / kMsInSecond)).format(kDefaultDateTimeFormat)
+  dayjs(new Date(props.value.date / kMsInSecond)).format(kDefaultDateTimeFormat)
 )
 
 function showTransactionPrice(state: boolean): void {
@@ -56,29 +65,29 @@ interface Item {
 
 const items = computed((): Item[] => [
   {
-    label: `${t('redeem_holofuel.request_id')}:`,
-    value: modalProps.value.requestId
+    label: `${t('redemption.redeem_holofuel.request_id')}:`,
+    value: props.value.requestId
   },
   {
     label: `${t('$.date')}:`,
     value: formattedDate.value
   },
   {
-    label: `${t('redeem_holofuel.holo_fuel_amount')}:`,
+    label: `${t('redemption.redeem_holofuel.holo_fuel_amount')}:`,
     value: `${formattedHfAmount.value} HF`
   },
   {
-    label: `${t('redeem_holofuel.redemption_currency')}:`,
-    value: modalProps.value.currency
+    label: `${t('redemption.redeem_holofuel.redemption_currency')}:`,
+    value: props.value.currency
   },
   {
-    label: `${t('redeem_holofuel.redemption_amount')}:`,
+    label: `${t('redemption.redeem_holofuel.redemption_amount')}:`,
     value: `${formattedRedemptionAmount.value} HOT`,
-    tipMessage: t('redemption_history.transaction_price', { hf: 1, hot: 1 })
+    tipMessage: t('redemption.redeem_holofuel.transaction_price', { hf: 1, hot: 1 })
   },
   {
-    label: `${t('redeem_holofuel.recipient_address_input_label')}:`,
-    value: modalProps.value.hotAddress
+    label: `${t('redemption.redeem_holofuel.recipient_address_input_label')}:`,
+    value: props.value.hotAddress
   }
 ])
 </script>
@@ -93,7 +102,7 @@ const items = computed((): Item[] => [
         <CheckCircleIcon class="redemption-initiated-modal__header-icon" />
 
         <p class="redemption-initiated-modal__header-label">
-          {{ $t('redeem_holofuel.redemption_initiated') }}
+          {{ t('redemption.redeem_holofuel.redemption_initiated') }}
         </p>
       </div>
 

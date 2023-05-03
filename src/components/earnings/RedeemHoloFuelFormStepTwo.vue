@@ -17,26 +17,26 @@ function updatePartialRedemptionTermsAccepted(event: Event): void {
 <template>
   <div>
     <div class="form-step-two__header">
-      <span>{{ $t('redeem_holofuel.review_and_confirm') }}</span>
+      <span>{{ $t('redemption.redeem_holofuel.review_and_confirm') }}</span>
     </div>
 
-    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.holo_fuel_amount')">
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redemption.redeem_holofuel.holo_fuel_amount')">
       {{ props.amount }} <span class="form-step-two__item-value--unit">HF</span>
     </RedeemHoloFuelFormStepTwoItem>
 
-    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.redemption_currency')">
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redemption.redeem_holofuel.redemption_currency')">
       <span class="form-step-two__item-value--unit">HOT</span>
     </RedeemHoloFuelFormStepTwoItem>
 
-    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.redemption_amount')">
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redemption.redeem_holofuel.redemption_amount')">
       {{ props.amount }} <span class="form-step-two__item-value--unit">HOT</span>
     </RedeemHoloFuelFormStepTwoItem>
 
-    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.redemption_amount')">
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redemption.redeem_holofuel.redemption_amount')">
       1 <span class="form-step-two__item-value--unit">HF</span> = 1 <span class="form-step-two__item-value--unit">HOT</span>
     </RedeemHoloFuelFormStepTwoItem>
 
-    <RedeemHoloFuelFormStepTwoItem :label="$t('redeem_holofuel.recipient_address_input_label')">
+    <RedeemHoloFuelFormStepTwoItem :label="$t('redemption.redeem_holofuel.recipient_address_input_label')">
       <span class="form-step-two__item-value--address">{{ props.hotAddress }}</span>
     </RedeemHoloFuelFormStepTwoItem>
 
@@ -52,7 +52,7 @@ function updatePartialRedemptionTermsAccepted(event: Event): void {
         for="partialRedemptionTermsAccepted"
         class="form-step-two__terms-label"
       >
-        {{ $t('redeem_holofuel.partial_redemption_terms') }}
+        {{ $t('redemption.redeem_holofuel.partial_redemption_terms') }}
       </label>
     </div>
   </div>

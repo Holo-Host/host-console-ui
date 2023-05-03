@@ -41,12 +41,14 @@ const canSubmit = computed((): boolean => {
   }
 })
 
-const redeemableHoloFuel = computed(() => {
+const redeemableHoloFuel = computed((): string | { error: unknown } => {
   if (isError(dashboardStore.hostEarnings)) {
     return dashboardStore.hostEarnings
   }
 
-  return dashboardStore.hostEarnings.holofuel.redeemable || '0'
+  return dashboardStore.hostEarnings.holofuel.redeemable
+    ? `${dashboardStore.hostEarnings.holofuel.redeemable}`
+    : '0'
 })
 
 interface StepOneProps {
@@ -67,6 +69,8 @@ async function handleSubmit(): Promise<void> {
     await dashboardStore.getEarnings()
 
     if (Number(redeemableHoloFuel.value) < Number(amount.value)) {
+      // Reset the checkbox and redirect to step 1 where
+      // user can see the error and enter a new amount
       partialRedemptionTermsAccepted.value = false
       step.value = 1
       isBusy.value = false
@@ -75,7 +79,7 @@ async function handleSubmit(): Promise<void> {
 
     const transaction: RedemptionTransaction = await redeemHoloFuel({
       amount: amount.value,
-      note: JSON.stringify({ eth_address: hotAddress })
+      wallet_address: hotAddress.value
     })
 
     if (transaction) {
@@ -84,7 +88,8 @@ async function handleSubmit(): Promise<void> {
       step.value = 1
       isBusy.value = false
 
-      showBanner({ message: t('redeem_holofuel.errors.redemption_failed') })
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call -- showBanner is coming from ui-common which is not using TS
+      showBanner({ message: t('redemption.redeem_holofuel.errors.redemption_failed') })
     }
   }
 }
@@ -113,13 +118,13 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
 
     <div class="redeem-card-content">
       <div class="redeem-card-content__title">
-        {{ $t('redeem_holofuel.title') }}
+        {{ $t('redemption.redeem_holofuel.title') }}
       </div>
 
       <div class="redeem-card-content__form">
         <RedeemHoloFuelFormStepOne
           v-if="step === 1"
-          :redeemable-amount="Number(redeemableHoloFuel)"
+          :redeemable-amount="redeemableHoloFuel"
           :amount="amount"
           :hot-address="hotAddress"
           @update="updateData"
@@ -155,7 +160,7 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
           class="redeem-card-content__submit-button"
           @click="handleSubmit"
         >
-          {{ step === 1 ? $t('$.next') : $t('redeem_holofuel.confirm_and_redeem') }}
+          {{ step === 1 ? $t('$.next') : $t('redemption.redeem_holofuel.confirm_and_redeem') }}
         </BaseButton>
       </div>
     </div>

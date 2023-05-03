@@ -48,6 +48,7 @@ async function handleRedemptionSubmitted(
     date: transaction.created_date,
     hfAmount: transaction.amount,
     requestId: transaction.id,
+    // Hardcoded until we add the call to support other Reserve types, will be dynamic in the future
     currency: 'HOT',
     hotAddress: transaction.hotAddress,
     redemptionAmount: transaction.amount

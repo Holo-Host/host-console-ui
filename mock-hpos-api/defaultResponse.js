@@ -191,14 +191,8 @@ const getMyProfile = {
 }
 
 const getAllReserveAccountsDetails = {
-  hash: 'QmYXJ5Y2FyZG9uLmNvbS9ob2xvZnVsb2c=',
-  pub_key: {
-    type: 'Buffer',
-    data: [
-      132, 32, 36, 157, 32, 140, 24, 241, 10, 28, 222, 179, 158, 62, 209, 80, 229, 227, 114, 241,
-      62, 210, 166, 100, 55, 151, 238, 176, 36, 80, 111, 82, 43, 225, 83, 139, 240, 203, 176
-    ]
-  },
+  reserve_id: 'QmYXJ5Y2FyZG9uLmNvbS9ob2xvZnVsb2c=',
+  pub_key: 'uhCAkod6AkumAC8VNFgDHZsdpDBPBGPpPxt2QyxebjY6zfHGQCkSp',
   info: {
     external_reserve_currency: '',
     external_account_number: '',
@@ -221,8 +215,9 @@ const redemptionTransaction = {
   direction: '',
   status: '',
   note: '',
-  proof_of_service: '',
-}
+  proof_of_service: {
+    redemption: '0x12345678...'
+  },}
 
 const mockPaidInvoicesData = [
   {
@@ -562,7 +557,7 @@ const data = {
           return getMyProfile
         case 'get_all_reserve_accounts_details':
           return getAllReserveAccountsDetails
-        case 'redemption':
+        case 'redeem':
           return redemptionTransaction
       }
     }

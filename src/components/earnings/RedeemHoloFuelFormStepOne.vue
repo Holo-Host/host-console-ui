@@ -51,9 +51,9 @@ function activateHotAddressValidation(): void {
 <template>
   <div>
     <div class="form-step-one__header">
-      <span>{{ $t('redeem_holofuel.you_have') }}</span>
+      <span>{{ $t('redemption.redeem_holofuel.you_have') }}</span>
       <span class="form-step-one__header-value">{{ formattedRedeemableHoloFuel }} HF</span>
-      <span>{{ $t('redeem_holofuel.available_to_redeem') }}</span>
+      <span>{{ $t('redemption.redeem_holofuel.available_to_redeem') }}</span>
     </div>
 
     <div class="form-step-one__input-wrapper">
@@ -62,13 +62,13 @@ function activateHotAddressValidation(): void {
         <BaseInput
           v-model="amount"
           autofocus
-          :label="$t('redeem_holofuel.amount_input_label')"
-          :placeholder="$t('redeem_holofuel.amount_input_placeholder')"
+          :label="$t('redemption.redeem_holofuel.amount_input_label')"
+          :placeholder="$t('redemption.redeem_holofuel.amount_input_placeholder')"
           :decimal-places="18"
           :is-valid="isAmountValid"
           has-errors
-          :message="isAmountValid ? '' : $t('redeem_holofuel.amount_input_error')"
-          :tip="$t('redeem_holofuel.amount_input_tip')"
+          :message="isAmountValid ? '' : $t('redemption.redeem_holofuel.amount_input_error')"
+          :tip="$t('redemption.redeem_holofuel.amount_input_tip')"
           name="amount"
           :input-type="EInputType.number"
           unit="HF"
@@ -83,9 +83,9 @@ function activateHotAddressValidation(): void {
           v-model="hotAddress"
           :is-valid="!hotAddressValidationIsActive || isHotAddressValid"
           has-errors
-          :message="!hotAddressValidationIsActive || isHotAddressValid ? '' : $t('redeem_holofuel.recipient_address_input_error')"
-          :label="$t('redeem_holofuel.recipient_address_input_label')"
-          :placeholder="$t('redeem_holofuel.recipient_address_input_placeholder')"
+          :message="!hotAddressValidationIsActive || isHotAddressValid ? '' : $t('redemption.redeem_holofuel.recipient_address_input_error')"
+          :label="$t('redemption.redeem_holofuel.recipient_address_input_label')"
+          :placeholder="$t('redemption.redeem_holofuel.recipient_address_input_placeholder')"
           name="amount"
           @blur="activateHotAddressValidation"
         />
