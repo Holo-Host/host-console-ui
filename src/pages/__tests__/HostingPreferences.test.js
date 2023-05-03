@@ -4,7 +4,7 @@ import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from '@/router.ts'
 import { createI18n } from 'vue-i18n'
 import HostingPreferences from '../HostingPreferences.vue'
-import { messages } from '@/locales'
+import messages from '@/locales'
 import {expect, describe, it, vi, beforeEach, afterEach} from 'vitest'
 import axios from 'axios';
 
