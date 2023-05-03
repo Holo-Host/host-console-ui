@@ -29,7 +29,7 @@ interface HposInterface {
 
 interface RedeemHoloFuelPayload {
   amount: string
-  note: string
+  note?: string
   wallet_address: string
 }
 

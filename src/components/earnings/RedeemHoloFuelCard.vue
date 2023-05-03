@@ -87,6 +87,7 @@ async function handleSubmit(): Promise<void> {
     } else {
       step.value = 1
       isBusy.value = false
+      partialRedemptionTermsAccepted.value = false
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call -- showBanner is coming from ui-common which is not using TS
       showBanner({ message: t('redemption.redeem_holofuel.errors.redemption_failed') })
