@@ -1,16 +1,21 @@
 <script setup lang="ts">
+import { useModals } from '@uicommon/composables/useModals'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import RedeemHoloFuelCard from '@/components/earnings/RedeemHoloFuelCard.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import { EModal } from '@/constants/ui'
+import type { RedemptionTransaction } from '@/interfaces/HposInterface'
+import router, { kRoutes } from '@/router'
 import { useDashboardStore } from '@/store/dashboard'
-import { isError } from '@/types/predicates'
 import type { BreadCrumb } from '@/types/types'
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showModal } = useModals()
 
 const { t } = useI18n()
 
 const isLoading = ref(false)
-
 const dashboardStore = useDashboardStore()
 
 const breadcrumbs = computed((): BreadCrumb[] => [
@@ -29,13 +34,26 @@ async function getRedeemableHoloFuel(): Promise<void> {
   isLoading.value = false
 }
 
-const redeemableHoloFuel = computed(() => {
-  if (isError(dashboardStore.hostEarnings)) {
-    return dashboardStore.hostEarnings
-  }
+interface ExtendedRedemptionTransaction extends RedemptionTransaction {
+  hotAddress: string
+}
 
-  return dashboardStore.hostEarnings.holofuel.redeemable || '0'
-})
+async function handleRedemptionSubmitted(
+  transaction: ExtendedRedemptionTransaction
+): Promise<void> {
+  await router.push({ name: kRoutes.earnings.name })
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+  showModal(EModal.redemption_initiated, {
+    date: transaction.created_date,
+    hfAmount: transaction.amount,
+    requestId: transaction.id,
+    // Hardcoded until we add the call to support other Reserve types, will be dynamic in the future
+    currency: 'HOT',
+    hotAddress: transaction.hotAddress,
+    redemptionAmount: transaction.amount
+  })
+}
 
 onMounted(async (): Promise<void> => {
   await getRedeemableHoloFuel()
@@ -49,7 +67,7 @@ onMounted(async (): Promise<void> => {
   >
     <RedeemHoloFuelCard
       :is-loading="isLoading"
-      :redeemable-holo-fuel="redeemableHoloFuel"
+      @submitted="handleRedemptionSubmitted"
     />
   </primarylayout>
 </template>

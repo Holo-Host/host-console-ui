@@ -8,6 +8,7 @@ const translations = {
     app_name: 'Host Console',
     back: 'Back',
     dashboard: 'Dashboard',
+    date: 'Date',
     days: 'days',
     earnings: 'Earnings',
     generic_error: 'Sorry, we couldn’t fetch this data.',
@@ -120,39 +121,46 @@ const translations = {
     title: 'Recent Payments',
     no_payments: 'You have no payments'
   },
-  redeem_holofuel: {
-    available_to_redeem: 'available to redeem.',
-    amount_input_label: 'Redemption Amount',
-    amount_input_placeholder: 'Enter HF amount',
-    amount_input_error: 'Amount exceeds redeemable balance.',
-    amount_input_tip: '*Note: HoloFuel and HOT are currently 1:1',
-    confirm_and_redeem: 'Confirm & Redeem',
-    holo_fuel_amount: 'HF Amount',
-    partial_redemption_terms:
-      'Redemptions are processed first come, first serve. By checking this box, you accept a partial redemption if 1) there isn’t enough HOT in the reserve to fulfill your entire request or 2) the price surpasses the minimum you have chosen.',
-    recipient_address_input_label: 'Recipient HOT Address',
-    recipient_address_input_placeholder: 'Enter HOT wallet address',
-    recipient_address_input_error: 'HOT address not valid, please check it and try again.',
-    redemption_amount: 'Redemption Amount',
-    redemption_currency: 'Redemption Currency',
-    redemption_price: 'Redemption Price',
-    review_and_confirm: 'Please review and confirm:',
-    title: 'Redeem HoloFuel',
-    you_have: 'You have'
-  },
-  redemption_history: {
-    errors: {
-      no_redemptions: 'You have no redemptions.'
+  redemption: {
+    transaction_price: 'Transaction Price: {hf} HF = {hot} HOT',
+    history: {
+      errors: {
+        no_redemptions: 'You have no redemptions.'
+      },
+      headers: {
+        created: 'Date Submitted',
+        hf_amount: 'HF Amount',
+        redemption_amount: 'Redemption Amount',
+        transaction_id: 'Transaction ID',
+        status: 'Status'
+      },
+      original_requested_amount: 'Original Requested Amount: {amount}'
     },
-    headers: {
-      created: 'Date Submitted',
-      hf_amount: 'HF Amount',
+    redeem_holofuel: {
+      available_to_redeem: 'available to redeem.',
+      amount_input_label: 'Redemption Amount',
+      amount_input_placeholder: 'Enter HF amount',
+      amount_input_error: 'Amount exceeds redeemable balance.',
+      amount_input_tip: '*Note: HoloFuel and HOT are currently 1:1',
+      confirm_and_redeem: 'Confirm & Redeem',
+      errors: {
+        redemption_failed: 'Something went wrong, please try again.'
+      },
+      holo_fuel_amount: 'HF Amount',
+      partial_redemption_terms:
+        'Redemptions are processed first come, first serve. By checking this box, you accept a partial redemption if 1) there isn’t enough HOT in the reserve to fulfill your entire request or 2) the price surpasses the minimum you have chosen.',
+      recipient_address_input_label: 'Recipient HOT Address',
+      recipient_address_input_placeholder: 'Enter HOT wallet address',
+      recipient_address_input_error: 'HOT address not valid, please check it and try again.',
       redemption_amount: 'Redemption Amount',
-      transaction_id: 'Transaction ID',
-      status: 'Status'
-    },
-    original_requested_amount: 'Original Requested Amount: {amount}',
-    transaction_price: 'Transaction Price: {hf} HF = {hot} HOT'
+      redemption_currency: 'Redemption Currency',
+      redemption_initiated: 'Redemption Initiated!',
+      redemption_price: 'Redemption Price',
+      request_id: 'Request ID',
+      review_and_confirm: 'Please review and confirm:',
+      title: 'Redeem HoloFuel',
+      you_have: 'You have'
+    }
   },
   settings: {
     account_display_name: 'Account Display Name',

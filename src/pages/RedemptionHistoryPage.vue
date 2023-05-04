@@ -73,7 +73,7 @@ const headersMap = computed(
         'createdDate',
         {
           key: 'createdDate',
-          label: t('redemption_history.headers.created'),
+          label: t('redemption.history.headers.created'),
           isVisibleOnMobile: true,
           isSortable: true,
           type: 'date'
@@ -83,7 +83,7 @@ const headersMap = computed(
         'completedAmount',
         {
           key: 'completedAmount',
-          label: t('redemption_history.headers.hf_amount'),
+          label: t('redemption.history.headers.hf_amount'),
           description: hasPartialRedemption.value ? '*partial redemption' : '',
           isVisibleOnMobile: false,
           isSortable: true,
@@ -94,7 +94,7 @@ const headersMap = computed(
         'redemptionAmount',
         {
           key: 'redemptionAmount',
-          label: t('redemption_history.headers.redemption_amount'),
+          label: t('redemption.history.headers.redemption_amount'),
           isVisibleOnMobile: true,
           isSortable: true,
           align: 'end',
@@ -105,7 +105,7 @@ const headersMap = computed(
         'transactionId',
         {
           key: 'transactionId',
-          label: t('redemption_history.headers.transaction_id'),
+          label: t('redemption.history.headers.transaction_id'),
           isVisibleOnMobile: true,
           isSortable: true,
           type: 'string'
@@ -115,7 +115,7 @@ const headersMap = computed(
         'status',
         {
           key: 'status',
-          label: t('redemption_history.headers.status'),
+          label: t('redemption.history.headers.status'),
           isVisibleOnMobile: true,
           isSortable: true,
           type: 'string'
@@ -159,7 +159,7 @@ onMounted(async (): Promise<void> => {
         :headers="[...headersMap.values()]"
         initial-sort-by="createdDate"
         :items="redemptions"
-        empty-message-translation-key="redemption_history.errors.no_redemptions"
+        empty-message-translation-key="redemption.history.errors.no_redemptions"
         @try-again-clicked="getRedemptionHistory"
       >
         <RedemptionHistoryTableRow

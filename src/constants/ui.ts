@@ -9,6 +9,10 @@ export const kSortOptions = {
   }
 }
 
-export const EModal = {
-  welcome: 100
+export enum EModal {
+  welcome,
+  redemption_initiated
 }
+
+export const kMsInSecond = 1000
+export const kDefaultDateTimeFormat = 'DD MMM YYYY hh:mm UTC'

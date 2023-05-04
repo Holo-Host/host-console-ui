@@ -61,7 +61,7 @@ function showTransactionPrice(state: boolean): void {
               v-if="isPartialInfoVisible"
               class="redemption-history-table-row__info-popover redemption-history-table-row__partial-info-popover"
             >
-              {{ $t('redemption_history.original_requested_amount', { amount: props.redemption.formattedRequestedAmount }) }}
+              {{ $t('redemption.history.original_requested_amount', { amount: props.redemption.formattedRequestedAmount }) }}
             </div>
           </Transition>
         </div>
@@ -90,7 +90,7 @@ function showTransactionPrice(state: boolean): void {
             v-if="isPriceVisible"
             class="redemption-history-table-row__info-popover redemption-history-table-row__price-info-popover"
           >
-            {{ $t('redemption_history.transaction_price', { hf: 1, hot: 1 }) }}
+            {{ $t('redemption.transaction_price', { hf: 1, hot: 1 }) }}
           </div>
         </Transition>
       </div>

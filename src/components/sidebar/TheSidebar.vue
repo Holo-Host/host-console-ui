@@ -90,7 +90,7 @@ const items = computed((): SidebarItem[] => [
   flex: 0 0 270px;
   background: var(--white-color);
   box-shadow: 0 4px 4px rgba(54, 59, 71, 0.1);
-  z-index: 100;
+  z-index: 20;
 
   &__header {
     background-color: rgba(0, 202, 217, 0.06);

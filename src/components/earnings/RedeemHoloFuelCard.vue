@@ -2,24 +2,35 @@
 import { ChevronLeftIcon } from '@heroicons/vue/20/solid'
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseCard from '@uicommon/components/BaseCard.vue'
+import { useBanner } from '@uicommon/composables/useBanner'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import RedeemHoloFuelFormStepOne from './RedeemHoloFuelFormStepOne.vue'
 import RedeemHoloFuelFormStepTwo from './RedeemHoloFuelFormStepTwo.vue'
+import { RedemptionTransaction, useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
+import { useDashboardStore } from '@/store/dashboard'
+import { isError } from '@/types/predicates'
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showBanner } = useBanner()
+const { t } = useI18n()
+const { redeemHoloFuel } = useHposInterface()
 const router = useRouter()
+const dashboardStore = useDashboardStore()
 
 const props = defineProps<{
-  redeemableHoloFuel: string
   isLoading: boolean
 }>()
+
+const emit = defineEmits(['submitted'])
 
 const amount = ref('')
 const hotAddress = ref('')
 const partialRedemptionTermsAccepted = ref(false)
 const step = ref(1)
-
+const isBusy = ref(false)
 const isStepOneValid = ref(false)
 
 const canSubmit = computed((): boolean => {
@@ -28,6 +39,16 @@ const canSubmit = computed((): boolean => {
   } else {
     return partialRedemptionTermsAccepted.value
   }
+})
+
+const redeemableHoloFuel = computed((): string | { error: unknown } => {
+  if (isError(dashboardStore.hostEarnings)) {
+    return dashboardStore.hostEarnings
+  }
+
+  return dashboardStore.hostEarnings.holofuel.redeemable
+    ? `${dashboardStore.hostEarnings.holofuel.redeemable}`
+    : '0'
 })
 
 interface StepOneProps {
@@ -39,11 +60,38 @@ interface StepTwoProps {
   partialRedemptionTermsAccepted: boolean
 }
 
-function handleSubmit(): void {
+async function handleSubmit(): Promise<void> {
   if (step.value === 1) {
     step.value = 2
   } else {
-    // TODO: submit form
+    isBusy.value = true
+
+    await dashboardStore.getEarnings()
+
+    if (Number(redeemableHoloFuel.value) < Number(amount.value)) {
+      // Reset the checkbox and redirect to step 1 where
+      // user can see the error and enter a new amount
+      partialRedemptionTermsAccepted.value = false
+      step.value = 1
+      isBusy.value = false
+      return
+    }
+
+    const transaction: RedemptionTransaction = await redeemHoloFuel({
+      amount: amount.value,
+      wallet_address: hotAddress.value
+    })
+
+    if (transaction) {
+      emit('submitted', { ...transaction, hotAddress })
+    } else {
+      step.value = 1
+      isBusy.value = false
+      partialRedemptionTermsAccepted.value = false
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call -- showBanner is coming from ui-common which is not using TS
+      showBanner({ message: t('redemption.redeem_holofuel.errors.redemption_failed') })
+    }
   }
 }
 
@@ -71,13 +119,15 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
 
     <div class="redeem-card-content">
       <div class="redeem-card-content__title">
-        {{ $t('redeem_holofuel.title') }}
+        {{ $t('redemption.redeem_holofuel.title') }}
       </div>
 
       <div class="redeem-card-content__form">
         <RedeemHoloFuelFormStepOne
           v-if="step === 1"
-          :redeemable-amount="Number(props.redeemableHoloFuel)"
+          :redeemable-amount="redeemableHoloFuel"
+          :amount="amount"
+          :hot-address="hotAddress"
           @update="updateData"
           @update:is-valid="isStepOneValid = $event"
         />
@@ -107,10 +157,11 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
 
         <BaseButton
           :is-disabled="!canSubmit"
+          :is-busy="isBusy"
           class="redeem-card-content__submit-button"
           @click="handleSubmit"
         >
-          {{ step === 1 ? $t('$.next') : $t('redeem_holofuel.confirm_and_redeem') }}
+          {{ step === 1 ? $t('$.next') : $t('redemption.redeem_holofuel.confirm_and_redeem') }}
         </BaseButton>
       </div>
     </div>
