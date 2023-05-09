@@ -9,6 +9,7 @@
     "build": "VITE_UI_VERSION=$npm_package_version VITE_USE_REAL_PUB_KEY=true vite build",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "test": "yarn vitest",
+    "test:e2e": "yarn run cypress open",
     "start-mock-hpos-api": "node mock-hpos-api/runMockHposApi.js",
     "start-mock-hpos-api-with-auth": "node mock-hpos-api/runMockHposApi.js --email test@test.com --password asasas"
   },
@@ -48,6 +49,7 @@
     "@vue/compiler-sfc": "^3.2.47",
     "@vue/test-utils": "^2.3.0",
     "buffer": "^6.0.3",
+    "cypress": "^12.11.0",
     "eslint": "8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard": "^17.0.0",
