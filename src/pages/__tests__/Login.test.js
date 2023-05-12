@@ -4,7 +4,7 @@ import { kRoutes } from '@/router'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../LoginPage.vue'
-import { messages } from '@/locales'
+import messages from '@/locales'
 import { expect, describe, it, vi } from 'vitest'
 
 const i18n = createI18n({

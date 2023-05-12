@@ -1,62 +1,3 @@
-<template>
-  <PrimaryLayout
-    title="hApps"
-    class="happs"
-    :is-content-loading="isLoading"
-    :is-content-error="isError"
-    @try-again-clicked="getData"
-  >
-    <div class="happs__controls">
-      <BaseSearchInput
-        :value="filterValue"
-        :is-disabled="isLoading"
-        label-translation-key="$.filter_by"
-        @update="onFilterChange"
-      />
-
-      <SortByDropdown
-        :value="sortBy"
-        is-disabled
-        class="happs__sort-by-dropdown"
-        @update:value="onSortByChange"
-      />
-    </div>
-
-    <div v-if="!isLoading && !isError">
-      <div
-        v-if="filteredHapps.length"
-        class="happs__happ-list"
-      >
-        <HAppCard
-          v-for="happ in filteredHapps"
-          :key="happ.id"
-          :happ="happ"
-          class="happs__happ-list-item"
-        >
-          <template #status-chip>
-            <BaseChip
-              v-if="happ.isPaused"
-              :label="$t('$.paused')"
-              :type="EChipType.info"
-            />
-          </template>
-        </HAppCard>
-      </div>
-
-      <div
-        v-else
-        class="happs__happ-list"
-      >
-        <HAppCard
-          is-empty
-          :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : 'hosted_happs.no_happs'"
-          class="happs__happ-list-item"
-        />
-      </div>
-    </div>
-  </PrimaryLayout>
-</template>
-
 <script setup lang="ts">
 import BaseChip from '@uicommon/components/BaseChip.vue'
 import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
@@ -138,6 +79,65 @@ onMounted(async () => {
   await getData()
 })
 </script>
+
+<template>
+  <PrimaryLayout
+    title="hApps"
+    class="happs"
+    :is-content-loading="isLoading"
+    :is-content-error="isError"
+    @try-again-clicked="getData"
+  >
+    <div class="happs__controls">
+      <BaseSearchInput
+        :value="filterValue"
+        :is-disabled="isLoading"
+        label-translation-key="$.filter_by"
+        @update="onFilterChange"
+      />
+
+      <SortByDropdown
+        :value="sortBy"
+        is-disabled
+        class="happs__sort-by-dropdown"
+        @update:value="onSortByChange"
+      />
+    </div>
+
+    <div v-if="!isLoading && !isError">
+      <div
+        v-if="filteredHapps.length"
+        class="happs__happ-list"
+      >
+        <HAppCard
+          v-for="happ in filteredHapps"
+          :key="happ.id"
+          :happ="happ"
+          class="happs__happ-list-item"
+        >
+          <template #status-chip>
+            <BaseChip
+              v-if="happ.isPaused"
+              :label="$t('$.paused')"
+              :type="EChipType.info"
+            />
+          </template>
+        </HAppCard>
+      </div>
+
+      <div
+        v-else
+        class="happs__happ-list"
+      >
+        <HAppCard
+          is-empty
+          :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : 'hosted_happs.no_happs'"
+          class="happs__happ-list-item"
+        />
+      </div>
+    </div>
+  </PrimaryLayout>
+</template>
 
 <style lang="scss" scoped>
 .happs {

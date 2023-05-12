@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import MenuIcon from '@/components/icons/MenuIcon.vue'
+import TheSidebar from '@/components/sidebar/TheSidebar.vue'
+import TopNavMenu from '@/components/TopNavMenu.vue'
+
+withDefaults(
+  defineProps<{
+    nickname: string
+    agentAddress?: typeof Uint8Array | null
+  }>(),
+  {
+    agentAddress: null
+  }
+)
+
+const isMobileSidebarVisible = ref(false)
+</script>
+
 <template>
   <section class="mobile-banner">
     <MenuIcon @click="isMobileSidebarVisible = !isMobileSidebarVisible" />
@@ -17,25 +36,6 @@
     />
   </section>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import MenuIcon from '@/components/icons/MenuIcon.vue'
-import TheSidebar from '@/components/sidebar/TheSidebar.vue'
-import TopNavMenu from '@/components/TopNavMenu.vue'
-
-withDefaults(
-  defineProps<{
-    nickname: string
-    agentAddress?: typeof Uint8Array | null
-  }>(),
-  {
-    agentAddress: null
-  }
-)
-
-const isMobileSidebarVisible = ref(false)
-</script>
 
 <style scoped>
 .mobile-banner {

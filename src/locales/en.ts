@@ -1,8 +1,6 @@
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
 import commonTranslations from '@uicommon/locales/en'
 
-const translations = {
+export default {
   $: {
     ...commonTranslations.$,
     app_name: 'Host Console',
@@ -201,5 +199,3 @@ const translations = {
       'Oops, looks like we could not update your display name. Try refreshing this page and if the problem persists, please contact support.'
   }
 }
-
-export default translations

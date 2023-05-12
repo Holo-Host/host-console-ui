@@ -1,18 +1,3 @@
-<template>
-  <Transition>
-    <div
-      v-if="isVisible"
-      class="login-error-banner"
-    >
-      <AlertTriangleIcon class="login-error-banner__icon" />
-      <span class="login-error-banner__label">{{ props.message }}</span>
-    </div>
-  </Transition>
-  <div
-    class="login-error-banner__placeholder"
-  />
-</template>
-
 <script setup lang="ts">
 import AlertTriangleIcon from './icons/AlertTriangleIcon.vue'
 
@@ -27,6 +12,21 @@ const props = withDefaults(
   }
 )
 </script>
+
+<template>
+  <Transition>
+    <div
+      v-if="isVisible"
+      class="login-error-banner"
+    >
+      <AlertTriangleIcon class="login-error-banner__icon" />
+      <span class="login-error-banner__label">{{ props.message }}</span>
+    </div>
+  </Transition>
+  <div
+    class="login-error-banner__placeholder"
+  />
+</template>
 
 <style lang="scss" scoped>
 .login-error-banner {

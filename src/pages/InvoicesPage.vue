@@ -1,43 +1,3 @@
-<template>
-  <PrimaryLayout
-    :title="$t(pageHeaderTranslationKey)"
-    :breadcrumbs="breadcrumbs"
-    data-test-invoices-page-layout
-  >
-    <div
-      class="controls"
-      data-test-invoices-page-filters
-    >
-      <BaseSearchInput
-        :value="filterValue"
-        :is-disabled="!isFilteringEnabled"
-        label-translation-key="$.filter_by"
-        @update="setFilter"
-      />
-    </div>
-
-    <div data-test-invoices-page-table>
-      <BaseTable
-        v-slot="{ items }"
-        :is-loading="isLoading"
-        :is-error="isError"
-        :headers="[...headersMap.values()]"
-        :initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
-        :items="filteredData"
-        :empty-message-translation-key="emptyMessageTranslationKey"
-        @try-again-clicked="getInvoices"
-      >
-        <InvoicesTableRow
-          v-for="item in items"
-          :key="item.id"
-          :is-paid="isPaidInvoices"
-          :invoice="item"
-        />
-      </BaseTable>
-    </div>
-  </PrimaryLayout>
-</template>
-
 <script setup lang="ts">
 import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import BaseTable from '@uicommon/components/BaseTable.vue'
@@ -152,21 +112,21 @@ const invoices = computed(() => {
 
   return Array.isArray(rawInvoices)
     ? rawInvoices.map((invoice) => ({
-      ...invoice,
-      formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
-      happ: invoice.happ.name,
-      formattedExpirationDate: dayjs(new Date(invoice.expirationDate / kMsInSecond)).format(
-        kDefaultDateFormat
-      ),
-      amount: Number(invoice.amount),
-      formattedCompletedDate: dayjs(invoice.completedDate / kMsInSecond).format(
-        kDefaultDateFormat
-      ),
-      formattedCreatedDate: dayjs(invoice.createdDate / kMsInSecond).format(kDefaultDateFormat),
-      formattedAmount:
+        ...invoice,
+        formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
+        happ: invoice.happ.name,
+        formattedExpirationDate: dayjs(new Date(invoice.expirationDate / kMsInSecond)).format(
+          kDefaultDateFormat
+        ),
+        amount: Number(invoice.amount),
+        formattedCompletedDate: dayjs(invoice.completedDate / kMsInSecond).format(
+          kDefaultDateFormat
+        ),
+        formattedCreatedDate: dayjs(invoice.createdDate / kMsInSecond).format(kDefaultDateFormat),
+        formattedAmount:
           invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
-      status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
-    }))
+        status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
+      }))
     : []
 })
 
@@ -257,6 +217,46 @@ onMounted(async (): Promise<void> => {
   await getInvoices()
 })
 </script>
+
+<template>
+  <PrimaryLayout
+    :title="$t(pageHeaderTranslationKey)"
+    :breadcrumbs="breadcrumbs"
+    data-test-invoices-page-layout
+  >
+    <div
+      class="controls"
+      data-test-invoices-page-filters
+    >
+      <BaseSearchInput
+        :value="filterValue"
+        :is-disabled="!isFilteringEnabled"
+        label-translation-key="$.filter_by"
+        @update="setFilter"
+      />
+    </div>
+
+    <div data-test-invoices-page-table>
+      <BaseTable
+        v-slot="{ items }"
+        :is-loading="isLoading"
+        :is-error="isError"
+        :headers="[...headersMap.values()]"
+        :initial-sort-by="isPaidInvoices ? 'completedDate' : 'createdDate'"
+        :items="filteredData"
+        :empty-message-translation-key="emptyMessageTranslationKey"
+        @try-again-clicked="getInvoices"
+      >
+        <InvoicesTableRow
+          v-for="item in items"
+          :key="item.id"
+          :is-paid="isPaidInvoices"
+          :invoice="item"
+        />
+      </BaseTable>
+    </div>
+  </PrimaryLayout>
+</template>
 
 <style scoped>
 .controls {

@@ -1,36 +1,3 @@
-<template>
-  <section
-    class="sidebar"
-    data-test-sidebar
-  >
-    <h1
-      class="sidebar__header"
-      data-test-sidebar-header
-    >
-      {{ $t('$.host_console') }}
-    </h1>
-
-    <section
-      class="sidebar__menu"
-      data-test-sidebar-menu
-    >
-      <TheSidebarItem
-        v-for="item in items"
-        :key="item.to"
-        :to="item.to"
-        :label="item.label"
-        :icon="item.icon"
-        :icon-style="item.iconStyle"
-        data-test-sidebar-menu-item
-      />
-
-      <TheSidebarAlphaBanner />
-
-      <TheSidebarFooter />
-    </section>
-  </section>
-</template>
-
 <script setup lang="ts">
 import CashIcon from '@uicommon/components/icons/CashIcon'
 import { computed } from 'vue'
@@ -77,6 +44,39 @@ const items = computed((): SidebarItem[] => [
   }
 ])
 </script>
+
+<template>
+  <section
+    class="sidebar"
+    data-test-sidebar
+  >
+    <h1
+      class="sidebar__header"
+      data-test-sidebar-header
+    >
+      {{ $t('$.host_console') }}
+    </h1>
+
+    <section
+      class="sidebar__menu"
+      data-test-sidebar-menu
+    >
+      <TheSidebarItem
+        v-for="item in items"
+        :key="item.to"
+        :to="item.to"
+        :label="item.label"
+        :icon="item.icon"
+        :icon-style="item.iconStyle"
+        data-test-sidebar-menu-item
+      />
+
+      <TheSidebarAlphaBanner />
+
+      <TheSidebarFooter />
+    </section>
+  </section>
+</template>
 
 <style lang="scss" scoped>
 .sidebar {

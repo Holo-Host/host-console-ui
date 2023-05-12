@@ -1,3 +1,13 @@
+<script setup lang="ts">
+defineProps<{
+  options: []
+  value: number | string
+  isDisabled: boolean
+}>()
+
+defineEmits(['update:selected-value'])
+</script>
+
 <template>
   <select
     :value="value"
@@ -14,16 +24,6 @@
     </option>
   </select>
 </template>
-
-<script setup lang="ts">
-defineProps<{
-  options: []
-  value: number | string
-  isDisabled: boolean
-}>()
-
-defineEmits(['update:selected-value'])
-</script>
 
 <style lang="scss" scoped>
 .dropdown-select {

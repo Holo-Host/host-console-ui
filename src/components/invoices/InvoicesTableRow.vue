@@ -1,3 +1,31 @@
+<script setup lang="ts">
+import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
+import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
+import Identicon from '@uicommon/components/Identicon.vue'
+import { decodeAgentId } from '@uicommon/utils/agent'
+import PaidInvoicesExpandableContent from '@/components/invoices/PaidInvoicesExpandableContent.vue'
+import type { Transaction } from '@/interfaces/HposInterface'
+
+interface ExtendedTransaction extends Transaction {
+  formattedId: string
+  happ: string
+  formattedCompletedDate: string
+  formattedCreatedDate: string
+  formattedExpirationDate: string
+  formattedAmount: string
+}
+
+const props = withDefaults(
+  defineProps<{
+    invoice: ExtendedTransaction
+    isPaid?: boolean
+  }>(),
+  {
+    isPaid: false
+  }
+)
+</script>
+
 <template>
   <BaseTableRow>
     <BaseTableRowItem
@@ -48,31 +76,3 @@
     </template>
   </BaseTableRow>
 </template>
-
-<script setup lang="ts">
-import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
-import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
-import Identicon from '@uicommon/components/Identicon.vue'
-import { decodeAgentId } from '@uicommon/utils/agent'
-import PaidInvoicesExpandableContent from '@/components/invoices/PaidInvoicesExpandableContent.vue'
-import type { Transaction } from '@/interfaces/HposInterface'
-
-interface ExtendedTransaction extends Transaction {
-  formattedId: string
-  happ: string
-  formattedCompletedDate: string
-  formattedCreatedDate: string
-  formattedExpirationDate: string
-  formattedAmount: string
-}
-
-const props = withDefaults(
-  defineProps<{
-    invoice: ExtendedTransaction
-    isPaid?: boolean
-  }>(),
-  {
-    isPaid: false
-  }
-)
-</script>

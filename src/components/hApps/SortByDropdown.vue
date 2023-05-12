@@ -1,28 +1,3 @@
-<template>
-  <div class="sort-by-dropdown">
-    <div
-      class="sort-by-dropdown__label"
-      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
-    >
-      {{ $t('$.sort_by') }}:&nbsp;
-    </div>
-    <select
-      :value="props.value"
-      class="sort-by-dropdown__sort"
-      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
-      @change="onChange"
-    >
-      <option
-        v-for="option in props.options"
-        :key="option.value"
-        :value="option.value"
-      >
-        {{ option.label }}
-      </option>
-    </select>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { kSortOptions } from '@/constants/ui'
 
@@ -49,6 +24,31 @@ function onChange(event: { target: { value: string } }): void {
   emit('update:value', event.target.value)
 }
 </script>
+
+<template>
+  <div class="sort-by-dropdown">
+    <div
+      class="sort-by-dropdown__label"
+      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
+    >
+      {{ $t('$.sort_by') }}:&nbsp;
+    </div>
+    <select
+      :value="props.value"
+      class="sort-by-dropdown__sort"
+      :class="{ 'sort-by-dropdown--disabled': props.isDisabled }"
+      @change="onChange"
+    >
+      <option
+        v-for="option in props.options"
+        :key="option.value"
+        :value="option.value"
+      >
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+</template>
 
 <style lang="scss">
 .sort-by-dropdown {

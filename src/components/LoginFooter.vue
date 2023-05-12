@@ -1,17 +1,27 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+const version = computed(() => import.meta.env.VITE_UI_VERSION)
+</script>
+
 <template>
   <div
     class="footer"
     data-test-login-page-footer-wrapper
   >
-    <div>{{ $t('$.hosted_by') }}</div>
+    <div>{{ t('$.hosted_by') }}</div>
     <div class="logo-row">
       <img
         src="/images/holo-logo-bw.png"
         alt="holo logo"
-      /> {{ $t('$.holo') }}
+      /> {{ t('$.holo') }}
     </div>
     <div>
-      {{ $t('login.password_reminder') }}
+      {{ t('login.password_reminder') }}
     </div>
     <div>
       <a
@@ -19,21 +29,14 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        {{ $t('$.learn_more') }}
-      </a> {{ $t('login.controlling_your_data') }}
+        {{ t('$.learn_more') }}
+      </a> {{ t('login.controlling_your_data') }}
     </div>
     <div class="version">
-      {{ $t('$.app_version', { app: 'Host Console', version }) }}
+      {{ t('$.app_version', { app: t('$.app_name'), version }) }}
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const version = computed(() => import.meta.env.VITE_UI_VERSION)
-</script>
 
 <style scoped>
 .footer {

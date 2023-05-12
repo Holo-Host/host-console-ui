@@ -3,11 +3,11 @@ import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import { defaultSettingsResult, defaultSshAccessResult } from 'src/__tests__/constants'
 import { mockGlobalCrypto } from 'src/__tests__/utils'
-import router from '@/router'
-import { createI18n } from 'vue-i18n'
-import TheSidebar from '../sidebar/TheSidebar'
-import { messages } from '@/locales'
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
+import { createI18n } from 'vue-i18n'
+import TheSidebar from '../sidebar/TheSidebar.vue'
+import messages from '@/locales'
+import router from '@/router'
 
 const i18n = createI18n({
   legacy: false,
@@ -35,8 +35,8 @@ describe('sidebar', () => {
           i18n,
           router,
           createTestingPinia({
-            createSpy: vi.fn(),
-          }),
+            createSpy: vi.fn()
+          })
         ]
       }
     })
@@ -72,7 +72,7 @@ describe('sidebar', () => {
     })
 
     it('with alpha flag', async () => {
-      axios.get.mockImplementation((path) => {
+      axios.get.mockImplementation(async (path) => {
         if (path.endsWith('/api/v1/config')) {
           return Promise.resolve(defaultSettingsResult)
         }

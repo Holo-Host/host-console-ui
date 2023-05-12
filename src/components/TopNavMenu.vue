@@ -1,3 +1,50 @@
+<script setup lang="ts">
+import Identicon from '@uicommon/components/Identicon.vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import DownTriangleIcon from '@/components/icons/DownTriangleIcon.vue'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
+import { kAuthTokenLSKey } from '@/constants.ts'
+import { kRoutes } from '@/router'
+
+const { goToHoloFuel } = useGoToHoloFuel()
+
+const router = useRouter()
+
+const props = withDefaults(
+  defineProps<{
+    nickname: string
+    agentAddress?: typeof Uint8Array | null
+    white?: boolean
+  }>(),
+  {
+    agentAddress: null,
+    white: false
+  }
+)
+
+const isMenuOpen = ref(false)
+
+function toggleMenu(): void {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+function closeDropdown(): void {
+  isMenuOpen.value = false
+}
+
+async function logout(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  localStorage.removeItem(kAuthTokenLSKey)
+  await router.push({ name: kRoutes.login.name })
+}
+
+async function openSettingsAndCloseMenu(): Promise<void> {
+  isMenuOpen.value = false
+  await router.push({ name: kRoutes.accountSettings.name })
+}
+</script>
+
 <template>
   <div class="top-nav-menu">
     <div class="owner">
@@ -53,53 +100,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import Identicon from '@uicommon/components/Identicon.vue'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import DownTriangleIcon from '@/components/icons/DownTriangleIcon.vue'
-import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
-import { kAuthTokenLSKey } from '@/constants.ts'
-import { kRoutes } from '@/router'
-
-const { goToHoloFuel } = useGoToHoloFuel()
-
-const router = useRouter()
-
-const props = withDefaults(
-  defineProps<{
-    nickname: string
-    agentAddress?: typeof Uint8Array | null
-    white?: boolean
-  }>(),
-  {
-    agentAddress: null,
-    white: false
-  }
-)
-
-const isMenuOpen = ref(false)
-
-function toggleMenu(): void {
-  isMenuOpen.value = !isMenuOpen.value
-}
-
-function closeDropdown(): void {
-  isMenuOpen.value = false
-}
-
-async function logout(): Promise<void> {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  localStorage.removeItem(kAuthTokenLSKey)
-  await router.push({ name: kRoutes.login.name })
-}
-
-async function openSettingsAndCloseMenu(): Promise<void> {
-  isMenuOpen.value = false
-  await router.push({ name: kRoutes.accountSettings.name })
-}
-</script>
 
 <style scoped>
 .top-nav-menu {

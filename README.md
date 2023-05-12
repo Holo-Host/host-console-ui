@@ -81,8 +81,6 @@ and
 yarn test
 ```
 
-Note: you must have a .env file with `VITE_HPOS_PORT` for tests to pass as it uses the mocked HPOS API server.
-
 ### Compiles and minifies for production
 ```
 yarn build
@@ -102,13 +100,13 @@ To deploy a new version to dev environment you need to update the appropriate `r
 
 https://github.com/Holo-Host/holo-nixpkgs/blob/develop/overlays/holo-nixpkgs/host-console-ui/default.nix
 
-Replace `rev` but your latest commit hash.
+Replace `rev` with your latest commit hash.
 
 Run the command below from the root of the holo-nixpkgs repo:
 
 `nix-build . -A host-console-ui`
 
-I should fail with a message
+It should fail with a message like below:
 
 ```
 hash mismatch in fixed-output derivation '/nix/store/....:
@@ -120,6 +118,15 @@ Copy the `got` value to the `sha256` in the `holo-nixpkgs/overlays/holo-nixpkgs/
 
 Create a PR off `develop`, merge it and wait for hydra to deploy it. You can check the status in the link below.
 
-`https://hydra.holo.host/project/holo-nixpkgs`
+https://hydra.holo.host/project/holo-nixpkgs
+
+In the meantime run regression tests on GitHub. To do that:
+- note your PR number
+- go to the Actions tab
+- select the `Holo Regression Test` workflow and click `Run workflow`
+- `Use workflow from` should be set to `develop`
+- `Enter the PR number` should be set to your PR number
+- click `Run workflow`
+- wait for the tests to finish
 
 Once the build is done, all holoports that watch for `develop` channel should pick up the change and update the version of the app.

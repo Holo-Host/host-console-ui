@@ -1,3 +1,18 @@
+<script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    label?: string
+    value?: string | number
+    gridColumns?: string
+  }>(),
+  {
+    label: '',
+    value: '',
+    gridColumns: ''
+  }
+)
+</script>
+
 <template>
   <div
     class="settings-row"
@@ -15,21 +30,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const props = withDefaults(
-  defineProps<{
-    label?: string
-    value?: string | number
-    gridColumns?: string
-  }>(),
-  {
-    label: '',
-    value: '',
-    gridColumns: ''
-  }
-)
-</script>
 
 <style lang="scss" scoped>
 .settings-row {

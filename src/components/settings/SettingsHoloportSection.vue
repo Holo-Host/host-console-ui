@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import BaseCheckbox from '@uicommon/components/BaseCheckbox.vue'
+import BaseInput from '@uicommon/components/BaseInput.vue'
+import { ref } from 'vue'
+import CircledExIcon from '../icons/CircledExIcon.vue'
+import FilledCheckIcon from '../icons/FilledCheckIcon.vue'
+import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
+import PencilIcon from '../icons/PencilIcon.vue'
+import SettingsRow from './SettingsRow.vue'
+import SettingsSection from './SettingsSection.vue'
+
+const props = withDefaults(
+  defineProps<{
+    settings: Record<string, unknown>
+    isLoading?: boolean
+  }>(),
+  {
+    isLoading: false
+  }
+)
+
+const emit = defineEmits(['update:device-name'])
+
+const isEditingDeviceName = ref(false)
+const editedDeviceName = ref('')
+
+function editDeviceName(): void {
+  editedDeviceName.value = props.settings.deviceName
+  isEditingDeviceName.value = true
+}
+
+function saveDeviceName(): void {
+  emit('update:device-name', editedDeviceName.value)
+  isEditingDeviceName.value = false
+}
+
+function cancelEditDeviceName(): void {
+  isEditingDeviceName.value = false
+  editedDeviceName.value = ''
+}
+</script>
+
 <template>
   <SettingsSection
     :title="$t('$.holoport')"
@@ -72,48 +114,6 @@
     </SettingsRow>
   </SettingsSection>
 </template>
-
-<script setup lang="ts">
-import BaseCheckbox from '@uicommon/components/BaseCheckbox.vue'
-import BaseInput from '@uicommon/components/BaseInput.vue'
-import { ref } from 'vue'
-import CircledExIcon from '../icons/CircledExIcon.vue'
-import FilledCheckIcon from '../icons/FilledCheckIcon.vue'
-import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
-import PencilIcon from '../icons/PencilIcon.vue'
-import SettingsRow from './SettingsRow.vue'
-import SettingsSection from './SettingsSection.vue'
-
-const props = withDefaults(
-  defineProps<{
-    settings: Record<string, unknown>
-    isLoading?: boolean
-  }>(),
-  {
-    isLoading: false
-  }
-)
-
-const emit = defineEmits(['update:device-name'])
-
-const isEditingDeviceName = ref(false)
-const editedDeviceName = ref('')
-
-function editDeviceName(): void {
-  editedDeviceName.value = props.settings.deviceName
-  isEditingDeviceName.value = true
-}
-
-function saveDeviceName(): void {
-  emit('update:device-name', editedDeviceName.value)
-  isEditingDeviceName.value = false
-}
-
-function cancelEditDeviceName(): void {
-  isEditingDeviceName.value = false
-  editedDeviceName.value = ''
-}
-</script>
 
 <style lang="scss" scoped>
 .holoport-settings {

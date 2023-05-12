@@ -1,77 +1,3 @@
-<template>
-  <div class="container">
-    <div
-      class="error-banner"
-      data-test-login-page-error-banner
-    >
-      <LoginErrorBanner
-        :is-visible="!!errors.api"
-        :message="errors.api"
-      />
-    </div>
-
-    <form
-      class="form"
-      data-test-login-page-form
-      @submit.prevent=""
-    >
-      <div class="form-box">
-        <h1
-          class="title"
-          data-test-login-page-form-title
-        >
-          {{ $t('login.title') }}
-        </h1>
-
-        <span
-          class="subtitle"
-          data-test-login-page-form-subtitle
-        >
-          {{ $t('login.subtitle') }}
-        </span>
-
-        <BaseLoginInput
-          id="email"
-          v-model="email"
-          :input-type="EInputType.email"
-          :is-valid="!errors.email"
-          has-errors
-          :label="$t('login.email')"
-          name="email"
-          :message="errors.email"
-          class="login-input"
-          data-test-login-page-form-email-input
-        />
-
-        <BaseLoginInput
-          id="password"
-          v-model="password"
-          :input-type="EInputType.password"
-          :is-valid="!errors.password"
-          has-errors
-          :label="$t('login.password')"
-          name="password"
-          :message="errors.password"
-          data-test-login-page-form-password-input
-        />
-
-        <BaseButton
-          :is-disabled="!email || !password || isLoading"
-          :is-busy="isLoading"
-          :type="EButtonType.gray"
-          class="login-button"
-          data-test-login-page-form-submit-button
-          @click="login"
-        >
-          {{ $t('$.login') }}
-        </BaseButton>
-      </div>
-    </form>
-
-    <LoginFooter data-test-login-page-footer />
-  </div>
-</template>
-
 <script setup lang="ts">
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseLoginInput from '@uicommon/components/BaseLoginInput.vue'
@@ -226,6 +152,80 @@ async function login(): Promise<void> {
   }
 }
 </script>
+
+<template>
+  <div class="container">
+    <div
+      class="error-banner"
+      data-test-login-page-error-banner
+    >
+      <LoginErrorBanner
+        :is-visible="!!errors.api"
+        :message="errors.api"
+      />
+    </div>
+
+    <form
+      class="form"
+      data-test-login-page-form
+      @submit.prevent=""
+    >
+      <div class="form-box">
+        <h1
+          class="title"
+          data-test-login-page-form-title
+        >
+          {{ $t('login.title') }}
+        </h1>
+
+        <span
+          class="subtitle"
+          data-test-login-page-form-subtitle
+        >
+          {{ $t('login.subtitle') }}
+        </span>
+
+        <BaseLoginInput
+          id="email"
+          v-model="email"
+          :input-type="EInputType.email"
+          :is-valid="!errors.email"
+          has-errors
+          :label="$t('login.email')"
+          name="email"
+          :message="errors.email"
+          class="login-input"
+          data-test-login-page-form-email-input
+        />
+
+        <BaseLoginInput
+          id="password"
+          v-model="password"
+          :input-type="EInputType.password"
+          :is-valid="!errors.password"
+          has-errors
+          :label="$t('login.password')"
+          name="password"
+          :message="errors.password"
+          data-test-login-page-form-password-input
+        />
+
+        <BaseButton
+          :is-disabled="!email || !password || isLoading"
+          :is-busy="isLoading"
+          :type="EButtonType.gray"
+          class="login-button"
+          data-test-login-page-form-submit-button
+          @click="login"
+        >
+          {{ $t('$.login') }}
+        </BaseButton>
+      </div>
+    </form>
+
+    <LoginFooter data-test-login-page-footer />
+  </div>
+</template>
 
 <style scoped>
 .container {

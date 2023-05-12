@@ -5,7 +5,7 @@ import { mockGlobalCrypto } from 'src/__tests__/utils'
 import router from '@/router'
 import { createI18n } from 'vue-i18n'
 import HAppsPage from '../HAppsPage.vue'
-import { messages } from '@/locales'
+import messages from '@/locales'
 import { expect, describe, it, vi } from 'vitest'
 
 const i18n = createI18n({

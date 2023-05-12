@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-
 import { createTestingPinia } from '@pinia/testing'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { expect, describe, it, vi } from 'vitest'
 import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import TopNav from '../TopNav.vue'
-import { messages } from '@/locales'
+import messages from '@/locales'
 import { kRoutes } from '@/router'
 
 const clickOutside = vi.fn()

@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import BaseCard from '@uicommon/components/BaseCard.vue'
+import { computed } from 'vue'
+import GearIcon from '@/components/icons/GearIcon.vue'
+import type { UsageResponse } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
+import { presentMicroSeconds, presentBytes } from '@/utils'
+
+const props = defineProps<{
+  data: UsageResponse | { error: unknown }
+  isLoading: boolean
+}>()
+
+const emit = defineEmits(['try-again-clicked'])
+
+const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
+</script>
+
 <template>
   <BaseCard
     :is-loading="props.isLoading"
@@ -68,24 +86,6 @@
     </template>
   </BaseCard>
 </template>
-
-<script setup lang="ts">
-import BaseCard from '@uicommon/components/BaseCard.vue'
-import { computed } from 'vue'
-import GearIcon from '@/components/icons/GearIcon.vue'
-import type { UsageResponse } from '@/interfaces/HposInterface'
-import { isError as isErrorPredicate } from '@/types/predicates'
-import { presentMicroSeconds, presentBytes } from '@/utils'
-
-const props = defineProps<{
-  data: UsageResponse | { error: unknown }
-  isLoading: boolean
-}>()
-
-const emit = defineEmits(['try-again-clicked'])
-
-const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.data.error)
-</script>
 
 <style scoped>
 .info-row {

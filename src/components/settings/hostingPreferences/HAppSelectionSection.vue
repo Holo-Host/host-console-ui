@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import SettingsSection from '../SettingsSection.vue'
+import PencilIcon from '@/components/icons/PencilIcon.vue'
+</script>
+
 <template>
   <SettingsSection
     :title="$t('hosting_preferences.happ_selection.header')"
@@ -35,11 +40,6 @@
     </div>
   </SettingsSection>
 </template>
-
-<script setup lang="ts">
-import SettingsSection from '../SettingsSection.vue'
-import PencilIcon from '@/components/icons/PencilIcon.vue'
-</script>
 
 <style lang="scss" scoped>
 .card-content {

@@ -1,18 +1,3 @@
-<template>
-  <PrimaryLayout :title="$t('settings.header')">
-    <SettingsHoloportSection
-      :settings="user"
-      @update:device-name="onDeviceNameUpdate"
-    />
-
-    <SettingsHolofuelSection
-      :nickname="user.holoFuel.nickname"
-      :agent-address="user.holoFuel.agentAddress"
-      class="settings__holofuel-section"
-    />
-  </PrimaryLayout>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
@@ -28,6 +13,21 @@ async function onDeviceNameUpdate(deviceName: string): Promise<void> {
   await userStore.updateDeviceName(deviceName)
 }
 </script>
+
+<template>
+  <PrimaryLayout :title="$t('settings.header')">
+    <SettingsHoloportSection
+      :settings="user"
+      @update:device-name="onDeviceNameUpdate"
+    />
+
+    <SettingsHolofuelSection
+      :nickname="user.holoFuel.nickname"
+      :agent-address="user.holoFuel.agentAddress"
+      class="settings__holofuel-section"
+    />
+  </PrimaryLayout>
+</template>
 
 <style lang="scss">
 .settings__holofuel-section {

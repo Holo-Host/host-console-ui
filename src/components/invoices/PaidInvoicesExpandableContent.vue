@@ -1,39 +1,3 @@
-<template>
-  <td
-    colspan="4"
-    class="paid-invoices-expandable-content"
-  >
-    <div
-      class="paid-invoices-expandable-content__item"
-    >
-      <span class="paid-invoices-expandable-content__label">
-        {{ t('invoices.headers.publisher') }}:
-      </span>
-      <span class="paid-invoices-expandable-content__value">
-        <Identicon
-          v-if="invoice.counterparty"
-          size="27"
-          :agent-key="decodeAgentId(invoice.counterparty)"
-          role="img"
-          aria-label="Agent Identity Icon"
-        />
-      </span>
-    </div>
-    <div
-      v-for="item in items"
-      :key="item.key"
-      class="paid-invoices-expandable-content__item"
-    >
-      <span class="paid-invoices-expandable-content__label">
-        {{ item.label }}:
-      </span>
-      <span class="paid-invoices-expandable-content__value">
-        {{ item.value }}
-      </span>
-    </div>
-  </td>
-</template>
-
 <script setup lang="ts">
 import Identicon from '@uicommon/components/Identicon.vue'
 import { decodeAgentId } from '@uicommon/utils/agent'
@@ -70,6 +34,42 @@ const items = ref<Item[]>([
   }
 ])
 </script>
+
+<template>
+  <td
+    colspan="4"
+    class="paid-invoices-expandable-content"
+  >
+    <div
+      class="paid-invoices-expandable-content__item"
+    >
+      <span class="paid-invoices-expandable-content__label">
+        {{ t('invoices.headers.publisher') }}:
+      </span>
+      <span class="paid-invoices-expandable-content__value">
+        <Identicon
+          v-if="invoice.counterparty"
+          size="27"
+          :agent-key="decodeAgentId(invoice.counterparty)"
+          role="img"
+          aria-label="Agent Identity Icon"
+        />
+      </span>
+    </div>
+    <div
+      v-for="item in items"
+      :key="item.key"
+      class="paid-invoices-expandable-content__item"
+    >
+      <span class="paid-invoices-expandable-content__label">
+        {{ item.label }}:
+      </span>
+      <span class="paid-invoices-expandable-content__value">
+        {{ item.value }}
+      </span>
+    </div>
+  </td>
+</template>
 
 <style lang="scss" scoped>
 .paid-invoices-expandable-content {

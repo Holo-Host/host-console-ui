@@ -1,3 +1,21 @@
+<script setup lang="ts">
+import Identicon from '@uicommon/components/Identicon.vue'
+import { encodeAgentId } from '@uicommon/utils/agent'
+import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
+import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
+
+const props = withDefaults(
+  defineProps<{
+    agentAddress?: Uint8Array | null
+  }>(),
+  {
+    agentAddress: null
+  }
+)
+
+const { goToHoloFuel } = useGoToHoloFuel()
+</script>
+
 <template>
   <div class="holofuel-address">
     <span class="holofuel-address__explanation">
@@ -35,24 +53,6 @@
     </p>
   </div>
 </template>
-
-<script setup lang="ts">
-import Identicon from '@uicommon/components/Identicon.vue'
-import { encodeAgentId } from '@uicommon/utils/agent'
-import LeaveSiteIcon from '../icons/LeaveSiteIcon.vue'
-import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
-
-const props = withDefaults(
-  defineProps<{
-    agentAddress?: Uint8Array | null
-  }>(),
-  {
-    agentAddress: null
-  }
-)
-
-const { goToHoloFuel } = useGoToHoloFuel()
-</script>
 
 <style lang="scss">
 .holofuel-address {
