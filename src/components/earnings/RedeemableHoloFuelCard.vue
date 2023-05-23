@@ -8,7 +8,6 @@ import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
 import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon.vue'
 import TransferIcon from '@/components/icons/TransferIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
-import { kRoutes } from '@/router'
 
 const emit = defineEmits(['try-again-clicked'])
 
@@ -41,15 +40,16 @@ const redeemableHoloFuel = computed((): number =>
 
     <div class="redeemable-holofuel__links">
       <BaseLinkButton
-        :to="kRoutes.redemptionHistory.path"
+        is-disabled
+        to=""
         :icon="RedemptionHistoryIcon"
         :label="$t('earnings.redemption_history')"
         class="redeemable-holofuel__link"
       />
 
       <BaseLinkButton
-        :is-disabled="props.data === 0"
-        :to="kRoutes.redeemHoloFuel.path"
+        is-disabled
+        to=""
         :icon="RightArrowIcon"
         :label="$t('earnings.redeem_holofuel')"
         class="redeemable-holofuel__link"

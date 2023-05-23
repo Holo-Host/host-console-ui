@@ -1,6 +1,6 @@
 {
   "name": "host-console",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.2",
   "private": true,
   "homepage": "https://holo-host.github.io/host-console-ui/",
   "scripts": {
