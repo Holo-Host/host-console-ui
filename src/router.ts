@@ -7,8 +7,6 @@ import HAppsPage from './pages/HAppsPage.vue'
 import HostingPreferences from './pages/HostingPreferences.vue'
 import InvoicesPage from './pages/InvoicesPage.vue'
 import LoginPage from './pages/LoginPage.vue'
-import RedeemHoloFuelPage from './pages/RedeemHoloFuelPage.vue'
-import RedemptionHistoryPage from './pages/RedemptionHistoryPage.vue'
 import SettingsPage from './pages/SettingsPage.vue'
 
 interface Routes {
@@ -21,8 +19,6 @@ interface Routes {
   paidInvoices: RouteRecordRaw
   unpaidInvoices: RouteRecordRaw
   hostingPreferences: RouteRecordRaw
-  redemptionHistory: RouteRecordRaw
-  redeemHoloFuel: RouteRecordRaw
   default: RouteRecordRaw
 }
 
@@ -99,24 +95,6 @@ export const kRoutes: Routes = {
     }
   },
 
-  redemptionHistory: {
-    path: '/earnings/redemption-history',
-    name: 'RedemptionHistory',
-    component: RedemptionHistoryPage,
-    meta: {
-      requiresAuth: true
-    }
-  },
-
-  redeemHoloFuel: {
-    path: '/earnings/redeem-holofuel',
-    name: 'RedeemHoloFuel',
-    component: RedeemHoloFuelPage,
-    meta: {
-      requiresAuth: true
-    }
-  },
-
   hostingPreferences: {
     path: '/preferences',
     name: 'HostingPreferences',
@@ -145,8 +123,6 @@ export const routerFactory = (): Router => {
       kRoutes.happs,
       kRoutes.hostingPreferences,
       kRoutes.paidInvoices,
-      kRoutes.redemptionHistory,
-      kRoutes.redeemHoloFuel,
       kRoutes.unpaidInvoices,
       kRoutes.login
     ]

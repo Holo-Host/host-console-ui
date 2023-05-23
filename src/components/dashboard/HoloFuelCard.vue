@@ -3,7 +3,6 @@ import BaseCard from '@uicommon/components/BaseCard.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import router, { kRoutes } from '@/router'
 import { isError as isErrorPredicate } from '@/types/predicates'
 import type { DashboardCardItem } from '@/types/types'
 
@@ -73,7 +72,7 @@ const items = computed((): DashboardCardItem[] => [
     <button
       :disabled="!canRedeem"
       class="redeem-button"
-      @click="router.push({ name: kRoutes.redeemHoloFuel.name })"
+      @click="() => {}"
     >
       {{ $t('holofuel.redeem_holofuel') }}
     </button>
