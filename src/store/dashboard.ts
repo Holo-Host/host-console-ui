@@ -22,7 +22,7 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     hostEarnings: {
       earnings: { last30days: '0', last7days: '0', lastday: '0' },
-      holofuel: { balance: '0', available: '0' },
+      holofuel: { balance: '0', available: '0', redeemable: '0' },
       recentPayments: []
     },
     hostedHapps: []

@@ -643,7 +643,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
-        path: '/redemption_history'
+        path: '/redemptions'
       })
     } catch (error) {
       return false
