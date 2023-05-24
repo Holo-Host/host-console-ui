@@ -10,8 +10,8 @@ export const kSortOptions = {
 }
 
 export enum EModal {
-  welcome,
-  redemption_initiated
+  welcome = 'welcome',
+  redemption_initiated = 'redemption_initiated'
 }
 
 export const kMsInSecond = 1000
