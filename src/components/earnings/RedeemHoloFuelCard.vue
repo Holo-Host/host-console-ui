@@ -77,7 +77,7 @@ async function handleSubmit(): Promise<void> {
       return
     }
 
-    const transaction: RedemptionTransaction = await redeemHoloFuel({
+    const transaction: RedemptionTransaction | boolean = await redeemHoloFuel({
       amount: amount.value,
       wallet_address: hotAddress.value
     })

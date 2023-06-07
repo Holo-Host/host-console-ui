@@ -23,7 +23,7 @@ interface HposInterface {
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
-  redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<any>
+  redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
   HPOS_API_URL: string
 }
 
@@ -51,11 +51,13 @@ export interface RedemptionTransaction {
   expiration_date?: number
 }
 
-interface ReserveSettingsResponse {
+interface ReserveSettings {
   reserve_id: string
   pub_key: string
   info: Record<string, string>
 }
+
+type ReserveSettingsResponse = ReserveSettings[]
 
 export interface UpdateHoloFuelProfilePayload {
   nickname?: string
@@ -692,26 +694,31 @@ export function useHposInterface(): HposInterface {
         params: getReserveDetailsParams
       })) as ReserveSettingsResponse
 
-      const initiateRedemptionParams = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'holofuel',
-        zomeName: 'transactor',
-        fnName: 'redeem',
-        payload: {
-          reserve_id: reserveAccountsDetails.reserve_id,
-          amount: payload.amount,
-          wallet_address: payload.wallet_address
+      if (reserveAccountsDetails[0]) {
+        const initiateRedemptionParams = {
+          appId: localStorage.getItem(kCoreAppVersionLSKey),
+          roleId: 'holofuel',
+          zomeName: 'transactor',
+          fnName: 'redeem',
+          payload: {
+            reserve_id: reserveAccountsDetails[0].reserve_id,
+            amount: payload.amount,
+            wallet_address: payload.wallet_address,
+            expiration_date: Number.MAX_SAFE_INTEGER
+          }
         }
+
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        const transaction: RedemptionTransaction = (await hposHolochainCall({
+          method: 'post',
+          path: '/zome_call',
+          params: initiateRedemptionParams
+        })) as RedemptionTransaction
+
+        return transaction
       }
 
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      const transaction: RedemptionTransaction = (await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        params: initiateRedemptionParams
-      })) as RedemptionTransaction
-
-      return transaction
+      return false
     } catch (error) {
       return false
     }
