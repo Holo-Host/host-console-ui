@@ -7,6 +7,7 @@ import { useOverlay } from '@uicommon/composables/useOverlay.js'
 import { EButtonType } from '@uicommon/types/ui.js'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import MobileTopNav from '@/components/MobileTopNav.vue'
+import GoToSpringboardModal from '@/components/modals/GoToSpringboardModal.vue'
 import RedemptionInitiatedModal from '@/components/modals/RedemptionInitiatedModal.vue'
 import WelcomeModal from '@/components/modals/WelcomeModal.vue'
 import TheSidebar from '@/components/sidebar/TheSidebar.vue'
@@ -116,6 +117,8 @@ onMounted(async () => {
         :dont-show-modal-again-local-storage-key="kDontShowGoToHoloFuelModalAgainLSKey"
         :holo-fuel-url="kHoloFuelUrl"
       />
+
+      <GoToSpringboardModal />
 
       <RedemptionInitiatedModal />
 

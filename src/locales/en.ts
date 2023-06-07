@@ -108,6 +108,10 @@ export default {
       unpaid: 'Unpaid'
     }
   },
+  kyc: {
+    title: 'KYC',
+    description: 'Complete your KYC...'
+  },
   login: {
     ...commonTranslations.login,
     title: 'Host Console Login',
@@ -177,6 +181,12 @@ export default {
       short: 'HF = Test Fuel',
       title: 'ALPHA: HoloFuel = Test Fuel'
     }
+  },
+  springboard: {
+    go_to_springboard: 'Go to Springboard',
+    description:
+      'You’re leaving Host Console to go to Holo Springboard, where you can update you KYC level.',
+    title: 'Holo Springboard'
   },
   usage: {
     daily_snapshot: 'Daily Snapshot',
