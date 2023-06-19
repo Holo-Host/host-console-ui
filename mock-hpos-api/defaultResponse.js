@@ -544,7 +544,7 @@ const data = {
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion,
     '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
-    '/holochain-api/v1/redemption_history': mockRedemptionHistoryData
+    '/holochain-api/v1/redemptions': mockRedemptionHistoryData
   },
   put: {
     '/api/v1/config': (args) => args,
