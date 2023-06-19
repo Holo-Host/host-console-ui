@@ -168,7 +168,14 @@ export default {
     holofuel_address: 'HoloFuel Address',
     hpos_version: 'HPOS Version',
     ssh_access: 'Access for HoloPort support (SSH)',
-    header: 'Account Settings'
+    header: 'Account Settings',
+    verification: {
+      current_level: 'Verified to Level {level}',
+      description:
+        'Level 2 verification is required for transactions larger than ~10,000 GBP and other special uses of HoloFuel.',
+      label: 'Verification',
+      link: 'Complete level {level} verification'
+    }
   },
   sidebar: {
     alpha: {
@@ -177,6 +184,12 @@ export default {
       short: 'HF = Test Fuel',
       title: 'ALPHA: HoloFuel = Test Fuel'
     }
+  },
+  springboard: {
+    go_to_springboard: 'Go to Springboard',
+    description:
+      'You’re leaving Host Console to go to Holo Springboard, where you can upgrade your verification.',
+    title: 'Holo Springboard'
   },
   usage: {
     daily_snapshot: 'Daily Snapshot',

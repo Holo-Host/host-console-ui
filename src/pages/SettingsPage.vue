@@ -30,7 +30,8 @@ async function onDeviceNameUpdate(deviceName: string): Promise<void> {
 </template>
 
 <style lang="scss">
-.settings__holofuel-section {
+.settings__holofuel-section,
+.settings__kyc-section {
   margin-top: 18px;
 }
 </style>
