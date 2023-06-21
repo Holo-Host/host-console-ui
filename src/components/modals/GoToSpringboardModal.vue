@@ -44,7 +44,7 @@ import { EButtonType } from '@uicommon/types/ui'
 import { EModal } from '@/constants/ui'
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import BaseModal from '@uicommon/components/BaseModal.vue'
-import {kSprinboardUrl} from '@/constants';
+import { kSpringboardUrl } from '@/constants';
 
 const { visibleModal, hideModal } = useModals()
 
@@ -54,7 +54,7 @@ function handleSpringboardLogin() {
   hideModal()
 
   const tabName = `host-console-springboard`
-  window.open(`${kSprinboardUrl}?kyc=true`, tabName).focus()
+  window.open(`${kSpringboardUrl}?kyc=true`, tabName).focus()
 }
 </script>
 
