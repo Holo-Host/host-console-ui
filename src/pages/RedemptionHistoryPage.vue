@@ -86,8 +86,7 @@ const headersMap = computed(
           label: t('redemption.history.headers.hf_amount'),
           description: hasPartialRedemption.value ? '*partial redemption' : '',
           isVisibleOnMobile: false,
-          isSortable: true,
-          type: 'string'
+          isSortable: true
         }
       ],
       [
@@ -97,8 +96,7 @@ const headersMap = computed(
           label: t('redemption.history.headers.redemption_amount'),
           isVisibleOnMobile: true,
           isSortable: true,
-          align: 'end',
-          type: 'string'
+          align: 'end'
         }
       ],
       [
