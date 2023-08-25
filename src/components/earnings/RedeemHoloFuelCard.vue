@@ -32,6 +32,9 @@ const partialRedemptionTermsAccepted = ref(false)
 const step = ref(1)
 const isBusy = ref(false)
 const isStepOneValid = ref(false)
+const wasStepOneSubmitted = ref(false)
+
+const kMinimumRedeemableHoloFuel = 10
 
 const canSubmit = computed((): boolean => {
   if (step.value === 1) {
@@ -62,6 +65,12 @@ interface StepTwoProps {
 
 async function handleSubmit(): Promise<void> {
   if (step.value === 1) {
+    wasStepOneSubmitted.value = true
+
+    if (Number(amount.value) < kMinimumRedeemableHoloFuel) {
+      return
+    }
+
     step.value = 2
   } else {
     isBusy.value = true
@@ -128,6 +137,7 @@ function updateData(updateProps: StepOneProps & StepTwoProps): void {
           :redeemable-amount="redeemableHoloFuel"
           :amount="amount"
           :hot-address="hotAddress"
+          :was-submitted="wasStepOneSubmitted"
           @update="updateData"
           @update:is-valid="isStepOneValid = $event"
         />
