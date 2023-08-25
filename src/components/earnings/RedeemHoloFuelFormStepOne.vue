@@ -8,15 +8,31 @@ const props = defineProps<{
   redeemableAmount: string
   amount: string
   hotAddress: string
+  wasSubmitted: boolean
 }>()
 
 const emit = defineEmits(['update', 'update:is-valid'])
+
+const kMinimumRedeemableHoloFuel = 10
 
 const amount = ref(`${props.amount}` || '')
 const hotAddress = ref(`${props.hotAddress}` || '')
 const hotAddressValidationIsActive = ref(false)
 
-const isAmountValid = computed(() => Number(amount.value) <= Number(props.redeemableAmount))
+const isAmountValid = computed(
+  () =>
+    (!props.wasSubmitted || Number(amount.value) >= kMinimumRedeemableHoloFuel) &&
+    Number(amount.value) <= Number(props.redeemableAmount)
+)
+
+const amountErrorMessage = computed(() => {
+  if (Number(amount.value) >= Number(props.redeemableAmount)) {
+    return 'redemption.redeem_holofuel.amount_input_error'
+  }
+
+  return 'redemption.redeem_holofuel.amount_input_error_minimum_value'
+})
+
 const isHotAddressValid = computed(() => /^0x[a-fA-F0-9]{40}$/.test(hotAddress.value))
 
 const canSubmit = computed(
@@ -67,7 +83,7 @@ function activateHotAddressValidation(): void {
           :decimal-places="18"
           :is-valid="isAmountValid"
           has-errors
-          :message="isAmountValid ? '' : $t('redemption.redeem_holofuel.amount_input_error')"
+          :message="isAmountValid ? '' : $t(amountErrorMessage)"
           :tip="$t('redemption.redeem_holofuel.amount_input_tip')"
           name="amount"
           :input-type="EInputType.number"
