@@ -54,7 +54,7 @@ function handleSpringboardLogin() {
   hideModal()
 
   const tabName = `host-console-springboard`
-  window.open(`${kSpringboardUrl}?kyc=true`, tabName).focus()
+  window.open(`${kSpringboardUrl}/home?kyc=true`, tabName).focus()
 }
 </script>
 
