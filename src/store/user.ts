@@ -3,7 +3,7 @@ import { UpdateHoloFuelProfilePayload, useHposInterface } from '@/interfaces/Hpo
 import { isHoloFuelProfile } from '@/types/predicates'
 import type { HoloFuelProfile } from '@/types/types'
 
-const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName } = useHposInterface()
+const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName, getKycLevel } = useHposInterface()
 
 interface State {
   publicKey: string | undefined
@@ -36,6 +36,9 @@ export const useUserStore = defineStore('user', {
     async getUser(): Promise<void> {
       const { coreAppVersion } = await getCoreAppVersion()
       const getUserResponse = await getUser()
+      const kycLevel = await getKycLevel()
+
+      console.log('kycLevelResponse', kycLevel)
 
       if (getUserResponse.user && isHoloFuelProfile(getUserResponse.holoFuelProfile)) {
         const { user, holoport, holoFuelProfile } = getUserResponse

@@ -15,6 +15,7 @@ interface HposInterface {
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
   getUser: () => Promise<User>
+  getKycLevel: () => Promise<unknown>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
   getHoloFuelProfile: () => unknown
@@ -674,6 +675,30 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getKycLevel(): Promise<CoreAppVersion> {
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const data = await hposHolochainCall({
+        method: 'get',
+        path: '/kyc'
+      })
+
+      console.log(data)
+
+      // if (typeof coreAppVersion === 'string') {
+      //   localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
+      // }
+      //
+      // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // return { coreAppVersion }
+    } catch (error) {
+      // return {
+      //   coreAppVersion: null
+      // }
+    }
+  }
+
   async function redeemHoloFuel(
     payload: RedeemHoloFuelPayload
   ): Promise<RedemptionTransaction | boolean> {
@@ -741,6 +766,7 @@ export function useHposInterface(): HposInterface {
     getCoreAppVersion,
     getHostPreferences,
     redeemHoloFuel,
+    getKycLevel,
     HPOS_API_URL
   }
 }
