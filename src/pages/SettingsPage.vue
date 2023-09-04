@@ -23,6 +23,7 @@ async function onDeviceNameUpdate(deviceName: string): Promise<void> {
 
     <SettingsHolofuelSection
       :nickname="user.holoFuel.nickname"
+			:kyc-level="user.kycLevel"
       :agent-address="user.holoFuel.agentAddress"
       class="settings__holofuel-section"
     />

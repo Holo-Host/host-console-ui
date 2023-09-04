@@ -2,28 +2,37 @@
 import BaseCard from '@uicommon/components/BaseCard.vue'
 import BaseLinkButton from '@uicommon/components/BaseLinkButton.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import BaseTooltip from '@/components/BaseTooltip.vue'
 import CardHeader from '@/components/earnings/CardHeader.vue'
 import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
 import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon.vue'
 import TransferIcon from '@/components/icons/TransferIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 import { kRoutes } from '@/router'
+import { EUserKycLevel } from '@/types/types'
 
 const emit = defineEmits(['try-again-clicked'])
 
 const { goToHoloFuel } = useGoToHoloFuel()
 
 const props = defineProps<{
-  data: number
+  redeemableValue: number
+  kycLevel: EUserKycLevel
   isLoading: boolean
   isError: boolean
 }>()
 
+const isRedeemHoloFuelTooltipVisible = ref(false)
+
 const redeemableHoloFuel = computed((): number =>
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-  formatCurrency(Number(props.data) || 0)
+  formatCurrency(Number(props.redeemableValue) || 0)
 )
+
+const isKycLevelOne = computed((): boolean => props.kycLevel === EUserKycLevel.one)
+
+const canRedeem = computed((): boolean => !isKycLevelOne.value && Number(props.redeemableValue) > 0)
 </script>
 
 <template>
@@ -47,13 +56,27 @@ const redeemableHoloFuel = computed((): number =>
         class="redeemable-holofuel__link"
       />
 
-      <BaseLinkButton
-        :is-disabled="props.data === 0"
-        :to="kRoutes.redeemHoloFuel.path"
-        :icon="RightArrowIcon"
-        :label="$t('earnings.redeem_holofuel')"
-        class="redeemable-holofuel__link"
-      />
+      <div
+        class="redeemable-holofuel__redeem-button"
+        @mouseover="() => isKycLevelOne ? isRedeemHoloFuelTooltipVisible = true : null"
+        @mouseleave="() => isKycLevelOne ? isRedeemHoloFuelTooltipVisible = false: null"
+        @click="() => isKycLevelOne ? isRedeemHoloFuelTooltipVisible = true: null"
+      >
+        <BaseLinkButton
+          :is-disabled="!canRedeem"
+          :to="kRoutes.redeemHoloFuel.path"
+          :icon="RightArrowIcon"
+          :label="$t('earnings.redeem_holofuel')"
+          class="redeemable-holofuel__link"
+        />
+
+        <BaseTooltip
+          class="redeemable-holofuel__redeem-button-tooltip"
+          :is-visible="isRedeemHoloFuelTooltipVisible"
+        >
+          {{ $t('redemption.redeem_holofuel.kyc_level_one_notice') }}
+        </BaseTooltip>
+      </div>
 
       <BaseLinkButton
         to=""
@@ -83,6 +106,16 @@ const redeemableHoloFuel = computed((): number =>
   &__link {
     margin-right: 30px;
     padding-right: 40px;
+  }
+
+  &__redeem-button {
+    position: relative;
+
+    &-tooltip {
+      top: 48px;
+      right: 80px;
+      width: 260px;
+    }
   }
 }
 

@@ -63,7 +63,7 @@ async function openSettingsAndCloseMenu(): Promise<void> {
         <div class="display-name">
           {{ nickname }}
           <span class="verification-status">
-            Unverified
+            {{ $t('settings.verification.verified') }}
           </span>
         </div>
         <DownTriangleIcon

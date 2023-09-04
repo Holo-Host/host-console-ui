@@ -1,10 +1,10 @@
-import { useModals } from '@uicommon/composables/useModals.js'
-import { defineStore } from 'pinia'
-import { EModal } from '@/constants/ui'
-import { UpdateHoloFuelProfilePayload, useHposInterface } from '@/interfaces/HposInterface'
-import { isHoloFuelProfile } from '@/types/predicates'
-import type { HoloFuelProfile } from '@/types/types'
-import { EUserKycLevel } from '@/types/types'
+import {useModals} from '@uicommon/composables/useModals.js'
+import {defineStore} from 'pinia'
+import {EModal} from '@/constants/ui'
+import {UpdateHoloFuelProfilePayload, useHposInterface} from '@/interfaces/HposInterface'
+import {isHoloFuelProfile} from '@/types/predicates'
+import type {HoloFuelProfile} from '@/types/types'
+import {EUserKycLevel} from '@/types/types'
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
@@ -21,7 +21,7 @@ interface State {
   hposVersion: string
   holoFuel: HoloFuelProfile
   coreAppVersion: string
-  kycLevel: string
+  kycLevel: EUserKycLevel
 }
 
 export const useUserStore = defineStore('user', {
@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', {
       }
 
       if (kycLevel) {
-        this.kycLevel = kycLevel
+        this.kycLevel = EUserKycLevel.two
       } else {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         showModal(EModal.error_modal)

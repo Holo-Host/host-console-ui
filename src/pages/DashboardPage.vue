@@ -9,12 +9,15 @@ import UsageCard from '@/components/dashboard/UsageCard.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kRoutes } from '@/router'
 import { useDashboardStore } from '@/store/dashboard'
+import { useUserStore } from '@/store/user'
 import { isError } from '@/types/predicates'
+import type { HoloFuelCardData, Error } from '@/types/types'
 
 const kPaymentsToDisplay = 3
 
 const router = useRouter()
 const dashboardStore = useDashboardStore()
+const userStore = useUserStore()
 
 const isLoadingEarnings = ref(false)
 const isLoadingUsage = ref(false)
@@ -25,6 +28,18 @@ const holoFuel = computed(() =>
     ? dashboardStore.hostEarnings
     : dashboardStore.hostEarnings.holofuel
 )
+
+const holoFuelCardData = computed((): HoloFuelCardData | Error => {
+  if (isError(holoFuel.value)) {
+    return holoFuel.value
+  } else {
+    return {
+      available: holoFuel.value?.available ?? '0',
+      redeemable: holoFuel.value?.redeemable ?? '0',
+      kycLevel: userStore.kycLevel
+    }
+  }
+})
 
 const topHostedHapps = computed(() => dashboardStore.hostedHapps)
 
@@ -86,7 +101,7 @@ onMounted(async (): Promise<void> => {
 
       <HoloFuelCard
         :is-loading="isLoadingEarnings"
-        :data="holoFuel"
+        :data="holoFuelCardData"
         class="holofuel-card"
         data-test-dashboard-holo-fuel-card
         @try-again-clicked="getEarnings"

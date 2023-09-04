@@ -5,9 +5,11 @@ import RedeemableHoloFuelCard from '@/components/earnings/RedeemableHoloFuelCard
 import WeeklyEarningsCard from '@/components/earnings/WeeklyEarningsCard.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { useDashboardStore } from '@/store/dashboard'
+import { useUserStore } from '@/store/user'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
 const dashboardStore = useDashboardStore()
+const userStore = useUserStore()
 
 const isLoading = ref(false)
 const isError = computed(() => !!dashboardStore.hostEarnings.error)
@@ -26,6 +28,8 @@ const redeemableHoloFuel = computed((): number =>
     ? Number(dashboardStore.hostEarnings.holofuel.redeemable || 0)
     : 0
 )
+
+const kycLevel = computed(() => userStore.kycLevel)
 
 async function getEarnings(): Promise<void> {
   isLoading.value = true
@@ -55,7 +59,8 @@ onMounted(async (): Promise<void> => {
       />
 
       <RedeemableHoloFuelCard
-        :data="redeemableHoloFuel"
+        :redeemable-value="redeemableHoloFuel"
+        :kyc-level="kycLevel"
         :is-loading="false"
         :is-error="false"
         data-test-earnings-redeemable-holo-fuel-card

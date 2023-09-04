@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import HoloFuelAddress from './HoloFuelAddress.vue'
 import SettingsRow from './SettingsRow.vue'
 import SettingsSection from './SettingsSection.vue'
 import LeaveSiteIcon from '@/components/icons/LeaveSiteIcon.vue'
 import { useGoToSpringboard } from '@/composables/useGoToSpringboard'
+import { EUserKycLevel } from '@/types/types'
 
 const { goToSpringboard } = useGoToSpringboard()
 
@@ -14,13 +16,15 @@ const props = withDefaults(
   defineProps<{
     nickname: string
     agentAddress?: Uint8Array | null
-    currentLevel?: number
+    kycLevel: number
   }>(),
   {
-    agentAddress: null,
-    currentLevel: 1
+    agentAddress: null
   }
 )
+
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
+const currentLevel = computed((): number => (props.kycLevel === EUserKycLevel.one ? 1 : 2))
 </script>
 
 <template>
@@ -44,9 +48,9 @@ const props = withDefaults(
       :label="t('settings.verification.label')"
     >
       <div class="flex flex-col">
-        <span>{{ t('settings.verification.current_level', { level: props.currentLevel }) }}</span>
+        <span>{{ t('settings.verification.current_level', { level: currentLevel }) }}</span>
         <p class="verification__description">
-          {{ t('settings.verification.description') }}
+          {{ t('settings.verification.next_level_descriptions.two') }}
         </p>
         <p
           class="springboard-link"
@@ -54,7 +58,7 @@ const props = withDefaults(
         >
           <LeaveSiteIcon />
           <span class="holofuel-address__link-label">
-            {{ t('settings.verification.link', { level: props.currentLevel + 1 }) }}
+            {{ t('settings.verification.link', { level: currentLevel + 1 }) }}
           </span>
         </p>
       </div>
