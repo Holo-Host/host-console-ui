@@ -49,10 +49,14 @@ const currentLevel = computed((): number => (props.kycLevel === EUserKycLevel.on
     >
       <div class="flex flex-col">
         <span>{{ t('settings.verification.current_level', { level: currentLevel }) }}</span>
-        <p class="verification__description">
+        <p
+          v-if="currentLevel === 1"
+          class="verification__description"
+        >
           {{ t('settings.verification.next_level_descriptions.two') }}
         </p>
         <p
+          v-if="currentLevel === 1"
           class="springboard-link"
           @click="goToSpringboard"
         >
