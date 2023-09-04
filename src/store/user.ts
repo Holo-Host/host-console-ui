@@ -1,9 +1,16 @@
+import { useModals } from '@uicommon/composables/useModals.js'
 import { defineStore } from 'pinia'
+import { EModal } from '@/constants/ui'
 import { UpdateHoloFuelProfilePayload, useHposInterface } from '@/interfaces/HposInterface'
 import { isHoloFuelProfile } from '@/types/predicates'
 import type { HoloFuelProfile } from '@/types/types'
+import { EUserKycLevel } from '@/types/types'
 
-const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName, getKycLevel } = useHposInterface()
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showModal } = useModals()
+
+const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName, getKycLevel } =
+  useHposInterface()
 
 interface State {
   publicKey: string | undefined
@@ -14,6 +21,7 @@ interface State {
   hposVersion: string
   holoFuel: HoloFuelProfile
   coreAppVersion: string
+  kycLevel: string
 }
 
 export const useUserStore = defineStore('user', {
@@ -29,7 +37,8 @@ export const useUserStore = defineStore('user', {
       nickname: '',
       avatarUrl: ''
     },
-    coreAppVersion: ''
+    coreAppVersion: '',
+    kycLevel: EUserKycLevel.one
   }),
 
   actions: {
@@ -37,8 +46,6 @@ export const useUserStore = defineStore('user', {
       const { coreAppVersion } = await getCoreAppVersion()
       const getUserResponse = await getUser()
       const kycLevel = await getKycLevel()
-
-      console.log('kycLevelResponse', kycLevel)
 
       if (getUserResponse.user && isHoloFuelProfile(getUserResponse.holoFuelProfile)) {
         const { user, holoport, holoFuelProfile } = getUserResponse
@@ -48,6 +55,13 @@ export const useUserStore = defineStore('user', {
         this.deviceName = holoport.name ?? ''
         this.hposVersion = holoport.hposVersion ?? ''
         this.holoFuel = holoFuelProfile
+      }
+
+      if (kycLevel) {
+        this.kycLevel = kycLevel
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        showModal(EModal.error_modal)
       }
 
       if (coreAppVersion) {

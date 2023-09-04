@@ -1,5 +1,6 @@
 import type { HostPreferencesResponse, Redemption, Transaction } from '@/interfaces/HposInterface'
 import type { AdminSignature, CheckAuthResponse, Error, HoloFuelProfile } from '@/types/types'
+import { EUserKycLevel } from '@/types/types'
 
 export function isAdminSignature(target: CheckAuthResponse): target is AdminSignature {
   return target !== null
@@ -27,5 +28,9 @@ export function isTransactionsArray(target: unknown): target is Transaction[] {
 }
 
 export function isRedemptionsArray(target: unknown): target is Redemption[] {
+  return target !== undefined
+}
+
+export function isKycLevel(target: unknown): target is EUserKycLevel {
   return target !== undefined
 }

@@ -63,3 +63,8 @@ export interface DashboardCardItem {
   value: number
   isActive?: boolean
 }
+
+export enum EUserKycLevel {
+  one = 'holo_kyc_1',
+  two = 'holo_kyc_2'
+}

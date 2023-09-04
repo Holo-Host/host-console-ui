@@ -3,7 +3,8 @@ import axios from 'axios'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
-import type { CheckAuthResponse } from '@/types/types'
+import { isKycLevel } from '@/types/predicates'
+import type { CheckAuthResponse, EUserKycLevel } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
@@ -15,7 +16,7 @@ interface HposInterface {
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
   getUser: () => Promise<User>
-  getKycLevel: () => Promise<unknown>
+  getKycLevel: () => Promise<EUserKycLevel | null>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
   getHoloFuelProfile: () => unknown
@@ -118,6 +119,7 @@ type HposHolochainCallResponse =
   | HostPreferencesResponse
   | RedemptionTransaction
   | ReserveSettingsResponse
+  | EUserKycLevel
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -675,7 +677,7 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getKycLevel(): Promise<CoreAppVersion> {
+  async function getKycLevel(): Promise<EUserKycLevel | null> {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -684,18 +686,13 @@ export function useHposInterface(): HposInterface {
         path: '/kyc'
       })
 
-      console.log(data)
-
-      // if (typeof coreAppVersion === 'string') {
-      //   localStorage.setItem(kCoreAppVersionLSKey, coreAppVersion)
-      // }
-      //
-      // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      // return { coreAppVersion }
+      if (isKycLevel(data)) {
+        return data
+      } else {
+        return null
+      }
     } catch (error) {
-      // return {
-      //   coreAppVersion: null
-      // }
+      return null
     }
   }
 
