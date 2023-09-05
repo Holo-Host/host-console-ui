@@ -3,7 +3,8 @@ import axios from 'axios'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
-import type { CheckAuthResponse } from '@/types/types'
+import { isKycLevel } from '@/types/predicates'
+import type { CheckAuthResponse, EUserKycLevel } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
@@ -15,6 +16,7 @@ interface HposInterface {
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
   getUser: () => Promise<User>
+  getKycLevel: () => Promise<EUserKycLevel | null>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
   getHoloFuelProfile: () => unknown
@@ -117,6 +119,7 @@ type HposHolochainCallResponse =
   | HostPreferencesResponse
   | RedemptionTransaction
   | ReserveSettingsResponse
+  | EUserKycLevel
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -674,6 +677,25 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getKycLevel(): Promise<EUserKycLevel | null> {
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const data = await hposHolochainCall({
+        method: 'get',
+        path: '/kyc'
+      })
+
+      if (isKycLevel(data)) {
+        return data
+      } else {
+        return null
+      }
+    } catch (error) {
+      return null
+    }
+  }
+
   async function redeemHoloFuel(
     payload: RedeemHoloFuelPayload
   ): Promise<RedemptionTransaction | boolean> {
@@ -741,6 +763,7 @@ export function useHposInterface(): HposInterface {
     getCoreAppVersion,
     getHostPreferences,
     redeemHoloFuel,
+    getKycLevel,
     HPOS_API_URL
   }
 }

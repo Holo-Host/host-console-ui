@@ -63,3 +63,14 @@ export interface DashboardCardItem {
   value: number
   isActive?: boolean
 }
+
+export enum EUserKycLevel {
+  one = 'holo_kyc_1',
+  two = 'holo_kyc_2'
+}
+
+export interface HoloFuelCardData {
+  available: string | number
+  redeemable: string | number
+  kycLevel: EUserKycLevel
+}

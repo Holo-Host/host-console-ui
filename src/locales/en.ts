@@ -146,6 +146,8 @@ export default {
         redemption_failed: 'Something went wrong, please try again.'
       },
       holo_fuel_amount: 'HF Amount',
+      kyc_level_one_notice:
+        "As a KYC Level 1 user, you can't reedem HoloFuel. Please complete KYC Level 2 verification first.",
       partial_redemption_terms:
         'Redemptions are processed first come, first serve. By checking this box, you accept a partial redemption if 1) there isn’t enough HOT in the reserve to fulfill your entire request or 2) the price surpasses the minimum you have chosen.',
       recipient_address_input_label: 'Recipient HOT Address',
@@ -174,8 +176,14 @@ export default {
       current_level: 'Verified to Level {level}',
       description:
         'Level 2 verification is required for transactions larger than ~10,000 GBP and other special uses of HoloFuel.',
+      holo_kyc_1: 'Level 1',
+      holo_kyc_2: 'Level 2',
       label: 'Verification',
-      link: 'Complete level {level} verification'
+      link: 'Complete level {level} verification',
+      next_level_descriptions: {
+        two: 'As a level 1 user, you are limited to <500 GBP of transactions per month. update your KYC to make more transactions.'
+      },
+      verified: 'Verified'
     }
   },
   sidebar: {

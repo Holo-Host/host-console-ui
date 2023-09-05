@@ -12,7 +12,8 @@ export const kSortOptions = {
 export enum EModal {
   welcome = 'welcome',
   redemption_initiated = 'redemption_initiated',
-  go_to_springboard = 'go_to_springboard'
+  go_to_springboard = 'go_to_springboard',
+  error_modal = 'error_modal'
 }
 
 export const kMsInSecond = 1000
