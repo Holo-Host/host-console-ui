@@ -5,12 +5,14 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BaseTooltip from '@/components/BaseTooltip.vue'
 import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
+import { useGoToSpringboard } from '@/composables/useGoToSpringboard'
 import router, { kRoutes } from '@/router'
 import { isError as isErrorPredicate } from '@/types/predicates'
 import type { DashboardCardItem, HoloFuelCardData, Error } from '@/types/types'
 import { EUserKycLevel } from '@/types/types'
 
 const { t } = useI18n()
+const { goToSpringboard } = useGoToSpringboard()
 
 const props = defineProps<{
   data: HoloFuelCardData | Error
@@ -92,7 +94,13 @@ const items = computed((): DashboardCardItem[] => [
         class="redeem-button__tooltip"
         :is-visible="isRedeemHoloFuelTooltipVisible"
       >
-        {{ $t('redemption.redeem_holofuel.kyc_level_one_notice') }}
+        {{ $t('redemption.redeem_holofuel.kyc_level_one_notice_part_one') }}
+        <span
+          class="springboard-link"
+          @click="goToSpringboard"
+        >
+          {{ $t('redemption.redeem_holofuel.kyc_level_one_notice_part_two') }}
+        </span>
       </BaseTooltip>
     </div>
   </BaseCard>
@@ -131,5 +139,12 @@ const items = computed((): DashboardCardItem[] => [
 
 .margin-bottom {
   margin-bottom: 10px;
+}
+
+.springboard-link {
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 </style>

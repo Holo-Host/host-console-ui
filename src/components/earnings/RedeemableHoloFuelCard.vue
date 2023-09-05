@@ -9,12 +9,14 @@ import RightArrowIcon from '@/components/icons/FatArrowIcon.vue'
 import RedemptionHistoryIcon from '@/components/icons/RedemptionHistoryIcon.vue'
 import TransferIcon from '@/components/icons/TransferIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
+import { useGoToSpringboard } from '@/composables/useGoToSpringboard'
 import { kRoutes } from '@/router'
 import { EUserKycLevel } from '@/types/types'
 
 const emit = defineEmits(['try-again-clicked'])
 
 const { goToHoloFuel } = useGoToHoloFuel()
+const { goToSpringboard } = useGoToSpringboard()
 
 const props = defineProps<{
   redeemableValue: number
@@ -74,7 +76,13 @@ const canRedeem = computed((): boolean => !isKycLevelOne.value && Number(props.r
           class="redeemable-holofuel__redeem-button-tooltip"
           :is-visible="isRedeemHoloFuelTooltipVisible"
         >
-          {{ $t('redemption.redeem_holofuel.kyc_level_one_notice') }}
+          {{ $t('redemption.redeem_holofuel.kyc_level_one_notice_part_one') }}
+          <span
+            class="springboard-link"
+            @click="goToSpringboard"
+          >
+            {{ $t('redemption.redeem_holofuel.kyc_level_one_notice_part_two') }}
+          </span>
         </BaseTooltip>
       </div>
 
@@ -117,6 +125,13 @@ const canRedeem = computed((): boolean => !isKycLevelOne.value && Number(props.r
       width: 260px;
     }
   }
+}
+
+.springboard-link {
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 @media screen and (max-width: 1050px) {

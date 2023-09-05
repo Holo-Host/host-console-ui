@@ -146,8 +146,8 @@ export default {
         redemption_failed: 'Something went wrong, please try again.'
       },
       holo_fuel_amount: 'HF Amount',
-      kyc_level_one_notice:
-        "As a KYC Level 1 user, you can't reedem HoloFuel. Please complete KYC Level 2 verification first.",
+      kyc_level_one_notice_part_one: 'Please complete your Level 2 KYC to redeem HoloFuel.',
+      kyc_level_one_notice_part_two: 'Upgrade to Level 2',
       partial_redemption_terms:
         'Redemptions are processed first come, first serve. By checking this box, you accept a partial redemption if 1) there isn’t enough HOT in the reserve to fulfill your entire request or 2) the price surpasses the minimum you have chosen.',
       recipient_address_input_label: 'Recipient HOT Address',
