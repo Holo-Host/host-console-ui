@@ -130,6 +130,7 @@ const canRedeem = computed((): boolean => !isKycLevelOne.value && Number(props.r
 .springboard-link {
   font-weight: bold;
   cursor: pointer;
+  color: #b0ecf0;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
