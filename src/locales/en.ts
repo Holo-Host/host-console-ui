@@ -173,7 +173,7 @@ export default {
     ssh_access: 'Access for HoloPort support (SSH)',
     header: 'Account Settings',
     verification: {
-      current_level: 'Verified to Level {level}',
+      current_level: 'Level {level} Verified',
       description:
         'Level 2 verification is required for transactions larger than ~10,000 GBP and other special uses of HoloFuel.',
       holo_kyc_1: 'Level 1',
@@ -182,8 +182,7 @@ export default {
       link: 'Complete level {level} verification',
       next_level_descriptions: {
         two: 'As a level 1 user, you are limited to <500 GBP of transactions per month. update your KYC to make more transactions.'
-      },
-      verified: 'Verified'
+      }
     }
   },
   sidebar: {

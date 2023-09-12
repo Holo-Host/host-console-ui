@@ -100,11 +100,13 @@ onMounted(async () => {
       class="main-column"
     >
       <MobileTopNav
+        :kyc-level="userStore.kycLevel"
         :nickname="nickname"
         :agent-address="agentAddress"
       />
 
       <TopNav
+        :kyc-level="userStore.kycLevel"
         :breadcrumbs="breadcrumbsOrTitle"
         :nickname="nickname"
         :agent-address="agentAddress"

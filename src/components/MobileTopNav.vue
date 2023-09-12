@@ -2,10 +2,13 @@
 import { ref } from 'vue'
 import MenuIcon from '@/components/icons/MenuIcon.vue'
 import TheSidebar from '@/components/sidebar/TheSidebar.vue'
+import TopNav from '@/components/TopNav.vue'
 import TopNavMenu from '@/components/TopNavMenu.vue'
+import { EUserKycLevel } from '@/types/types'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
+    kycLevel: EUserKycLevel
     nickname: string
     agentAddress?: typeof Uint8Array | null
   }>(),
@@ -22,9 +25,10 @@ const isMobileSidebarVisible = ref(false)
     <MenuIcon @click="isMobileSidebarVisible = !isMobileSidebarVisible" />
 
     <TopNavMenu
-      :nickname="nickname"
+      :kyc-level="props.kycLevel"
+      :nickname="props.nickname"
       :white="true"
-      :agent-address="agentAddress"
+      :agent-address="props.agentAddress"
     />
 
     <TheSidebar v-if="isMobileSidebarVisible" />
