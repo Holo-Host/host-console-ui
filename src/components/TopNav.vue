@@ -3,9 +3,11 @@ import { computed } from 'vue'
 import RightChevronIcon from '@/components/icons/RightChevronIcon.vue'
 import TopNavMenu from '@/components/TopNavMenu.vue'
 import type { BreadCrumb } from '@/types/types'
+import { EUserKycLevel } from '@/types/types'
 
 const props = withDefaults(
   defineProps<{
+    kycLevel: EUserKycLevel
     breadcrumbs: BreadCrumb[]
     agentAddress?: typeof Uint8Array | null
     nickname: string
@@ -61,8 +63,9 @@ const isSubtitleVisible = computed(
     </div>
 
     <TopNavMenu
-      :nickname="nickname"
-      :agent-address="agentAddress"
+      :kyc-level="props.kycLevel"
+      :nickname="props.nickname"
+      :agent-address="props.agentAddress"
       data-test-top-nav-menu
     />
 

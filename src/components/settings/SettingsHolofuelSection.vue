@@ -16,7 +16,7 @@ const props = withDefaults(
   defineProps<{
     nickname: string
     agentAddress?: Uint8Array | null
-    kycLevel: number
+    kycLevel: EUserKycLevel
   }>(),
   {
     agentAddress: null

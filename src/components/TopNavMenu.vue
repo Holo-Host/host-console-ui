@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import Identicon from '@uicommon/components/Identicon.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import DownTriangleIcon from '@/components/icons/DownTriangleIcon.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 import { kAuthTokenLSKey } from '@/constants.ts'
 import { kRoutes } from '@/router'
+import { EUserKycLevel } from '@/types/types'
 
 const { goToHoloFuel } = useGoToHoloFuel()
 
 const router = useRouter()
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{
+    kycLevel: EUserKycLevel
     nickname: string
     agentAddress?: typeof Uint8Array | null
     white?: boolean
@@ -24,6 +28,8 @@ const props = withDefaults(
 )
 
 const isMenuOpen = ref(false)
+
+const currentLevel = computed((): number => (props.kycLevel === EUserKycLevel.one ? 1 : 2))
 
 function toggleMenu(): void {
   isMenuOpen.value = !isMenuOpen.value
@@ -63,7 +69,7 @@ async function openSettingsAndCloseMenu(): Promise<void> {
         <div class="display-name">
           {{ nickname }}
           <span class="verification-status">
-            {{ $t('settings.verification.verified') }}
+            {{ t('settings.verification.current_level', { level: currentLevel }) }}
           </span>
         </div>
         <DownTriangleIcon
@@ -134,8 +140,8 @@ async function openSettingsAndCloseMenu(): Promise<void> {
 .display-name {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
+  align-items: flex-start;
+  text-align: left;
   margin-left: 12px;
 }
 

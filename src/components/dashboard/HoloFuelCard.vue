@@ -144,6 +144,7 @@ const items = computed((): DashboardCardItem[] => [
 .springboard-link {
   font-weight: bold;
   cursor: pointer;
+  color: #b0ecf0;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
