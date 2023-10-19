@@ -78,7 +78,7 @@ const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.
       </div>
       <div class="info-row daily-row">
         <span class="daily-label">
-          {{ $t('$.bandwidth') }}
+          {{ $t('$.data_transfer') }}
         </span>
         <span class="bold">{{ presentBytes(props.data ? props.data.totalUsage?.bandwidth : 0) }}
         </span>
