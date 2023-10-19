@@ -534,6 +534,10 @@ const holoNixpkgs = {
   }
 }
 
+const mockKycData = {
+  "kyc": 'holo_kyc_2'
+}
+
 // NB: both /api and /holochain-api calls are mocked here
 const data = {
   get: {
@@ -544,7 +548,8 @@ const data = {
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion,
     '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
-    '/holochain-api/v1/redemptions': mockRedemptionHistoryData
+    '/holochain-api/v1/redemptions': mockRedemptionHistoryData,
+    '/holochain-api/v1/kyc': mockKycData
   },
   put: {
     '/api/v1/config': (args) => args,
