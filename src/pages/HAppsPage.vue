@@ -7,10 +7,11 @@ import { computed, onMounted, ref } from 'vue'
 import SortByDropdown from '@/components/hApps/SortByDropdown.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kSortOptions } from '@/constants/ui'
-import { HApp, useHposInterface } from '@/interfaces/HposInterface'
+import type { HApp } from '@/interfaces/HposInterface'
+import { useDashboardStore } from '@/store/dashboard'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
-const { getHostedHapps } = useHposInterface()
+const store = useDashboardStore()
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -28,10 +29,11 @@ function onFilterChange({ value, isActive }: FilterChangeProps): void {
   filterValue.value = value
 }
 
-const happs = ref<HApp[] | { error: unknown }>([])
 const sortBy = ref(kSortOptions.alphabetical.value)
 
-const filteredHapps = computed((): HApp[] => {
+const hostedHApps = computed((): HApp[] | { error: unknown } => store.hostedHApps)
+
+const filteredHApps = computed((): HApp[] => {
   const sortByLogic: (a: HApp, b: HApp) => number =
     // Sorting by earnings is not available now as we don't have a property
     // like that in the HApp, we use 'sourceChains' for now
@@ -39,18 +41,18 @@ const filteredHapps = computed((): HApp[] => {
       ? (a: HApp, b: HApp): number => (a.sourceChains < b.sourceChains ? 1 : -1)
       : (a: HApp, b: HApp): number => (a.name > b.name ? 1 : -1)
 
-  if (isErrorPredicate(happs.value) && happs.value.error) {
+  if (isErrorPredicate(hostedHApps.value) && hostedHApps.value.error) {
     return []
   }
 
-  if (!isErrorPredicate(happs.value) && filterIsActive.value && filterValue.value) {
-    return happs.value
+  if (!isErrorPredicate(hostedHApps.value) && filterIsActive.value && filterValue.value) {
+    return hostedHApps.value
       .filter((hApp: HApp) => hApp.name.toLowerCase().includes(filterValue.value.toLowerCase()))
       .sort(sortByLogic)
   }
 
-  if (!isErrorPredicate(happs.value)) {
-    return [...happs.value].sort(sortByLogic)
+  if (!isErrorPredicate(hostedHApps.value)) {
+    return [...hostedHApps.value].sort(sortByLogic)
   }
 
   return []
@@ -66,9 +68,9 @@ async function getData(): Promise<void> {
   isError.value = false
   isLoading.value = true
 
-  happs.value = await getHostedHapps()
+  await store.getHostedHApps()
 
-  if (isErrorPredicate(happs.value) && happs.value.error) {
+  if (isErrorPredicate(hostedHApps.value) && hostedHApps.value.error) {
     isError.value = true
   }
 
@@ -106,18 +108,18 @@ onMounted(async () => {
 
     <div v-if="!isLoading && !isError">
       <div
-        v-if="filteredHapps.length"
+        v-if="filteredHApps.length"
         class="happs__happ-list"
       >
         <HAppCard
-          v-for="happ in filteredHapps"
-          :key="happ.id"
-          :happ="happ"
+          v-for="hApp in filteredHApps"
+          :key="hApp.id"
+          :happ="hApp"
           class="happs__happ-list-item"
         >
           <template #status-chip>
             <BaseChip
-              v-if="happ.isPaused"
+              v-if="hApp.isPaused"
               :label="$t('$.paused')"
               :type="EChipType.info"
             />

@@ -3,7 +3,7 @@
     <div v-if="!confirmed" class="stop-hosting-modal">
       <ExclamationIcon class="exclamation-icon" />
       <p class="content">
-        Are you sure you want to stop hosting {{ happName }}?
+        Are you sure you want to stop hosting {{ hAppName }}?
       </p>
       <p class="content">
         It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.
@@ -59,7 +59,7 @@ export default {
   },
 
   props: {
-    happName: {
+    hAppName: {
       type: String,
       required: true
     }

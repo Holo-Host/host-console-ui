@@ -5,9 +5,12 @@ export default {
     ...commonTranslations.$,
     app_name: 'Host Console',
     back: 'Back',
+    bandwidth: 'Bandwidth',
+    cpu: 'CPU',
     dashboard: 'Dashboard',
     date: 'Date',
     days: 'days',
+    description: 'Description',
     earnings: 'Earnings',
     generic_error: 'Sorry, we couldn’t fetch this data.',
     happs: 'hApps',
@@ -18,6 +21,7 @@ export default {
     learn_more: 'Learn more',
     logout: 'Logout',
     next: 'Next',
+    storage: 'Storage',
     terms_of_service: 'Terms of Service',
     try_again: 'Try again'
   },
@@ -36,6 +40,17 @@ export default {
     unpaid_and_late: 'Unpaid & Late Invoices',
     unpaid_invoices: 'Unpaid Invoices',
     weekly_earnings: 'Weekly Earnings'
+  },
+  happ_details: {
+    earnings: {
+      total: 'Total Earnings',
+      last_7_days: 'Earned in last 7 days',
+      average_weekly: 'Average weekly earnings'
+    },
+    stop_hosting: 'Stop Hosting',
+    stop_hosting_warning: 'Stopping hosting of a hApp will remove it and all associated data from your HoloPort.',
+    total_source_chains: 'Total source chains',
+    total_usage: 'Total usage'
   },
   holofuel: {
     balance: 'Balance',

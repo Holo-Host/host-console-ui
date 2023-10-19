@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { HApp, HostEarnings, UsageResponse, useHposInterface } from '@/interfaces/HposInterface'
 
-const { getUsage, getTopHostedHapps, getHostEarnings } = useHposInterface()
+const { getUsage, getTopHostedHapps, getHostEarnings, getHostedHapps } = useHposInterface()
 
 interface State {
   usage: UsageResponse | { error: unknown }
   hostEarnings: HostEarnings | { error: unknown }
-  hostedHapps: HApp[] | { error: unknown }
+  hostedHApps: HApp[] | { error: unknown }
 }
 
 export const useDashboardStore = defineStore('dashboard', {
@@ -25,7 +25,7 @@ export const useDashboardStore = defineStore('dashboard', {
       holofuel: { balance: '0', available: '0', redeemable: '0' },
       recentPayments: []
     },
-    hostedHapps: []
+    hostedHApps: []
   }),
 
   actions: {
@@ -34,11 +34,15 @@ export const useDashboardStore = defineStore('dashboard', {
     },
 
     async getTopHostedHapps(): Promise<void> {
-      this.hostedHapps = await getTopHostedHapps()
+      this.hostedHApps = await getTopHostedHapps()
     },
 
     async getEarnings(): Promise<void> {
       this.hostEarnings = await getHostEarnings()
+    },
+
+    async getHostedHApps(): Promise<void> {
+      this.hostedHApps = await getHostedHapps()
     }
   }
 })

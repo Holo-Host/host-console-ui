@@ -12,6 +12,7 @@ interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
   getTopHostedHapps: () => Promise<HApp[] | { error: unknown }>
   getHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
@@ -110,6 +111,7 @@ export interface HostPreferencesResponse {
 type HposHolochainCallResponse =
   | HostEarnings
   | HApp[]
+  | HAppDetails
   | UsageResponse
   | HposStatusResponse
   | HoloFuelProfileResponse
@@ -145,6 +147,28 @@ export interface HApp {
     bandwidth: number
     cpu: number
   }
+}
+
+export interface HAppDetails {
+  id: string
+  name: string
+  description: string
+  categories: string[]
+  enabled: boolean
+  isPaused: boolean
+  sourceChains: number
+  daysHosted: number
+  earnings: {
+    total: number
+    last7Days: number
+    averageWeekly: number
+  }
+  last7DaysUsage: {
+    bandwidth: number
+    cpu: number
+    storage: number
+  }
+  hostingPlan: 'paid' | 'free'
 }
 
 export interface Earnings {
@@ -216,6 +240,10 @@ function isError(error: Error | unknown): error is Error {
 
 function isHappArray(array: unknown): array is HApp[] {
   return Array.isArray(array)
+}
+
+function isHAppDetails(data: unknown): data is HAppDetails {
+  return typeof data === 'object' && data !== null
 }
 
 interface HposCallArgs {
@@ -411,6 +439,30 @@ export function useHposInterface(): HposInterface {
       }
     } catch (error) {
       console.error('getHostedHapps encountered an error: ', error)
+      return { error }
+    }
+  }
+
+  async function getHAppDetails(
+    id: string
+  ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'get',
+        path: '/happ',
+        params: {
+          id
+        }
+      })
+
+      if (isHAppDetails(result)) {
+        return result
+      } else {
+        console.error("getHAppDetails didn't return a HAppDetails object")
+        return { error: "getHAppDetails didn't return a HAppDetails object" }
+      }
+    } catch (error) {
+      console.error('getHAppDetails encountered an error: ', error)
       return { error }
     }
   }
@@ -764,6 +816,7 @@ export function useHposInterface(): HposInterface {
     getHostPreferences,
     redeemHoloFuel,
     getKycLevel,
+    getHAppDetails,
     HPOS_API_URL
   }
 }
