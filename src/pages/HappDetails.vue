@@ -33,7 +33,7 @@ function getData(): void {
   const result = {
     id: '1',
     name: 'My App',
-    description: 'Just is my best app, the best I have ever built... honestly.',
+    description: 'hApp to make you smarter',
     categories: ['education', 'business', 'social networking'],
     enabled: true,
     isPaused: false,

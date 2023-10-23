@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HAppImage from '@uicommon/components/HAppImage.vue'
 import { useI18n } from 'vue-i18n'
+import CategoryChip from '@/components/CategoryChip.vue'
 import HAppDetailsEarnings from '@/components/hAppDetails/HAppDetailsEarnings.vue'
 import HAppDetailsStopHosting from '@/components/hAppDetails/HAppDetailsStopHosting.vue'
 import HAppDetailsUsage from '@/components/hAppDetails/HAppDetailsUsage.vue'
@@ -36,6 +37,19 @@ const props = defineProps<{
         <div class="happ-details__left-column-description">
           {{ props.hApp.description }}
         </div>
+
+        <div class="happ-details__left-column-categories">
+          <CategoryChip
+            v-for="category in props.hApp.categories"
+            :key="category"
+            :label="category"
+            :custom-theme="{
+              fontColor: 'gray',
+              backgroundColor: 'grey-light-color'
+            }"
+            class="happ-details__left-column-category"
+          />
+        </div>
       </div>
 
       <div class="happ-details__main-column">
@@ -69,10 +83,10 @@ const props = defineProps<{
           class="happ-details__main-column-usage"
         />
 
-        <HAppDetailsStopHosting
-          :h-app="props.hApp"
-          class="happ-details__main-column-stop-hosting"
-        />
+        <!--        <HAppDetailsStopHosting-->
+        <!--          :h-app="props.hApp"-->
+        <!--          class="happ-details__main-column-stop-hosting"-->
+        <!--        />-->
       </div>
     </div>
   </div>
@@ -109,7 +123,7 @@ const props = defineProps<{
     flex-direction: column;
 
     &-happ-image {
-      margin-bottom: 34px;
+      margin-bottom: 38px;
     }
 
     &-description-label {
@@ -119,6 +133,17 @@ const props = defineProps<{
     &-description {
       font-weight: 700;
       color: var(--grey-dark-color);
+    }
+
+    &-categories {
+      margin-top: 48px;
+    }
+
+    &-category {
+      display: block;
+      margin-top: 13px;
+      width: fit-content;
+      block-size: fit-content;
     }
   }
 
