@@ -83,14 +83,7 @@ const prices = computed((): PriceItem[] => [
     isDisabled: true
   },
   {
-    label: t('$.storage'),
-    value: props.data.storage ? formatPrice(props.data.storage).value : 0,
-    unit: props.data.storage ? formatPrice(props.data.storage).unit : '',
-    prop: 'storage',
-    isDisabled: true
-  },
-  {
-    label: t('$.bandwidth'),
+    label: t('$.data_transfer'),
     value: props.data.bandwidth ? formatPrice(props.data.bandwidth).value : 0,
     unit: props.data.bandwidth ? formatPrice(props.data.bandwidth).unit : '',
     prop: 'bandwidth',
