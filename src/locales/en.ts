@@ -47,8 +47,10 @@ export default {
       last_7_days: 'Earned in last 7 days',
       average_weekly: 'Average weekly earnings'
     },
+    seven_day_usage: '7 day usage',
     stop_hosting: 'Stop Hosting',
-    stop_hosting_warning: 'Stopping hosting of a hApp will remove it and all associated data from your HoloPort.',
+    stop_hosting_warning:
+      'Stopping hosting of a hApp will remove it and all associated data from your HoloPort.',
     total_source_chains: 'Total source chains',
     total_usage: 'Total usage'
   },

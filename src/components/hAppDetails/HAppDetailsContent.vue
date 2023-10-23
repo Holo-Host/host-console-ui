@@ -4,12 +4,8 @@ import { useI18n } from 'vue-i18n'
 import HAppDetailsEarnings from '@/components/hAppDetails/HAppDetailsEarnings.vue'
 import HAppDetailsStopHosting from '@/components/hAppDetails/HAppDetailsStopHosting.vue'
 import HAppDetailsUsage from '@/components/hAppDetails/HAppDetailsUsage.vue'
-import AlertCircleIcon from '@/components/icons/AlertCircleIcon.vue'
-import ChainIcon from '@/components/icons/ChainIcon.vue'
-import ClockIcon from '@/components/icons/ClockIcon.vue'
 import LeftChevronIcon from '@/components/icons/LeftChevronIcon.vue'
 import type { HAppDetails } from '@/interfaces/HposInterface'
-import { presentHolofuelAmount, presentMicroSeconds, presentBytes } from '@/utils'
 
 const { t } = useI18n()
 
@@ -63,9 +59,20 @@ const props = defineProps<{
           {{ props.hApp.name }}
         </h2>
 
-        <HAppDetailsEarnings :h-app="props.hApp" />
-        <HAppDetailsUsage :h-app="props.hApp" />
-        <HAppDetailsStopHosting :h-app="props.hApp" />
+        <HAppDetailsEarnings
+          :h-app="props.hApp"
+          class="happ-details__main-column-earnings"
+        />
+
+        <HAppDetailsUsage
+          :h-app="props.hApp"
+          class="happ-details__main-column-usage"
+        />
+
+        <HAppDetailsStopHosting
+          :h-app="props.hApp"
+          class="happ-details__main-column-stop-hosting"
+        />
       </div>
     </div>
   </div>
@@ -139,6 +146,18 @@ const props = defineProps<{
       font-weight: 700;
       color: var(--grey-dark-color);
     }
+
+    &-earnings {
+      margin-top: 2px;
+    }
+
+    &-usage {
+      margin-top: 32px;
+    }
+
+    &-stop-hosting {
+      margin-top: 32px;
+    }
   }
 }
 
@@ -146,28 +165,34 @@ const props = defineProps<{
   .happ-details {
     margin: 0 0 20px 0;
     padding: 18px;
+
+    &__main-column {
+      margin: 0 4px;
+
+      &-mobile {
+        display: block;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      &-name {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+
+      &-description {
+        font-size: 11px;
+        margin-bottom: 24px;
+      }
+    }
   }
+
   .mobile-column {
     display: flex;
   }
-  .main-column {
-    margin: 0 4px;
-  }
-  .back-link {
-    margin-bottom: 4px;
-  }
+
   .desktop {
     display: none;
-  }
-  .happ-image {
-    margin-bottom: 10px;
-  }
-  .name {
-    margin-bottom: 8px;
-  }
-  .description {
-    font-size: 11px;
-    margin-bottom: 46px;
   }
 }
 </style>

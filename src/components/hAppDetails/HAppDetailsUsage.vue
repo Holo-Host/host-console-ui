@@ -13,23 +13,25 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="happ-details-usage__info-row">
-    <ClockIcon class="happ-details-usage__clock-icon" /> {{ t('hosted_happs.hosted_for') }}:&nbsp;<span class="happ-details-usage__info-row-value">{{ props.hApp.daysHosted }} {{ t('$.days') }}</span>
-  </div>
-  <div class="happ-details-usage__info-row mobile-margin">
-    <ChainIcon class="happ-details-usage__chain-icon" /> {{ t('happ_details.total_source_chains') }}:&nbsp;<span class="happ-details-usage__info-row-value">{{ props.hApp.sourceChains }}</span>
-  </div>
+  <div>
+    <div class="happ-details-usage__info-row">
+      <ClockIcon class="happ-details-usage__clock-icon" /> {{ t('hosted_happs.hosted_for') }}:&nbsp;<span class="happ-details-usage__info-row-value">{{ props.hApp.daysHosted }} {{ t('$.days') }}</span>
+    </div>
+    <div class="happ-details-usage__info-row happ-details-usage__source-chains mobile-margin">
+      <ChainIcon class="happ-details-usage__chain-icon" /> {{ t('happ_details.total_source_chains') }}:&nbsp;<span class="happ-details-usage__info-row-value">{{ props.hApp.sourceChains }}</span>
+    </div>
 
-  <div class="happ-details-usage__usage-row">
-    <span class="happ-details-usage__usage-row-label">{{ t('happ_details.total_usage') }}:</span>
-    <div class="happ-details-usage__usage-row-value-wrapper">
-      <span class="happ-details-usage__usage-row-value">{{ presentMicroSeconds(props.hApp.last7DaysUsage.cpu) }}</span> {{ t('$.cpu') }}
-    </div>
-    <div class="happ-details-usage__usage-row-value-wrapper">
-      <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.storage) }}</span> {{ t('$.storage') }}
-    </div>
-    <div class="happ-details-usage__usage-row-value-wrapper">
-      <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.bandwidth) }}</span> {{ t('$.bandwidth') }}
+    <div class="happ-details-usage__usage-row">
+      <span class="happ-details-usage__usage-row-label">{{ t('happ_details.seven_day_usage') }}:</span>
+      <div class="happ-details-usage__usage-row-value-wrapper">
+        <span class="happ-details-usage__usage-row-value">{{ presentMicroSeconds(props.hApp.last7DaysUsage.cpu) }}</span> {{ t('$.cpu') }}
+      </div>
+      <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__storage">
+        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.storage) }}</span> {{ t('$.storage') }}
+      </div>
+      <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__data-transfer">
+        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.bandwidth) }}</span> {{ t('$.bandwidth') }}
+      </div>
     </div>
   </div>
 </template>
@@ -40,8 +42,7 @@ const props = defineProps<{
     display: flex;
     align-items: center;
     color: var(--grey-color);
-    margin-left: 4px;
-    margin-bottom: 16px;
+    margin-left: 0;
     font-size: 14px;
 
     &-value {
@@ -50,13 +51,25 @@ const props = defineProps<{
     }
   }
 
+  &__clock-icon {
+    margin-right: 8px;
+  }
+
+  &__chain-icon {
+    margin-right: 4px;
+  }
+
+  &__source-chains {
+    margin-top: 10px;
+  }
+
   &__usage-row {
     display: flex;
     color: var(--grey-dark-color);
     font-size: 12px;
     font-weight: 600;
     padding-right: 36px;
-    margin-bottom: 42px;
+    margin-top: 36px;
 
     &-label {
       font-size: 14px;
@@ -64,16 +77,20 @@ const props = defineProps<{
 
     &-value-wrapper {
       display: flex;
-      margin-left: 30px;
+      margin-left: 14px;
     }
 
     &-value {
       padding: 0 5px;
       border-bottom: 2px solid var(--primary-color);
       font-size: 13px;
-      font-weight: 700;
-      margin-right: 7px;
+      font-weight: 800;
     }
+  }
+
+  &__storage,
+  &__data-transfer {
+    margin-left: 30px;
   }
 }
 
@@ -81,10 +98,6 @@ const props = defineProps<{
   .happ-details-usage {
     &__info-row {
       font-size: 14px;
-    }
-
-    .mobile-margin {
-      margin-bottom: 38px;
     }
 
     &__clock-icon {

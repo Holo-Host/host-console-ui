@@ -27,37 +27,39 @@ function stopHostingHApp(): void {
 </script>
 
 <template>
-  <div class="happ-details__row">
-    <div
-      class="happ-details__label"
-      @click="() => {}"
-    >
-      {{ t('happ_details.stop_hosting') }}
+  <div>
+    <div class="happ-details__row">
+      <div
+        class="happ-details__label"
+        @click="openHostingModal"
+      >
+        {{ t('happ_details.stop_hosting') }}
+      </div>
+      <div class="happ-details__warning">
+        <AlertCircleIcon class="alert-circle-icon" />
+        {{ t('happ_details.stop_hosting_warning') }}
+      </div>
     </div>
-    <div class="happ-details__warning">
-      <AlertCircleIcon class="alert-circle-icon" />
-      {{ t('happ_details.stop_hosting_warning') }}
-    </div>
-  </div>
 
-  <StopHostingModal
-    v-if="hApp"
-    :is-visible="isHostingModalVisible"
-    :h-app-name="hApp?.name || ''"
-    @close="closeHostingModal"
-    @stop-hosting-happ="stopHostingHApp"
-  />
+    <StopHostingModal
+      v-if="hApp"
+      :is-visible="isHostingModalVisible"
+      :h-app-name="hApp?.name || ''"
+      @close="closeHostingModal"
+      @stop-hosting-happ="stopHostingHApp"
+    />
+  </div>
 </template>
 
 <style scoped lang="scss">
-.happ-details__ {
-  &___row {
+.happ-details {
+  &__row {
     display: flex;
     align-items: center;
   }
 
   &__label {
-    font-weight: bold;
+    font-weight: 800;
     font-size: 12px;
     line-height: 16px;
     text-decoration-line: underline;
