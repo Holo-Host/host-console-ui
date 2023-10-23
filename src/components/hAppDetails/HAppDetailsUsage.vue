@@ -30,7 +30,7 @@ const props = defineProps<{
         <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.storage) }}</span> {{ t('$.storage') }}
       </div>
       <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__data-transfer">
-        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.bandwidth) }}</span> {{ t('$.bandwidth') }}
+        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.bandwidth) }}</span> {{ t('$.data_transfer') }}
       </div>
     </div>
   </div>

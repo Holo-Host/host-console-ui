@@ -8,6 +8,7 @@ import SortByDropdown from '@/components/hApps/SortByDropdown.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kSortOptions } from '@/constants/ui'
 import type { HApp } from '@/interfaces/HposInterface'
+import router, { kRoutes } from '@/router'
 import { useDashboardStore } from '@/store/dashboard'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
@@ -77,6 +78,10 @@ async function getData(): Promise<void> {
   isLoading.value = false
 }
 
+async function goToDetails(happId: string): Promise<void> {
+  await router.push({ name: kRoutes.happ.name, params: { id: happId } })
+}
+
 onMounted(async () => {
   await getData()
 })
@@ -115,7 +120,9 @@ onMounted(async () => {
           v-for="hApp in filteredHApps"
           :key="hApp.id"
           :happ="hApp"
+          are-details-available
           class="happs__happ-list-item"
+          @details-link-click="goToDetails(hApp.id)"
         >
           <template #status-chip>
             <BaseChip
