@@ -68,7 +68,7 @@ const emit = defineEmits(['update'])
     flex: 1;
     overflow: hidden;
     background-color: white;
-    padding: 2px 16px;
+    padding: 2px 14px;
     text-align: center;
     font-size: 12px;
     font-weight: 800;

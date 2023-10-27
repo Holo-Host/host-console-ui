@@ -195,7 +195,6 @@ onMounted(async () => {
     grid-template-columns: repeat(auto-fill, minmax(600px, 600px));
     grid-template-rows: repeat(auto-fill, 180px);
     grid-gap: 24px;
-    margin-top: 12px;
     height: calc(100vh - 175px);
     overflow-y: scroll;
   }
