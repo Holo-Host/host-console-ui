@@ -66,7 +66,8 @@ export default {
   },
   hosted_happs: {
     hosted_for: 'Hosted for',
-    no_happs: 'You’re not hosting any hApps',
+    no_active_happs: 'You’re not hosting any hApps',
+    no_inactive_happs: 'You do not have any inactive hApps',
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },
