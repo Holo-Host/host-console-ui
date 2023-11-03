@@ -1,110 +1,121 @@
+<script lang="ts" setup>
+import BaseButton from '@uicommon/components/BaseButton'
+import BaseModal from '@uicommon/components/BaseModal'
+import { EButtonType } from '@uicommon/types/ui'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import BigCheckIcon from '@/components/icons/BigCheckIcon'
+import ExclamationIcon from '@/components/icons/ExclamationIcon'
+import { HAppDetails } from '@/interfaces/HposInterface'
+
+const { t } = useI18n()
+
+const props = defineProps<{
+  hApp: HAppDetails
+}>()
+
+const emit = defineEmits(['close'])
+
+const isConfirmed = ref(false)
+
+function confirm(): void {
+  stopHostingHApp()
+  isConfirmed.value = true
+}
+
+function close(): void {
+  emit('close')
+}
+
+function stopHostingHApp(): void {
+  console.log('NOT YET IMPLEMENTED: Stopping hosting happ', props.hApp.name)
+}
+</script>
+
 <template>
-  <BaseModal @close="$emit('close')">
-    <div v-if="!confirmed" class="stop-hosting-modal">
-      <ExclamationIcon class="exclamation-icon" />
-      <p class="content">
-        Are you sure you want to stop hosting {{ hAppName }}?
+  <BaseModal
+    is-visible
+    content-padding="sm"
+    @close="emit('close')"
+  >
+    <div
+      v-if="!isConfirmed"
+      class="stop-hosting-modal"
+    >
+      <ExclamationIcon />
+      <p class="stop-hosting-modal__title">
+        {{ t('happ_details.disable_hosting_modal.title') }}
       </p>
-      <p class="content">
-        It will be removed from your HoloPort and will not be available for you to host again for 30 days. All invoices, logs and payments associated with this hApp will remain available to you.
-      </p>
+      <span class="stop-hosting-modal__description">
+        {{ t('happ_details.disable_hosting_modal.description_one') }}
+      </span>
+      <span>{{ t('happ_details.disable_hosting_modal.description_two') }}</span>
     </div>
-    <div v-if="confirmed" class="stop-hosting-modal">
-      <BigCheckIcon class="exclamation-icon" />
-      <p class="content">
-        This hApp has been removed from hosting.
+
+    <div
+      v-if="isConfirmed"
+      class="stop-hosting-modal"
+    >
+      <BigCheckIcon />
+      <p class="stop-hosting-modal__title">
+        {{ t('happ_details.disable_hosting_modal.success.title') }}
       </p>
-      <p class="content">
-        Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the publisher.
+      <p class="stop-hosting-modal__description">
+        {{ t('happ_details.disable_hosting_modal.success.description') }}
       </p>
     </div>
 
     <template
-      v-if="confirmed"
+      v-if="isConfirmed"
       #buttons
     >
-      <BaseButton @click="closeAndGoToHapps">
-        Close
+      <BaseButton
+        @click="close"
+      >
+        {{ t('$.close') }}
       </BaseButton>
     </template>
+
     <template
       v-else
       #buttons
     >
-      <BaseButton @click="confirm">
-        Yes, I want to stop hosting this hApp
+      <BaseButton
+        :type="EButtonType.tertiary"
+        @click="close"
+      >
+        {{ t('$.cancel') }}
       </BaseButton>
 
-      <BaseButton @click="$emit('close')">
-        Cancel
+      <BaseButton
+        class="stop-hosting-modal__confirm-button"
+        @click="confirm"
+      >
+        {{ t('happ_details.disable_hosting_modal.confirmation_button') }}
       </BaseButton>
     </template>
   </BaseModal>
 </template>
 
-<script>
-import BaseButton from '@uicommon/components/BaseButton'
-import BaseModal from '@uicommon/components/BaseModal'
-import BigCheckIcon from '@/components/icons/BigCheckIcon'
-import ExclamationIcon from '@/components/icons/ExclamationIcon'
-
-export default {
-  name: 'StopHostingModal',
-
-  components: {
-    BaseModal,
-    BaseButton,
-    ExclamationIcon,
-    BigCheckIcon
-  },
-
-  props: {
-    hAppName: {
-      type: String,
-      required: true
-    }
-  },
-
-  emits: ['close', 'stop-hosting-happ'],
-
-  data() {
-    return {
-      confirmed: false
-    }
-  },
-
-  methods: {
-    confirm() {
-      this.$emit('stop-hosting-happ')
-      this.confirmed = true
-    },
-
-    closeAndGoToHapps() {
-      this.$emit('close')
-      this.$router.push('/happs')
-    }
-  }
-}
-</script>
-
-<style scoped>
+<style lang="scss" scoped>
 .stop-hosting-modal {
   display: flex;
   align-items: center;
-  padding-top: 26px;
   flex-direction: column;
-  font-style: normal;
   font-weight: 600;
-  font-size: 14px;
-  line-height: 19px;
-  text-align: center;
-  color: var(--grey-dark-color);
-}
-.exclamation-icon {
-  margin-bottom: 22px;
-}
-.content {
-  max-width: 625px;
-  margin: 0 0 20px 0;
+
+  &__title {
+    margin-top: 20px;
+    font-weight: 600;
+  }
+
+  &__description {
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  &__confirm-button {
+    margin-left: 16px;
+  }
 }
 </style>

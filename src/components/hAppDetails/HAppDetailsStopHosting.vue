@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import BaseButton from '@uicommon/components/BaseButton.vue'
+import { EButtonType } from '@uicommon/types/ui'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import BaseTooltip from '@/components/BaseTooltip.vue'
 import AlertCircleIcon from '@/components/icons/AlertCircleIcon.vue'
 import StopHostingModal from '@/components/StopHostingModal.vue'
 import type { HAppDetails } from '@/interfaces/HposInterface'
@@ -12,6 +15,7 @@ const props = defineProps<{
 }>()
 
 const isHostingModalVisible = ref(false)
+const isDisableHostingTooltipVisible = ref(false)
 
 function openHostingModal(): void {
   isHostingModalVisible.value = true
@@ -20,33 +24,38 @@ function openHostingModal(): void {
 function closeHostingModal(): void {
   isHostingModalVisible.value = false
 }
-
-function stopHostingHApp(): void {
-  console.log('NOT YET IMPLEMENTED: Stopping hosting happ', props.hApp.name)
-}
 </script>
 
 <template>
   <div>
     <div class="happ-details__row">
-      <div
-        class="happ-details__label"
+      <BaseButton
+        :type="EButtonType.tertiary"
+        :title="t('happ_details.disable_hosting')"
         @click="openHostingModal"
-      >
-        {{ t('happ_details.stop_hosting') }}
-      </div>
+      />
       <div class="happ-details__warning">
-        <AlertCircleIcon class="alert-circle-icon" />
-        {{ t('happ_details.stop_hosting_warning') }}
+        <AlertCircleIcon
+          class="alert-circle-icon"
+          @mouseover="() => isDisableHostingTooltipVisible = true"
+          @mouseleave="() => isDisableHostingTooltipVisible = false"
+        />
+
+        <BaseTooltip
+          class="happ-details__warning-tooltip"
+          :is-visible="isDisableHostingTooltipVisible"
+        >
+          {{ $t('happ_details.disable_hosting_warning') }}
+        </BaseTooltip>
       </div>
     </div>
 
     <StopHostingModal
-      v-if="hApp"
+      v-if="props.hApp"
+      :h-app="props.hApp"
       :is-visible="isHostingModalVisible"
       :h-app-name="hApp?.name || ''"
       @close="closeHostingModal"
-      @stop-hosting-happ="stopHostingHApp"
     />
   </div>
 </template>
@@ -58,32 +67,23 @@ function stopHostingHApp(): void {
     align-items: center;
   }
 
-  &__label {
-    font-weight: 800;
-    font-size: 12px;
-    line-height: 16px;
-    text-decoration-line: underline;
-    color: var(--grey-dark-color);
-    margin-right: 10px;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
   &__warning {
     display: flex;
+    position: relative;
     align-items: flex-start;
-    background: #f3f5f8;
     border-radius: 4px;
     color: var(--grey-dark-color);
     font-size: 12px;
     font-weight: 400;
     padding: 4px 12px;
-  }
-}
 
-.alert-circle-icon {
-  flex-shrink: 0;
-  margin-right: 12px;
+    &-tooltip {
+      position: absolute;
+      top: 30px;
+      right: 8px;
+      width: 204px;
+    }
+  }
 }
 
 @media screen and (max-width: 1050px) {

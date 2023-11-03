@@ -42,6 +42,23 @@ export default {
     weekly_earnings: 'Weekly Earnings'
   },
   happ_details: {
+    disable_hosting: 'Disable Hosting',
+    disable_hosting_warning:
+      'Disabling hosting of a hApp will remove it and all associated data from your HoloPort.',
+    disable_hosting_modal: {
+      success: {
+        title: 'This hApp has been removed from hosting.',
+        description:
+          'Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the manager.'
+      },
+      confirmation_button: 'Yes, disable',
+      description_one:
+        'It will be removed from your HoloPort and will not be available for you to host again for 30 days.',
+      description_two:
+        'All invoices, logs and payments associated with this hApp will remain available to you.',
+      title: 'Are you sure you want to disable this hApp?'
+    },
+    enable_hosting: 'Enable Hosting',
     earnings: {
       total: 'Total Earnings',
       last_7_days: 'Earned in last 7 days',

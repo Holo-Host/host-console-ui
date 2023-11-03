@@ -69,9 +69,16 @@ const props = defineProps<{
         </div>
 
         <!-- Desktop -->
-        <h2 class="happ-details__main-column-name desktop">
-          {{ props.hApp.name }}
-        </h2>
+        <div class="happ-details__main-column-header">
+          <h2 class="happ-details__main-column-name desktop">
+            {{ props.hApp.name }}
+          </h2>
+
+          <HAppDetailsStopHosting
+            :h-app="props.hApp"
+            class="happ-details__main-column-stop-hosting"
+          />
+        </div>
 
         <HAppDetailsEarnings
           :h-app="props.hApp"
@@ -82,11 +89,6 @@ const props = defineProps<{
           :h-app="props.hApp"
           class="happ-details__main-column-usage"
         />
-
-        <!--        <HAppDetailsStopHosting-->
-        <!--          :h-app="props.hApp"-->
-        <!--          class="happ-details__main-column-stop-hosting"-->
-        <!--        />-->
       </div>
     </div>
   </div>
@@ -159,6 +161,11 @@ const props = defineProps<{
       flex-direction: column;
     }
 
+		&-header {
+			display: flex;
+			justify-content: space-between;
+		}
+
     &-name {
       margin: 0 0 40px 0;
       color: var(--grey-dark-color);
@@ -177,10 +184,6 @@ const props = defineProps<{
     }
 
     &-usage {
-      margin-top: 32px;
-    }
-
-    &-stop-hosting {
       margin-top: 32px;
     }
   }
