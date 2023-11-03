@@ -59,6 +59,17 @@ export default {
       title: 'Are you sure you want to disable this hApp?'
     },
     enable_hosting: 'Enable Hosting',
+    enable_hosting_warning:
+      'Hosting a hApp will deploy it and all associated data to your Holoport.',
+    enable_hosting_modal: {
+      success: {
+        title: 'This hApp has been enabled and you are now hosting it. '
+      },
+      confirmation_button: 'Yes, host hApp',
+      description_one:
+        'Hosting this hApp will take up some space on your console and KYC level 2 users get paid for hosting.',
+      title: 'Are you sure you want to host this hApp?'
+    },
     earnings: {
       total: 'Total Earnings',
       last_7_days: 'Earned in last 7 days',

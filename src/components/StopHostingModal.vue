@@ -1,14 +1,18 @@
 <script lang="ts" setup>
+import { ExclamationCircleIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
 import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
+import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import BigCheckIcon from '@/components/icons/BigCheckIcon'
-import ExclamationIcon from '@/components/icons/ExclamationIcon'
+import { EModal } from '@/constants/ui'
 import { HAppDetails } from '@/interfaces/HposInterface'
 
 const { t } = useI18n()
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showModal } = useModals()
 
 const props = defineProps<{
   hApp: HAppDetails
@@ -17,14 +21,42 @@ const props = defineProps<{
 const emit = defineEmits(['close'])
 
 const isConfirmed = ref(false)
+const isBusy = ref(false)
+const isError = ref(false)
 
 function confirm(): void {
-  stopHostingHApp()
-  isConfirmed.value = true
+  isBusy.value = true
+
+  setTimeout(() => {
+    if (props.hApp.enabled) {
+      stopHostingHApp()
+    } else {
+      startHostingHApp()
+    }
+
+    // If failed
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+    // showModal(EModal.error_modal)
+    // emit('close')
+    //
+    // isBusy.value = false
+    // isConfirmed.value = false
+
+    // If success
+    isBusy.value = false
+    isConfirmed.value = true
+  }, 2000)
 }
 
 function close(): void {
+  isBusy.value = false
+  isConfirmed.value = false
+  isError.value = false
   emit('close')
+}
+
+function startHostingHApp(): void {
+  console.log('NOT YET IMPLEMENTED: Starting hosting happ', props.hApp.name)
 }
 
 function stopHostingHApp(): void {
@@ -35,32 +67,35 @@ function stopHostingHApp(): void {
 <template>
   <BaseModal
     is-visible
-    content-padding="sm"
+    :content-padding=" props.hApp.enabled ? 'sm': 'md'"
     @close="emit('close')"
   >
     <div
-      v-if="!isConfirmed"
+      v-if="!isConfirmed && !isError"
       class="stop-hosting-modal"
     >
-      <ExclamationIcon />
+      <ExclamationCircleIcon class="stop-hosting-modal__icon" />
       <p class="stop-hosting-modal__title">
-        {{ t('happ_details.disable_hosting_modal.title') }}
+        {{ props.hApp.enabled ? t('happ_details.disable_hosting_modal.title') : t('happ_details.enable_hosting_modal.title') }}
       </p>
       <span class="stop-hosting-modal__description">
-        {{ t('happ_details.disable_hosting_modal.description_one') }}
+        {{ props.hApp.enabled ? t('happ_details.disable_hosting_modal.description_one') : t('happ_details.enable_hosting_modal.description_one') }}
       </span>
-      <span>{{ t('happ_details.disable_hosting_modal.description_two') }}</span>
+      <span v-if="props.hApp.enabled">{{ t('happ_details.disable_hosting_modal.description_two') }}</span>
     </div>
 
     <div
       v-if="isConfirmed"
       class="stop-hosting-modal"
     >
-      <BigCheckIcon />
+      <CheckCircleIcon class="stop-hosting-modal__icon" />
       <p class="stop-hosting-modal__title">
-        {{ t('happ_details.disable_hosting_modal.success.title') }}
+        {{ props.hApp.enabled ? t('happ_details.disable_hosting_modal.success.title') : t('happ_details.enable_hosting_modal.success.title') }}
       </p>
-      <p class="stop-hosting-modal__description">
+      <p
+        v-if="props.hApp.enabled"
+        class="stop-hosting-modal__description"
+      >
         {{ t('happ_details.disable_hosting_modal.success.description') }}
       </p>
     </div>
@@ -82,6 +117,7 @@ function stopHostingHApp(): void {
     >
       <BaseButton
         :type="EButtonType.tertiary"
+        :is-disabled="isBusy"
         @click="close"
       >
         {{ t('$.cancel') }}
@@ -89,9 +125,11 @@ function stopHostingHApp(): void {
 
       <BaseButton
         class="stop-hosting-modal__confirm-button"
+        :is-busy="isBusy"
+        :is-disabled="isBusy"
         @click="confirm"
       >
-        {{ t('happ_details.disable_hosting_modal.confirmation_button') }}
+        {{ props.hApp.enabled ? t('happ_details.disable_hosting_modal.confirmation_button') : t('happ_details.enable_hosting_modal.confirmation_button') }}
       </BaseButton>
     </template>
   </BaseModal>
@@ -103,6 +141,12 @@ function stopHostingHApp(): void {
   align-items: center;
   flex-direction: column;
   font-weight: 600;
+
+  &__icon {
+    width: 66px;
+    height: 66px;
+    color: var(--primary-color);
+  }
 
   &__title {
     margin-top: 20px;

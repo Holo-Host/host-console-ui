@@ -43,6 +43,7 @@ function close() {
 	&__title {
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		margin-top: 6px;
 		font-size: 26px;
 		font-weight: 600;

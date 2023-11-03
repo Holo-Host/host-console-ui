@@ -30,8 +30,8 @@ function closeHostingModal(): void {
   <div>
     <div class="happ-details__row">
       <BaseButton
-        :type="EButtonType.tertiary"
-        :title="t('happ_details.disable_hosting')"
+        :type="props.hApp.enabled ? EButtonType.tertiary : EButtonType.primary"
+        :title="props.hApp.enabled ? t('happ_details.disable_hosting') : t('happ_details.enable_hosting')"
         @click="openHostingModal"
       />
       <div class="happ-details__warning">
@@ -45,7 +45,7 @@ function closeHostingModal(): void {
           class="happ-details__warning-tooltip"
           :is-visible="isDisableHostingTooltipVisible"
         >
-          {{ $t('happ_details.disable_hosting_warning') }}
+          {{ props.hApp.enabled ? $t('happ_details.disable_hosting_warning') : $t('happ_details.enable_hosting_warning') }}
         </BaseTooltip>
       </div>
     </div>
