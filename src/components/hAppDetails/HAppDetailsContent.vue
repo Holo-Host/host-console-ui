@@ -92,6 +92,7 @@ const props = defineProps<{
         />
 
         <HAppDetailsHostingPlan
+          v-if="props.hApp.enabled"
           :h-app="props.hApp"
           class="happ-details__main-column-hosting-plan"
         />
