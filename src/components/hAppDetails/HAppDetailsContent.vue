@@ -3,6 +3,7 @@ import HAppImage from '@uicommon/components/HAppImage.vue'
 import { useI18n } from 'vue-i18n'
 import CategoryChip from '@/components/CategoryChip.vue'
 import HAppDetailsEarnings from '@/components/hAppDetails/HAppDetailsEarnings.vue'
+import HAppDetailsHostingPlan from '@/components/hAppDetails/HAppDetailsHostingPlan.vue'
 import HAppDetailsStopHosting from '@/components/hAppDetails/HAppDetailsStopHosting.vue'
 import HAppDetailsUsage from '@/components/hAppDetails/HAppDetailsUsage.vue'
 import LeftChevronIcon from '@/components/icons/LeftChevronIcon.vue'
@@ -89,6 +90,11 @@ const props = defineProps<{
           :h-app="props.hApp"
           class="happ-details__main-column-usage"
         />
+
+        <HAppDetailsHostingPlan
+          :h-app="props.hApp"
+          class="happ-details__main-column-hosting-plan"
+        />
       </div>
     </div>
   </div>
@@ -161,10 +167,10 @@ const props = defineProps<{
       flex-direction: column;
     }
 
-		&-header {
-			display: flex;
-			justify-content: space-between;
-		}
+    &-header {
+      display: flex;
+      justify-content: space-between;
+    }
 
     &-name {
       margin: 0 0 40px 0;
@@ -185,6 +191,10 @@ const props = defineProps<{
 
     &-usage {
       margin-top: 32px;
+    }
+
+    &-hosting-plan {
+      margin-top: 54px;
     }
   }
 }

@@ -99,6 +99,20 @@ export default {
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },
+  hosting_plan: {
+    free: {
+      title: 'Are you sure you want to host this hApp for free?',
+      confirmation_button_label: 'Yes, host for free',
+      success_title: 'Hosting Plan Switched',
+      success_description: 'You’ve successfully switched to free hosting plan.'
+    },
+    paid: {
+      title: 'Are you sure you want to stop hosting this hApp for free? ',
+      confirmation_button_label: 'Yes, switch to paid',
+      success_title: 'Hosting Plan Switched',
+      success_description: 'You’ve successfully switched to paid hosting plan.'
+    }
+  },
   hosting_preferences: {
     header: 'Hosting Preferences',
     happ_selection: {
