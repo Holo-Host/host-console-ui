@@ -77,7 +77,7 @@ const emit = defineEmits(['update'])
     &--current {
       color: var(--primary-color);
       border-color: var(--primary-color);
-      background-color: var(--primary-light-color);
+      background-color: var(--primary-extra-light-color);
     }
 
     &--inactive {
