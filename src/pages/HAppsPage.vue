@@ -4,6 +4,7 @@ import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import HAppCard from '@uicommon/components/HAppCard.vue'
 import { EChipType } from '@uicommon/types/ui'
 import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import BaseTabSelect from '@/components/BaseTabSelect.vue'
 import SortByDropdown from '@/components/hApps/SortByDropdown.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
@@ -13,18 +14,23 @@ import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { getHostedHapps } = useHposInterface()
 
+const { t } = useI18n()
+
 const isLoading = ref(false)
 const isError = ref(false)
 
-const selectedTab = ref('active')
+const selectedTab = ref('enabled')
 
 const tabs = computed(() => [
-  { value: 'active', name: 'Active hApps', current: selectedTab.value === 'active' },
   {
-    value: 'inactive',
-    name: 'Inactive hApps',
-    href: '#',
-    current: selectedTab.value === 'inactive'
+    value: 'enabled',
+    name: t('hosted_happs.enabled'),
+    current: selectedTab.value === 'enabled'
+  },
+  {
+    value: 'disabled',
+    name: t('hosted_happs.disabled'),
+    current: selectedTab.value === 'disabled'
   }
 ])
 
@@ -49,9 +55,9 @@ const happs = ref<HApp[] | { error: unknown }>([])
 const sortBy = ref(kSortOptions.alphabetical.value)
 
 const filteredHapps = computed((): HApp[] => {
-	let hAppsFilteredByActivity: HApp[] = []
+  let hAppsFilteredByActivity: HApp[] = []
 
-	const sortByLogic: (a: HApp, b: HApp) => number =
+  const sortByLogic: (a: HApp, b: HApp) => number =
     // Sorting by earnings is not available now as we don't have a property
     // like that in the HApp, we use 'sourceChains' for now
     sortBy.value === kSortOptions.earnings.value
@@ -64,7 +70,7 @@ const filteredHapps = computed((): HApp[] => {
   } else if (!isErrorPredicate(happs.value)) {
     // If hApps are hosted filter them by activity
     hAppsFilteredByActivity =
-      selectedTab.value === 'active'
+      selectedTab.value === 'enabled'
         ? happs.value.filter((hApp: HApp) => hApp.enabled)
         : happs.value.filter((hApp: HApp) => !hApp.enabled)
   }
@@ -164,7 +170,7 @@ onMounted(async () => {
       >
         <HAppCard
           is-empty
-          :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : selectedTab === 'active' ? 'hosted_happs.no_active_happs' : 'hosted_happs.no_inactive_happs'"
+          :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : selectedTab === 'enabled' ? 'hosted_happs.no_enabled_happs' : 'hosted_happs.no_disabled_happs'"
           class="happs__happ-list-item"
         />
       </div>

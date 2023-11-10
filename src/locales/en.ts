@@ -48,9 +48,11 @@ export default {
     ...commonTranslations.holofuel_modal
   },
   hosted_happs: {
+    disabled: 'Disabled hApps',
+    enabled: 'Enabled hApps',
     hosted_for: 'Hosted for',
-    no_active_happs: 'You have not enabled any hApps for hosting',
-    no_inactive_happs: 'You have not disabled any hApps',
+    no_enabled_happs: 'You have not enabled any hApps for hosting',
+    no_disabled_happs: 'You have not disabled any hApps',
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },

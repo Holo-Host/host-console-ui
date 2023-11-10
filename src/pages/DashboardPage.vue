@@ -45,7 +45,7 @@ const holoFuelCardData = computed((): HoloFuelCardData | Error => {
 const topHostedHapps = computed(() =>
   isError(dashboardStore.hostedHapps)
     ? dashboardStore.hostedHapps
-    : dashboardStore.hostedHapps.filter((hApp) => hApp.enabled).slice(0, kTopHostedHAppsToDisplay)
+    : dashboardStore.hostedHapps.filter((hApp) => !hApp.enabled).slice(0, kTopHostedHAppsToDisplay)
 )
 
 const earnings = computed(() =>
