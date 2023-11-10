@@ -14,6 +14,7 @@ import { isError } from '@/types/predicates'
 import type { HoloFuelCardData, Error } from '@/types/types'
 
 const kPaymentsToDisplay = 3
+const kTopHostedHAppsToDisplay = 3
 
 const router = useRouter()
 const dashboardStore = useDashboardStore()
@@ -41,7 +42,11 @@ const holoFuelCardData = computed((): HoloFuelCardData | Error => {
   }
 })
 
-const topHostedHapps = computed(() => dashboardStore.hostedHapps)
+const topHostedHapps = computed(() =>
+  isError(dashboardStore.hostedHapps)
+    ? dashboardStore.hostedHapps
+    : dashboardStore.hostedHapps.filter((hApp) => hApp.enabled).slice(0, kTopHostedHAppsToDisplay)
+)
 
 const earnings = computed(() =>
   isError(dashboardStore.hostEarnings)
@@ -59,7 +64,7 @@ const usage = computed(() => dashboardStore.usage)
 
 async function getTopHostedHapps(): Promise<void> {
   isLoadingHostedHapps.value = true
-  await dashboardStore.getTopHostedHapps()
+  await dashboardStore.getHostedHapps()
   isLoadingHostedHapps.value = false
 }
 

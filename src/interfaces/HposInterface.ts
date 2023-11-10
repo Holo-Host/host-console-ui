@@ -10,7 +10,6 @@ import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
 interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
-  getTopHostedHapps: () => Promise<HApp[] | { error: unknown }>
   getHostedHapps: () => Promise<HApp[] | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
@@ -365,30 +364,6 @@ export function useHposInterface(): HposInterface {
       })
     } catch (error) {
       console.error('usage encountered an error: ', error)
-      return { error }
-    }
-  }
-
-  async function getTopHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
-    try {
-      // NB: the `/hosted_happs` endpoint returns happs sorted by earnings in descending order
-      const result = await hposHolochainCall({
-        method: 'get',
-        path: '/hosted_happs',
-        params: {
-          usage_interval: 7,
-          quantity: kTopHappsToDisplay
-        }
-      })
-
-      if (isHappArray(result)) {
-        return result.filter((happ: HApp) => happ.enabled)
-      } else {
-        console.error("getTopHostedHapps didn't return an array")
-        return []
-      }
-    } catch (error) {
-      console.error('getTopHostedHapps encountered an error: ', error)
       return { error }
     }
   }
@@ -748,7 +723,6 @@ export function useHposInterface(): HposInterface {
 
   return {
     getUsage,
-    getTopHostedHapps,
     getHostedHapps,
     getHostEarnings,
     checkAuth,
