@@ -27,7 +27,7 @@ const emit = defineEmits(['try-again-clicked'])
         v-if="!props.data || props.data.length === 0"
         class="no-happs"
       >
-        {{ $t('hosted_happs.no_happs') }}
+        {{ $t('hosted_happs.no_enabled_happs') }}
       </div>
       <div
         v-for="happ in props.data"
@@ -72,6 +72,8 @@ const emit = defineEmits(['try-again-clicked'])
   align-items: center;
   height: 100%;
   color: var(--grey-color);
+  font-size: 15px;
   font-weight: bold;
+	text-align: center;
 }
 </style>
