@@ -369,8 +369,8 @@ export function useHposInterface(): HposInterface {
     // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
     try {
       return await hposCall({
-        ...args,
-        pathPrefix: '/holochain-api/v1'
+        pathPrefix: '/holochain-api/v1',
+        ...args
       })
     } catch (err) {
       if (isError(err) && err.response && err.response.status === kHttpStatus.UNAUTHORIZED) {
@@ -402,6 +402,7 @@ export function useHposInterface(): HposInterface {
       // NB: the `/hosted_happs` endpoint returns happs sorted by earnings in descending order
       const result = await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/holochain-api/v2',
         path: '/hosted_happs',
         params: {
           usage_interval: 7,
@@ -425,6 +426,7 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/holochain-api/v2',
         path: '/hosted_happs',
         params: {
           usage_interval: 7
