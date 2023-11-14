@@ -3,10 +3,13 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
+import { useUserStore } from '@/store/user'
+import { EUserKycLevel } from '@/types/types'
 
 const { t } = useI18n()
+const userStore = useUserStore()
+const kycLevel = ref<EUserKycLevel>((userStore.kycLevel as any).kyc)
 const paidHostingEnabled = ref(false)
-const kycLevel = ref(2)
 
 const paidHostingToggled = (isToggledOn: boolean): void => {
     paidHostingEnabled.value = isToggledOn
@@ -19,7 +22,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     :title="$t('hosting_preferences.toggle_paid_hosting.enable_paid_hosting')"
     class="toggle-paid-hosting-section">
     <div class="toggle-container">
-        <div v-if="kycLevel < 2" class="kyc-needed-container" @click="kycLevel = (kycLevel === 1) ? 2 : 1">
+        <div v-if="kycLevel !== EUserKycLevel.two" class="kyc-needed-container">
             <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_one') }}</span>
             <span class="kyc-needed-text__dark-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
             <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
@@ -28,11 +31,11 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
             :toggleOn="paidHostingEnabled"
             :labelToggledOn="$t('hosting_preferences.toggle_paid_hosting.enabled')"
             :labelToggledOff="$t('hosting_preferences.toggle_paid_hosting.disabled')"
-            :isDisabled="kycLevel < 2"
+            :isDisabled="kycLevel !== EUserKycLevel.two"
             @toggle="paidHostingToggled">
         </ToggleSwitch>
     </div>
-    <div v-if="kycLevel > 1" class="hosting-invoice-info" @click="kycLevel = (kycLevel === 1) ? 2 : 1">
+    <div v-if="kycLevel !== EUserKycLevel.one" class="hosting-invoice-info">
         {{ paidHostingEnabled ?
             $t('hosting_preferences.toggle_paid_hosting.invoice_info_enabled') :
             $t('hosting_preferences.toggle_paid_hosting.invoice_info_disabled') }}
