@@ -4,6 +4,7 @@ import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import HAppSelectionSection from '@/components/settings/hostingPreferences/HAppSelectionSection'
 import InvoicesSection from '@/components/settings/hostingPreferences/InvoicesSection.vue'
 import PricesSection from '@/components/settings/hostingPreferences/PricesSection.vue'
+import TogglePaidHostingSection from '@/components/settings/hostingPreferences/TogglePaidHostingSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
 
 const preferencesStore = usePreferencesStore()
@@ -42,8 +43,10 @@ onMounted(async (): Promise<void> => {
     @try-again-clicked="getHostPreferences"
   >
     <template v-if="!isLoading && !isError">
+      <TogglePaidHostingSection />
       <PricesSection
         :data="pricesSettings"
+        class="hosting-preferences__prices"
         data-test-hosting-preferences-prices-section
       />
 
@@ -63,6 +66,10 @@ onMounted(async (): Promise<void> => {
 
 <style lang="scss" scoped>
 .hosting-preferences {
+  &__prices {
+    margin-top: 18px;
+  }
+
   &__invoices {
     margin-top: 18px;
   }
