@@ -553,7 +553,7 @@ const data = {
     '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
     '/holochain-api/v1/host_preferences': mockHostPreferences,
     '/holochain-api/v1/redemptions': mockRedemptionHistoryData,
-    '/holochain-api/v1/kyc': mockKycData
+    '/holochain-api/v1/kyc': mockKycData.kyc
   },
   put: {
     '/api/v1/config': (args) => args,

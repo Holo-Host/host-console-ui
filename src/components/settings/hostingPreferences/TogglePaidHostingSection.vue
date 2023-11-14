@@ -8,7 +8,6 @@ import { EUserKycLevel } from '@/types/types'
 
 const { t } = useI18n()
 const userStore = useUserStore()
-const kycLevel = ref<EUserKycLevel>((userStore.kycLevel as any).kyc)
 const paidHostingEnabled = ref(false)
 
 const paidHostingToggled = (isToggledOn: boolean): void => {
@@ -22,7 +21,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     :title="$t('hosting_preferences.toggle_paid_hosting.enable_paid_hosting')"
     class="toggle-paid-hosting-section">
     <div class="toggle-container">
-        <div v-if="kycLevel !== EUserKycLevel.two" class="kyc-needed-container">
+        <div v-if="userStore.kycLevel !== EUserKycLevel.two" class="kyc-needed-container">
             <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_one') }}</span>
             <span class="kyc-needed-text__dark-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
             <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
@@ -31,11 +30,11 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
             :toggleOn="paidHostingEnabled"
             :labelToggledOn="$t('hosting_preferences.toggle_paid_hosting.enabled')"
             :labelToggledOff="$t('hosting_preferences.toggle_paid_hosting.disabled')"
-            :isDisabled="kycLevel !== EUserKycLevel.two"
+            :isDisabled="userStore.kycLevel !== EUserKycLevel.two"
             @toggle="paidHostingToggled">
         </ToggleSwitch>
     </div>
-    <div v-if="kycLevel !== EUserKycLevel.one" class="hosting-invoice-info">
+    <div v-if="userStore.kycLevel !== EUserKycLevel.one" class="hosting-invoice-info">
         {{ paidHostingEnabled ?
             $t('hosting_preferences.toggle_paid_hosting.invoice_info_enabled') :
             $t('hosting_preferences.toggle_paid_hosting.invoice_info_disabled') }}
