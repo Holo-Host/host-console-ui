@@ -22,7 +22,7 @@ const userStore = useUserStore()
 
 const isLoadingEarnings = ref(false)
 const isLoadingUsage = ref(false)
-const isLoadingHostedHapps = ref(false)
+const isLoadingHostedHApps = ref(false)
 
 const holoFuel = computed(() =>
   isError(dashboardStore.hostEarnings)
@@ -42,10 +42,10 @@ const holoFuelCardData = computed((): HoloFuelCardData | Error => {
   }
 })
 
-const topHostedHapps = computed(() =>
-  isError(dashboardStore.hostedHapps)
-    ? dashboardStore.hostedHapps
-    : dashboardStore.hostedHapps.filter((hApp) => !hApp.enabled).slice(0, kTopHostedHAppsToDisplay)
+const topHostedHApps = computed(() =>
+  isError(dashboardStore.hostedHApps)
+    ? dashboardStore.hostedHApps
+    : dashboardStore.hostedHApps.filter((hApp) => hApp.enabled).slice(0, kTopHostedHAppsToDisplay)
 )
 
 const earnings = computed(() =>
@@ -63,9 +63,9 @@ const recentPayments = computed(() =>
 const usage = computed(() => dashboardStore.usage)
 
 async function getTopHostedHapps(): Promise<void> {
-  isLoadingHostedHapps.value = true
-  await dashboardStore.getHostedHapps()
-  isLoadingHostedHapps.value = false
+  isLoadingHostedHApps.value = true
+  await dashboardStore.getHostedHApps()
+  isLoadingHostedHApps.value = false
 }
 
 async function getEarnings(): Promise<void> {
@@ -83,7 +83,7 @@ async function getUsage(): Promise<void> {
 onMounted(async (): Promise<void> => {
   isLoadingEarnings.value = true
   isLoadingUsage.value = true
-  isLoadingHostedHapps.value = true
+  isLoadingHostedHApps.value = true
 
   await getEarnings()
   await getUsage()
@@ -115,8 +115,8 @@ onMounted(async (): Promise<void> => {
 
     <div class="row">
       <HappsCard
-        :data="topHostedHapps"
-        :is-loading="isLoadingHostedHapps"
+        :data="topHostedHApps"
+        :is-loading="isLoadingHostedHApps"
         with-more-button
         class="happs-card"
         data-test-dashboard-happs-card

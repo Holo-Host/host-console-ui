@@ -24,33 +24,12 @@ const breadcrumbs = computed(() => [
   }
 ])
 
-function getData(): void {
+async function getData(): Promise<void> {
   isError.value = false
+
   isLoading.value = true
-
-  // const result = await getHAppDetails(currentRoute.params.id)
-
-  const result = {
-    id: '1',
-    name: 'My App',
-    description: 'hApp to make you smarter',
-    categories: ['education', 'business', 'social networking'],
-    enabled: true,
-    isPaused: false,
-    sourceChains: 497,
-    daysHosted: 34,
-    earnings: {
-      total: 1903458,
-      last7Days: 476005,
-      averageWeekly: 283
-    },
-    last7DaysUsage: {
-      bandwidth: 238000000000,
-      cpu: 9000000000099,
-      storage: 34000000000
-    },
-    hostingPlan: 'paid'
-  }
+  const result = await getHAppDetails(currentRoute.params.id)
+  isLoading.value = false
 
   if (isErrorPredicate(result) && result.error) {
     isError.value = true

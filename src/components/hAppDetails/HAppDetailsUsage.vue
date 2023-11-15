@@ -24,13 +24,13 @@ const props = defineProps<{
     <div class="happ-details-usage__usage-row">
       <span class="happ-details-usage__usage-row-label">{{ t('happ_details.seven_day_usage') }}:</span>
       <div class="happ-details-usage__usage-row-value-wrapper">
-        <span class="happ-details-usage__usage-row-value">{{ presentMicroSeconds(props.hApp.last7DaysUsage.cpu) }}</span> {{ t('$.cpu') }}
+        <span class="happ-details-usage__usage-row-value">{{ presentMicroSeconds(props.hApp.usage?.cpu) }}</span> {{ t('$.cpu') }}
       </div>
-      <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__storage">
-        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.storage) }}</span> {{ t('$.storage') }}
-      </div>
+      <!--      <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__storage">-->
+      <!--        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.usage.storage) }}</span> {{ t('$.storage') }}-->
+      <!--      </div>-->
       <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__data-transfer">
-        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.last7DaysUsage.bandwidth) }}</span> {{ t('$.data_transfer') }}
+        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.usage?.bandwidth) }}</span> {{ t('$.data_transfer') }}
       </div>
     </div>
   </div>

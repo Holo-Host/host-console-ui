@@ -10,7 +10,7 @@ import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
 interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
-  getHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHostedHApps: () => Promise<HApp[] | { error: unknown }>
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
@@ -396,7 +396,7 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
+  async function getHostedHApps(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       const result = await hposHolochainCall({
         method: 'get',
@@ -408,13 +408,13 @@ export function useHposInterface(): HposInterface {
       })
 
       if (isHappArray(result)) {
-        return result.filter((happ) => happ.enabled)
+        return result
       } else {
-        console.error("getHostedHapps didn't return an array")
+        console.error("getHostedHApps didn't return an array")
         return []
       }
     } catch (error) {
-      console.error('getHostedHapps encountered an error: ', error)
+      console.error('getHostedHApps encountered an error: ', error)
       return { error }
     }
   }
@@ -425,10 +425,8 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'get',
-        path: '/happ',
-        params: {
-          id
-        }
+        pathPrefix: '/api/v2',
+        path: `/hosted_happs/${id}`
       })
 
       if (isHAppDetails(result)) {
@@ -776,7 +774,7 @@ export function useHposInterface(): HposInterface {
 
   return {
     getUsage,
-    getHostedHapps,
+    getHostedHApps,
     getHostEarnings,
     checkAuth,
     getUser,
