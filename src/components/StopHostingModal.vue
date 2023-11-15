@@ -7,9 +7,11 @@ import { EButtonType } from '@uicommon/types/ui'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EModal } from '@/constants/ui'
-import { HAppDetails } from '@/interfaces/HposInterface'
+import { HAppDetails, useHposInterface } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { t } = useI18n()
+const { stopHostingHApp, startHostingHApp } = useHposInterface()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
@@ -18,34 +20,40 @@ const props = defineProps<{
   hApp: HAppDetails
 }>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'update:hosting'])
 
 const isConfirmed = ref(false)
 const isBusy = ref(false)
 const isError = ref(false)
 
-function confirm(): void {
+async function confirm(): Promise<void> {
   isBusy.value = true
+  let result = null
 
-  setTimeout(() => {
-    if (props.hApp.enabled) {
-      stopHostingHApp()
-    } else {
-      startHostingHApp()
-    }
+  if (props.hApp.enabled) {
+    result = await stopHostingHApp(props.hApp.id)
+  } else {
+    result = await startHostingHApp(props.hApp.id)
+  }
 
-    // If failed
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-    // showModal(EModal.error_modal)
-    // emit('close')
-    //
-    // isBusy.value = false
-    // isConfirmed.value = false
+  // If failed
+  if (isErrorPredicate(result)) {
+    emit('close')
 
-    // If success
     isBusy.value = false
-    isConfirmed.value = true
-  }, 2000)
+    isConfirmed.value = false
+
+    setTimeout(() => {
+      showModal(EModal.error_modal)
+    }, 300)
+
+    return
+  }
+
+  // If success
+  isBusy.value = false
+  isConfirmed.value = true
+  emit('update:hosting', !props.hApp.enabled)
 }
 
 function close(): void {
@@ -53,14 +61,6 @@ function close(): void {
   isConfirmed.value = false
   isError.value = false
   emit('close')
-}
-
-function startHostingHApp(): void {
-  console.log('NOT YET IMPLEMENTED: Starting hosting happ', props.hApp.name)
-}
-
-function stopHostingHApp(): void {
-  console.log('NOT YET IMPLEMENTED: Stopping hosting happ', props.hApp.name)
 }
 </script>
 

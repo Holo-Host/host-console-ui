@@ -12,6 +12,8 @@ interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
   getHostedHApps: () => Promise<HApp[] | { error: unknown }>
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
+  startHostingHApp: (id: string) => Promise<void | { error: unknown }>
+  stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
@@ -441,6 +443,40 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function startHostingHApp(
+    id: string
+  ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'post',
+        pathPrefix: '/api/v2',
+        path: `/hosted_happs/${id}/enable`
+      })
+
+      return result
+    } catch (error) {
+      console.error('startHostingHApp encountered an error: ', error)
+      return { error }
+    }
+  }
+
+  async function stopHostingHApp(
+    id: string
+  ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'post',
+        pathPrefix: '/api/v2',
+        path: `/hosted_happs/${id}/disable`
+      })
+
+      return result
+    } catch (error) {
+      console.error('stopHostingHApp encountered an error: ', error)
+      return { error }
+    }
+  }
+
   async function getHostEarnings(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       return await hposHolochainCall({
@@ -790,6 +826,8 @@ export function useHposInterface(): HposInterface {
     redeemHoloFuel,
     getKycLevel,
     getHAppDetails,
+    startHostingHApp,
+    stopHostingHApp,
     HPOS_API_URL
   }
 }
