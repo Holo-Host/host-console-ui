@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import HAppDetailsContent from '@/components/hAppDetails/HAppDetailsContent.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
@@ -9,6 +10,8 @@ import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { getHAppDetails } = useHposInterface()
 const currentRoute = useRoute()
+
+const { t } = useI18n()
 
 const hApp = ref<HAppDetails>()
 const isLoading = ref(false)
@@ -20,16 +23,15 @@ const breadcrumbs = computed(() => [
     path: '/happs'
   },
   {
-    label: isLoading.value ? 'Loading...' : hApp.value?.name ?? 'Something went wrong'
+    label: isLoading.value ? t('$.loading') : hApp.value?.name ?? t('$.something_went_wrong')
   }
 ])
 
 async function getData(): Promise<void> {
   isError.value = false
-
   isLoading.value = true
+
   const result = await getHAppDetails(currentRoute.params.id)
-  isLoading.value = false
 
   if (isErrorPredicate(result) && result.error) {
     isError.value = true
@@ -42,11 +44,16 @@ async function getData(): Promise<void> {
   isLoading.value = false
 }
 
-onMounted(() => {
-  getData()
-})
+function updateHosting(isEnabled: boolean): void {
+  hApp.value = {
+    ...hApp.value,
+    enabled: isEnabled
+  }
+}
 
-onMounted(async () => {})
+onMounted(async () => {
+  await getData()
+})
 </script>
 
 <template>
@@ -59,6 +66,7 @@ onMounted(async () => {})
       <HAppDetailsContent
         v-if="hApp"
         :h-app="hApp"
+        @update:hosting="updateHosting"
       />
     </template>
   </PrimaryLayout>

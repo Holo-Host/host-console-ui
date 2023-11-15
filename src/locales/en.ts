@@ -19,8 +19,10 @@ export default {
     identicon_explanation:
       'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
     learn_more: 'Learn more',
+    loading: 'Loading...',
     logout: 'Logout',
     next: 'Next',
+    something_went_wrong: 'Something went wrong',
     storage: 'Storage',
     terms_of_service: 'Terms of Service',
     try_again: 'Try again'
@@ -42,6 +44,34 @@ export default {
     weekly_earnings: 'Weekly Earnings'
   },
   happ_details: {
+    disable_hosting: 'Disable Hosting',
+    disable_hosting_warning:
+      'Disabling hosting of a hApp will remove it and all associated data from your HoloPort.',
+    disable_hosting_modal: {
+      success: {
+        title: 'This hApp has been removed from hosting.',
+        description:
+          'Please note it may take some time for the hApp to be fully removed from your HoloPort. Any hosting provided for storage during that time will be billed to the manager.'
+      },
+      confirmation_button: 'Yes, disable',
+      description_one:
+        'It will be removed from your HoloPort and will not be available for you to host again for 30 days.',
+      description_two:
+        'All invoices, logs and payments associated with this hApp will remain available to you.',
+      title: 'Are you sure you want to disable this hApp?'
+    },
+    enable_hosting: 'Enable Hosting',
+    enable_hosting_warning:
+      'Hosting a hApp will deploy it and all associated data to your Holoport.',
+    enable_hosting_modal: {
+      success: {
+        title: 'This hApp has been enabled and you are now hosting it. '
+      },
+      confirmation_button: 'Yes, host hApp',
+      description_one:
+        'Hosting this hApp will take up some space on your console and KYC level 2 users get paid for hosting.',
+      title: 'Are you sure you want to host this hApp?'
+    },
     earnings: {
       total: 'Total Earnings',
       last_7_days: 'Earned in last 7 days',
