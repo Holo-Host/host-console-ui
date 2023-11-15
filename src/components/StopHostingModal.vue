@@ -53,7 +53,6 @@ async function confirm(): Promise<void> {
   // If success
   isBusy.value = false
   isConfirmed.value = true
-  emit('update:hosting', !props.hApp.enabled)
 }
 
 function close(): void {
@@ -61,6 +60,7 @@ function close(): void {
   isConfirmed.value = false
   isError.value = false
   emit('close')
+  emit('update:hosting', !props.hApp.enabled)
 }
 </script>
 
