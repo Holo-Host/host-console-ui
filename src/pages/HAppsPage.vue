@@ -9,10 +9,12 @@ import BaseTabSelect from '@/components/BaseTabSelect.vue'
 import SortByDropdown from '@/components/hApps/SortByDropdown.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { kSortOptions } from '@/constants/ui'
-import { HApp, useHposInterface } from '@/interfaces/HposInterface'
+import type { HApp } from '@/interfaces/HposInterface'
+import router, { kRoutes } from '@/router'
+import { useDashboardStore } from '@/store/dashboard'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
-const { getHostedHapps } = useHposInterface()
+const store = useDashboardStore()
 
 const { t } = useI18n()
 
@@ -51,10 +53,10 @@ function onFilterChange({ value, isActive }: FilterChangeProps): void {
   filterValue.value = value
 }
 
-const happs = ref<HApp[] | { error: unknown }>([])
+const happs = computed((): HApp[] | { error: unknown } => store.hostedHApps)
 const sortBy = ref(kSortOptions.alphabetical.value)
 
-const filteredHapps = computed((): HApp[] => {
+const filteredHApps = computed((): HApp[] => {
   let hAppsFilteredByActivity: HApp[] = []
 
   const sortByLogic: (a: HApp, b: HApp) => number =
@@ -98,13 +100,17 @@ async function getData(): Promise<void> {
   isError.value = false
   isLoading.value = true
 
-  happs.value = await getHostedHapps()
+  await store.getHostedHApps()
 
   if (isErrorPredicate(happs.value) && happs.value.error) {
     isError.value = true
   }
 
   isLoading.value = false
+}
+
+async function goToDetails(happId: string): Promise<void> {
+  await router.push({ name: kRoutes.happ.name, params: { id: happId } })
 }
 
 onMounted(async () => {
@@ -118,11 +124,13 @@ onMounted(async () => {
     class="happs"
     :is-content-loading="isLoading"
     :is-content-error="isError"
+    data-test-happs-page-layout
     @try-again-clicked="getData"
   >
     <div class="happs__controls">
       <BaseTabSelect
         :tabs="tabs"
+        data-test-happs-page-tabs-select
         @update="onTabChange"
       />
 
@@ -131,6 +139,7 @@ onMounted(async () => {
           :value="filterValue"
           :is-disabled="isLoading"
           label-translation-key="$.filter_by"
+          data-test-happs-page-search-input
           @update="onFilterChange"
         />
 
@@ -138,6 +147,7 @@ onMounted(async () => {
           :value="sortBy"
           is-disabled
           class="happs__sort-by-dropdown"
+          data-test-happs-page-sort-by-dropdown
           @update:value="onSortByChange"
         />
       </div>
@@ -145,18 +155,21 @@ onMounted(async () => {
 
     <div v-if="!isLoading && !isError">
       <div
-        v-if="filteredHapps.length"
+        v-if="filteredHApps.length"
         class="happs__happ-list"
       >
         <HAppCard
-          v-for="happ in filteredHapps"
-          :key="happ.id"
-          :happ="happ"
+          v-for="hApp in filteredHApps"
+          :key="hApp.id"
+          :happ="hApp"
+          are-details-available
           class="happs__happ-list-item"
+          data-test-happs-page-happ-card
+          @details-link-click="goToDetails(hApp.id)"
         >
           <template #status-chip>
             <BaseChip
-              v-if="happ.isPaused"
+              v-if="hApp.isPaused"
               :label="$t('$.paused')"
               :type="EChipType.info"
             />
@@ -171,6 +184,7 @@ onMounted(async () => {
         <HAppCard
           is-empty
           :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : selectedTab === 'enabled' ? 'hosted_happs.no_enabled_happs' : 'hosted_happs.no_disabled_happs'"
+          data-test-happs-page-happ-card-empty
           class="happs__happ-list-item"
         />
       </div>

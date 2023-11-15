@@ -26,12 +26,13 @@ const { showModal } = useModals()
 
 const props = withDefaults(
   defineProps<{
-    title: string
+    title?: string
     breadcrumbs?: BreadCrumb[]
     isContentLoading?: boolean
     isContentError?: boolean
   }>(),
   {
+    title: '',
     breadcrumbs: undefined,
     isContentLoading: false,
     isContentError: false

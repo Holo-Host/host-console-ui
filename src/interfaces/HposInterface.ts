@@ -10,7 +10,8 @@ import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
 interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
-  getHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHostedHApps: () => Promise<HApp[] | { error: unknown }>
+  getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
@@ -109,6 +110,7 @@ export interface HostPreferencesResponse {
 type HposHolochainCallResponse =
   | HostEarnings
   | HApp[]
+  | HAppDetails
   | UsageResponse
   | HposStatusResponse
   | HoloFuelProfileResponse
@@ -144,6 +146,28 @@ export interface HApp {
     bandwidth: number
     cpu: number
   }
+}
+
+export interface HAppDetails {
+  id: string
+  name: string
+  description: string
+  categories: string[]
+  enabled: boolean
+  isPaused: boolean
+  sourceChains: number
+  daysHosted: number
+  earnings: {
+    total: number
+    last7Days: number
+    averageWeekly: number
+  }
+  last7DaysUsage: {
+    bandwidth: number
+    cpu: number
+    storage: number
+  }
+  hostingPlan: 'paid' | 'free'
 }
 
 export interface Earnings {
@@ -215,6 +239,10 @@ function isError(error: Error | unknown): error is Error {
 
 function isHappArray(array: unknown): array is HApp[] {
   return Array.isArray(array)
+}
+
+function isHAppDetails(data: unknown): data is HAppDetails {
+  return typeof data === 'object' && data !== null
 }
 
 interface HposCallArgs {
@@ -340,8 +368,8 @@ export function useHposInterface(): HposInterface {
     // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
     try {
       return await hposCall({
-        ...args,
-        pathPrefix: '/holochain-api/v1'
+        pathPrefix: '/holochain-api/v1',
+        ...args
       })
     } catch (err) {
       if (isError(err) && err.response && err.response.status === kHttpStatus.UNAUTHORIZED) {
@@ -368,10 +396,11 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
+  async function getHostedHApps(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       const result = await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/hosted_happs',
         params: {
           usage_interval: 7
@@ -379,13 +408,35 @@ export function useHposInterface(): HposInterface {
       })
 
       if (isHappArray(result)) {
-        return result.filter((happ) => happ.enabled)
+        return result
       } else {
-        console.error("getHostedHapps didn't return an array")
+        console.error("getHostedHApps didn't return an array")
         return []
       }
     } catch (error) {
-      console.error('getHostedHapps encountered an error: ', error)
+      console.error('getHostedHApps encountered an error: ', error)
+      return { error }
+    }
+  }
+
+  async function getHAppDetails(
+    id: string
+  ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'get',
+        pathPrefix: '/api/v2',
+        path: `/hosted_happs/${id}`
+      })
+
+      if (isHAppDetails(result)) {
+        return result
+      } else {
+        console.error("getHAppDetails didn't return a HAppDetails object")
+        return { error: "getHAppDetails didn't return a HAppDetails object" }
+      }
+    } catch (error) {
+      console.error('getHAppDetails encountered an error: ', error)
       return { error }
     }
   }
@@ -723,7 +774,7 @@ export function useHposInterface(): HposInterface {
 
   return {
     getUsage,
-    getHostedHapps,
+    getHostedHApps,
     getHostEarnings,
     checkAuth,
     getUser,
@@ -738,6 +789,7 @@ export function useHposInterface(): HposInterface {
     getHostPreferences,
     redeemHoloFuel,
     getKycLevel,
+    getHAppDetails,
     HPOS_API_URL
   }
 }
