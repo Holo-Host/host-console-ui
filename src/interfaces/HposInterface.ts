@@ -10,8 +10,7 @@ import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
 interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
-  getTopHostedHapps: () => Promise<HApp[] | { error: unknown }>
-  getHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHostedHApps: () => Promise<HApp[] | { error: unknown }>
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
@@ -369,8 +368,8 @@ export function useHposInterface(): HposInterface {
     // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
     try {
       return await hposCall({
-        ...args,
-        pathPrefix: '/holochain-api/v1'
+        pathPrefix: '/holochain-api/v1',
+        ...args
       })
     } catch (err) {
       if (isError(err) && err.response && err.response.status === kHttpStatus.UNAUTHORIZED) {
@@ -397,34 +396,11 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function getTopHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
-    try {
-      // NB: the `/hosted_happs` endpoint returns happs sorted by earnings in descending order
-      const result = await hposHolochainCall({
-        method: 'get',
-        path: '/hosted_happs',
-        params: {
-          usage_interval: 7,
-          quantity: kTopHappsToDisplay
-        }
-      })
-
-      if (isHappArray(result)) {
-        return result.filter((happ: HApp) => happ.enabled)
-      } else {
-        console.error("getTopHostedHapps didn't return an array")
-        return []
-      }
-    } catch (error) {
-      console.error('getTopHostedHapps encountered an error: ', error)
-      return { error }
-    }
-  }
-
-  async function getHostedHapps(): Promise<HposHolochainCallResponse | { error: unknown }> {
+  async function getHostedHApps(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       const result = await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/hosted_happs',
         params: {
           usage_interval: 7
@@ -432,13 +408,13 @@ export function useHposInterface(): HposInterface {
       })
 
       if (isHappArray(result)) {
-        return result.filter((happ) => happ.enabled)
+        return result
       } else {
-        console.error("getHostedHapps didn't return an array")
+        console.error("getHostedHApps didn't return an array")
         return []
       }
     } catch (error) {
-      console.error('getHostedHapps encountered an error: ', error)
+      console.error('getHostedHApps encountered an error: ', error)
       return { error }
     }
   }
@@ -449,10 +425,8 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'get',
-        path: '/happ',
-        params: {
-          id
-        }
+        pathPrefix: '/api/v2',
+        path: `/hosted_happs/${id}`
       })
 
       if (isHAppDetails(result)) {
@@ -800,8 +774,7 @@ export function useHposInterface(): HposInterface {
 
   return {
     getUsage,
-    getTopHostedHapps,
-    getHostedHapps,
+    getHostedHApps,
     getHostEarnings,
     checkAuth,
     getUser,

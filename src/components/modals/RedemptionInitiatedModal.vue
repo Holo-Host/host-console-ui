@@ -10,6 +10,7 @@ import { computed, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import RedemptionInitiatedModalItem from './RedemptionInitiatedModalItem.vue'
+import BaseBanner from '@/components/BaseBanner.vue'
 import { EModal, kDefaultDateTimeFormat, kMsInSecond } from '@/constants/ui'
 
 const { t } = useI18n()
@@ -95,6 +96,7 @@ const items = computed((): Item[] => [
 <template>
   <BaseModal
     :is-visible="visibleModal === EModal.redemption_initiated"
+    content-padding="sm"
     @close="hideModal"
   >
     <div class="redemption-initiated-modal">
@@ -107,13 +109,21 @@ const items = computed((): Item[] => [
       </div>
 
       <div class="redemption-initiated-modal__description">
-        <RedemptionInitiatedModalItem
-          v-for="item in items"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value"
-          :tip-message="item.tipMessage || ''"
-        />
+        <BaseBanner message="Important">
+          <span class="redemption-initiated-modal__banner-content">
+            This is a request, it may be partially or totally accepted or rejected. To know the status of your request, please check redemption history, you will also receive an email if anything goes wrong.
+          </span>
+        </BaseBanner>
+
+        <div class="redemption-initiated-modal__description-items">
+          <RedemptionInitiatedModalItem
+            v-for="item in items"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+            :tip-message="item.tipMessage || ''"
+          />
+        </div>
       </div>
     </div>
 
@@ -152,11 +162,20 @@ const items = computed((): Item[] => [
   &__description {
     display: flex;
     flex-direction: column;
-    margin-top: 40px;
+    margin-top: 12px;
+
+    &-items {
+      margin-top: 30px;
+      margin-left: 20px;
+    }
   }
 
   &__button {
     margin-top: 24px;
+  }
+
+  &__banner-content {
+    text-decoration: underline;
   }
 }
 </style>
