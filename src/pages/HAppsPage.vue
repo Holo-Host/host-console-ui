@@ -124,11 +124,13 @@ onMounted(async () => {
     class="happs"
     :is-content-loading="isLoading"
     :is-content-error="isError"
+    data-test-happs-page-layout
     @try-again-clicked="getData"
   >
     <div class="happs__controls">
       <BaseTabSelect
         :tabs="tabs"
+        data-test-happs-page-tabs-select
         @update="onTabChange"
       />
 
@@ -137,6 +139,7 @@ onMounted(async () => {
           :value="filterValue"
           :is-disabled="isLoading"
           label-translation-key="$.filter_by"
+          data-test-happs-page-search-input
           @update="onFilterChange"
         />
 
@@ -144,6 +147,7 @@ onMounted(async () => {
           :value="sortBy"
           is-disabled
           class="happs__sort-by-dropdown"
+          data-test-happs-page-sort-by-dropdown
           @update:value="onSortByChange"
         />
       </div>
@@ -160,6 +164,7 @@ onMounted(async () => {
           :happ="hApp"
           are-details-available
           class="happs__happ-list-item"
+          data-test-happs-page-happ-card
           @details-link-click="goToDetails(hApp.id)"
         >
           <template #status-chip>
@@ -179,6 +184,7 @@ onMounted(async () => {
         <HAppCard
           is-empty
           :empty-card-label="filterValue ? 'hosted_happs.no_filtered_happs' : selectedTab === 'enabled' ? 'hosted_happs.no_enabled_happs' : 'hosted_happs.no_disabled_happs'"
+          data-test-happs-page-happ-card-empty
           class="happs__happ-list-item"
         />
       </div>
