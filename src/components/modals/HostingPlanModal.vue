@@ -7,12 +7,14 @@ import { EButtonType } from '@uicommon/types/ui'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EModal } from '@/constants/ui'
-import { HAppDetails } from '@/interfaces/HposInterface'
+import { HAppDetails, useHposInterface } from '@/interfaces/HposInterface'
+import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { t } = useI18n()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
+const { updateHAppHostingPlan } = useHposInterface()
 
 const props = defineProps<{
   hApp: HAppDetails
@@ -24,28 +26,35 @@ const isConfirmed = ref(false)
 const isBusy = ref(false)
 const isError = ref(false)
 
-function confirm(): void {
+async function confirm(): Promise<void> {
   isBusy.value = true
+  let result = null
 
-  setTimeout(() => {
-    if (props.hApp.hostingPlan === 'paid') {
-      startFreeHosting()
-    } else {
-      startPaidHosting()
-    }
+  if (props.hApp.hostingPlan === 'paid') {
+    result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'free' })
+  } else {
+    result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'paid' })
+  }
 
-    // If failed
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-    // showModal(EModal.error_modal)
-    // emit('close')
-    //
-    // isBusy.value = false
-    // isConfirmed.value = false
+  // If failed
+  if (isErrorPredicate(result)) {
+    emit('close')
 
-    // If success
     isBusy.value = false
-    isConfirmed.value = true
-  }, 2000)
+    isConfirmed.value = false
+
+    setTimeout(() => {
+      showModal(EModal.error_modal)
+    }, 300)
+
+    return
+  }
+
+  // If success
+  isBusy.value = false
+  isConfirmed.value = true
+
+  isBusy.value = true
 }
 
 function close(): void {
@@ -57,10 +66,12 @@ function close(): void {
 
 function startFreeHosting(): void {
   console.log('NOT YET IMPLEMENTED: Starting free hosting happ', props.hApp.name)
+  emit('update:hosting-plan', true)
 }
 
 function startPaidHosting(): void {
   console.log('NOT YET IMPLEMENTED: Starting paid hosting happ', props.hApp.name)
+  emit('update:hosting-plan', true)
 }
 </script>
 
@@ -144,9 +155,9 @@ function startPaidHosting(): void {
     margin-top: 20px;
     font-weight: 600;
 
-		&--success {
-			font-weight: 800;
-		}
+    &--success {
+      font-weight: 800;
+    }
   }
 
   &__description {

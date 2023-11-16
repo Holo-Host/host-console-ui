@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
+import { decodeAgentId } from '../../ui-common-library/src/utils/agent'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
@@ -14,6 +15,7 @@ interface HposInterface {
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   startHostingHApp: (id: string) => Promise<void | { error: unknown }>
   stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
+  updateHAppHostingPlan: (payload: UpdateHAppHostingPlanPayload) => Promise<boolean>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
@@ -29,6 +31,11 @@ interface HposInterface {
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
   HPOS_API_URL: string
+}
+
+interface UpdateHAppHostingPlanPayload {
+  id: string
+  value: string
 }
 
 interface RedeemHoloFuelPayload {
@@ -477,6 +484,38 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function updateHAppHostingPlan({
+    id,
+    value
+  }: UpdateHAppHostingPlanPayload): Promise<boolean> {
+    console.log('updateHAppHostingPlan', id, value)
+    console.log(decodeAgentId(id))
+
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'core-app',
+        zomeName: 'hha',
+        fnName: 'get_happ_preferences',
+        payload: {
+          happ_id: id
+        }
+      }
+
+      const result = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      console.log(result)
+
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   async function getHostEarnings(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       return await hposHolochainCall({
@@ -828,6 +867,7 @@ export function useHposInterface(): HposInterface {
     getHAppDetails,
     startHostingHApp,
     stopHostingHApp,
+    updateHAppHostingPlan,
     HPOS_API_URL
   }
 }

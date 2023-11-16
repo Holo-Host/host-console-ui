@@ -77,6 +77,13 @@ export default {
       last_7_days: 'Earned in last 7 days',
       average_weekly: 'Average weekly earnings'
     },
+    hosting_plan: {
+      free: 'Free',
+      free_description: 'Agree to host this hApp for free.',
+      label: 'Hosting Plan',
+      paid: 'Paid',
+      paid_description: 'Get paid to host this hApp.'
+    },
     seven_day_usage: '7 day usage',
     stop_hosting: 'Stop Hosting',
     stop_hosting_warning:

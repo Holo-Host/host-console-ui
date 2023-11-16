@@ -4,6 +4,7 @@ const props = defineProps<{
   value: string
   label: string
   description: string
+  modelValue: string
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -18,11 +19,12 @@ const emit = defineEmits(['update:modelValue'])
     >
       <input
         :id="props.id"
+        v-model="props.modelValue"
         name="type"
         type="radio"
         :value="props.value"
         class="base-radio-button__input"
-				@change="emit('update:modelValue', props.value)"
+        @change="emit('update:modelValue', props.value)"
       />
       <div class="base-radio-button__input-inner">
         <svg
@@ -113,14 +115,14 @@ const emit = defineEmits(['update:modelValue'])
 
   &__label {
     font-weight: 800;
-		cursor: pointer;
+    cursor: pointer;
   }
 
   &__description {
     font-weight: 600;
     font-size: 12px;
     color: var(--grey-light-color);
-		cursor: pointer;
+    cursor: pointer;
   }
 }
 </style>

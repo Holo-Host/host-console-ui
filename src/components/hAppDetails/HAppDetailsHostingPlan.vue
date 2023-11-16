@@ -12,8 +12,8 @@ const props = defineProps<{
 }>()
 
 function updatePlan(value: string) {
-	openModal()
-  console.log(value)
+	console.log(value)
+  openModal()
 }
 
 const isModalVisible = ref(false)
@@ -29,13 +29,14 @@ function closeModal(): void {
 
 <template>
   <div class="happ-details-hosting-plan">
-    <span class="happ-details-hosting-plan__title">Hosting Plan</span>
+    <span class="happ-details-hosting-plan__title">{{ t('happ_details.hosting_plan.label') }}</span>
     <div class="happ-details-hosting-plan__radio-buttons">
       <BaseRadioButton
         id="happ-details-hosting-plan-paid"
         value="paid"
-        label="Paid"
-        description="Get paid to host this hApp."
+        :model-value="props.hApp.hostingPlan"
+        :label="t('happ_details.hosting_plan.paid')"
+        :description="t('happ_details.hosting_plan.paid_description')"
         class="happ-details-hosting-plan__radio-button-paid"
         @update:model-value="updatePlan"
       />
@@ -43,8 +44,9 @@ function closeModal(): void {
       <BaseRadioButton
         id="happ-details-hosting-plan-free"
         value="free"
-        label="Free"
-        description="Agree to host this hApp for free."
+        :model-value="props.hApp.hostingPlan"
+        :label="t('happ_details.hosting_plan.free')"
+        :description="t('happ_details.hosting_plan.free_description')"
         class="happ-details-hosting-plan__radio-button-free"
         @update:model-value="updatePlan"
       />
