@@ -14,6 +14,12 @@ const { t } = useI18n()
 const props = defineProps<{
   hApp: HAppDetails
 }>()
+
+const emit = defineEmits(['update:hosting'])
+
+function updateHosting(isEnabled: boolean): void {
+  emit('update:hosting', isEnabled)
+}
 </script>
 
 <template>
@@ -78,6 +84,7 @@ const props = defineProps<{
           <HAppDetailsStopHosting
             :h-app="props.hApp"
             class="happ-details__main-column-stop-hosting"
+            @update:hosting="updateHosting"
           />
         </div>
 

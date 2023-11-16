@@ -14,6 +14,8 @@ const props = defineProps<{
   hApp: HAppDetails
 }>()
 
+const emit = defineEmits(['update:hosting'])
+
 const isHostingModalVisible = ref(false)
 const isDisableHostingTooltipVisible = ref(false)
 
@@ -23,6 +25,10 @@ function openHostingModal(): void {
 
 function closeHostingModal(): void {
   isHostingModalVisible.value = false
+}
+
+function updateHosting(isEnabled: boolean): void {
+  emit('update:hosting', isEnabled)
 }
 </script>
 
@@ -55,6 +61,7 @@ function closeHostingModal(): void {
       :h-app="props.hApp"
       :is-visible="isHostingModalVisible"
       :h-app-name="hApp?.name || ''"
+      @update:hosting="updateHosting"
       @close="closeHostingModal"
     />
   </div>

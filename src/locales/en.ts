@@ -19,8 +19,10 @@ export default {
     identicon_explanation:
       'This Identicon design and hash ID are both unique representations of this Host Console and associated HoloFuel address. Consider this address like a bank account, or crypto wallet. When you see this identicon, you know it’s your account.',
     learn_more: 'Learn more',
+    loading: 'Loading...',
     logout: 'Logout',
     next: 'Next',
+    something_went_wrong: 'Something went wrong',
     storage: 'Storage',
     terms_of_service: 'Terms of Service',
     try_again: 'Try again'
@@ -93,9 +95,11 @@ export default {
     ...commonTranslations.holofuel_modal
   },
   hosted_happs: {
+    disabled: 'Disabled hApps',
+    enabled: 'Enabled hApps',
     hosted_for: 'Hosted for',
-    no_active_happs: 'You’re not hosting any hApps',
-    no_inactive_happs: 'You do not have any inactive hApps',
+    no_enabled_happs: 'You have not enabled any hApps for hosting',
+    no_disabled_happs: 'You have not disabled any hApps',
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
   },

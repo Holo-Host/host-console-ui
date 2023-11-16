@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import HAppDetailsContent from '@/components/hAppDetails/HAppDetailsContent.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
@@ -9,6 +10,8 @@ import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { getHAppDetails } = useHposInterface()
 const currentRoute = useRoute()
+
+const { t } = useI18n()
 
 const hApp = ref<HAppDetails>()
 const isLoading = ref(false)
@@ -20,37 +23,15 @@ const breadcrumbs = computed(() => [
     path: '/happs'
   },
   {
-    label: isLoading.value ? 'Loading...' : hApp.value?.name ?? 'Something went wrong'
+    label: isLoading.value ? t('$.loading') : hApp.value?.name ?? t('$.something_went_wrong')
   }
 ])
 
-function getData(): void {
+async function getData(): Promise<void> {
   isError.value = false
   isLoading.value = true
 
-  // const result = await getHAppDetails(currentRoute.params.id)
-
-  const result = {
-    id: '1',
-    name: 'My App',
-    description: 'hApp to make you smarter',
-    categories: ['education', 'business', 'social networking'],
-    enabled: true,
-    isPaused: false,
-    sourceChains: 497,
-    daysHosted: 34,
-    earnings: {
-      total: 1903458,
-      last7Days: 476005,
-      averageWeekly: 283
-    },
-    last7DaysUsage: {
-      bandwidth: 238000000000,
-      cpu: 9000000000099,
-      storage: 34000000000
-    },
-    hostingPlan: 'paid'
-  }
+  const result = await getHAppDetails(currentRoute.params.id)
 
   if (isErrorPredicate(result) && result.error) {
     isError.value = true
@@ -63,11 +44,16 @@ function getData(): void {
   isLoading.value = false
 }
 
-onMounted(() => {
-  getData()
-})
+function updateHosting(isEnabled: boolean): void {
+  hApp.value = {
+    ...hApp.value,
+    enabled: isEnabled
+  }
+}
 
-onMounted(async () => {})
+onMounted(async () => {
+  await getData()
+})
 </script>
 
 <template>
@@ -80,6 +66,7 @@ onMounted(async () => {})
       <HAppDetailsContent
         v-if="hApp"
         :h-app="hApp"
+        @update:hosting="updateHosting"
       />
     </template>
   </PrimaryLayout>

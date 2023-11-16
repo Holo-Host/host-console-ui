@@ -62,6 +62,7 @@ export default defineConfig(({ mode }) => {
         },
     test: {
       environment: 'happy-dom',
+      globals: true,
       exclude: [...configDefaults.exclude, '**/ui-common-library/**']
     }
   }
