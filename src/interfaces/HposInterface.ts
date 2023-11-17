@@ -11,6 +11,8 @@ import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
   getHostedHapps: () => Promise<HApp[] | { error: unknown }>
+  getHapps: () => Promise<HApp[] | { error: unknown }>
+  getHosts: (happ_id: string) => Promise<Host[] | { error: unknown }>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
@@ -140,10 +142,28 @@ export interface HApp {
   sourceChains: number
   hostedAgents?: number
   storage: number
+  special_installed_app_id?: string
   usage: {
     bandwidth: number
     cpu: number
   }
+}
+
+export interface Host {
+  host_pub_key: string
+  holoport_id: string
+  preferences: {
+    timestamp: number
+    max_fuel_before_invoice: number
+    price_compute: number
+    price_storage: number
+    price_bandwidth: number
+    max_time_before_invoice: {
+      secs: number
+      nanos: number
+    }
+  },
+  preferences_hash: string
 }
 
 export interface Earnings {
@@ -214,6 +234,10 @@ function isError(error: Error | unknown): error is Error {
 }
 
 function isHappArray(array: unknown): array is HApp[] {
+  return Array.isArray(array)
+}
+
+function isHostArray(array: unknown): array is Host[] {
   return Array.isArray(array)
 }
 
@@ -652,6 +676,48 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getHapps(): Promise<HApp[] | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'get',
+        path: '/get_happs',
+        params: {}
+      })
+
+      if (isHappArray(result)) {
+        return result
+      } else {
+        console.error("getHapps didn't return an array")
+        return []
+      }
+    } catch (error) {
+      console.error('getHapps encountered an error: ', error)
+      return { error }
+    }
+  }
+
+  async function getHosts(happ_id: string): Promise<Host[] | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'get',
+        path: '/get_hosts',
+        params: {
+          happ_id
+        }
+      })
+
+      if (isHostArray(result)) {
+        return result
+      } else {
+        console.error("getHosts didn't return an array")
+        return []
+      }
+    } catch (error) {
+      console.error('getHosts encountered an error: ', error)
+      return { error }
+    }
+  }
+
   async function getKycLevel(): Promise<EUserKycLevel | null> {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -724,6 +790,8 @@ export function useHposInterface(): HposInterface {
   return {
     getUsage,
     getHostedHapps,
+    getHapps,
+    getHosts,
     getHostEarnings,
     checkAuth,
     getUser,

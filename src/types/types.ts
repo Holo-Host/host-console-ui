@@ -40,6 +40,14 @@ export interface InvoicesData {
   }
 }
 
+export interface HostPricing {
+  host_pub_key: string
+  price_compute: number
+  price_storage: number
+  price_bandwidth: number
+}
+
+
 export interface TableHeader {
   key: string
   isSortable: boolean

@@ -15,11 +15,11 @@ const isError = ref(false)
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
 
-async function getHostPreferences(): Promise<void> {
+async function getHostPreferencesAndPricing(): Promise<void> {
   try {
     isError.value = false
     isLoading.value = true
-    await preferencesStore.getHostPreferences()
+    await preferencesStore.getHostPreferencesAndPricing()
     isLoading.value = false
   } catch (e) {
     isLoading.value = false
@@ -29,7 +29,7 @@ async function getHostPreferences(): Promise<void> {
 
 onMounted(async (): Promise<void> => {
   if (!preferencesStore.isLoaded) {
-    await getHostPreferences()
+    await getHostPreferencesAndPricing()
   }
 })
 </script>
@@ -40,7 +40,7 @@ onMounted(async (): Promise<void> => {
     :is-content-error="isError"
     :title="$t('hosting_preferences.header')"
     data-test-hosting-preferences-layout
-    @try-again-clicked="getHostPreferences"
+    @try-again-clicked="getHostPreferencesAndPricing"
   >
     <template v-if="!isLoading && !isError">
       <TogglePaidHostingSection />

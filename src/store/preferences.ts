@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia'
 import { useHposInterface } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
-import type { InvoicesData, PricesData } from '@/types/types'
+import type { InvoicesData, PricesData, HostPricing } from '@/types/types'
+import { isError } from '@/types/predicates'
 
-const { getHostPreferences } = useHposInterface()
+const { getHostPreferences, getHosts, getHapps } = useHposInterface()
 
 interface State {
   isLoaded: boolean
   pricesSettings: PricesData
   invoicesSettings: InvoicesData
+  holoportPricing: HostPricing[]
 }
 
 export const usePreferencesStore = defineStore('preferences', {
@@ -27,10 +29,19 @@ export const usePreferencesStore = defineStore('preferences', {
       due: {
         period: 'N/A' // in duration days
       }
-    }
+    },
+    holoportPricing: []
   }),
 
   actions: {
+    async getHostPreferencesAndPricing(): Promise<void> {
+      await Promise.all([
+        await this.getHostPreferences(),
+        await this.getHostPricing()
+      ])
+
+      this.isLoaded = true
+    },
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 
@@ -68,8 +79,42 @@ export const usePreferencesStore = defineStore('preferences', {
           }
         }
       }
+    },
+    async getHostPricing(): Promise<void> {
+        const CORE_APP_IDENTIFIER = 'core-app'
 
-      this.isLoaded = true
+        // 1. Get a list of all hApps and find hApp where the special installed hApp id set
+        const all_hApps = await getHapps()
+        if( isError(all_hApps) ) {
+          throw all_hApps
+        }
+
+        const hApp_with_special_installed_app_id = all_hApps.find(
+          hApp => hApp.special_installed_app_id !== null &&
+          hApp.special_installed_app_id?.indexOf('core-app') !== -1
+        )
+
+        if( !hApp_with_special_installed_app_id ) {
+          this.holoportPricing = []
+          throw new Error(`Could not fetch holoport pricing information: no core-app found`)
+        }
+        
+        // 2. Get all hosts from HPOS using the hApp Id of the hApp w/ core-app special installed hApp id
+        const all_hosts = await getHosts(hApp_with_special_installed_app_id.id)
+        if( isError(all_hosts) ) {
+          throw all_hosts
+        }
+
+        const holoportPricing = all_hosts.map(host => {
+          return {
+            host_pub_key: host.host_pub_key,
+            price_compute: host.preferences.price_compute,
+            price_storage: host.preferences.price_storage,
+            price_bandwidth: host.preferences.price_bandwidth
+          }
+        })
+        
+        this.holoportPricing = holoportPricing        
     }
   }
 })
