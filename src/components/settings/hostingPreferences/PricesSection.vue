@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
+import PricingHistogram from './PricingHistogram.vue'
 import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
 import type { PricesData } from '@/types/types'
 
@@ -80,14 +81,27 @@ const prices = computed((): PriceItem[] => [
     value: props.data.cpu || 0,
     unit: 'HF per min',
     prop: 'cpu',
-    isDisabled: true
+    isDisabled: false
   },
+  ////////////////////////////////////////////////////////////////
+  // REMOVE OR COMMENT OUT THE FOLLOWING LINES BEFORE MERGING
+  ////////////////////////////////////////////////////////////////
+  {
+    label: t('$.storage'),
+    value: props.data.storage ? formatPrice(props.data.storage).value : 0,
+    unit: props.data.storage ? formatPrice(props.data.storage).unit : '',
+    prop: 'storage',
+    isDisabled: false
+  },
+  ////////////////////////////////////////////////////////////////
+  // REMOVE OR COMMENT OUT THE LINES ABOVE BEFORE MERGING
+  ////////////////////////////////////////////////////////////////
   {
     label: t('$.data_transfer'),
     value: props.data.bandwidth ? formatPrice(props.data.bandwidth).value : 0,
     unit: props.data.bandwidth ? formatPrice(props.data.bandwidth).unit : '',
     prop: 'bandwidth',
-    isDisabled: true
+    isDisabled: false
   }
 ])
 </script>
@@ -101,16 +115,27 @@ const prices = computed((): PriceItem[] => [
       {{ $t('hosting_preferences.prices.subheader') }}
     </span>
 
-    <div class="prices-section__prices">
-      <HostingPreferencesEditablePriceRow
-        v-for="price in prices"
-        :key="price.label"
-        v-bind="price"
-        class="prices-section__price"
-        @update:value="updatePrice"
-      />
+    <div class="prices-configuration">
+      <div class="prices-section__prices">
+        <HostingPreferencesEditablePriceRow
+          v-for="price in prices"
+          :key="price.label"
+          v-bind="price"
+          class="prices-section__price"
+          @update:value="updatePrice"
+        />
+      </div>
+
+      <PricingHistogram
+        :selected_pricing_option="2"
+        :disabled="false"
+        :price="50"
+      >
+      </PricingHistogram>    
     </div>
+
   </SettingsSection>
+
 </template>
 
 <style lang="scss" scoped>
@@ -121,12 +146,24 @@ const prices = computed((): PriceItem[] => [
   }
 
   &__prices {
+    display: flex;
+    flex-direction: column;
     margin-top: 24px;
     margin-left: 40px;
+    margin-right: 24px;
   }
 
   &__price {
     margin-top: 6px;
+  }
+
+  .prices-configuration {
+    display: flex;
+    flex-direction: row;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    color: #313c59;
   }
 }
 </style>

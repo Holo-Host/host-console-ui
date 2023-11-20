@@ -35,7 +35,8 @@
     "vite-plugin-require": "^1.1.10",
     "vue": "^3.2.47",
     "vue-i18n": "^9.2.2",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue-slider-component": "^4.0.0-beta.4"
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^0.8.2",

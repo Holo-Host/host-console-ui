@@ -30,6 +30,12 @@ export interface PricesData {
   cpu: number
 }
 
+export enum EPricingOptions {
+  storage = 0,
+  data_transfer = 1,
+  compute = 2
+}
+
 export interface InvoicesData {
   due: {
     period: string

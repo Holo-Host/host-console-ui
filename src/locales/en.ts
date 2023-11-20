@@ -100,6 +100,14 @@ export default {
       disabled: 'Disabled',
       invoice_info_enabled: 'Invoices will be sent to hApp managers for hosting services provided unless free hosting is enabled for individual hApps.',
       invoice_info_disabled: 'You are currently hosting hApps for free, switch the toggle on to start getting paid. If you would like to continue hosting any individual hApps for free, please toggle “free hosting” on for each individual hApp.'
+    },
+    pricing_histogram: {
+      average_storage_price: 'Average Storage Price',
+      average_data_transfer_price: 'Average Data Transfer Price',
+      average_compute_price: 'Average Compute Price',
+      chargeable_rate: 'chargeable rate',
+      save: 'Save',
+      reset: 'Reset'
     }
   },
   invoices: {
