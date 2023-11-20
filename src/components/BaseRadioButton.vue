@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { ref } from 'vue'
+
 const props = defineProps<{
   id: string
   value: string
@@ -8,6 +10,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['update:modelValue'])
+
+const localValue = ref(props.modelValue)
 </script>
 
 <template>
@@ -19,7 +23,7 @@ const emit = defineEmits(['update:modelValue'])
     >
       <input
         :id="props.id"
-        v-model="props.modelValue"
+        v-model="localValue"
         name="type"
         type="radio"
         :value="props.value"

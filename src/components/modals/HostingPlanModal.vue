@@ -18,6 +18,7 @@ const { updateHAppHostingPlan } = useHposInterface()
 
 const props = defineProps<{
   hApp: HAppDetails
+  planValue: 'free' | 'paid'
 }>()
 
 const emit = defineEmits(['close'])
@@ -30,10 +31,12 @@ async function confirm(): Promise<void> {
   isBusy.value = true
   let result = null
 
-  if (props.hApp.hostingPlan === 'paid') {
-    result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'free' })
-  } else {
+  if (props.planValue === 'paid') {
     result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'paid' })
+    emit('update:hosting-plan', 'paid')
+  } else {
+    result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'free' })
+    emit('update:hosting-plan', 'free')
   }
 
   // If failed
@@ -62,16 +65,6 @@ function close(): void {
   isConfirmed.value = false
   isError.value = false
   emit('close')
-}
-
-function startFreeHosting(): void {
-  console.log('NOT YET IMPLEMENTED: Starting free hosting happ', props.hApp.name)
-  emit('update:hosting-plan', true)
-}
-
-function startPaidHosting(): void {
-  console.log('NOT YET IMPLEMENTED: Starting paid hosting happ', props.hApp.name)
-  emit('update:hosting-plan', true)
 }
 </script>
 

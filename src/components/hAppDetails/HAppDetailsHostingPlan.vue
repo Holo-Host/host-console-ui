@@ -11,8 +11,11 @@ const props = defineProps<{
   hApp: HAppDetails
 }>()
 
+const planValue = ref(props.hApp.hostingPlan)
+
 function updatePlan(value: string) {
-	console.log(value)
+  console.log('updatePlan', value)
+  planValue.value = value
   openModal()
 }
 
@@ -55,6 +58,7 @@ function closeModal(): void {
     <HostingPlanModal
       v-if="props.hApp"
       :h-app="props.hApp"
+      :plan-value="planValue"
       :is-visible="isModalVisible"
       @close="closeModal"
     />

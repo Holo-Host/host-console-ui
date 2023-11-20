@@ -489,9 +489,23 @@ export function useHposInterface(): HposInterface {
     value
   }: UpdateHAppHostingPlanPayload): Promise<boolean> {
     console.log('updateHAppHostingPlan', id, value)
-    console.log(decodeAgentId(id))
 
     try {
+      // const params = {
+      //   appId: localStorage.getItem(kCoreAppVersionLSKey),
+      //   roleId: 'core-app',
+      //   zomeName: 'hha',
+      //   fnName: 'set_happ_preferences',
+      //   payload: {
+      //     happ_id: id,
+      //     max_fuel_before_invoice: 1000,
+      //     price_compute: 0,
+      //     price_storage: 0,
+      //     price_bandwidth: 0,
+      //     max_time_before_invoice: { secs: 15000, nanos: 0 }
+      //   }
+      // }
+
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
         roleId: 'core-app',
@@ -501,6 +515,8 @@ export function useHposInterface(): HposInterface {
           happ_id: id
         }
       }
+
+      console.log(params)
 
       const result = await hposHolochainCall({
         method: 'post',
@@ -539,28 +555,6 @@ export function useHposInterface(): HposInterface {
       throw error
     }
   }
-
-  // async function setHostPreferences(hostPreferences): Promise<HposHolochainCallResponse> {
-  //   try {
-  //     const params: Record<string, unknown> = {
-  //       appId: localStorage.getItem(kCoreAppVersionLSKey),
-  //       roleId: 'core-app',
-  //       zomeName: 'hha',
-  //       fnName: 'set_happ_preferences',
-  //       payload: hostPreferences
-  //     }
-  //
-  //     await hposHolochainCall({
-  //       method: 'post',
-  //       path: '/zome_call',
-  //       params
-  //     })
-  //
-  //     return true
-  //   } catch (error) {
-  //     return false
-  //   }
-  // }
 
   async function checkAuth(
     email: string,
