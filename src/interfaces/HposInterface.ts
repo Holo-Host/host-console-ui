@@ -491,32 +491,37 @@ export function useHposInterface(): HposInterface {
     console.log('updateHAppHostingPlan', id, value)
 
     try {
+      const params =
+        value === 'free'
+          ? {
+              appId: localStorage.getItem(kCoreAppVersionLSKey),
+              roleId: 'core-app',
+              zomeName: 'hha',
+              fnName: 'set_happ_preferences',
+              payload: {
+                happ_id: id,
+                max_fuel_before_invoice: '1000',
+                price_compute: '0',
+                price_storage: '0',
+                price_bandwidth: '0',
+                max_time_before_invoice: { secs: 15000, nanos: 0 }
+              }
+            }
+          : {
+              appId: localStorage.getItem(kCoreAppVersionLSKey),
+              roleId: 'core-app',
+              zomeName: 'hha',
+              fnName: 'use_default_happ_preferences',
+              payload: id
+            }
+
       // const params = {
       //   appId: localStorage.getItem(kCoreAppVersionLSKey),
       //   roleId: 'core-app',
       //   zomeName: 'hha',
-      //   fnName: 'set_happ_preferences',
-      //   payload: {
-      //     happ_id: id,
-      //     max_fuel_before_invoice: 1000,
-      //     price_compute: 0,
-      //     price_storage: 0,
-      //     price_bandwidth: 0,
-      //     max_time_before_invoice: { secs: 15000, nanos: 0 }
-      //   }
+      //   fnName: 'get_happ_preferences',
+      //   payload: id
       // }
-
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'core-app',
-        zomeName: 'hha',
-        fnName: 'get_happ_preferences',
-        payload: {
-          happ_id: id
-        }
-      }
-
-      console.log(params)
 
       const result = await hposHolochainCall({
         method: 'post',
