@@ -72,7 +72,6 @@ onMounted(async () => {
 
       try {
         await userStore.getUser()
-				console.log('nickname in try', userStore.holoFuel.nickname)
       } catch (e) {
         localStorage.removeItem(kAuthTokenLSKey)
         await router.push({ name: kRoutes.login.name })
@@ -83,11 +82,7 @@ onMounted(async () => {
       isLoading.value = false
     }
 
-		console.log('nickname outside try', userStore.holoFuel.nickname)
-
 		await nextTick(() => {
-			console.log('nickname outside try - nextTick', userStore.holoFuel.nickname)
-
 			if (!userStore.holoFuel.nickname) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         showModal(EModal.welcome)
