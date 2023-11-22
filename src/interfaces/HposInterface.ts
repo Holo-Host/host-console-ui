@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import axios from 'axios'
+import { decodeAgentId } from '../../ui-common-library/src/utils/agent'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
@@ -14,6 +15,7 @@ interface HposInterface {
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   startHostingHApp: (id: string) => Promise<void | { error: unknown }>
   stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
+  updateHAppHostingPlan: (payload: UpdateHAppHostingPlanPayload) => Promise<boolean>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
   checkAuth: (email: string, password: string, authToken: string) => Promise<CheckAuthResponse>
@@ -29,6 +31,11 @@ interface HposInterface {
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
   HPOS_API_URL: string
+}
+
+interface UpdateHAppHostingPlanPayload {
+  id: string
+  value: string
 }
 
 interface RedeemHoloFuelPayload {
@@ -477,6 +484,47 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function updateHAppHostingPlan({
+    id,
+    value
+  }: UpdateHAppHostingPlanPayload): Promise<boolean> {
+    try {
+      const params =
+        value === 'free'
+          ? {
+              appId: localStorage.getItem(kCoreAppVersionLSKey),
+              roleId: 'core-app',
+              zomeName: 'hha',
+              fnName: 'set_happ_preferences',
+              payload: {
+                happ_id: id,
+                max_fuel_before_invoice: '1000',
+                price_compute: '0',
+                price_storage: '0',
+                price_bandwidth: '0',
+                max_time_before_invoice: { secs: 15000, nanos: 0 }
+              }
+            }
+          : {
+              appId: localStorage.getItem(kCoreAppVersionLSKey),
+              roleId: 'core-app',
+              zomeName: 'hha',
+              fnName: 'use_default_happ_preferences',
+              payload: id
+            }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   async function getHostEarnings(): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       return await hposHolochainCall({
@@ -490,38 +538,27 @@ export function useHposInterface(): HposInterface {
   }
 
   async function getHostPreferences(): Promise<HposHolochainCallResponse | { error: unknown }> {
+    const params = {
+      appId: localStorage.getItem(kCoreAppVersionLSKey),
+      roleId: 'core-app',
+      zomeName: 'hha',
+      fnName: 'get_default_happ_preferences',
+      payload: null
+    }
+
     try {
-      return await hposHolochainCall({
-        method: 'get',
-        path: '/host_preferences'
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
       })
+
+      return true
     } catch (error) {
       console.error('getHostPreferences encountered an error: ', error)
-      throw error
+      return false
     }
   }
-
-  // async function setHostPreferences(hostPreferences): Promise<HposHolochainCallResponse> {
-  //   try {
-  //     const params: Record<string, unknown> = {
-  //       appId: localStorage.getItem(kCoreAppVersionLSKey),
-  //       roleId: 'core-app',
-  //       zomeName: 'hha',
-  //       fnName: 'set_happ_preferences',
-  //       payload: hostPreferences
-  //     }
-  //
-  //     await hposHolochainCall({
-  //       method: 'post',
-  //       path: '/zome_call',
-  //       params
-  //     })
-  //
-  //     return true
-  //   } catch (error) {
-  //     return false
-  //   }
-  // }
 
   async function checkAuth(
     email: string,
@@ -828,6 +865,7 @@ export function useHposInterface(): HposInterface {
     getHAppDetails,
     startHostingHApp,
     stopHostingHApp,
+    updateHAppHostingPlan,
     HPOS_API_URL
   }
 }

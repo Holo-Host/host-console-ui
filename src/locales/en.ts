@@ -77,6 +77,13 @@ export default {
       last_7_days: 'Earned in last 7 days',
       average_weekly: 'Average weekly earnings'
     },
+    hosting_plan: {
+      free: 'Free',
+      free_description: 'Agree to host this hApp for free.',
+      label: 'Hosting Plan',
+      paid: 'Paid',
+      paid_description: 'Get paid to host this hApp.'
+    },
     seven_day_usage: '7 day usage',
     stop_hosting: 'Stop Hosting',
     stop_hosting_warning:
@@ -102,6 +109,20 @@ export default {
     no_disabled_happs: 'You have not disabled any hApps',
     no_filtered_happs: 'No hApps match your search',
     title: 'Top Hosted hApps'
+  },
+  hosting_plan: {
+    free: {
+      title: 'Are you sure you want to host this hApp for free?',
+      confirmation_button_label: 'Yes, host for free',
+      success_title: 'Hosting Plan Switched',
+      success_description: 'You’ve successfully switched to free hosting plan.'
+    },
+    paid: {
+      title: 'Are you sure you want to stop hosting this hApp for free? ',
+      confirmation_button_label: 'Yes, switch to paid',
+      success_title: 'Hosting Plan Switched',
+      success_description: 'You’ve successfully switched to paid hosting plan.'
+    }
   },
   hosting_preferences: {
     header: 'Hosting Preferences',

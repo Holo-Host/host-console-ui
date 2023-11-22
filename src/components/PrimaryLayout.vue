@@ -82,8 +82,8 @@ onMounted(async () => {
       isLoading.value = false
     }
 
-    await nextTick(() => {
-      if (!userStore.holoFuel.nickname) {
+		await nextTick(() => {
+			if (!userStore.holoFuel.nickname) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         showModal(EModal.welcome)
       }

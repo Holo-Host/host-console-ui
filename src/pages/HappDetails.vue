@@ -51,6 +51,13 @@ function updateHosting(isEnabled: boolean): void {
   }
 }
 
+function updateHostingPlan(plan: 'free' | 'paid'): void {
+  hApp.value = {
+    ...hApp.value,
+    hostingPlan: plan
+  }
+}
+
 onMounted(async () => {
   await getData()
 })
@@ -67,6 +74,7 @@ onMounted(async () => {
         v-if="hApp"
         :h-app="hApp"
         @update:hosting="updateHosting"
+        @update:hosting-plan="updateHostingPlan"
       />
     </template>
   </PrimaryLayout>

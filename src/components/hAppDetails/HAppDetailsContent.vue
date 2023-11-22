@@ -3,6 +3,7 @@ import HAppImage from '@uicommon/components/HAppImage.vue'
 import { useI18n } from 'vue-i18n'
 import CategoryChip from '@/components/CategoryChip.vue'
 import HAppDetailsEarnings from '@/components/hAppDetails/HAppDetailsEarnings.vue'
+import HAppDetailsHostingPlan from '@/components/hAppDetails/HAppDetailsHostingPlan.vue'
 import HAppDetailsStopHosting from '@/components/hAppDetails/HAppDetailsStopHosting.vue'
 import HAppDetailsUsage from '@/components/hAppDetails/HAppDetailsUsage.vue'
 import LeftChevronIcon from '@/components/icons/LeftChevronIcon.vue'
@@ -14,10 +15,14 @@ const props = defineProps<{
   hApp: HAppDetails
 }>()
 
-const emit = defineEmits(['update:hosting'])
+const emit = defineEmits(['update:hosting', 'update:hosting-plan'])
 
 function updateHosting(isEnabled: boolean): void {
   emit('update:hosting', isEnabled)
+}
+
+function updateHostingPlan(plan: 'free' | 'paid'): void {
+  emit('update:hosting-plan', plan)
 }
 </script>
 
@@ -95,6 +100,13 @@ function updateHosting(isEnabled: boolean): void {
         <HAppDetailsUsage
           :h-app="props.hApp"
           class="happ-details__main-column-usage"
+        />
+
+        <HAppDetailsHostingPlan
+          v-if="props.hApp.enabled"
+          :h-app="props.hApp"
+          class="happ-details__main-column-hosting-plan"
+          @update:hosting-plan="updateHostingPlan"
         />
       </div>
     </div>
@@ -192,6 +204,10 @@ function updateHosting(isEnabled: boolean): void {
 
     &-usage {
       margin-top: 32px;
+    }
+
+    &-hosting-plan {
+      margin-top: 54px;
     }
   }
 }
