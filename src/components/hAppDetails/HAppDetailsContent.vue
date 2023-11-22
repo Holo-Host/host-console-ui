@@ -15,10 +15,14 @@ const props = defineProps<{
   hApp: HAppDetails
 }>()
 
-const emit = defineEmits(['update:hosting'])
+const emit = defineEmits(['update:hosting', 'update:hosting-plan'])
 
 function updateHosting(isEnabled: boolean): void {
   emit('update:hosting', isEnabled)
+}
+
+function updateHostingPlan(plan: 'free' | 'paid'): void {
+  emit('update:hosting-plan', plan)
 }
 </script>
 
@@ -102,6 +106,7 @@ function updateHosting(isEnabled: boolean): void {
           v-if="props.hApp.enabled"
           :h-app="props.hApp"
           class="happ-details__main-column-hosting-plan"
+          @update:hosting-plan="updateHostingPlan"
         />
       </div>
     </div>

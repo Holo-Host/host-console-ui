@@ -21,11 +21,30 @@ const props = defineProps<{
   planValue: 'free' | 'paid'
 }>()
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'update:hosting-plan'])
 
 const isConfirmed = ref(false)
 const isBusy = ref(false)
 const isError = ref(false)
+
+function close(): void {
+  if (!isConfirmed.value) {
+    emit('update:hosting-plan', props.planValue === 'free' ? 'paid' : 'free')
+  }
+
+  isBusy.value = false
+  isConfirmed.value = false
+  isError.value = false
+  emit('close')
+}
+
+function cancel(): void {
+  isBusy.value = false
+  isConfirmed.value = false
+  isError.value = false
+  emit('update:hosting-plan', props.planValue === 'free' ? 'paid' : 'free')
+  emit('close')
+}
 
 async function confirm(): Promise<void> {
   isBusy.value = true
@@ -33,45 +52,39 @@ async function confirm(): Promise<void> {
 
   if (props.planValue === 'paid') {
     result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'paid' })
-    emit('update:hosting-plan', 'paid')
+
+    if (result) {
+      emit('update:hosting-plan', 'paid')
+    }
   } else {
     result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'free' })
-    emit('update:hosting-plan', 'free')
+
+    if (result) {
+      emit('update:hosting-plan', 'free')
+    }
   }
 
-  // If failed
-  if (isErrorPredicate(result)) {
-    emit('close')
-
-    isBusy.value = false
-    isConfirmed.value = false
+  if (!result) {
+    // If failed
+    cancel()
 
     setTimeout(() => {
       showModal(EModal.error_modal)
     }, 300)
+  } else {
+    // If success
+    isBusy.value = false
+    isConfirmed.value = true
 
-    return
+    isBusy.value = true
   }
-
-  // If success
-  isBusy.value = false
-  isConfirmed.value = true
-
-  isBusy.value = true
-}
-
-function close(): void {
-  isBusy.value = false
-  isConfirmed.value = false
-  isError.value = false
-  emit('close')
 }
 </script>
 
 <template>
   <BaseModal
     is-visible
-    @close="emit('close')"
+    @close="close"
   >
     <div
       v-if="!isConfirmed && !isError"
@@ -79,7 +92,7 @@ function close(): void {
     >
       <ExclamationCircleIcon class="stop-hosting-modal__icon" />
       <p class="stop-hosting-modal__title">
-        {{ props.hApp.hostingPlan === 'paid' ? t('hosting_plan.free.title') : t('hosting_plan.paid.title') }}
+        {{ props.planValue === 'free' ? t('hosting_plan.free.title') : t('hosting_plan.paid.title') }}
       </p>
     </div>
 
@@ -89,10 +102,10 @@ function close(): void {
     >
       <CheckCircleIcon class="stop-hosting-modal__icon" />
       <p class="stop-hosting-modal__title--success">
-        {{ props.hApp.hostingPlan === 'paid' ? t('hosting_plan.free.success_title') : t('hosting_plan.paid.success_title') }}
+        {{ props.planValue === 'free' ? t('hosting_plan.free.success_title') : t('hosting_plan.paid.success_title') }}
       </p>
       <p class="stop-hosting-modal__description">
-        {{ props.hApp.hostingPlan === 'paid' ? t('hosting_plan.free.success_description') : t('hosting_plan.paid.success_description') }}
+        {{ props.planValue === 'free' ? t('hosting_plan.free.success_description') : t('hosting_plan.paid.success_description') }}
       </p>
     </div>
 
@@ -114,7 +127,7 @@ function close(): void {
       <BaseButton
         :type="EButtonType.tertiary"
         :is-disabled="isBusy"
-        @click="close"
+        @click="cancel"
       >
         {{ t('$.cancel') }}
       </BaseButton>
@@ -125,7 +138,7 @@ function close(): void {
         :is-disabled="isBusy"
         @click="confirm"
       >
-        {{ props.hApp.hostingPlan === 'paid' ? t('hosting_plan.free.confirmation_button_label') : t('hosting_plan.paid.confirmation_button_label') }}
+        {{ props.planValue === 'free' ? t('hosting_plan.free.confirmation_button_label') : t('hosting_plan.paid.confirmation_button_label') }}
       </BaseButton>
     </template>
   </BaseModal>

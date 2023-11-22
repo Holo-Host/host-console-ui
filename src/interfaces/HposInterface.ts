@@ -488,8 +488,6 @@ export function useHposInterface(): HposInterface {
     id,
     value
   }: UpdateHAppHostingPlanPayload): Promise<boolean> {
-    console.log('updateHAppHostingPlan', id, value)
-
     try {
       const params =
         value === 'free'
@@ -515,21 +513,11 @@ export function useHposInterface(): HposInterface {
               payload: id
             }
 
-      // const params = {
-      //   appId: localStorage.getItem(kCoreAppVersionLSKey),
-      //   roleId: 'core-app',
-      //   zomeName: 'hha',
-      //   fnName: 'get_happ_preferences',
-      //   payload: id
-      // }
-
-      const result = await hposHolochainCall({
+      await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
         params
       })
-
-      console.log(result)
 
       return true
     } catch (error) {

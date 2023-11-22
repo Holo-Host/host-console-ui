@@ -11,14 +11,9 @@ const props = defineProps<{
   hApp: HAppDetails
 }>()
 
-const planValue = ref(props.hApp.hostingPlan)
+const emit = defineEmits(['update:hosting-plan'])
 
-function updatePlan(value: string) {
-  console.log('updatePlan', value)
-  planValue.value = value
-  openModal()
-}
-
+const planValue = ref<'free' | 'paid'>(props.hApp.hostingPlan)
 const isModalVisible = ref(false)
 
 function openModal(): void {
@@ -28,6 +23,16 @@ function openModal(): void {
 function closeModal(): void {
   isModalVisible.value = false
 }
+
+function showConfirmation(value: 'free' | 'paid'): void {
+  planValue.value = value
+  openModal()
+}
+
+function updatePlan(value: 'free' | 'paid'): void {
+  planValue.value = value
+  emit('update:hosting-plan', value)
+}
 </script>
 
 <template>
@@ -36,22 +41,24 @@ function closeModal(): void {
     <div class="happ-details-hosting-plan__radio-buttons">
       <BaseRadioButton
         id="happ-details-hosting-plan-paid"
+        :key="planValue"
         value="paid"
-        :model-value="props.hApp.hostingPlan"
+        :model-value="planValue"
         :label="t('happ_details.hosting_plan.paid')"
         :description="t('happ_details.hosting_plan.paid_description')"
         class="happ-details-hosting-plan__radio-button-paid"
-        @update:model-value="updatePlan"
+        @update:model-value="showConfirmation"
       />
 
       <BaseRadioButton
         id="happ-details-hosting-plan-free"
+        :key="planValue"
         value="free"
-        :model-value="props.hApp.hostingPlan"
+        :model-value="planValue"
         :label="t('happ_details.hosting_plan.free')"
         :description="t('happ_details.hosting_plan.free_description')"
         class="happ-details-hosting-plan__radio-button-free"
-        @update:model-value="updatePlan"
+        @update:model-value="showConfirmation"
       />
     </div>
 
@@ -61,6 +68,7 @@ function closeModal(): void {
       :plan-value="planValue"
       :is-visible="isModalVisible"
       @close="closeModal"
+      @update:hosting-plan="updatePlan"
     />
   </div>
 </template>
