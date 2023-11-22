@@ -538,14 +538,25 @@ export function useHposInterface(): HposInterface {
   }
 
   async function getHostPreferences(): Promise<HposHolochainCallResponse | { error: unknown }> {
+    const params = {
+      appId: localStorage.getItem(kCoreAppVersionLSKey),
+      roleId: 'core-app',
+      zomeName: 'hha',
+      fnName: 'get_default_happ_preferences',
+      payload: null
+    }
+
     try {
-      return await hposHolochainCall({
-        method: 'get',
-        path: '/host_preferences'
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
       })
+
+      return true
     } catch (error) {
       console.error('getHostPreferences encountered an error: ', error)
-      throw error
+      return false
     }
   }
 
