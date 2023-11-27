@@ -36,7 +36,6 @@ const holoportPricing = computed(() => {
         mockPricing.push(host)
     }
 
-    console.log(`🐮 holoportPricing mockHosts`, mockPricing)
     return mockPricing
 })
 
@@ -69,6 +68,22 @@ const rangesData = computed(() => {
     return []
 })
 
+const trianglePositionStyle = computed(() => {
+    let yPosition = 0
+
+    if (props.selected_pricing_option === EPricingOptions.compute) {
+        yPosition = -85
+    } else if (props.selected_pricing_option === EPricingOptions.storage) {
+        yPosition = -35
+    } else if (props.selected_pricing_option === EPricingOptions.data_transfer) {
+        yPosition = 10
+    }
+
+    return {
+        'top': `${yPosition}px`
+    }
+})
+
 const updatePrice = (value: number) => {
     if (props.selected_pricing_option === EPricingOptions.compute) {
         computePrice.value = value
@@ -86,6 +101,12 @@ const updatePrice = (value: number) => {
 </script>
 
 <template>
+    <div class="triangle-container">
+        <svg id="triangle" :style="trianglePositionStyle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke="black">
+            <polygon points="100 0, 0 50, 100 100, 100 0" fill="white"/>
+            <line x1="100" y1="0" x2="100" y2="100" stroke="white" stroke-width="5"/>
+        </svg>
+    </div>
     <div class='pricing-histogram'>
         <div class='avg-pricing-label'>
             {{ averagePricingLabel  }} 100 HF per GB
@@ -125,8 +146,19 @@ const updatePrice = (value: number) => {
     </div>
   </template>
   
-  <style lang="scss" scoped>
-  .pricing-histogram {
+<style lang="scss" scoped>
+#triangle {
+    position: relative;
+    width: 50px;
+    border: none;
+    left: 1px;
+}
+
+.triangle-container {
+    display: flex;
+    width: 50px;
+}
+.pricing-histogram {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -138,13 +170,13 @@ const updatePrice = (value: number) => {
     width: 396px;
     height: 246px;
     flex-shrink: 0;
-  }
+}
 
-  .histogram-container {
+.histogram-container {
     margin: 20px 40px 50px 40px;
-  }
+}
 
-  .avg-pricing-label {
+.avg-pricing-label {
     color: #313C59;
     font-family: Nunito Sans;
     font-size: 14px;
@@ -153,37 +185,37 @@ const updatePrice = (value: number) => {
     line-height: normal;
     margin-left: 20px;
     margin-top: 11px;
-  }
+}
 
-    .row {
-        display: flex;
-        align-items: center;
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.histogram-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0px 13px 9px 13px;
+    align-items: flex-end;
+
+    &__save-button {
+        margin-left: 8px;
+        margin-top: -8px;
     }
+}
 
-    .histogram-buttons {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin: 0px 13px 9px 13px;
-        align-items: flex-end;
+.reset-link {
+    display: flex;
+    text-decoration: underline;
+    color: #606C8B;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: normal;
+    text-decoration-line: underline;
 
-        &__save-button {
-            margin-left: 8px;
-            margin-top: -8px;
-        }
+    &:hover {
+        cursor: pointer;
     }
-
-    .reset-link {
-        display: flex;
-        text-decoration: underline;
-        color: #606C8B;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: normal;
-        text-decoration-line: underline;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-  </style>
+}
+</style>
