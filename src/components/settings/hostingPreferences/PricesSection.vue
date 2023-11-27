@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 import PricingHistogram from './PricingHistogram.vue'
 import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
 import type { PricesData } from '@/types/types'
+import { EPricingOptions } from '@/types/types'
 
 const { t } = useI18n()
 
@@ -13,6 +14,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['update:price'])
+
+const editPricingOption = ref<EPricingOptions | null>(null)
 
 interface UpdatePricePayload {
   prop: string
@@ -72,6 +75,7 @@ interface PriceItem {
   value: string | number
   unit: string
   prop: string
+  pricingOption: EPricingOptions
   isDisabled: boolean
 }
 
@@ -81,7 +85,8 @@ const prices = computed((): PriceItem[] => [
     value: props.data.cpu || 0,
     unit: 'HF per min',
     prop: 'cpu',
-    isDisabled: false
+    isDisabled: false,
+    pricingOption: EPricingOptions.compute
   },
   ////////////////////////////////////////////////////////////////
   // REMOVE OR COMMENT OUT THE FOLLOWING LINES BEFORE MERGING
@@ -91,7 +96,8 @@ const prices = computed((): PriceItem[] => [
     value: props.data.storage ? formatPrice(props.data.storage).value : 0,
     unit: props.data.storage ? formatPrice(props.data.storage).unit : '',
     prop: 'storage',
-    isDisabled: false
+    isDisabled: false,
+    pricingOption: EPricingOptions.storage 
   },
   ////////////////////////////////////////////////////////////////
   // REMOVE OR COMMENT OUT THE LINES ABOVE BEFORE MERGING
@@ -101,9 +107,11 @@ const prices = computed((): PriceItem[] => [
     value: props.data.bandwidth ? formatPrice(props.data.bandwidth).value : 0,
     unit: props.data.bandwidth ? formatPrice(props.data.bandwidth).unit : '',
     prop: 'bandwidth',
-    isDisabled: false
+    isDisabled: false,
+    pricingOption: EPricingOptions.data_transfer 
   }
 ])
+
 </script>
 
 <template>
@@ -121,13 +129,16 @@ const prices = computed((): PriceItem[] => [
           v-for="price in prices"
           :key="price.label"
           v-bind="price"
+          :selected_pricing_option="editPricingOption"
           class="prices-section__price"
           @update:value="updatePrice"
+          @begin_edit="(payload) => editPricingOption = payload.pricingOption"
+          @cancel_update="editPricingOption = null"
         />
       </div>
 
-      <PricingHistogram
-        :selected_pricing_option="2"
+      <PricingHistogram v-if="editPricingOption !== null"
+        :selected_pricing_option="editPricingOption"
         :disabled="false"
         :price="50"
       >

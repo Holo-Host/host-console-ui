@@ -15,13 +15,17 @@ const dataTransferPrice = ref(0)
 const storagePrice = ref(0)
 
 const props = defineProps<{
-  selected_pricing_option: EPricingOptions
+  selected_pricing_option: EPricingOptions | null
   price: number
   disabled: boolean
 }>()
 
 const holoportPricing = computed(() => {
     // return preferencesStore.holoportPricing
+
+    ////////////////////////////////////////////////////////////////
+    // REMOVE THE FOLLOWING LINES BEFORE MERGING & UNCOMMENT THE LINE ABOVE
+    ////////////////////////////////////////////////////////////////
     let mockPricing = []
 
     for(let i = 0; i < 1000; i++) {
@@ -37,6 +41,9 @@ const holoportPricing = computed(() => {
     }
 
     return mockPricing
+    ////////////////////////////////////////////////////////////////
+    // REMOVE OR COMMENT OUT THE LINES ABOVE BEFORE MERGING
+    ////////////////////////////////////////////////////////////////    
 })
 
 const averagePricingLabel = computed(() => {
@@ -47,6 +54,8 @@ const averagePricingLabel = computed(() => {
             return t('hosting_preferences.pricing_histogram.average_storage_price')
         case EPricingOptions.data_transfer:
             return t('hosting_preferences.pricing_histogram.average_data_transfer_price')
+        default:
+            return ''
     }
 })
 
@@ -122,7 +131,6 @@ const updatePrice = (value: number) => {
             </Ranges>
             <div class='row'>
                 <Slider
-                    v-if="props.selected_pricing_option === EPricingOptions.compute"
                     :value="props.price"
                     :disabled="props.disabled"
                     @input="updatePrice"

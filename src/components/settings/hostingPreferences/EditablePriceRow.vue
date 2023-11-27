@@ -6,6 +6,7 @@ import CircledExIcon from '../../icons/CircledExIcon.vue'
 import FilledCheckIcon from '../../icons/FilledCheckIcon.vue'
 import PencilIcon from '../../icons/PencilIcon.vue'
 import SettingsRow from '../SettingsRow.vue'
+import type { EPricingOptions } from '@/types/types'
 
 const props = withDefaults(
   defineProps<{
@@ -14,13 +15,15 @@ const props = withDefaults(
     unit: string
     prop: string
     isDisabled?: boolean
+    pricingOption: EPricingOptions
+    selected_pricing_option: EPricingOptions | null
   }>(),
   {
     isDisabled: false
   }
 )
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:value','cancel_update','begin_edit'])
 
 const isEditing = ref(false)
 const editedValue = ref('')
@@ -28,6 +31,7 @@ const editedValue = ref('')
 function edit(): void {
   editedValue.value = `${props.value}`
   isEditing.value = true
+  emit('begin_edit', { pricingOption: props.pricingOption })
 }
 
 function save(): void {
@@ -38,46 +42,29 @@ function save(): void {
 function cancel(): void {
   isEditing.value = false
   editedValue.value = ''
+  emit('cancel_update')
 }
 </script>
 
 <template>
   <SettingsRow
     :label="label"
-    :value="!isEditing ? props.value : ''"
+    :value="props.value"
     grid-columns="110px auto"
   >
-    <div
-      v-if="isEditing"
-      class="editable-price-row__editable-value"
-    >
-      <BaseInput
-        v-model="editedValue"
-        :input-type="EInputType.number"
-        placeholder=""
-        name="edited-value"
-        class="editable-price-row__editable-value-input"
-      />
-
-      <FilledCheckIcon
-        class="editable-price-row__button"
-        data-testid="save-button"
-        @click="save"
-      />
-
-      <CircledExIcon
-        class="editable-price-row__button"
-        data-testid="cancel-button"
-        @click="cancel"
-      />
-    </div>
     <span class="editable-price-row__unit">{{ props.unit }}</span>
     <PencilIcon
-      v-if="!isEditing"
+      v-if="!isEditing || props.selected_pricing_option !== props.pricingOption"
       class="editable-price-row__editable-value-icon"
       :class="{ 'disabled': props.isDisabled }"
       @click="edit"
     />
+    <CircledExIcon
+        v-if="isEditing && props.selected_pricing_option === props.pricingOption"
+        class="editable-price-row__button"
+        data-testid="cancel-button"
+        @click="cancel"
+      />    
   </SettingsRow>
 </template>
 
@@ -110,7 +97,7 @@ function cancel(): void {
   }
 
   &__button {
-    margin-top: -8px;
+    margin-top: -2px;
     margin-left: 5px;
     cursor: pointer;
   }
