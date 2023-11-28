@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref, onMounted, watch } from 'vue'
+    import { computed, ref, onUpdated, watch } from 'vue'
     import VueSlider from 'vue-slider-component'
     import { useI18n } from 'vue-i18n'
 
@@ -16,7 +16,7 @@
 
     const emit = defineEmits(['input'])
 
-    onMounted(async () => {
+    onUpdated(async () => {
       updateSliderValue()
     })
 

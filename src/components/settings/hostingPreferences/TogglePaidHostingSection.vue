@@ -10,8 +10,11 @@ const { t } = useI18n()
 const userStore = useUserStore()
 const paidHostingEnabled = ref(false)
 
+const emit = defineEmits(['paid_hosting_toggled'])
+
 const paidHostingToggled = (isToggledOn: boolean): void => {
     paidHostingEnabled.value = isToggledOn
+    emit('paid_hosting_toggled', isToggledOn)
 }
 
 </script>

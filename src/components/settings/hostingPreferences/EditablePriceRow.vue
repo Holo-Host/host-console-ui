@@ -98,7 +98,7 @@ function cancel(): void {
 
   &__button {
     margin-top: -2px;
-    margin-left: 5px;
+    margin-left: 10px;
     cursor: pointer;
   }
 

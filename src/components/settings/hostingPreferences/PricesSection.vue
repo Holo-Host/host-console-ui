@@ -17,15 +17,6 @@ const emit = defineEmits(['update:price'])
 
 const editPricingOption = ref<EPricingOptions | null>(null)
 
-interface UpdatePricePayload {
-  prop: string
-  value: number
-}
-
-function updatePrice({ prop, value }: UpdatePricePayload): void {
-  emit('update:price', { prop, value })
-}
-
 interface FormattedPrice {
   value: number | string
   unit: string
@@ -112,6 +103,30 @@ const prices = computed((): PriceItem[] => [
   }
 ])
 
+const selectedPricingValue = computed(() => {
+  if (editPricingOption.value === EPricingOptions.compute) {
+    return props.data.cpu
+  } else if (editPricingOption.value === EPricingOptions.storage) {
+    return props.data.storage
+  } else if (editPricingOption.value === EPricingOptions.data_transfer) {
+    return props.data.bandwidth
+  } else {
+    return 0
+  }
+})
+
+const updatePrice = (newPrice: number) => {
+  if (editPricingOption.value === EPricingOptions.compute) {
+    props.data.cpu = newPrice
+  } else if (editPricingOption.value === EPricingOptions.storage) {
+    props.data.storage = newPrice
+  } else if (editPricingOption.value === EPricingOptions.data_transfer) {
+    props.data.bandwidth = newPrice
+  }
+
+  // emit('update:price', { prop, value })  
+}
+
 </script>
 
 <template>
@@ -131,7 +146,6 @@ const prices = computed((): PriceItem[] => [
           v-bind="price"
           :selected_pricing_option="editPricingOption"
           class="prices-section__price"
-          @update:value="updatePrice"
           @begin_edit="(payload) => editPricingOption = payload.pricingOption"
           @cancel_update="editPricingOption = null"
         />
@@ -139,8 +153,9 @@ const prices = computed((): PriceItem[] => [
 
       <PricingHistogram v-if="editPricingOption !== null"
         :selected_pricing_option="editPricingOption"
+        @update_price="updatePrice"
         :disabled="false"
-        :price="50"
+        :price="selectedPricingValue"
       >
       </PricingHistogram>    
     </div>

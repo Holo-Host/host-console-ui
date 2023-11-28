@@ -12,6 +12,8 @@ const preferencesStore = usePreferencesStore()
 const isLoading = ref(false)
 const isError = ref(false)
 
+const isPaidHostingEnabled = ref(false)
+
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
 
@@ -43,14 +45,18 @@ onMounted(async (): Promise<void> => {
     @try-again-clicked="getHostPreferencesAndPricing"
   >
     <template v-if="!isLoading && !isError">
-      <TogglePaidHostingSection />
+      <TogglePaidHostingSection
+        @paid_hosting_toggled="(isPricingEnabled: boolean) => isPaidHostingEnabled = isPricingEnabled"
+      />
       <PricesSection
+        v-if="isPaidHostingEnabled"
         :data="pricesSettings"
         class="hosting-preferences__prices"
         data-test-hosting-preferences-prices-section
       />
 
       <InvoicesSection
+        v-if="isPaidHostingEnabled"
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
         data-test-hosting-preferences-invoices-section

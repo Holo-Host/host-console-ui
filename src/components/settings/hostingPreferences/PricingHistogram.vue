@@ -10,15 +10,15 @@ import BaseButton from '@uicommon/components/BaseButton.vue'
 const { t } = useI18n()
 const preferencesStore = usePreferencesStore()
 
-const computePrice = ref(0)
-const dataTransferPrice = ref(0)
-const storagePrice = ref(0)
-
 const props = defineProps<{
   selected_pricing_option: EPricingOptions | null
   price: number
   disabled: boolean
 }>()
+
+const emit = defineEmits(['update_price'])
+
+const selectedPrice = ref(props.price)
 
 const holoportPricing = computed(() => {
     // return preferencesStore.holoportPricing
@@ -81,32 +81,17 @@ const trianglePositionStyle = computed(() => {
     let yPosition = 0
 
     if (props.selected_pricing_option === EPricingOptions.compute) {
-        yPosition = -85
+        yPosition = -63
     } else if (props.selected_pricing_option === EPricingOptions.storage) {
-        yPosition = -35
+        yPosition = -13
     } else if (props.selected_pricing_option === EPricingOptions.data_transfer) {
-        yPosition = 10
+        yPosition = 27
     }
 
     return {
         'top': `${yPosition}px`
     }
 })
-
-const updatePrice = (value: number) => {
-    if (props.selected_pricing_option === EPricingOptions.compute) {
-        computePrice.value = value
-    }
-
-    if (props.selected_pricing_option === EPricingOptions.storage) {
-        storagePrice.value = value
-    }
-
-    if (props.selected_pricing_option === EPricingOptions.data_transfer) {
-        dataTransferPrice.value = value
-    }
-}
-
 </script>
 
 <template>
@@ -123,7 +108,7 @@ const updatePrice = (value: number) => {
         <div class="histogram-container">
             <Ranges
                 :numbers="rangesData"
-                :value="props.price"
+                :value="selectedPrice"
                 :min="0"
                 :max="Math.max(...rangesData, 100)"
                 :numPartitions="20"
@@ -131,9 +116,9 @@ const updatePrice = (value: number) => {
             </Ranges>
             <div class='row'>
                 <Slider
-                    :value="props.price"
+                    :value="selectedPrice"
                     :disabled="props.disabled"
-                    @input="updatePrice"
+                    @input="(newPrice) => selectedPrice = newPrice"
                     :min="0"
                     :max="Math.max(...rangesData, 100)"
                     :logarithmic="false">
@@ -141,12 +126,15 @@ const updatePrice = (value: number) => {
             </div>
         </div>
         <div class='histogram-buttons'>
-            <div class="reset-link">
+            <div 
+                class="reset-link"
+                @click="selectedPrice = props.price"
+            >
                 {{ $t('hosting_preferences.pricing_histogram.reset') }}
             </div>
             <BaseButton
                 class="histogram-buttons__save-button"
-                @click="updatePrice"
+                @click="emit('update_price', selectedPrice)"
             >
                 {{ $t('hosting_preferences.pricing_histogram.save') }}
             </BaseButton>
@@ -170,7 +158,7 @@ const updatePrice = (value: number) => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin-right: 20px;
+    margin: -40px 0px 0px 0px;
     max-width: 450px;
     min-width: 100px;
     border-radius: 5px;
