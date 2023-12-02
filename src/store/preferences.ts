@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { useHposInterface } from '@/interfaces/HposInterface'
+import { useHposInterface, DefaultPreferencesPayload } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
 import type { InvoicesData, PricesData } from '@/types/types'
 
-const { getHostPreferences } = useHposInterface()
+const { getHostPreferences, setDefaultHAppPreferences } = useHposInterface()
 
 interface State {
   isLoaded: boolean
@@ -31,6 +31,17 @@ export const usePreferencesStore = defineStore('preferences', {
   }),
 
   actions: {
+    async setDefaultPreferences(): Promise<void> {
+      const payload: DefaultPreferencesPayload = {
+        max_fuel_before_invoice: `0`,
+        max_time_before_invoice: [0,0],
+        price_compute: `${this.pricesSettings.cpu}`,
+        price_storage: `${this.pricesSettings.storage}`,
+        price_bandwidth: `${this.pricesSettings.bandwidth}`
+      }
+
+      await setDefaultHAppPreferences(payload)
+    },
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 

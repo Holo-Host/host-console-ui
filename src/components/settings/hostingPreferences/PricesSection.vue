@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
-import type { PricesData } from '@/types/types'
+import type { PricesData, UpdatePricePayload } from '@/types/types'
 
 const { t } = useI18n()
 
@@ -13,12 +13,8 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:price'])
 
-interface UpdatePricePayload {
-  prop: string
-  value: number
-}
-
 function updatePrice({ prop, value }: UpdatePricePayload): void {
+  console.log(`Prices section: updatePrice: ${prop} ${value}`)
   emit('update:price', { prop, value })
 }
 
@@ -78,16 +74,16 @@ const prices = computed((): PriceItem[] => [
   {
     label: t('$.cpu'),
     value: props.data.cpu || 0,
-    unit: 'HF per min',
+    unit: 'HF per hour',
     prop: 'cpu',
-    isDisabled: true
+    isDisabled: false
   },
   {
     label: t('$.data_transfer'),
     value: props.data.bandwidth ? formatPrice(props.data.bandwidth).value : 0,
-    unit: props.data.bandwidth ? formatPrice(props.data.bandwidth).unit : '',
+    unit: 'HF per Gb',
     prop: 'bandwidth',
-    isDisabled: true
+    isDisabled: false
   }
 ])
 </script>
