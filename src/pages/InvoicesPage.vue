@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import BaseTable from '@uicommon/components/BaseTable.vue'
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
 import { useFilter } from '@uicommon/composables/useFilter'
+import { useModals } from '@uicommon/composables/useModals'
+import { ESpinnerSize } from '@uicommon/types/ui'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import dayjs from 'dayjs'
 import { ref, computed, onMounted } from 'vue'
@@ -9,6 +13,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import InvoicesTableRow from '@/components/invoices/InvoicesTableRow.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import { EModal } from '@/constants/ui'
 import { kRoutes } from '@/router'
 import { useEarningsStore } from '@/store/earnings'
 import type { BreadCrumb } from '@/types/types'
@@ -18,6 +23,10 @@ const router = useRouter()
 
 const isLoading = ref(false)
 const isError = ref(false)
+const isDownloadingServiceLogs = ref(false)
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showModal } = useModals()
 
 const earningsStore = useEarningsStore()
 
@@ -213,6 +222,15 @@ async function getInvoices(): Promise<void> {
   }
 }
 
+function downloadServiceLogs(): void {
+  isDownloadingServiceLogs.value = true
+
+  setTimeout(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    showModal(EModal.loading_modal, { description: t('download_service_logs.loading_message') })
+  }, 3000)
+}
+
 onMounted(async (): Promise<void> => {
   await getInvoices()
 })
@@ -234,6 +252,23 @@ onMounted(async (): Promise<void> => {
         label-translation-key="$.filter_by"
         @update="setFilter"
       />
+
+      <div
+        class="service-logs-download"
+        :class="{ 'service-logs-download--disabled': isDownloadingServiceLogs }"
+        @click="downloadServiceLogs"
+      >
+        <CircleSpinner
+          v-if="isDownloadingServiceLogs"
+          :scale="ESpinnerSize.xs"
+          class="service-logs-download__icon"
+        />
+        <ArrowTopRightOnSquareIcon
+          v-else
+          class="service-logs-download__icon"
+        />
+        <span class="service-logs-download__label">{{ t('download_service_logs.label') }}</span>
+      </div>
     </div>
 
     <div data-test-invoices-page-table>
@@ -258,12 +293,50 @@ onMounted(async (): Promise<void> => {
   </PrimaryLayout>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .controls {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 10px;
+  padding-right: 16px;
+
+  .service-logs-download {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-left: 12px;
+    cursor: pointer;
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &__icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &__label {
+      margin-left: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    &__icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &__label {
+      margin-left: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  }
 }
 </style>
