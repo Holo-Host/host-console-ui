@@ -10,7 +10,12 @@ import { EUserKycLevel } from '@/types/types'
 const { t } = useI18n()
 const userStore = useUserStore()
 const { goToSpringboard } = useGoToSpringboard()
-const paidHostingEnabled = ref(false)
+
+const props = defineProps<{
+  paidHostingEnabled: boolean
+}>()
+
+const paidHostingEnabled = ref(props.paidHostingEnabled)
 
 const emit = defineEmits(['paid_hosting_toggled'])
 

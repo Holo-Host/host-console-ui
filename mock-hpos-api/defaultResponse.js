@@ -631,7 +631,12 @@ const mockKycData = {
   "kyc": 'holo_kyc_2'
 }
 
-const mockHostPreferences = {
+let mockDefaultHappPreferences = {
+  max_fuel_before_invoice: '1000',
+  max_time_before_invoice: [2000, 500],
+  price_bandwidth: (Math.random() * 10).toFixed(5).toString(),
+  price_compute: (Math.random() * 10).toFixed(5).toString(),
+  price_storage: (Math.random() * 10).toFixed(5).toString()
 }
 
 // NB: both /api and /holochain-api calls are mocked here
@@ -646,7 +651,6 @@ const data = {
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion,
     '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
-    '/holochain-api/v1/host_preferences': mockHostPreferences,
     '/holochain-api/v1/redemptions': mockRedemptionHistoryData,
     '/holochain-api/v1/kyc': mockKycData.kyc
   },
@@ -661,6 +665,18 @@ const data = {
           return getMyProfile
         case 'get_all_reserve_accounts_details':
           return getAllReserveAccountsDetails
+        case 'get_default_happ_preferences':
+          return mockDefaultHappPreferences
+        case 'set_default_happ_preferences':
+          mockDefaultHappPreferences = {
+            max_fuel_before_invoice: '1000',
+            max_time_before_invoice: [2000, 500],
+            price_bandwidth: '0',
+            price_compute: '0.0001',
+            price_storage: '0'
+          }
+          
+          return true
         case 'redeem':
           return redemptionTransaction
       }

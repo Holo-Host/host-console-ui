@@ -42,6 +42,29 @@ export const usePreferencesStore = defineStore('preferences', {
 
       await setDefaultHAppPreferences(payload)
     },
+    setInitialPricing(): void {
+      this.pricesSettings = {
+        cpu: 0.0001,
+        storage: 0.0001,
+        bandwidth: 0.0001
+      }
+    },
+    clearPricing(): void {
+      this.pricesSettings = {
+        cpu: 0,
+        storage: 0,
+        bandwidth: 0
+      }
+    },
+    updatePrice(priceSetting: string, value: number): void {
+      if (priceSetting === 'cpu') {
+        this.pricesSettings.cpu = value
+      } else if (priceSetting === 'storage') {
+        this.pricesSettings.storage = value
+      } else if (priceSetting === 'bandwidth') {
+        this.pricesSettings.bandwidth = value
+      }
+    },   
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 

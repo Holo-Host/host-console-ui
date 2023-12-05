@@ -24,6 +24,10 @@ async function getHostPreferences(): Promise<void> {
     isLoading.value = true
     await preferencesStore.getHostPreferences()
     isLoading.value = false
+    isPaidHostingEnabled.value = 
+      preferencesStore.pricesSettings.bandwidth > 0 ||
+      preferencesStore.pricesSettings.storage > 0 ||
+      preferencesStore.pricesSettings.cpu > 0
   } catch (e) {
     isLoading.value = false
     isError.value = true
@@ -34,7 +38,8 @@ async function setDefaultHostPreferences(): Promise<void> {
   try {
     isError.value = false
     isLoading.value = true
-    await preferencesStore.getHostPreferences()
+    await preferencesStore.setDefaultPreferences()
+    await getHostPreferences()
     isLoading.value = false
   } catch (e) {
     isLoading.value = false
@@ -48,8 +53,21 @@ onMounted(async (): Promise<void> => {
   }
 })
 
-function updatePrice({ prop, value }: UpdatePricePayload): void {
-  console.log(`Hosting preferences: updatePrice: ${prop} ${value}`)
+async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
+  await preferencesStore.updatePrice(prop, value)
+  await preferencesStore.setDefaultPreferences()
+  await getHostPreferences()
+}
+
+function onTogglePaidHosting(isToggledOn: boolean): void {
+  isPaidHostingEnabled.value = isToggledOn
+  if (isToggledOn) {
+    preferencesStore.setInitialPricing()
+  } else {
+    preferencesStore.clearPricing()
+  }
+
+  setDefaultHostPreferences()
 }
 
 </script>
@@ -64,7 +82,8 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
   >
     <template v-if="!isLoading && !isError">
       <TogglePaidHostingSection
-        @paid_hosting_toggled="(isPricingEnabled: boolean) => isPaidHostingEnabled = isPricingEnabled"
+        :paidHostingEnabled="isPaidHostingEnabled"
+        @paid_hosting_toggled="onTogglePaidHosting"
       />    
       <PricesSection
         v-if="isPaidHostingEnabled"

@@ -578,13 +578,13 @@ export function useHposInterface(): HposInterface {
     }
 
     try {
-      await hposHolochainCall({
+      const hostPreferences = await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
         params
       })
 
-      return true
+      return hostPreferences
     } catch (error) {
       console.error('getHostPreferences encountered an error: ', error)
       return false

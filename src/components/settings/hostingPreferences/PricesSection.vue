@@ -79,7 +79,7 @@ const prices = computed((): PriceItem[] => [
   },
   {
     label: t('$.data_transfer'),
-    value: props.data.bandwidth ? formatPrice(props.data.bandwidth).value : 0,
+    value: props.data.bandwidth || 0,
     unit: 'HF per Gb',
     prop: 'bandwidth',
     isDisabled: false
