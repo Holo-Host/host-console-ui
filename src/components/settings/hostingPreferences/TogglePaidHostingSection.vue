@@ -4,10 +4,12 @@ import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
 import { useUserStore } from '@/store/user'
+import { useGoToSpringboard } from '@/composables/useGoToSpringboard'
 import { EUserKycLevel } from '@/types/types'
 
 const { t } = useI18n()
 const userStore = useUserStore()
+const { goToSpringboard } = useGoToSpringboard()
 const paidHostingEnabled = ref(false)
 
 const emit = defineEmits(['paid_hosting_toggled'])
@@ -26,7 +28,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     <div class="toggle-container">
         <div v-if="userStore.kycLevel !== EUserKycLevel.two" class="kyc-needed-container">
             <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_one') }}</span>
-            <span class="kyc-needed-text__dark-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
+            <span class="kyc-needed-text__spingboard-link" @click="goToSpringboard">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
             <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
         </div>
         <ToggleSwitch
@@ -86,9 +88,12 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     font-size: 12px;
     font-weight: 400;
 
-    &__dark-text {
+    &__spingboard-link {
         color: #313C59;
         font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 4px;
     }
   }
 

@@ -75,6 +75,7 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
       />
 
       <InvoicesSection
+        v-if="isPaidHostingEnabled"
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
         data-test-hosting-preferences-invoices-section

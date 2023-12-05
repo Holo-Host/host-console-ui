@@ -14,7 +14,6 @@ const props = defineProps<{
 const emit = defineEmits(['update:price'])
 
 function updatePrice({ prop, value }: UpdatePricePayload): void {
-  console.log(`Prices section: updatePrice: ${prop} ${value}`)
   emit('update:price', { prop, value })
 }
 
