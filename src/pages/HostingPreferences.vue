@@ -6,10 +6,12 @@ import InvoicesSection from '@/components/settings/hostingPreferences/InvoicesSe
 import PricesSection from '@/components/settings/hostingPreferences/PricesSection.vue'
 import TogglePaidHostingSection from '@/components/settings/hostingPreferences/TogglePaidHostingSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
-import { useHposInterface } from '@/interfaces/HposInterface'
+import { useUserStore } from '@/store/user'
+import { EUserKycLevel } from '@/types/types'
 import type { UpdatePricePayload } from '@/types/types'
 
 const preferencesStore = usePreferencesStore()
+const userStore = useUserStore()
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -48,7 +50,9 @@ async function setDefaultHostPreferences(): Promise<void> {
 }
 
 onMounted(async (): Promise<void> => {
-  if (!preferencesStore.isLoaded) {
+  if( userStore.kycLevel !== EUserKycLevel.two) {
+    isPaidHostingEnabled.value = false
+  } else if (!preferencesStore.isLoaded) {
     await getHostPreferences()
   }
 })

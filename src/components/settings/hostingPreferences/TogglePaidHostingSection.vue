@@ -15,7 +15,7 @@ const props = defineProps<{
   paidHostingEnabled: boolean
 }>()
 
-const paidHostingEnabled = ref(props.paidHostingEnabled)
+const paidHostingEnabled = ref(props.paidHostingEnabled && userStore.kycLevel === EUserKycLevel.two)
 
 const emit = defineEmits(['paid_hosting_toggled'])
 
@@ -42,6 +42,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
             :labelToggledOff="$t('hosting_preferences.toggle_paid_hosting.disabled')"
             :isDisabled="userStore.kycLevel !== EUserKycLevel.two"
             @toggle="paidHostingToggled">
+            data-test-toggle-paid-hosting
         </ToggleSwitch>
     </div>
     <div v-if="userStore.kycLevel !== EUserKycLevel.one" class="hosting-invoice-info">

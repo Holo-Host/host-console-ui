@@ -668,14 +668,6 @@ const data = {
         case 'get_default_happ_preferences':
           return mockDefaultHappPreferences
         case 'set_default_happ_preferences':
-          mockDefaultHappPreferences = {
-            max_fuel_before_invoice: '1000',
-            max_time_before_invoice: [2000, 500],
-            price_bandwidth: '0',
-            price_compute: '0.0001',
-            price_storage: '0'
-          }
-          
           return true
         case 'redeem':
           return redemptionTransaction
