@@ -15,7 +15,7 @@ const userStore = useUserStore()
 
 const isLoading = ref(false)
 const isError = ref(false)
-const isPaidHostingEnabled = ref(false)
+const isPaidHostingEnabled = ref(userStore.kycLevel !== EUserKycLevel.two)
 
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
@@ -50,9 +50,7 @@ async function setDefaultHostPreferences(): Promise<void> {
 }
 
 onMounted(async (): Promise<void> => {
-  if( userStore.kycLevel !== EUserKycLevel.two) {
-    isPaidHostingEnabled.value = false
-  } else if (!preferencesStore.isLoaded) {
+  if (!preferencesStore.isLoaded) {
     await getHostPreferences()
   }
 })

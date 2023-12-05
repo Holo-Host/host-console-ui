@@ -156,7 +156,9 @@ export default {
     },
     prices: {
       header: 'Price Configuration',
-      subheader: 'Default Rates'
+      subheader: 'Default Rates',
+      hfpermin: 'HF per min',
+      hfpergb: 'HF per GB',
     },
     toggle_paid_hosting: {
       paid_hosting: 'Paid Hosting',

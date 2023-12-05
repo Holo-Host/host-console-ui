@@ -22,45 +22,6 @@ interface FormattedPrice {
   unit: string
 }
 
-function formatPrice(pricePerByte: number): FormattedPrice {
-  if (isNaN(pricePerByte)) {
-    return {
-      value: '--',
-      unit: 'HF per GB'
-    }
-  }
-
-  if (pricePerByte === 0) {
-    return {
-      value: 0,
-      unit: 'HF per GB'
-    }
-  }
-
-  const k = 1024
-  const sizes = ['byte', 'kB', 'MB', 'GB', 'TB']
-
-  // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
-  const zerosAfterDecimal = -Math.floor(Math.log(pricePerByte) / Math.log(10))
-
-  if (zerosAfterDecimal <= 0) {
-    return {
-      // eslint-disable-next-line no-magic-numbers
-      value: parseFloat(pricePerByte).toFixed(0),
-      unit: `HF per ${sizes[0]}`
-    }
-  }
-
-  // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
-  const unitIndex = Math.floor(zerosAfterDecimal / 3)
-
-  return {
-    // eslint-disable-next-line no-magic-numbers,@typescript-eslint/no-magic-numbers
-    value: parseFloat((pricePerByte * Math.pow(k, unitIndex)).toFixed(3)),
-    unit: `HF per ${sizes[unitIndex]}`
-  }
-}
-
 interface PriceItem {
   label: string
   value: string | number
@@ -73,14 +34,14 @@ const prices = computed((): PriceItem[] => [
   {
     label: t('$.cpu'),
     value: props.data.cpu || 0,
-    unit: 'HF per hour',
+    unit: t('hosting_preferences.prices.hfpermin'),
     prop: 'cpu',
     isDisabled: false
   },
   {
     label: t('$.data_transfer'),
     value: props.data.bandwidth || 0,
-    unit: 'HF per Gb',
+    unit: t('hosting_preferences.prices.hfpergb'),
     prop: 'bandwidth',
     isDisabled: false
   }
