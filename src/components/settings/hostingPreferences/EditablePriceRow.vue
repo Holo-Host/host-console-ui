@@ -92,8 +92,6 @@ function cancel(): void {
 
   &__editable-value-input {
     width: 75px;
-    // margin-top: -8px;
-    // margin-left: -15px;
     margin-right: 30px;
   }
 
@@ -110,7 +108,6 @@ function cancel(): void {
   }
 
   &__button {
-    // margin-top: -8px;
     margin-left: 5px;
     cursor: pointer;
   }
