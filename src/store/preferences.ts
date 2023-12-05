@@ -4,6 +4,7 @@ import { isHostPreferencesResponse } from '@/types/predicates'
 import type { InvoicesData, PricesData } from '@/types/types'
 
 const { getHostPreferences, setDefaultHAppPreferences } = useHposInterface()
+const kInitialPrice = 0.0001
 
 interface State {
   isLoaded: boolean
@@ -44,9 +45,9 @@ export const usePreferencesStore = defineStore('preferences', {
     },
     setInitialPricing(): void {
       this.pricesSettings = {
-        cpu: 0.0001,
-        storage: 0.0001,
-        bandwidth: 0.0001
+        cpu: kInitialPrice,
+        storage: 0,
+        bandwidth: kInitialPrice
       }
     },
     clearPricing(): void {
