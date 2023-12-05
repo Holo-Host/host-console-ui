@@ -84,6 +84,7 @@ function onTogglePaidHosting(isToggledOn: boolean): void {
       <TogglePaidHostingSection
         :paidHostingEnabled="isPaidHostingEnabled"
         @paid_hosting_toggled="onTogglePaidHosting"
+        data-test-toggle-paid-hosting-section
       />    
       <PricesSection
         v-if="isPaidHostingEnabled"
