@@ -50,9 +50,7 @@ async function setDefaultHostPreferences(): Promise<void> {
 }
 
 onMounted(async (): Promise<void> => {
-  if (!preferencesStore.isLoaded) {
     await getHostPreferences()
-  }
 })
 
 async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
