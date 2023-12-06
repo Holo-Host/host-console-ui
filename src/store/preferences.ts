@@ -59,11 +59,11 @@ export const usePreferencesStore = defineStore('preferences', {
     },
     updatePrice(priceSetting: string, value: number): void {
       if (priceSetting === 'cpu') {
-        this.pricesSettings.cpu = value
+        this.pricesSettings.cpu = value > 0 ? value : 0
       } else if (priceSetting === 'storage') {
-        this.pricesSettings.storage = value
+        this.pricesSettings.storage = value > 0 ? value : 0
       } else if (priceSetting === 'bandwidth') {
-        this.pricesSettings.bandwidth = value
+        this.pricesSettings.bandwidth = value > 0 ? value : 0
       }
     },   
     async getHostPreferences(): Promise<void> {

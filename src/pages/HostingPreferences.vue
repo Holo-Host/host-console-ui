@@ -55,8 +55,7 @@ onMounted(async (): Promise<void> => {
 
 async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
   await preferencesStore.updatePrice(prop, value)
-  await preferencesStore.setDefaultPreferences()
-  await getHostPreferences()
+  await setDefaultHostPreferences()
 }
 
 function onTogglePaidHosting(isToggledOn: boolean): void {
