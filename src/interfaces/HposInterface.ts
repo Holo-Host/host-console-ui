@@ -15,6 +15,7 @@ interface HposInterface {
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   startHostingHApp: (id: string) => Promise<void | { error: unknown }>
   stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
+  setDefaultHAppPreferences(preferences: DefaultPreferencesPayload): Promise<boolean>
   updateHAppHostingPlan: (payload: UpdateHAppHostingPlanPayload) => Promise<boolean>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
@@ -115,6 +116,14 @@ export interface HostPreferencesResponse {
   price_bandwidth: string
   price_compute: string
   price_storage: string
+}
+
+export interface DefaultPreferencesPayload {
+  max_fuel_before_invoice: string
+  price_compute: string
+  price_storage: string
+  price_bandwidth: string
+  max_time_before_invoice: [number, number]
 }
 
 type HposHolochainCallResponse =
@@ -485,6 +494,28 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function setDefaultHAppPreferences(preferences: DefaultPreferencesPayload): Promise<boolean> {
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'core-app',
+        zomeName: 'hha',
+        fnName: 'set_default_happ_preferences',
+        payload: preferences
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        params
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   async function getServiceLogs(
     id: string
   ): Promise<HposHolochainCallResponse | { error: unknown }> {
@@ -565,13 +596,13 @@ export function useHposInterface(): HposInterface {
     }
 
     try {
-      await hposHolochainCall({
+      const hostPreferences = await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
         params
       })
 
-      return true
+      return hostPreferences
     } catch (error) {
       console.error('getHostPreferences encountered an error: ', error)
       return false
@@ -881,6 +912,7 @@ export function useHposInterface(): HposInterface {
     redeemHoloFuel,
     getKycLevel,
     getHAppDetails,
+    setDefaultHAppPreferences,
     startHostingHApp,
     stopHostingHApp,
     updateHAppHostingPlan,

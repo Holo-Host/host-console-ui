@@ -5,7 +5,6 @@ import { ref } from 'vue'
 import CircledExIcon from '../../icons/CircledExIcon.vue'
 import FilledCheckIcon from '../../icons/FilledCheckIcon.vue'
 import PencilIcon from '../../icons/PencilIcon.vue'
-import SettingsRow from '../SettingsRow.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -23,7 +22,7 @@ const props = withDefaults(
 const emit = defineEmits(['update:value'])
 
 const isEditing = ref(false)
-const editedValue = ref('')
+const editedValue = ref(props.value)
 
 function edit(): void {
   editedValue.value = `${props.value}`
@@ -36,49 +35,48 @@ function save(): void {
 }
 
 function cancel(): void {
+  editedValue.value = `${props.value}`
   isEditing.value = false
-  editedValue.value = ''
 }
 </script>
 
 <template>
-  <SettingsRow
-    :label="label"
-    :value="!isEditing ? props.value : ''"
-    grid-columns="110px auto"
-  >
-    <div
-      v-if="isEditing"
-      class="editable-price-row__editable-value"
-    >
+    <div class="editable-price-row__editable-value">
+      <span  class="editable-price-row__label">{{ label }}</span>
+      <span  v-if="!isEditing" class="editable-price-row__readonly_value">{{ editedValue }}</span>
       <BaseInput
+        v-if="isEditing"
         v-model="editedValue"
-        :input-type="EInputType.number"
+        :input-type="EInputType.text"
         placeholder=""
         name="edited-value"
         class="editable-price-row__editable-value-input"
       />
 
       <FilledCheckIcon
+        v-if="isEditing"
         class="editable-price-row__button"
         data-testid="save-button"
+        role="button"
         @click="save"
       />
 
       <CircledExIcon
+        v-if="isEditing"
         class="editable-price-row__button"
         data-testid="cancel-button"
+        role="button"
         @click="cancel"
       />
+      <span class="editable-price-row__unit">{{ props.unit }}</span>
+      <PencilIcon
+        v-if="!isEditing"
+        role="button"
+        class="editable-price-row__editable-value-icon"
+        :class="{ 'disabled': props.isDisabled }"
+        @click="edit"
+      />
     </div>
-    <span class="editable-price-row__unit">{{ props.unit }}</span>
-    <PencilIcon
-      v-if="!isEditing"
-      class="editable-price-row__editable-value-icon"
-      :class="{ 'disabled': props.isDisabled }"
-      @click="edit"
-    />
-  </SettingsRow>
 </template>
 
 <style lang="scss" scoped>
@@ -88,12 +86,12 @@ function cancel(): void {
   &__editable-value {
     display: flex;
     align-items: center;
+    margin-bottom: 16px;
+    height: 32px;
   }
 
   &__editable-value-input {
-    width: 60px;
-    margin-top: -8px;
-    margin-left: -15px;
+    width: 75px;
     margin-right: 30px;
   }
 
@@ -110,7 +108,6 @@ function cancel(): void {
   }
 
   &__button {
-    margin-top: -8px;
     margin-left: 5px;
     cursor: pointer;
   }
@@ -119,6 +116,17 @@ function cancel(): void {
     margin-left: 30px;
     color: var(--grey-color);
     font-weight: 700;
+  }
+
+  &__label {
+    width: 100px;
+    margin-right: 16px;
+    color: var(--grey-color);
+    font-weight: 700;
+  }
+
+  &__readonly_value {
+    width: 75px;
   }
 }
 </style>

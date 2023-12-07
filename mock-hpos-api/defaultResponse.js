@@ -219,6 +219,99 @@ const redemptionTransaction = {
     redemption: '0x12345678...'
   },}
 
+const mockHapps = [
+  {
+    id: 'ef48c978-3a34-42fc-a0b7-8ffa89f2bebb',
+    name: 'CoreApp',
+    enabled: true,
+    isPaused: false,
+    special_installed_app_id: coreAppVersion.version,
+  }
+]
+
+const mockHosts = [
+  {
+    "host_pub_key": "uhCAkokIsoB0_NuY_GbL4_xmVlwoWvnJJcvRTOwFvAAU1iCrWE7ck",
+    "holoport_id": "QuantumCoreServer",
+    "preferences": {
+      "timestamp": 1698953469075923,
+      "max_fuel_before_invoice": "1",
+      "price_compute": "75",
+      "price_storage": "75",
+      "price_bandwidth": "75",
+      "max_time_before_invoice": {
+        "secs": 18446744073709552000,
+        "nanos": 999999999
+      }
+    },
+    "preferences_hash": "uhCkkcbUz9JvKRn56E_c3IEaimnEYifLo2CbjavFrYYjYyqx05AI5"
+  },
+  {
+    "host_pub_key": "uhCAkokIsoB0_NuY_GbK6_xmVlwoWvnJJcvRTOwFvAAU1iCrWE7ck",
+    "holoport_id": "NimbusEdgeServer",
+    "preferences": {
+      "timestamp": 1698953469075923,
+      "max_fuel_before_invoice": "1",
+      "price_compute": "50",
+      "price_storage": "50",
+      "price_bandwidth": "50",
+      "max_time_before_invoice": {
+        "secs": 18446744073709552000,
+        "nanos": 999999999
+      }
+    },
+    "preferences_hash": "uhCkkcbUz9JvKRn56E_c3IEaimnEYifLo2CbjavFrYYjYyqx05AI5"
+  },
+  {
+    "host_pub_key": "uhCAkokIsoB0_NuY_GbJ7_xmVlwoWvnJJcvRTOwFvAAU1iCrWE7ck",
+    "holoport_id": "Happy PhoenixBlazeServer",
+    "preferences": {
+      "timestamp": 1698953469075923,
+      "max_fuel_before_invoice": "1",
+      "price_compute": "100",
+      "price_storage": "100",
+      "price_bandwidth": "100",
+      "max_time_before_invoice": {
+        "secs": 18446744073709552000,
+        "nanos": 999999999
+      }
+    },
+    "preferences_hash": "uhCkkcbUz9JvKRn56E_c3IEaimnEYifLo2CbjavFrYYjYyqx05AI5"
+  },
+  {
+    "host_pub_key": "uhCAkokIsoB0_NuY_GbI8_xmVlwoWvnJJcvRTOwFvAAU1iCrWE7ck",
+    "holoport_id": "ZenithPulseServer",
+    "preferences": {
+      "timestamp": 1698953469075923,
+      "max_fuel_before_invoice": "1",
+      "price_compute": "25",
+      "price_storage": "25",
+      "price_bandwidth": "25",
+      "max_time_before_invoice": {
+        "secs": 18446744073709552000,
+        "nanos": 999999999
+      }
+    },
+    "preferences_hash": "uhCkkcbUz9JvKRn56E_c3IEaimnEYifLo2CbjavFrYYjYyqx05AI5"
+  },
+  {
+    "host_pub_key": "uhCAkokIsoB0_NuY_GbH9_xmVlwoWvnJJcvRTOwFvAAU1iCrWE7ck",
+    "holoport_id": "NebulaSparkServer",
+    "preferences": {
+      "timestamp": 1698953469075923,
+      "max_fuel_before_invoice": "1",
+      "price_compute": "0",
+      "price_storage": "0",
+      "price_bandwidth": "0",
+      "max_time_before_invoice": {
+        "secs": 18446744073709552000,
+        "nanos": 999999999
+      }
+    },
+    "preferences_hash": "uhCkkcbUz9JvKRn56E_c3IEaimnEYifLo2CbjavFrYYjYyqx05AI5"
+  }        
+]
+
 const mockPaidInvoicesData = [
   {
     id: 'uhCEkuoMG0RpLkYciC3ZO2ZiedEhDq9yZJLrbjjVmNmXvjpvaAE6H',
@@ -538,7 +631,12 @@ const mockKycData = {
   "kyc": 'holo_kyc_2'
 }
 
-const mockHostPreferences = {
+let mockDefaultHappPreferences = {
+  max_fuel_before_invoice: '1000',
+  max_time_before_invoice: [2000, 500],
+  price_bandwidth: (Math.random() * 10).toFixed(5).toString(),
+  price_compute: (Math.random() * 10).toFixed(5).toString(),
+  price_storage: (Math.random() * 10).toFixed(5).toString()
 }
 
 // NB: both /api and /holochain-api calls are mocked here
@@ -547,13 +645,14 @@ const data = {
     '/api/v1/config': userConfig,
     '/api/v1/status': holoNixpkgs,
     '/holochain-api/v1/hosted_happs': happs,
+    '/holochain-api/v1/get_happs': mockHapps,
+    '/holochain-api/v1/get_hosts': mockHosts,
     '/holochain-api/v1/usage': usage,
     '/holochain-api/v1/host_earnings': earnings,
     '/holochain-api/v1/core_app_version': coreAppVersion,
     '/holochain-api/v1/host_invoices': mockPaidInvoicesData,
-    '/holochain-api/v1/host_preferences': mockHostPreferences,
     '/holochain-api/v1/redemptions': mockRedemptionHistoryData,
-    '/holochain-api/v1/kyc': mockKycData
+    '/holochain-api/v1/kyc': mockKycData.kyc
   },
   put: {
     '/api/v1/config': (args) => args,
@@ -566,6 +665,10 @@ const data = {
           return getMyProfile
         case 'get_all_reserve_accounts_details':
           return getAllReserveAccountsDetails
+        case 'get_default_happ_preferences':
+          return mockDefaultHappPreferences
+        case 'set_default_happ_preferences':
+          return true
         case 'redeem':
           return redemptionTransaction
       }
