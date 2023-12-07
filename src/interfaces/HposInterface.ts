@@ -15,7 +15,7 @@ interface HposInterface {
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   startHostingHApp: (id: string) => Promise<void | { error: unknown }>
   stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
-  setDefaultHAppPreferences(preferences: DefaultPreferencesPayload): Promise<boolean>
+  setDefaultHAppPreferences: (preferences: DefaultPreferencesPayload) => Promise<boolean>
   updateHAppHostingPlan: (payload: UpdateHAppHostingPlanPayload) => Promise<boolean>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
@@ -28,7 +28,7 @@ interface HposInterface {
   updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
-  getServiceLogs: () => Promise<HposHolochainCallResponse>
+  getServiceLogs: (ids: string[]) => Promise<HposHolochainCallResponse>
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
@@ -140,8 +140,11 @@ type HposHolochainCallResponse =
   | RedemptionTransaction
   | ReserveSettingsResponse
   | EUserKycLevel
+  | ServiceLogsResponse
 
 type HposAdminCallResponse = HposConfigResponse
+
+type ServiceLogsResponse = Array<Record<string, unknown>>
 
 export interface UsageResponse {
   totalHostedHapps: number
@@ -494,7 +497,9 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function setDefaultHAppPreferences(preferences: DefaultPreferencesPayload): Promise<boolean> {
+  async function setDefaultHAppPreferences(
+    preferences: DefaultPreferencesPayload
+  ): Promise<boolean> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -517,16 +522,28 @@ export function useHposInterface(): HposInterface {
   }
 
   async function getServiceLogs(
-    id: string
+    ids: string[]
   ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    const promises = []
+
+    ids.forEach((id) => {
+      promises.push(
+        hposHolochainCall({
+          method: 'get',
+          pathPrefix: '/api/v2',
+          path: `/hosted_happs/${id}/logs?days=30`
+        })
+      )
+    })
+
     try {
-      const result = await hposHolochainCall({
-        method: 'post',
-        pathPrefix: '/api/v2',
-        path: `/hosted_happs/${id}/logs?days=30`
+      await Promise.all(promises).then((logs) => {
+        const flatenedLogs = logs.flat()
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return flatenedLogs
       })
 
-      return result
+      return []
     } catch (error) {
       console.error('getServiceLogs encountered an error: ', error)
       return { error }

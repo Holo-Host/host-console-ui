@@ -8,15 +8,21 @@ import { useModals } from '@uicommon/composables/useModals'
 import { ESpinnerSize } from '@uicommon/types/ui'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import dayjs from 'dayjs'
+import { unparse } from 'papaparse'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import InvoicesTableRow from '@/components/invoices/InvoicesTableRow.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { EModal } from '@/constants/ui'
+import { useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
+import { useDashboardStore } from '@/store/dashboard'
 import { useEarningsStore } from '@/store/earnings'
+import { isError as isErrorPredicate } from '@/types/predicates'
 import type { BreadCrumb } from '@/types/types'
+import { saveCsvToClient } from '@/utils/csvExportUtils'
+import { formatDate } from '@/utils/dateUtils'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -26,9 +32,11 @@ const isError = ref(false)
 const isDownloadingServiceLogs = ref(false)
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-const { showModal } = useModals()
+const { showModal, hideModal } = useModals()
 
 const earningsStore = useEarningsStore()
+const dashboardStore = useDashboardStore()
+const { getServiceLogs } = useHposInterface()
 
 const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
@@ -222,13 +230,42 @@ async function getInvoices(): Promise<void> {
   }
 }
 
-function downloadServiceLogs(): void {
-  isDownloadingServiceLogs.value = true
+function createExportFilename(): string {
+  const date = formatDate(new Date(), 'YYYY-MM-DD')
+  return `service-logs-${date}.csv`
+}
 
-  setTimeout(() => {
+async function downloadServiceLogs(): Promise<void> {
+  let timeout = null
+
+  isDownloadingServiceLogs.value = true
+  timeout = setTimeout(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
     showModal(EModal.loading_modal, { description: t('download_service_logs.loading_message') })
   }, 3000)
+
+  if (dashboardStore.hostedHApps.length === 0) {
+    await dashboardStore.getHostedHApps()
+  }
+
+  if (isErrorPredicate(dashboardStore.hostedHApps)) {
+    isError.value = true
+    isDownloadingServiceLogs.value = false
+    clearTimeout(timeout)
+    timeout = null
+    hideModal()
+  } else {
+    const hAppsIds = dashboardStore.hostedHApps.map((hApp) => hApp.id)
+    const rawLogs = await getServiceLogs(hAppsIds)
+
+    const csv = unparse(rawLogs)
+    saveCsvToClient(createExportFilename(), csv)
+
+    isDownloadingServiceLogs.value = false
+    clearTimeout(timeout)
+    timeout = null
+    hideModal()
+  }
 }
 
 onMounted(async (): Promise<void> => {
