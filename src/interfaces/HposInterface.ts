@@ -27,6 +27,7 @@ interface HposInterface {
   updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
+  getServiceLogs: () => Promise<HposHolochainCallResponse>
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
@@ -484,6 +485,23 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getServiceLogs(
+    id: string
+  ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    try {
+      const result = await hposHolochainCall({
+        method: 'post',
+        pathPrefix: '/api/v2',
+        path: `/hosted_happs/${id}/logs?days=30`
+      })
+
+      return result
+    } catch (error) {
+      console.error('getServiceLogs encountered an error: ', error)
+      return { error }
+    }
+  }
+
   async function updateHAppHostingPlan({
     id,
     value
@@ -866,6 +884,7 @@ export function useHposInterface(): HposInterface {
     startHostingHApp,
     stopHostingHApp,
     updateHAppHostingPlan,
+    getServiceLogs,
     HPOS_API_URL
   }
 }
