@@ -74,3 +74,8 @@ export interface HoloFuelCardData {
   redeemable: string | number
   kycLevel: EUserKycLevel
 }
+
+export interface UpdatePricePayload {
+  prop: string
+  value: number
+}

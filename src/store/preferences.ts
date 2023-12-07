@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { useHposInterface } from '@/interfaces/HposInterface'
+import { useHposInterface, DefaultPreferencesPayload } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
 import type { InvoicesData, PricesData } from '@/types/types'
 
-const { getHostPreferences } = useHposInterface()
+const { getHostPreferences, setDefaultHAppPreferences } = useHposInterface()
+const kInitialPrice = 0.0001
 
 interface State {
   isLoaded: boolean
@@ -31,6 +32,40 @@ export const usePreferencesStore = defineStore('preferences', {
   }),
 
   actions: {
+    async setDefaultPreferences(): Promise<void> {
+      const payload: DefaultPreferencesPayload = {
+        max_fuel_before_invoice: `0`,
+        max_time_before_invoice: [0,0],
+        price_compute: `${this.pricesSettings.cpu}`,
+        price_storage: `${this.pricesSettings.storage}`,
+        price_bandwidth: `${this.pricesSettings.bandwidth}`
+      }
+
+      await setDefaultHAppPreferences(payload)
+    },
+    setInitialPricing(): void {
+      this.pricesSettings = {
+        cpu: kInitialPrice,
+        storage: 0,
+        bandwidth: kInitialPrice
+      }
+    },
+    clearPricing(): void {
+      this.pricesSettings = {
+        cpu: 0,
+        storage: 0,
+        bandwidth: 0
+      }
+    },
+    updatePrice(priceSetting: string, value: number): void {
+      if (priceSetting === 'cpu') {
+        this.pricesSettings.cpu = value > 0 ? value : 0
+      } else if (priceSetting === 'storage') {
+        this.pricesSettings.storage = value > 0 ? value : 0
+      } else if (priceSetting === 'bandwidth') {
+        this.pricesSettings.bandwidth = value > 0 ? value : 0
+      }
+    },   
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 

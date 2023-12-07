@@ -57,12 +57,16 @@ describe('hosting preferences page', () => {
       expect(wrapper.findAll('[data-test-hosting-preferences-layout]')).toHaveLength(1)
     })
 
-    it('with prices section', () => {
-      expect(wrapper.findAll('[data-test-hosting-preferences-prices-section]')).toHaveLength(1)
+    it('with toggle paid hosting section', () => {
+      expect(wrapper.findAll('[data-test-toggle-paid-hosting-section]')).toHaveLength(1)
+    })
+        
+    it('without prices section when paid hosting toggled off', () => {
+      expect(wrapper.findAll('[data-test-hosting-preferences-prices-section]')).toHaveLength(0)
     })
 
-    it('with invoices section', () => {
-      expect(wrapper.findAll('[data-test-hosting-preferences-invoices-section]')).toHaveLength(1)
+    it('without invoices section when paid hosting toggled off', () => {
+      expect(wrapper.findAll('[data-test-hosting-preferences-invoices-section]')).toHaveLength(0)
     })
 
     it('with happ selection section', () => {
