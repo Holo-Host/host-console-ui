@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
+import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
-import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
-import { useUserStore } from '@/store/user'
 import { useGoToSpringboard } from '@/composables/useGoToSpringboard'
+import { useUserStore } from '@/store/user'
 import { EUserKycLevel } from '@/types/types'
 
 const { t } = useI18n()
@@ -12,49 +13,70 @@ const userStore = useUserStore()
 const { goToSpringboard } = useGoToSpringboard()
 
 const props = defineProps<{
+  isLoading: boolean
   paidHostingEnabled: boolean
 }>()
 
 const paidHostingEnabled = ref(props.paidHostingEnabled && userStore.kycLevel === EUserKycLevel.two)
 
-const emit = defineEmits(['paid_hosting_toggled'])
+const emit = defineEmits(['paid-hosting-toggled'])
 
 const paidHostingToggled = (isToggledOn: boolean): void => {
-    paidHostingEnabled.value = isToggledOn
-    emit('paid_hosting_toggled', isToggledOn)
+  paidHostingEnabled.value = isToggledOn
+  emit('paid-hosting-toggled', isToggledOn)
 }
-
 </script>
 
 <template>
   <SettingsSection
-    :title="$t('hosting_preferences.toggle_paid_hosting.paid_hosting')"
-    class="toggle-paid-hosting-section">
+    :title="t('hosting_preferences.toggle_paid_hosting.paid_hosting')"
+    class="toggle-paid-hosting-section"
+    :class="{ 'toggle-paid-hosting-section__is-loading': props.isLoading }"
+  >
     <div class="toggle-container">
-        <div v-if="userStore.kycLevel !== EUserKycLevel.two" class="kyc-needed-container">
-            <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_one') }}</span>
-            <span class="kyc-needed-text__spingboard-link" @click="goToSpringboard">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
-            <span class="kyc-needed-text">{{ $t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
-        </div>
-        <ToggleSwitch
-            :toggleOn="paidHostingEnabled"
-            :labelToggledOn="$t('hosting_preferences.toggle_paid_hosting.enabled')"
-            :labelToggledOff="$t('hosting_preferences.toggle_paid_hosting.disabled')"
-            :isDisabled="userStore.kycLevel !== EUserKycLevel.two"
-            @toggle="paidHostingToggled">
-            data-test-toggle-paid-hosting
-        </ToggleSwitch>
+      <CircleSpinner
+        v-if="props.isLoading"
+        class="toggle-container__spinner"
+      />
+      <div
+        v-if="userStore.kycLevel !== EUserKycLevel.two"
+        class="kyc-needed-container"
+      >
+        <span class="kyc-needed-text">{{ t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_one') }}</span>
+        <span
+          class="kyc-needed-text__spingboard-link"
+          @click="goToSpringboard"
+        >{{ t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
+        <span class="kyc-needed-text">{{ t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
+      </div>
+      <ToggleSwitch
+        :toggle-on="paidHostingEnabled"
+        :label-toggled-on="t('hosting_preferences.toggle_paid_hosting.enabled')"
+        :label-toggled-off="t('hosting_preferences.toggle_paid_hosting.disabled')"
+        :is-disabled="userStore.kycLevel !== EUserKycLevel.two"
+        @toggle="paidHostingToggled"
+      >
+        data-test-toggle-paid-hosting
+      </ToggleSwitch>
     </div>
-    <div v-if="userStore.kycLevel !== EUserKycLevel.one" class="hosting-invoice-info">
-        {{ paidHostingEnabled ?
-            $t('hosting_preferences.toggle_paid_hosting.invoice_info_enabled') :
-            $t('hosting_preferences.toggle_paid_hosting.invoice_info_disabled') }}
+    <div
+      v-if="userStore.kycLevel !== EUserKycLevel.one"
+      class="hosting-invoice-info"
+    >
+      {{ paidHostingEnabled ?
+        t('hosting_preferences.toggle_paid_hosting.invoice_info_enabled') :
+        t('hosting_preferences.toggle_paid_hosting.invoice_info_disabled') }}
     </div>
-</SettingsSection>
+  </SettingsSection>
 </template>
 
 <style lang="scss" scoped>
 .toggle-paid-hosting-section {
+  &__is-loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   &__subtitle {
     color: var(--grey-dark-color);
     font-weight: 700;
@@ -76,6 +98,10 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     justify-content: flex-end;
     gap: 16px;
     width: 100%;
+
+    &__spinner {
+      margin-left: 70px;
+    }
   }
 
   .kyc-needed-container {
@@ -85,21 +111,21 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     align-items: center;
     gap: 10px;
     border-radius: 8px;
-    background: #FDEBEB;
+    background: #fdebeb;
   }
 
   .kyc-needed-text {
-    color: #ED3C3C;
+    color: #ed3c3c;
     text-align: right;
     font-size: 12px;
     font-weight: 400;
 
     &__spingboard-link {
-        color: #313C59;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: underline;
-        text-underline-offset: 4px;
+      color: #313c59;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 4px;
     }
   }
 
@@ -110,12 +136,12 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     align-items: center;
     gap: 10px;
     border-radius: 8px;
-    background: #F5F5F4;
-    color: #929CB7;
+    background: #f5f5f4;
+    color: #929cb7;
     text-align: center;
     font-size: 12px;
     font-weight: 400;
-    line-height: normal;    
+    line-height: normal;
     width: 100%;
     margin-top: 16px;
   }

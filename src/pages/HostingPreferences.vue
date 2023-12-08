@@ -14,6 +14,7 @@ const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()
 
 const isLoading = ref(false)
+const isUpdating = ref(false)
 const isError = ref(false)
 const isPaidHostingEnabled = ref(userStore.kycLevel !== EUserKycLevel.two)
 
@@ -23,13 +24,24 @@ const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
 async function getHostPreferences(): Promise<void> {
   try {
     isError.value = false
-    isLoading.value = true
-    await preferencesStore.getHostPreferences()
-    isLoading.value = false
-    isPaidHostingEnabled.value = 
-      preferencesStore.pricesSettings.bandwidth > 0 ||
-      preferencesStore.pricesSettings.storage > 0 ||
-      preferencesStore.pricesSettings.cpu > 0
+
+    if (preferencesStore.isLoaded) {
+      isUpdating.value = true
+      await preferencesStore.getHostPreferences()
+      isUpdating.value = false
+      isPaidHostingEnabled.value =
+        preferencesStore.pricesSettings.bandwidth > 0 ||
+        preferencesStore.pricesSettings.storage > 0 ||
+        preferencesStore.pricesSettings.cpu > 0
+    } else {
+      isLoading.value = true
+      await preferencesStore.getHostPreferences()
+      isLoading.value = false
+      isPaidHostingEnabled.value =
+        preferencesStore.pricesSettings.bandwidth > 0 ||
+        preferencesStore.pricesSettings.storage > 0 ||
+        preferencesStore.pricesSettings.cpu > 0
+    }
   } catch (e) {
     isLoading.value = false
     isError.value = true
@@ -39,36 +51,36 @@ async function getHostPreferences(): Promise<void> {
 async function setDefaultHostPreferences(): Promise<void> {
   try {
     isError.value = false
-    isLoading.value = true
+    isUpdating.value = true
     await preferencesStore.setDefaultPreferences()
     await getHostPreferences()
-    isLoading.value = false
+    isUpdating.value = false
   } catch (e) {
-    isLoading.value = false
+    isUpdating.value = false
     isError.value = true
   }
 }
 
 onMounted(async (): Promise<void> => {
-    await getHostPreferences()
+  await getHostPreferences()
 })
 
 async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
-  await preferencesStore.updatePrice(prop, value)
+  preferencesStore.updatePrice(prop, value)
   await setDefaultHostPreferences()
 }
 
-function onTogglePaidHosting(isToggledOn: boolean): void {
+async function onTogglePaidHosting(isToggledOn: boolean): Promise<void> {
   isPaidHostingEnabled.value = isToggledOn
+
   if (isToggledOn) {
     preferencesStore.setInitialPricing()
   } else {
     preferencesStore.clearPricing()
   }
 
-  setDefaultHostPreferences()
+  await setDefaultHostPreferences()
 }
-
 </script>
 
 <template>
@@ -81,12 +93,15 @@ function onTogglePaidHosting(isToggledOn: boolean): void {
   >
     <template v-if="!isLoading && !isError">
       <TogglePaidHostingSection
-        :paidHostingEnabled="isPaidHostingEnabled"
-        @paid_hosting_toggled="onTogglePaidHosting"
+        :is-loading="isUpdating"
+        :paid-hosting-enabled="isPaidHostingEnabled"
         data-test-toggle-paid-hosting-section
-      />    
+        @paid-hosting-toggled="onTogglePaidHosting"
+      />
+
       <PricesSection
         v-if="isPaidHostingEnabled"
+        :is-loading="isUpdating"
         :data="pricesSettings"
         data-test-hosting-preferences-prices-section
         class="hosting-preferences__prices"
@@ -95,6 +110,7 @@ function onTogglePaidHosting(isToggledOn: boolean): void {
 
       <InvoicesSection
         v-if="isPaidHostingEnabled"
+        :is-loading="isUpdating"
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
         data-test-hosting-preferences-invoices-section

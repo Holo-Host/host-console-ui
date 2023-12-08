@@ -3,9 +3,11 @@ import SettingsSection from '../SettingsSection.vue'
 import InvoicesDueRow from '@/components/settings/hostingPreferences/InvoicesDueRow.vue'
 import InvoicesFrequencyRow from '@/components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
 import type { InvoicesData } from '@/types/types'
+import CircleSpinner from "@uicommon/components/CircleSpinner.vue";
 
 const props = defineProps<{
   data: InvoicesData
+  isLoading: boolean
 }>()
 
 const emit = defineEmits(['update:frequency', 'update:due'])
@@ -23,9 +25,11 @@ function updateDue(value) {
   <SettingsSection
     :title="$t('hosting_preferences.invoices.header')"
     class="invoices-section"
+    :class="{ 'invoices-section__is-loading': props.isLoading }"
   >
     <div class="invoices-section">
-      <InvoicesFrequencyRow
+			<CircleSpinner v-if="props.isLoading" />
+			<InvoicesFrequencyRow
         :data="props.data"
         @update:frequency="updateFrequency"
       />
@@ -57,6 +61,11 @@ function updateDue(value) {
 .invoices-section {
   color: var(--grey-dark-color);
   padding-bottom: 18px;
+
+  &__is-loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 
   &__due-row {
     margin-top: 40px;

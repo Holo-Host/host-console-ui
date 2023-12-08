@@ -34,8 +34,8 @@ export const usePreferencesStore = defineStore('preferences', {
   actions: {
     async setDefaultPreferences(): Promise<void> {
       const payload: DefaultPreferencesPayload = {
-        max_fuel_before_invoice: `0`,
-        max_time_before_invoice: [0,0],
+        max_fuel_before_invoice: '0',
+        max_time_before_invoice: [0, 0],
         price_compute: `${this.pricesSettings.cpu}`,
         price_storage: `${this.pricesSettings.storage}`,
         price_bandwidth: `${this.pricesSettings.bandwidth}`
@@ -43,6 +43,7 @@ export const usePreferencesStore = defineStore('preferences', {
 
       await setDefaultHAppPreferences(payload)
     },
+
     setInitialPricing(): void {
       this.pricesSettings = {
         cpu: kInitialPrice,
@@ -50,6 +51,7 @@ export const usePreferencesStore = defineStore('preferences', {
         bandwidth: kInitialPrice
       }
     },
+
     clearPricing(): void {
       this.pricesSettings = {
         cpu: 0,
@@ -57,6 +59,7 @@ export const usePreferencesStore = defineStore('preferences', {
         bandwidth: 0
       }
     },
+
     updatePrice(priceSetting: string, value: number): void {
       if (priceSetting === 'cpu') {
         this.pricesSettings.cpu = value > 0 ? value : 0
@@ -65,7 +68,8 @@ export const usePreferencesStore = defineStore('preferences', {
       } else if (priceSetting === 'bandwidth') {
         this.pricesSettings.bandwidth = value > 0 ? value : 0
       }
-    },   
+    },
+
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 
