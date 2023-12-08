@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
 import SettingsSection from '../SettingsSection.vue'
 import InvoicesDueRow from '@/components/settings/hostingPreferences/InvoicesDueRow.vue'
 import InvoicesFrequencyRow from '@/components/settings/hostingPreferences/InvoicesFrequencyRow.vue'
 import type { InvoicesData } from '@/types/types'
-import CircleSpinner from "@uicommon/components/CircleSpinner.vue";
 
 const props = defineProps<{
   data: InvoicesData
@@ -28,8 +28,12 @@ function updateDue(value) {
     :class="{ 'invoices-section__is-loading': props.isLoading }"
   >
     <div class="invoices-section">
-			<CircleSpinner v-if="props.isLoading" />
-			<InvoicesFrequencyRow
+      <CircleSpinner
+        v-if="props.isLoading"
+        class="invoices-section__spinner"
+      />
+
+      <InvoicesFrequencyRow
         :data="props.data"
         @update:frequency="updateFrequency"
       />
@@ -59,12 +63,17 @@ function updateDue(value) {
 
 <style lang="scss" scoped>
 .invoices-section {
+  position: relative;
   color: var(--grey-dark-color);
   padding-bottom: 18px;
 
   &__is-loading {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  &__spinner {
+    position: absolute;
   }
 
   &__due-row {

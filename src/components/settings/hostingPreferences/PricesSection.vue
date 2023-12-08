@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
 import HostingPreferencesEditablePriceRow from './EditablePriceRow.vue'
 import type { PricesData, UpdatePricePayload } from '@/types/types'
-import CircleSpinner from "@uicommon/components/CircleSpinner.vue";
 
 const { t } = useI18n()
 
@@ -56,8 +56,11 @@ const prices = computed((): PriceItem[] => [
     class="prices-section"
     :class="{ 'prices-section__is-loading': props.isLoading }"
   >
-		<CircleSpinner v-if="props.isLoading" />
-		<span class="prices-section__subtitle">
+    <CircleSpinner
+      v-if="props.isLoading"
+      class="prices-section__spinner"
+    />
+    <span class="prices-section__subtitle">
       {{ $t('hosting_preferences.prices.subheader') }}
     </span>
 
@@ -75,9 +78,15 @@ const prices = computed((): PriceItem[] => [
 
 <style lang="scss" scoped>
 .prices-section {
+  position: relative;
+
   &__is-loading {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  &__spinner {
+    position: absolute;
   }
 
   &__subtitle {

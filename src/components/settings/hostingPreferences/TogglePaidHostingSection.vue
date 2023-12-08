@@ -17,12 +17,9 @@ const props = defineProps<{
   paidHostingEnabled: boolean
 }>()
 
-const paidHostingEnabled = ref(props.paidHostingEnabled && userStore.kycLevel === EUserKycLevel.two)
-
 const emit = defineEmits(['paid-hosting-toggled'])
 
 const paidHostingToggled = (isToggledOn: boolean): void => {
-  paidHostingEnabled.value = isToggledOn
   emit('paid-hosting-toggled', isToggledOn)
 }
 </script>
@@ -49,8 +46,9 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
         >{{ t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_two') }}</span>
         <span class="kyc-needed-text">{{ t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
       </div>
+
       <ToggleSwitch
-        :toggle-on="paidHostingEnabled"
+        :toggle-on="props.paidHostingEnabled"
         :label-toggled-on="t('hosting_preferences.toggle_paid_hosting.enabled')"
         :label-toggled-off="t('hosting_preferences.toggle_paid_hosting.disabled')"
         :is-disabled="userStore.kycLevel !== EUserKycLevel.two"
@@ -93,6 +91,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
 
   .toggle-container {
     display: flex;
+    position: relative;
     flex-direction: row;
     padding: 10px 23px;
     justify-content: flex-end;
@@ -100,7 +99,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
     width: 100%;
 
     &__spinner {
-      margin-left: 70px;
+      position: absolute;
     }
   }
 

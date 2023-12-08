@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import GlobalHostingPlanModal from '@/components/modals/GlobalHostingPlanModal.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import HAppSelectionSection from '@/components/settings/hostingPreferences/HAppSelectionSection'
 import InvoicesSection from '@/components/settings/hostingPreferences/InvoicesSection.vue'
@@ -20,6 +21,21 @@ const isPaidHostingEnabled = ref(userStore.kycLevel !== EUserKycLevel.two)
 
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
+
+const isModalVisible = ref(false)
+
+function openModal(): void {
+  isModalVisible.value = true
+}
+
+function closeModal(): void {
+  isModalVisible.value = false
+}
+
+function cancelWizard(): void {
+  isPaidHostingEnabled.value = !isPaidHostingEnabled.value
+  closeModal()
+}
 
 async function getHostPreferences(): Promise<void> {
   try {
@@ -70,16 +86,22 @@ async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
   await setDefaultHostPreferences()
 }
 
-async function onTogglePaidHosting(isToggledOn: boolean): Promise<void> {
+function onTogglePaidHosting(isToggledOn: boolean): void {
   isPaidHostingEnabled.value = isToggledOn
 
-  if (isToggledOn) {
-    preferencesStore.setInitialPricing()
-  } else {
-    preferencesStore.clearPricing()
-  }
+  openModal()
 
-  await setDefaultHostPreferences()
+  // if (isToggledOn) {
+  //   preferencesStore.setInitialPricing()
+  // } else {
+  //   preferencesStore.clearPricing()
+  // }
+  //
+  // await setDefaultHostPreferences()
+}
+
+function updateHostingPlan(): void {
+  closeModal()
 }
 </script>
 
@@ -119,6 +141,15 @@ async function onTogglePaidHosting(isToggledOn: boolean): Promise<void> {
       <HAppSelectionSection
         class="hosting-preferences__happ-selection"
         data-test-hosting-preferences-happ-selection-section
+      />
+
+      <GlobalHostingPlanModal
+        :key="isPaidHostingEnabled"
+        :plan-value="isPaidHostingEnabled ? 'paid' : 'free'"
+        :is-visible="isModalVisible"
+        @close="closeModal"
+        @cancel="cancelWizard"
+        @update:hosting-plan="updateHostingPlan"
       />
     </template>
   </PrimaryLayout>

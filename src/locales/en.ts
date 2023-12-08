@@ -158,7 +158,7 @@ export default {
       header: 'Price Configuration',
       subheader: 'Default Rates',
       hfpermin: 'HF per min',
-      hfpergb: 'HF per GB',
+      hfpergb: 'HF per GB'
     },
     toggle_paid_hosting: {
       paid_hosting: 'Paid Hosting',
@@ -167,8 +167,23 @@ export default {
       kyc_needed_part_three: 'to get paid to host hApps.',
       enabled: 'Enabled',
       disabled: 'Disabled',
-      invoice_info_enabled: 'Invoices will be sent to hApp managers for hosting services provided unless free hosting is enabled for individual hApps.',
-      invoice_info_disabled: 'You are currently hosting hApps for free, switch the toggle on to start getting paid. If you would like to continue hosting any individual hApps for free, please toggle “free hosting” on for each individual hApp.'
+      invoice_info_enabled:
+        'Invoices will be sent to hApp managers for hosting services provided unless free hosting is enabled for individual hApps.',
+      invoice_info_disabled:
+        'You are currently hosting hApps for free, switch the toggle on to start getting paid. If you would like to continue hosting any individual hApps for free, please toggle “free hosting” on for each individual hApp.'
+    },
+    toggle_paid_hosting_modal: {
+      paid: {
+        confirmation_button_label: 'Yes, switch to paid hosting',
+        title: 'Are you sure you want to stop hosting hApps for free?',
+        description:
+          "You'll have the option to choose individual happs to continue hosting for free"
+      },
+      free: {
+        confirmation_button_label: 'Yes, host for free',
+        title: 'Are you sure you want to host all hApps for free? ',
+        description: ''
+      }
     }
   },
   invoices: {
