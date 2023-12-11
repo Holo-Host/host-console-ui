@@ -238,23 +238,24 @@ function createExportFilename(): string {
 
 function mapActivityLog(log): Record<string, unknown> {
   return {
-		// eslint-disable @typescript-eslint/naming-convention
+    // eslint-disable @typescript-eslint/naming-convention
     'request.agent_id': encodeAgentId(log.request.agent_id) || '',
-		'request.request.host_id': log.request.request.host_id || '',
-		'request.request.timestamp': log.request.request.timestamp,
-		'request.request.call_spec.args_hash': encodeAgentId(log.request.request.call_spec.args_hash) || '',
-		'request.request.call_spec.function': log.request.request.call_spec.function || '',
-		'request.request.call_spec.hha_hash': encodeAgentId(log.request.request.call_spec.hha_hash) || '',
-		'request.request.call_spec.role_name': log.request.request.call_spec.role_name || '',
-		'request.request.call_spec.zome': log.request.request.call_spec.zome || '',
-		'request.request.hha_pricing_pref': encodeAgentId(log.request.request.hha_pricing_pref) || '',
-		'request.request.request_signature': encodeAgentId(log.request.request_signature) || '',
-		'response.host_metrics.bandwidth': log.response.host_metrics.bandwidth || '',
-		'response.host_metrics.cpu': log.response.host_metrics.cpu || '',
-		'response.weblog_compat.source_ip': log.response.weblog_compat.source_ip || '',
-		'response.weblog_compat.status_code': log.response.weblog_compat.status_code || ''
-		// eslint-enable @typescript-eslint/naming-convention
-	}
+    'request.request.host_id': log.request.request.host_id || '',
+    'request.request.timestamp': log.request.request.timestamp,
+    'request.request.call_spec.args_hash': `${log.request.request.call_spec.args_hash}` || '',
+    'request.request.call_spec.function': log.request.request.call_spec.function || '',
+    'request.request.call_spec.hha_hash':
+      encodeAgentId(log.request.request.call_spec.hha_hash) || '',
+    'request.request.call_spec.role_name': log.request.request.call_spec.role_name || '',
+    'request.request.call_spec.zome': log.request.request.call_spec.zome || '',
+    'request.request.hha_pricing_pref': encodeAgentId(log.request.request.hha_pricing_pref) || '',
+    'request.request.request_signature': encodeAgentId(log.request.request_signature) || '',
+    'response.host_metrics.bandwidth': log.response.host_metrics.bandwidth || '',
+    'response.host_metrics.cpu': log.response.host_metrics.cpu || '',
+    'response.weblog_compat.source_ip': log.response.weblog_compat.source_ip || '',
+    'response.weblog_compat.status_code': log.response.weblog_compat.status_code || ''
+    // eslint-enable @typescript-eslint/naming-convention
+  }
 }
 
 async function downloadServiceLogs(): Promise<void> {
