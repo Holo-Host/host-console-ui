@@ -537,13 +537,10 @@ export function useHposInterface(): HposInterface {
     })
 
     try {
-      await Promise.all(promises).then((logs) => {
-        const flatenedLogs = logs.flat()
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return flatenedLogs
-      })
-
-      return []
+      const logs = await Promise.all(promises)
+      const flatenedLogs = logs.flat()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return flatenedLogs
     } catch (error) {
       console.error('getServiceLogs encountered an error: ', error)
       return { error }
