@@ -4,9 +4,11 @@ import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
 import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
-import { ref } from 'vue'
+import { computed, markRaw, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { EModal } from '@/constants/ui'
+import PaidHostingWizardStepOne from '@/components/settings/hostingPreferences/PaidHostingWizardStepOne.vue'
+import PaidHostingWizardStepTwo from '@/components/settings/hostingPreferences/PaidHostingWizardStepTwo.vue'
+import { EModal, PaidHostingWizardStep } from '@/constants/ui'
 import { useHposInterface } from '@/interfaces/HposInterface'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
@@ -26,6 +28,86 @@ const isConfirmed = ref(false)
 const isBusy = ref(false)
 const isError = ref(false)
 
+const transitionName = ref('')
+
+const steps = ref<[PaidHostingWizardStep, PaidHostingWizardStep]>([
+  {
+    id: 1,
+    title: 'Price Configuration',
+    description:
+      'Please set your desired rates below. The chart on the left shows the average rate by other users.',
+    nextButtonLabel: '$.next'
+  },
+  {
+    id: 2,
+    title: 'Select hApps',
+    description: 'Choose which hApps you would like to host for free',
+    backButtonLabel: '$.back',
+    nextButtonLabel: '$.next'
+  }
+])
+
+const stepComponents = ref([markRaw(PaidHostingWizardStepOne), markRaw(PaidHostingWizardStepTwo)])
+
+const currentStep = ref(0)
+
+const backButtonLabel = computed(() => {
+  return steps.value[currentStep.value - 1]?.backButtonLabel ?? '$.cancel'
+})
+
+const nextButtonLabel = computed(() => {
+  if (currentStep.value === 0) {
+    return props.planValue === 'free'
+      ? t('hosting_preferences.toggle_paid_hosting_modal.free.confirmation_button_label')
+      : t('hosting_preferences.toggle_paid_hosting_modal.paid.confirmation_button_label')
+  } else {
+    return steps.value[currentStep.value - 1]?.nextButtonLabel ?? '$.next'
+  }
+})
+
+// Steps management
+function goToPreviousStep(): void {
+  transitionName.value = 'slide-right'
+
+  if (currentStep.value > 1) {
+    currentStep.value -= 1
+  } else {
+    cancel()
+  }
+}
+
+interface StepOneValue {
+  transactionId: string
+}
+
+interface StepTwoValue {
+  transactionHash: string
+}
+
+function goToNextStep(value?: StepOneValue | StepTwoValue | string | number): void {
+  console.log(value)
+  transitionName.value = 'slide-left'
+
+  /* eslint-disable @typescript-eslint/no-magic-numbers */
+  switch (currentStep.value) {
+  case 0:
+    currentStep.value = 1
+    break
+
+  case steps.value[0]?.id:
+    currentStep.value = 2
+    break
+
+  case steps.value[1]?.id:
+    confirm()
+    break
+
+  default:
+    console.error('Sorry, there are no more steps, you are falling into oblivion.')
+  }
+  /* eslint-enable @typescript-eslint/no-magic-numbers */
+}
+
 function cancel(): void {
   isBusy.value = false
   isConfirmed.value = false
@@ -36,21 +118,22 @@ function cancel(): void {
 function confirm(): void {
   isBusy.value = true
   emit('update:hosting-plan', props.planValue)
-  // const result = null
-  //
-  // if (!result) {
-  // If failed
-  // cancel()
 
-  // setTimeout(() => {
-  //   showModal(EModal.error_modal)
-  // }, 300)
-  // } else {
-  // If success
-  // isBusy.value = false
-  // isConfirmed.value = true
+  isBusy.value = false
+
+  const result = null
+
+  // if (!result) {
+  //   // If failed
+  //   cancel()
   //
-  // isBusy.value = true
+  //   setTimeout(() => {
+  //     showModal(EModal.error_modal)
+  //   }, 300)
+  // } else {
+  //   // If success
+  //   isBusy.value = false
+  //   isConfirmed.value = true
   // }
 }
 </script>
@@ -58,20 +141,38 @@ function confirm(): void {
 <template>
   <BaseModal
     is-visible
+    :content-padding="currentStep === 0 ? 'md' : 'sm'"
     @close="cancel"
   >
     <div
       v-if="!isError"
       class="stop-hosting-modal"
     >
-      <ExclamationCircleIcon class="stop-hosting-modal__icon" />
-      <p class="stop-hosting-modal__title">
-        {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.title') : t('hosting_preferences.toggle_paid_hosting_modal.paid.title') }}
-      </p>
+      <Transition
+        :name="transitionName"
+        mode="out-in"
+      >
+        <component
+          :is="stepComponents[currentStep - 1]"
+          :steps="steps"
+          class="mt-16 ml-1 sm:mt-6"
+          @go-to-next-step="goToNextStep"
+          @go-to-previous-step="goToPreviousStep"
+        />
+      </Transition>
 
-      <p class="stop-hosting-modal__description">
-        {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.description') : t('hosting_preferences.toggle_paid_hosting_modal.paid.description') }}
-      </p>
+      <div v-if="currentStep === 0">
+        <ExclamationCircleIcon
+          class="stop-hosting-modal__icon"
+        />
+        <p class="stop-hosting-modal__title">
+          {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.title') : t('hosting_preferences.toggle_paid_hosting_modal.paid.title') }}
+        </p>
+
+        <p class="stop-hosting-modal__description">
+          {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.description') : t('hosting_preferences.toggle_paid_hosting_modal.paid.description') }}
+        </p>
+      </div>
     </div>
 
     <template
@@ -89,22 +190,25 @@ function confirm(): void {
       v-else
       #buttons
     >
-      <BaseButton
-        :type="EButtonType.tertiary"
-        :is-disabled="isBusy"
-        @click="cancel"
-      >
-        {{ t('$.cancel') }}
-      </BaseButton>
+      <div class="stop-hosting-modal__form-buttons">
+        <BaseButton
+          :type="EButtonType.tertiary"
+          :is-disabled="isBusy"
+          class="stop-hosting-modal__form-buttons-back-button"
+          @click="goToPreviousStep"
+        >
+          {{ t(backButtonLabel) }}
+        </BaseButton>
 
-      <BaseButton
-        class="stop-hosting-modal__confirm-button"
-        :is-busy="isBusy"
-        :is-disabled="isBusy"
-        @click="confirm"
-      >
-        {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.confirmation_button_label') : t('hosting_preferences.toggle_paid_hosting_modal.paid.confirmation_button_label') }}
-      </BaseButton>
+        <BaseButton
+          :is-busy="isBusy"
+          :is-disabled="isBusy"
+          class="stop-hosting-modal__form-buttons-next-button"
+          @click="goToNextStep"
+        >
+          {{ t(nextButtonLabel) }}
+        </BaseButton>
+      </div>
     </template>
   </BaseModal>
 </template>
@@ -136,8 +240,18 @@ function confirm(): void {
     font-weight: 600;
   }
 
-  &__confirm-button {
-    margin-left: 16px;
+  &__form-buttons {
+    width: 100%;
+    display: flex;
+
+    &-back-button {
+      width: 100%;
+    }
+
+    &-next-button {
+      width: 100%;
+      margin-left: 16px;
+    }
   }
 }
 </style>

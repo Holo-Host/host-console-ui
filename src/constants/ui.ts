@@ -9,6 +9,14 @@ export const kSortOptions = {
   }
 }
 
+export interface PaidHostingWizardStep {
+  id: number
+  title: string
+  description: string
+  backButtonLabel?: string
+  nextButtonLabel?: string
+}
+
 export enum EModal {
   welcome = 'welcome',
   redemption_initiated = 'redemption_initiated',
