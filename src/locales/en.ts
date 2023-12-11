@@ -27,6 +27,11 @@ export default {
     terms_of_service: 'Terms of Service',
     try_again: 'Try again'
   },
+  download_service_logs: {
+    label: 'Download service logs',
+    loading_message:
+      'Please do not refresh this page. Download will begin shortly, we are preparing your files.'
+  },
   earnings: {
     exceptions: 'Exceptions',
     last_30_days: 'Last 30 days',

@@ -1,25 +1,43 @@
 <script setup lang="ts">
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import BaseSearchInput from '@uicommon/components/BaseSearchInput.vue'
 import BaseTable from '@uicommon/components/BaseTable.vue'
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
 import { useFilter } from '@uicommon/composables/useFilter'
+import { useModals } from '@uicommon/composables/useModals'
+import { ESpinnerSize } from '@uicommon/types/ui'
+import { encodeAgentId, decodeAgentId } from '@uicommon/utils/agent'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import dayjs from 'dayjs'
+import { unparse } from 'papaparse'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import InvoicesTableRow from '@/components/invoices/InvoicesTableRow.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
+import { EModal } from '@/constants/ui'
+import { useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
+import { useDashboardStore } from '@/store/dashboard'
 import { useEarningsStore } from '@/store/earnings'
+import { isError as isErrorPredicate } from '@/types/predicates'
 import type { BreadCrumb } from '@/types/types'
+import { saveCsvToClient } from '@/utils/csvExportUtils'
+import { formatDate } from '@/utils/dateUtils'
 
 const { t } = useI18n()
 const router = useRouter()
 
 const isLoading = ref(false)
 const isError = ref(false)
+const isDownloadingServiceLogs = ref(false)
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
+const { showModal, hideModal } = useModals()
 
 const earningsStore = useEarningsStore()
+const dashboardStore = useDashboardStore()
+const { getServiceLogs } = useHposInterface()
 
 const isPaidInvoices = computed(() => router.currentRoute.value.name === kRoutes.paidInvoices.name)
 
@@ -213,6 +231,71 @@ async function getInvoices(): Promise<void> {
   }
 }
 
+function createExportFilename(): string {
+  const date = formatDate(new Date(), 'YYYY-MM-DD')
+  return `service-logs-${date}.csv`
+}
+
+function mapActivityLog(log): Record<string, unknown> {
+  return {
+    // eslint-disable @typescript-eslint/naming-convention
+    'request.agent_id': encodeAgentId(log.request.agent_id) || '',
+    'request.request.host_id': log.request.request.host_id || '',
+    'request.request.timestamp': log.request.request.timestamp,
+    'request.request.call_spec.args_hash': `${log.request.request.call_spec.args_hash}` || '',
+    'request.request.call_spec.function': log.request.request.call_spec.function || '',
+    'request.request.call_spec.hha_hash':
+      encodeAgentId(log.request.request.call_spec.hha_hash) || '',
+    'request.request.call_spec.role_name': log.request.request.call_spec.role_name || '',
+    'request.request.call_spec.zome': log.request.request.call_spec.zome || '',
+    'request.request.hha_pricing_pref': encodeAgentId(log.request.request.hha_pricing_pref) || '',
+    'request.request.request_signature': encodeAgentId(log.request.request_signature) || '',
+    'response.host_metrics.bandwidth': log.response.host_metrics.bandwidth || '',
+    'response.host_metrics.cpu': log.response.host_metrics.cpu || '',
+    'response.weblog_compat.source_ip': log.response.weblog_compat.source_ip || '',
+    'response.weblog_compat.status_code': log.response.weblog_compat.status_code || ''
+    // eslint-enable @typescript-eslint/naming-convention
+  }
+}
+
+async function downloadServiceLogs(): Promise<void> {
+  let timeout = null
+
+  isDownloadingServiceLogs.value = true
+  timeout = setTimeout(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    showModal(EModal.loading_modal, { description: t('download_service_logs.loading_message') })
+  }, 3000)
+
+  if (dashboardStore.hostedHApps.length === 0) {
+    await dashboardStore.getHostedHApps()
+  }
+
+  if (isErrorPredicate(dashboardStore.hostedHApps)) {
+    isError.value = true
+    isDownloadingServiceLogs.value = false
+    clearTimeout(timeout)
+    timeout = null
+    hideModal()
+  } else {
+    const hAppsIds = dashboardStore.hostedHApps.map((hApp) => hApp.id)
+    const rawLogs = await getServiceLogs(hAppsIds)
+
+    const csv = unparse(
+      rawLogs.map((log) => {
+        return mapActivityLog(Object.values(log)[0])
+      })
+    )
+
+    saveCsvToClient(createExportFilename(), csv)
+
+    isDownloadingServiceLogs.value = false
+    clearTimeout(timeout)
+    timeout = null
+    hideModal()
+  }
+}
+
 onMounted(async (): Promise<void> => {
   await getInvoices()
 })
@@ -234,6 +317,23 @@ onMounted(async (): Promise<void> => {
         label-translation-key="$.filter_by"
         @update="setFilter"
       />
+
+      <div
+        class="service-logs-download"
+        :class="{ 'service-logs-download--disabled': isDownloadingServiceLogs }"
+        @click="downloadServiceLogs"
+      >
+        <CircleSpinner
+          v-if="isDownloadingServiceLogs"
+          :scale="ESpinnerSize.xs"
+          class="service-logs-download__icon"
+        />
+        <ArrowTopRightOnSquareIcon
+          v-else
+          class="service-logs-download__icon"
+        />
+        <span class="service-logs-download__label">{{ t('download_service_logs.label') }}</span>
+      </div>
     </div>
 
     <div data-test-invoices-page-table>
@@ -258,12 +358,50 @@ onMounted(async (): Promise<void> => {
   </PrimaryLayout>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .controls {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 10px;
+  padding-right: 16px;
+
+  .service-logs-download {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-left: 12px;
+    cursor: pointer;
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &__icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &__label {
+      margin-left: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    &__icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &__label {
+      margin-left: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  }
 }
 </style>
