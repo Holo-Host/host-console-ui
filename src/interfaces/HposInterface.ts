@@ -15,7 +15,7 @@ interface HposInterface {
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
   startHostingHApp: (id: string) => Promise<void | { error: unknown }>
   stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
-  setDefaultHAppPreferences(preferences: DefaultPreferencesPayload): Promise<boolean>
+  setDefaultHAppPreferences: (preferences: DefaultPreferencesPayload) => Promise<boolean>
   updateHAppHostingPlan: (payload: UpdateHAppHostingPlanPayload) => Promise<boolean>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
   getHostPreferences: () => Promise<HostPreferencesResponse | { error: unknown }>
@@ -28,6 +28,7 @@ interface HposInterface {
   updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
   getUnpaidInvoices: () => Promise<HposHolochainCallResponse>
+  getServiceLogs: (ids: string[]) => Promise<HposHolochainCallResponse>
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
@@ -120,7 +121,7 @@ export interface HostPreferencesResponse {
 export interface DefaultPreferencesPayload {
   max_fuel_before_invoice: string
   price_compute: string
-  price_storage: string  
+  price_storage: string
   price_bandwidth: string
   max_time_before_invoice: [number, number]
 }
@@ -139,8 +140,11 @@ type HposHolochainCallResponse =
   | RedemptionTransaction
   | ReserveSettingsResponse
   | EUserKycLevel
+  | ServiceLogsResponse
 
 type HposAdminCallResponse = HposConfigResponse
+
+type ServiceLogsResponse = Array<Record<string, unknown>>
 
 export interface UsageResponse {
   totalHostedHapps: number
@@ -493,7 +497,9 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function setDefaultHAppPreferences(preferences: DefaultPreferencesPayload): Promise<boolean> {
+  async function setDefaultHAppPreferences(
+    preferences: DefaultPreferencesPayload
+  ): Promise<boolean> {
     try {
       const params = {
         appId: localStorage.getItem(kCoreAppVersionLSKey),
@@ -509,9 +515,35 @@ export function useHposInterface(): HposInterface {
         params
       })
 
-      return true      
+      return true
     } catch (error) {
       return false
+    }
+  }
+
+  async function getServiceLogs(
+    ids: string[]
+  ): Promise<HposHolochainCallResponse | { error: unknown }> {
+    const promises = []
+
+    ids.forEach((id) => {
+      promises.push(
+        hposHolochainCall({
+          method: 'get',
+          pathPrefix: '/api/v2',
+          path: `/hosted_happs/${id}/logs?days=30`
+        })
+      )
+    })
+
+    try {
+      const logs = await Promise.all(promises)
+      const flatenedLogs = logs.flat()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return flatenedLogs
+    } catch (error) {
+      console.error('getServiceLogs encountered an error: ', error)
+      return { error }
     }
   }
 
@@ -898,6 +930,7 @@ export function useHposInterface(): HposInterface {
     startHostingHApp,
     stopHostingHApp,
     updateHAppHostingPlan,
+    getServiceLogs,
     HPOS_API_URL
   }
 }
