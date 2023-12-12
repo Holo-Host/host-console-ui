@@ -30,20 +30,28 @@ const isError = ref(false)
 
 const transitionName = ref('')
 
+const prices = ref({
+  cpu: null,
+  dataTransfer: null
+})
+
+const hApps = ref([])
+
 const steps = ref<[PaidHostingWizardStep, PaidHostingWizardStep]>([
   {
     id: 1,
-    title: 'Price Configuration',
-    description:
-      'Please set your desired rates below. The chart on the left shows the average rate by other users.',
-    nextButtonLabel: '$.next'
+    title: t('hosting_preferences.toggle_paid_hosting_modal.step_one.title'),
+    description: t('hosting_preferences.toggle_paid_hosting_modal.step_one.description'),
+    nextButtonLabel: '$.next',
+    props: prices.value
   },
   {
     id: 2,
-    title: 'Select hApps',
-    description: 'Choose which hApps you would like to host for free',
+    title: t('hosting_preferences.toggle_paid_hosting_modal.step_two.title'),
+    description: t('hosting_preferences.toggle_paid_hosting_modal.step_two.description'),
     backButtonLabel: '$.back',
-    nextButtonLabel: '$.next'
+    nextButtonLabel: '$.next',
+    props: { hApps: hApps.value }
   }
 ])
 
@@ -58,8 +66,8 @@ const backButtonLabel = computed(() => {
 const nextButtonLabel = computed(() => {
   if (currentStep.value === 0) {
     return props.planValue === 'free'
-      ? t('hosting_preferences.toggle_paid_hosting_modal.free.confirmation_button_label')
-      : t('hosting_preferences.toggle_paid_hosting_modal.paid.confirmation_button_label')
+      ? 'hosting_preferences.toggle_paid_hosting_modal.free.confirmation_button_label'
+      : 'hosting_preferences.toggle_paid_hosting_modal.paid.confirmation_button_label'
   } else {
     return steps.value[currentStep.value - 1]?.nextButtonLabel ?? '$.next'
   }
@@ -76,16 +84,34 @@ function goToPreviousStep(): void {
   }
 }
 
-interface StepOneValue {
-  transactionId: string
+const isNextButtonDisabled = computed((): boolean => {
+  if (currentStep.value === 1) {
+    return prices.value.cpu === null || prices.value.dataTransfer === null
+  }
+
+  if (currentStep.value === 2) {
+    return false
+  }
+
+  return false
+})
+
+function updateValue({ prop, value }: { prop: string; value: string | number }): void {
+  switch (prop) {
+  case 'cpu':
+    prices.value.cpu = value
+    break
+
+  case 'dataTransfer':
+    prices.value.dataTransfer = value
+    break
+
+  default:
+    console.error('Unknown prop')
+  }
 }
 
-interface StepTwoValue {
-  transactionHash: string
-}
-
-function goToNextStep(value?: StepOneValue | StepTwoValue | string | number): void {
-  console.log(value)
+function goToNextStep(): void {
   transitionName.value = 'slide-left'
 
   /* eslint-disable @typescript-eslint/no-magic-numbers */
@@ -156,6 +182,7 @@ function confirm(): void {
           :is="stepComponents[currentStep - 1]"
           :steps="steps"
           class="mt-16 ml-1 sm:mt-6"
+          @update:value="updateValue"
           @go-to-next-step="goToNextStep"
           @go-to-previous-step="goToPreviousStep"
         />
@@ -202,7 +229,7 @@ function confirm(): void {
 
         <BaseButton
           :is-busy="isBusy"
-          :is-disabled="isBusy"
+          :is-disabled="isBusy || isNextButtonDisabled"
           class="stop-hosting-modal__form-buttons-next-button"
           @click="goToNextStep"
         >
@@ -243,6 +270,8 @@ function confirm(): void {
   &__form-buttons {
     width: 100%;
     display: flex;
+    margin-top: 8px;
+    padding: 0 12px;
 
     &-back-button {
       width: 100%;

@@ -188,6 +188,15 @@ export default {
         confirmation_button_label: 'Yes, host for free',
         title: 'Are you sure you want to host all hApps for free? ',
         description: ''
+      },
+      step_one: {
+        title: 'Price Configuration',
+        description: 'Please set your desired rates below.',
+        default_rates: 'Default Rates'
+      },
+      step_two: {
+        title: 'Select hApps',
+        description: 'Choose which hApps you would like to host for free'
       }
     }
   },

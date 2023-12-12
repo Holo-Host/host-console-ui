@@ -15,6 +15,7 @@ export interface PaidHostingWizardStep {
   description: string
   backButtonLabel?: string
   nextButtonLabel?: string
+  props: Record<string, unknown>
 }
 
 export enum EModal {

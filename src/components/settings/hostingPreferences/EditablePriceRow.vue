@@ -9,13 +9,15 @@ import PencilIcon from '../../icons/PencilIcon.vue'
 const props = withDefaults(
   defineProps<{
     label: string
-    value: number | string
+    value: number | string | null
     unit: string
     prop: string
     isDisabled?: boolean
+    labelAlign?: 'left' | 'center'
   }>(),
   {
-    isDisabled: false
+    isDisabled: false,
+    labelAlign: 'center'
   }
 )
 
@@ -25,7 +27,7 @@ const isEditing = ref(false)
 const editedValue = ref(props.value)
 
 function edit(): void {
-  editedValue.value = `${props.value}`
+  editedValue.value = props.value === null ? '' : `${props.value}`
   isEditing.value = true
 }
 
@@ -41,42 +43,52 @@ function cancel(): void {
 </script>
 
 <template>
-    <div class="editable-price-row__editable-value">
-      <span  class="editable-price-row__label">{{ label }}</span>
-      <span  v-if="!isEditing" class="editable-price-row__readonly_value">{{ editedValue }}</span>
-      <BaseInput
-        v-if="isEditing"
-        v-model="editedValue"
-        :input-type="EInputType.text"
-        placeholder=""
-        name="edited-value"
-        class="editable-price-row__editable-value-input"
-      />
+  <div class="editable-price-row__editable-value">
+    <span
+      class="editable-price-row__label"
+      :class="{ 'editable-price-row__label--text-left': props.labelAlign === 'left' }"
+    >
+      {{ label }}
+    </span>
+    <span
+      v-if="!isEditing"
+      class="editable-price-row__readonly_value"
+    >
+      {{ editedValue }}
+    </span>
+    <BaseInput
+      v-if="isEditing"
+      v-model="editedValue"
+      :input-type="EInputType.text"
+      placeholder=""
+      name="edited-value"
+      class="editable-price-row__editable-value-input"
+    />
 
-      <FilledCheckIcon
-        v-if="isEditing"
-        class="editable-price-row__button"
-        data-testid="save-button"
-        role="button"
-        @click="save"
-      />
+    <FilledCheckIcon
+      v-if="isEditing"
+      class="editable-price-row__button"
+      data-testid="save-button"
+      role="button"
+      @click="save"
+    />
 
-      <CircledExIcon
-        v-if="isEditing"
-        class="editable-price-row__button"
-        data-testid="cancel-button"
-        role="button"
-        @click="cancel"
-      />
-      <span class="editable-price-row__unit">{{ props.unit }}</span>
-      <PencilIcon
-        v-if="!isEditing"
-        role="button"
-        class="editable-price-row__editable-value-icon"
-        :class="{ 'disabled': props.isDisabled }"
-        @click="edit"
-      />
-    </div>
+    <CircledExIcon
+      v-if="isEditing"
+      class="editable-price-row__button"
+      data-testid="cancel-button"
+      role="button"
+      @click="cancel"
+    />
+    <span class="editable-price-row__unit">{{ props.unit }}</span>
+    <PencilIcon
+      v-if="!isEditing"
+      role="button"
+      class="editable-price-row__editable-value-icon"
+      :class="{ 'disabled': props.isDisabled }"
+      @click="edit"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -123,6 +135,10 @@ function cancel(): void {
     margin-right: 16px;
     color: var(--grey-color);
     font-weight: 700;
+
+    &--text-left {
+      text-align: left;
+    }
   }
 
   &__readonly_value {
