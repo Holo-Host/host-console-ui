@@ -22,6 +22,7 @@ export default {
     loading: 'Loading...',
     logout: 'Logout',
     next: 'Next',
+    search_happ: 'Search hApp',
     something_went_wrong: 'Something went wrong',
     storage: 'Storage',
     terms_of_service: 'Terms of Service',

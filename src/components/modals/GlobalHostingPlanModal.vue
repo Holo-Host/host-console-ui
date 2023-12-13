@@ -86,7 +86,11 @@ function goToPreviousStep(): void {
 
 const isNextButtonDisabled = computed((): boolean => {
   if (currentStep.value === 1) {
-    return prices.value.cpu === null || prices.value.dataTransfer === null
+    return (
+      prices.value.cpu === null ||
+      prices.value.dataTransfer === null ||
+      (prices.value.cpu === 0 && prices.value.dataTransfer === 0)
+    )
   }
 
   if (currentStep.value === 2) {
@@ -179,7 +183,7 @@ function confirm(): void {
         mode="out-in"
       >
         <component
-          :is="stepComponents[currentStep - 1]"
+          :is="stepComponents[currentStep + 1]"
           :steps="steps"
           class="mt-16 ml-1 sm:mt-6"
           @update:value="updateValue"
