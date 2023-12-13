@@ -4,12 +4,13 @@ import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
 import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
-import { computed, markRaw, ref } from 'vue'
+import { computed, markRaw, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PaidHostingWizardStepOne from '@/components/settings/hostingPreferences/PaidHostingWizardStepOne.vue'
 import PaidHostingWizardStepTwo from '@/components/settings/hostingPreferences/PaidHostingWizardStepTwo.vue'
 import { EModal, PaidHostingWizardStep } from '@/constants/ui'
-import { useHposInterface } from '@/interfaces/HposInterface'
+import { HApp, useHposInterface } from '@/interfaces/HposInterface'
+import { useDashboardStore } from '@/store/dashboard'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { t } = useI18n()
@@ -50,7 +51,7 @@ const steps = ref<[PaidHostingWizardStep, PaidHostingWizardStep]>([
     title: t('hosting_preferences.toggle_paid_hosting_modal.step_two.title'),
     description: t('hosting_preferences.toggle_paid_hosting_modal.step_two.description'),
     backButtonLabel: '$.back',
-    nextButtonLabel: '$.next',
+    nextButtonLabel: '$.confirm',
     props: { hApps: hApps.value }
   }
 ])
@@ -183,7 +184,7 @@ function confirm(): void {
         mode="out-in"
       >
         <component
-          :is="stepComponents[currentStep + 1]"
+          :is="stepComponents[currentStep - 1]"
           :steps="steps"
           class="mt-16 ml-1 sm:mt-6"
           @update:value="updateValue"

@@ -158,6 +158,7 @@ export interface UsageResponse {
 
 export interface HApp {
   id: string
+  icon?: string
   name: string
   enabled: boolean
   isPaused: boolean

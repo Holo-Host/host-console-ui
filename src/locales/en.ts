@@ -197,7 +197,10 @@ export default {
       },
       step_two: {
         title: 'Select hApps',
-        description: 'Choose which hApps you would like to host for free'
+        description: 'Choose which hApps you would like to host for free',
+        paid_happs: 'Paid hApps',
+        set_all_free: 'Set All Free',
+        set_all_paid: 'Set All Paid'
       }
     }
   },
