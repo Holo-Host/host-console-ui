@@ -1,26 +1,28 @@
 <script lang="ts" setup>
-import { ExclamationCircleIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
+import {ExclamationCircleIcon} from '@heroicons/vue/24/outline'
 import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
-import { useModals } from '@uicommon/composables/useModals'
-import { EButtonType } from '@uicommon/types/ui'
-import { computed, markRaw, onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
+import {useModals} from '@uicommon/composables/useModals'
+import {EButtonType} from '@uicommon/types/ui'
+import {computed, markRaw, onMounted, ref} from 'vue'
+import {useI18n} from 'vue-i18n'
 import PaidHostingWizardStepOne from '@/components/settings/hostingPreferences/PaidHostingWizardStepOne.vue'
 import PaidHostingWizardStepTwo from '@/components/settings/hostingPreferences/PaidHostingWizardStepTwo.vue'
-import { EModal, PaidHostingWizardStep } from '@/constants/ui'
-import { HApp, useHposInterface } from '@/interfaces/HposInterface'
-import { useDashboardStore } from '@/store/dashboard'
-import { isError as isErrorPredicate } from '@/types/predicates'
+import {PaidHostingWizardStep} from '@/constants/ui'
+import {HApp, useHposInterface} from '@/interfaces/HposInterface'
+import {useDashboardStore} from '@/store/dashboard'
+import {isError as isErrorPredicate} from '@/types/predicates'
+import {EHostingPlan, MappedHApp} from '@/types/types'
 
 const { t } = useI18n()
+const dashboardStore = useDashboardStore()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
 const { updateHAppHostingPlan } = useHposInterface()
 
 const props = defineProps<{
-  planValue: 'free' | 'paid'
+  planValue: EHostingPlan
 }>()
 
 const emit = defineEmits(['close', 'cancel', 'update:hosting-plan'])
@@ -36,9 +38,41 @@ const prices = ref({
   dataTransfer: null
 })
 
-const hApps = ref([])
+const isLoading = ref(false)
+const hApps = ref(dashboardStore.hostedHApps)
 
-const steps = ref<[PaidHostingWizardStep, PaidHostingWizardStep]>([
+const mappedHApps = ref<MappedHApp[]>([])
+
+onMounted(async () => {
+  if (isErrorPredicate(hApps.value) || !hApps.value?.length) {
+    try {
+      isLoading.value = true
+      await dashboardStore.getHostedHApps()
+
+      if (!isErrorPredicate(hApps.value)) {
+        mappedHApps.value = dashboardStore.hostedHApps.map((hApp: HApp) => ({
+          id: hApp.id,
+          name: hApp.name,
+          icon: hApp.icon ?? null,
+          hostingPlan: EHostingPlan.paid
+        }))
+      } else {
+        mappedHApps.value = []
+      }
+    } finally {
+      isLoading.value = false
+    }
+  } else {
+    mappedHApps.value = hApps.value.map((hApp: HApp): MappedHApp[] => ({
+      id: hApp.id,
+      name: hApp.name,
+      icon: hApp.icon ?? null,
+      hostingPlan: EHostingPlan.paid
+    }))
+  }
+})
+
+const steps = computed((): [PaidHostingWizardStep, PaidHostingWizardStep] => [
   {
     id: 1,
     title: t('hosting_preferences.toggle_paid_hosting_modal.step_one.title'),
@@ -52,7 +86,7 @@ const steps = ref<[PaidHostingWizardStep, PaidHostingWizardStep]>([
     description: t('hosting_preferences.toggle_paid_hosting_modal.step_two.description'),
     backButtonLabel: '$.back',
     nextButtonLabel: '$.confirm',
-    props: { hApps: hApps.value }
+    props: { hApps: mappedHApps.value }
   }
 ])
 
@@ -66,78 +100,13 @@ const backButtonLabel = computed(() => {
 
 const nextButtonLabel = computed(() => {
   if (currentStep.value === 0) {
-    return props.planValue === 'free'
+    return props.planValue === EHostingPlan.free
       ? 'hosting_preferences.toggle_paid_hosting_modal.free.confirmation_button_label'
       : 'hosting_preferences.toggle_paid_hosting_modal.paid.confirmation_button_label'
   } else {
     return steps.value[currentStep.value - 1]?.nextButtonLabel ?? '$.next'
   }
 })
-
-// Steps management
-function goToPreviousStep(): void {
-  transitionName.value = 'slide-right'
-
-  if (currentStep.value > 1) {
-    currentStep.value -= 1
-  } else {
-    cancel()
-  }
-}
-
-const isNextButtonDisabled = computed((): boolean => {
-  if (currentStep.value === 1) {
-    return (
-      prices.value.cpu === null ||
-      prices.value.dataTransfer === null ||
-      (prices.value.cpu === 0 && prices.value.dataTransfer === 0)
-    )
-  }
-
-  if (currentStep.value === 2) {
-    return false
-  }
-
-  return false
-})
-
-function updateValue({ prop, value }: { prop: string; value: string | number }): void {
-  switch (prop) {
-  case 'cpu':
-    prices.value.cpu = value
-    break
-
-  case 'dataTransfer':
-    prices.value.dataTransfer = value
-    break
-
-  default:
-    console.error('Unknown prop')
-  }
-}
-
-function goToNextStep(): void {
-  transitionName.value = 'slide-left'
-
-  /* eslint-disable @typescript-eslint/no-magic-numbers */
-  switch (currentStep.value) {
-  case 0:
-    currentStep.value = 1
-    break
-
-  case steps.value[0]?.id:
-    currentStep.value = 2
-    break
-
-  case steps.value[1]?.id:
-    confirm()
-    break
-
-  default:
-    console.error('Sorry, there are no more steps, you are falling into oblivion.')
-  }
-  /* eslint-enable @typescript-eslint/no-magic-numbers */
-}
 
 function cancel(): void {
   isBusy.value = false
@@ -167,10 +136,132 @@ function confirm(): void {
   //   isConfirmed.value = true
   // }
 }
+
+// Steps management
+function goToPreviousStep(): void {
+  transitionName.value = 'slide-right'
+
+  if (currentStep.value > 1) {
+    currentStep.value -= 1
+  } else {
+    cancel()
+  }
+}
+
+const isNextButtonDisabled = computed((): boolean => {
+  if (currentStep.value === 1) {
+    return (
+      prices.value.cpu === null ||
+      prices.value.dataTransfer === null ||
+      (prices.value.cpu === 0 && prices.value.dataTransfer === 0)
+    )
+  }
+
+  if (currentStep.value === 2) {
+    return false
+  }
+
+  return false
+})
+
+interface UpdateHAppPlanPayload {
+  id: string
+  value: EHostingPlan
+}
+
+type UpdatePricePayload = string | number | null
+
+interface UpdatePayload {
+  prop: string
+  value: UpdatePricePayload | UpdateHAppPlanPayload
+}
+
+function isUpdatePricePayload(
+  target: UpdatePricePayload | UpdateHAppPlanPayload
+): target is UpdatePricePayload {
+  return target !== null
+}
+
+function isUpdateHAppPlanPayload(
+  target: UpdatePricePayload | UpdateHAppPlanPayload
+): target is UpdateHAppPlanPayload {
+  return target !== null
+}
+
+function setAllHAppsPlan(payload: UpdateHAppPlanPayload): void {
+  mappedHApps.value = mappedHApps.value.map((hApp) => ({
+    ...hApp,
+    hostingPlan: payload.value
+  }))
+}
+
+function setSingleHAppPlan({ id, value }: UpdateHAppPlanPayload): void {
+  mappedHApps.value = mappedHApps.value.map((mappedHApp) => ({
+    ...mappedHApp,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    hostingPlan: mappedHApp.id === id ? value : mappedHApp.hostingPlan
+  }))
+}
+
+function updateValue(payload: UpdatePayload): void {
+  switch (payload.prop) {
+  case 'cpu':
+    if (isUpdatePricePayload(payload.value)) {
+      prices.value.cpu = payload.value
+    }
+
+    break
+
+  case 'dataTransfer':
+    if (isUpdatePricePayload(payload.value)) {
+      prices.value.dataTransfer = payload.value
+    }
+
+    break
+
+  case 'plan':
+    if (isUpdateHAppPlanPayload(payload.value)) {
+      if (payload.value.id === 'all') {
+        setAllHAppsPlan(payload.value)
+      } else {
+        setSingleHAppPlan(payload.value)
+      }
+    }
+
+    break
+
+  default:
+    console.error('Unknown prop')
+  }
+}
+
+function goToNextStep(): void {
+  transitionName.value = 'slide-left'
+
+  /* eslint-disable @typescript-eslint/no-magic-numbers */
+  switch (currentStep.value) {
+  case 0:
+    currentStep.value = 1
+    break
+
+  case steps.value[0]?.id:
+    currentStep.value = 2
+    break
+
+  case steps.value[1]?.id:
+    confirm()
+    break
+
+  default:
+    console.error('Sorry, there are no more steps, you are falling into oblivion.')
+  }
+  /* eslint-enable @typescript-eslint/no-magic-numbers */
+}
 </script>
 
 <template>
   <BaseModal
+		:is-clickable-outside="false"
     is-visible
     :content-padding="currentStep === 0 ? 'md' : 'sm'"
     @close="cancel"
@@ -198,11 +289,11 @@ function confirm(): void {
           class="stop-hosting-modal__icon"
         />
         <p class="stop-hosting-modal__title">
-          {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.title') : t('hosting_preferences.toggle_paid_hosting_modal.paid.title') }}
+          {{ props.planValue === EHostingPlan.free ? t('hosting_preferences.toggle_paid_hosting_modal.free.title') : t('hosting_preferences.toggle_paid_hosting_modal.paid.title') }}
         </p>
 
         <p class="stop-hosting-modal__description">
-          {{ props.planValue === 'free' ? t('hosting_preferences.toggle_paid_hosting_modal.free.description') : t('hosting_preferences.toggle_paid_hosting_modal.paid.description') }}
+          {{ props.planValue === EHostingPlan.free ? t('hosting_preferences.toggle_paid_hosting_modal.free.description') : t('hosting_preferences.toggle_paid_hosting_modal.paid.description') }}
         </p>
       </div>
     </div>

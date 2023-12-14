@@ -1,67 +1,21 @@
 <script lang="ts" setup>
-import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SearchInput from '@/components/SearchInput.vue'
 import HAppsListItem from '@/components/settings/hostingPreferences/HAppsListItem.vue'
 import type { PaidHostingWizardStep } from '@/constants/ui'
 import type { HApp } from '@/interfaces/HposInterface'
-import { useDashboardStore } from '@/store/dashboard'
 import { isError as isErrorPredicate } from '@/types/predicates'
-
-enum EHostingPlan {
-  free = 'free',
-  paid = 'paid'
-}
+import type { MappedHApp, UpdateHAppPlanProps } from '@/types/types'
+import { EHostingPlan } from '@/types/types'
 
 const { t } = useI18n()
-
-const dashboardStore = useDashboardStore()
 
 const props = defineProps<{
   steps: PaidHostingWizardStep[]
 }>()
 
-const isLoading = ref(false)
-const hApps = ref(dashboardStore.hostedHApps)
-
-interface MappedHApp {
-  id: string
-  name: string
-  icon: string
-  hostingPlan: string
-}
-
-const mappedHApps = ref<MappedHApp[]>([])
-
-onMounted(async () => {
-  if (isErrorPredicate(hApps.value) || !hApps.value?.length) {
-    try {
-      isLoading.value = true
-      await dashboardStore.getHostedHApps()
-
-      if (!isErrorPredicate(hApps.value)) {
-        mappedHApps.value = dashboardStore.hostedHApps.map((hApp: HApp) => ({
-          id: hApp.id,
-          name: hApp.name,
-          icon: hApp.icon ?? null,
-          hostingPlan: EHostingPlan.paid
-        }))
-      } else {
-        mappedHApps.value = []
-      }
-    } finally {
-      isLoading.value = false
-    }
-  } else {
-    mappedHApps.value = hApps.value.map((hApp: HApp): MappedHApp[] => ({
-      id: hApp.id,
-      name: hApp.name,
-      icon: hApp.icon ?? null,
-      hostingPlan: EHostingPlan.paid
-    }))
-  }
-})
+const emit = defineEmits(['update:value'])
 
 interface SearchChangeProps {
   value: string
@@ -78,16 +32,16 @@ function onSearchChange({ value, isActive }: SearchChangeProps): void {
 
 const foundHApps = computed((): MappedHApp[] => {
   if (searchIsActive.value && searchValue.value) {
-    return mappedHApps.value.filter((hApp: HApp) =>
+    return props.steps[1]?.props.hApps.filter((hApp: HApp) =>
       hApp.name.toLowerCase().includes(searchValue.value.toLowerCase())
     )
   } else {
-    return isErrorPredicate(hApps.value) ? [] : mappedHApps.value
+    return isErrorPredicate(props.steps[1].props.hApps) ? [] : props.steps[1].props.hApps
   }
 })
 
 const paidHAppsCount = computed(
-  () => mappedHApps.value.filter((hApp) => hApp.hostingPlan === EHostingPlan.paid).length
+  () => props.steps[1].props.hApps.filter((hApp) => hApp.hostingPlan === EHostingPlan.paid).length
 )
 
 // Required to re-render the toggles
@@ -95,23 +49,14 @@ const setAllTriggered = ref(0)
 
 function setAll(plan: EHostingPlan): void {
   setAllTriggered.value = setAllTriggered.value + 1
-  mappedHApps.value = mappedHApps.value.map((hApp) => ({
-    ...hApp,
-    hostingPlan: plan
-  }))
+  emit('update:value', { prop: 'plan', value: { id: 'all', value: plan } })
 }
 
-interface UpdateHAppPlanProps {
-  id: string
-  value: EHostingPlan
-}
-
-function updateHAppPlan(data: UpdateHAppPlanProps): void {
-  mappedHApps.value = mappedHApps.value.map((mappedHApp) => ({
-    ...mappedHApp,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    hostingPlan: mappedHApp.id === data.id ? data.value : mappedHApp.hostingPlan
-  }))
+function updateSingle(data: UpdateHAppPlanProps): void {
+  emit('update:value', {
+    prop: 'plan',
+    value: { id: data.id, value: data.value }
+  })
 }
 </script>
 
@@ -133,7 +78,6 @@ function updateHAppPlan(data: UpdateHAppPlanProps): void {
 
     <SearchInput
       :value="searchValue"
-      :is-disabled="isLoading"
       :placeholder="t('$.search_happ')"
       @update="onSearchChange"
     />
@@ -157,8 +101,6 @@ function updateHAppPlan(data: UpdateHAppPlanProps): void {
     </div>
 
     <div class="paid-hosting-modal-wizard-step-two__form">
-      <CircleSpinner v-if="isLoading" />
-
       <div
         v-for="hApp in foundHApps"
         :key="hApp.id"
@@ -166,8 +108,7 @@ function updateHAppPlan(data: UpdateHAppPlanProps): void {
       >
         <HAppsListItem
           :h-app="hApp"
-          :re-render-toggle="setAllTriggered"
-          @update:plan="updateHAppPlan"
+          @update:plan="updateSingle"
         />
       </div>
     </div>

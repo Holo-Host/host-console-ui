@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { EInputType } from '@uicommon/types/ui'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import HostingPreferencesEditablePriceRow from '@/components/settings/hostingPreferences/EditablePriceRow.vue'
@@ -80,6 +81,7 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
             v-for="price in prices"
             :key="price.label"
             v-bind="price"
+            :type="EInputType.number"
             label-align="left"
             class="prices-section__price"
             @update:value="updatePrice"

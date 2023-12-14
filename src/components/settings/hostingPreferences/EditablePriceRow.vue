@@ -8,6 +8,7 @@ import PencilIcon from '../../icons/PencilIcon.vue'
 
 const props = withDefaults(
   defineProps<{
+    type?: EInputType
     label: string
     value: number | string | null
     unit: string
@@ -16,6 +17,7 @@ const props = withDefaults(
     labelAlign?: 'left' | 'center'
   }>(),
   {
+    type: EInputType.text,
     isDisabled: false,
     labelAlign: 'center'
   }
@@ -59,7 +61,7 @@ function cancel(): void {
     <BaseInput
       v-if="isEditing"
       v-model="editedValue"
-      :input-type="EInputType.text"
+      :input-type="props.type"
       placeholder=""
       name="edited-value"
       class="editable-price-row__editable-value-input"

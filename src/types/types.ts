@@ -79,3 +79,20 @@ export interface UpdatePricePayload {
   prop: string
   value: number
 }
+
+export enum EHostingPlan {
+  free = 'free',
+  paid = 'paid'
+}
+
+export interface MappedHApp {
+  id: string
+  name: string
+  icon: string
+  hostingPlan: string
+}
+
+export interface UpdateHAppPlanProps {
+  id: string
+  value: EHostingPlan
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import GlobalHostingPlanModal from '@/components/modals/GlobalHostingPlanModal.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import HAppSelectionSection from '@/components/settings/hostingPreferences/HAppSelectionSection'
@@ -8,8 +8,8 @@ import PricesSection from '@/components/settings/hostingPreferences/PricesSectio
 import TogglePaidHostingSection from '@/components/settings/hostingPreferences/TogglePaidHostingSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
 import { useUserStore } from '@/store/user'
-import { EUserKycLevel } from '@/types/types'
 import type { UpdatePricePayload } from '@/types/types'
+import { EHostingPlan, EUserKycLevel } from '@/types/types'
 
 const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()
@@ -145,7 +145,7 @@ function updateHostingPlan(): void {
 
       <GlobalHostingPlanModal
         :key="isPaidHostingEnabled"
-        :plan-value="isPaidHostingEnabled ? 'paid' : 'free'"
+        :plan-value="isPaidHostingEnabled ? EHostingPlan.paid : EHostingPlan.free"
         :is-visible="isModalVisible"
         @close="closeModal"
         @cancel="cancelWizard"

@@ -2,6 +2,7 @@
 import HAppImage from '@uicommon/components/HAppImage.vue'
 import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
 import { capitalize } from 'vue'
+import { EHostingPlan } from '@/types/types'
 
 interface HApp {
   id: string
@@ -12,13 +13,12 @@ interface HApp {
 
 const props = defineProps<{
   hApp: HApp
-  reRenderToggle: number
 }>()
 
 const emit = defineEmits(['update:plan'])
 
 function togglePlan(value: boolean): void {
-  emit('update:plan', { id: props.hApp.id, value: value ? 'paid' : 'free' })
+  emit('update:plan', { id: props.hApp.id, value: value ? EHostingPlan.paid : EHostingPlan.free })
 }
 </script>
 
@@ -40,8 +40,7 @@ function togglePlan(value: boolean): void {
 
     <div class="happs-list-item__happ-toggle">
       <ToggleSwitch
-        :key="props.reRenderToggle"
-        :toggle-on="props.hApp.hostingPlan === 'paid'"
+        :toggle-on="props.hApp.hostingPlan === EHostingPlan.paid"
         class="happs-list-item__happ-toggle-switch"
         @toggle="togglePlan"
       />

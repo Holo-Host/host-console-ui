@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
-import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SettingsSection from '../SettingsSection.vue'
+import BaseToggleSwitch from '@/components/BaseToggleSwitch.vue'
 import { useGoToSpringboard } from '@/composables/useGoToSpringboard'
 import { useUserStore } from '@/store/user'
 import { EUserKycLevel } from '@/types/types'
@@ -47,7 +46,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
         <span class="kyc-needed-text">{{ t('hosting_preferences.toggle_paid_hosting.kyc_needed_part_three') }}</span>
       </div>
 
-      <ToggleSwitch
+      <BaseToggleSwitch
         :toggle-on="props.paidHostingEnabled"
         :label-toggled-on="t('hosting_preferences.toggle_paid_hosting.enabled')"
         :label-toggled-off="t('hosting_preferences.toggle_paid_hosting.disabled')"
@@ -55,7 +54,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
         @toggle="paidHostingToggled"
       >
         data-test-toggle-paid-hosting
-      </ToggleSwitch>
+      </BaseToggleSwitch>
     </div>
     <div
       v-if="userStore.kycLevel !== EUserKycLevel.one"
