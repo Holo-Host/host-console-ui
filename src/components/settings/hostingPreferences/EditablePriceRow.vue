@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseInput from '@uicommon/components/BaseInput.vue'
 import { EInputType } from '@uicommon/types/ui'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import CircledExIcon from '../../icons/CircledExIcon.vue'
 import FilledCheckIcon from '../../icons/FilledCheckIcon.vue'
 import PencilIcon from '../../icons/PencilIcon.vue'
@@ -26,6 +26,7 @@ const props = withDefaults(
 const emit = defineEmits(['update:value'])
 
 const isEditing = ref(false)
+const isValid = ref(true)
 const editedValue = ref(props.value)
 
 function edit(): void {
@@ -42,6 +43,13 @@ function cancel(): void {
   editedValue.value = `${props.value}`
   isEditing.value = false
 }
+
+watch(
+  () => editedValue.value,
+  (value) => {
+    isValid.value = value && value >= 0
+  }
+)
 </script>
 
 <template>
@@ -61,6 +69,7 @@ function cancel(): void {
     <BaseInput
       v-if="isEditing"
       v-model="editedValue"
+      :is-valid="isValid"
       :input-type="props.type"
       placeholder=""
       name="edited-value"
@@ -72,6 +81,7 @@ function cancel(): void {
       class="editable-price-row__button"
       data-testid="save-button"
       role="button"
+      :class="{ 'editable-price-row__button--disabled': !isValid }"
       @click="save"
     />
 
@@ -124,6 +134,12 @@ function cancel(): void {
   &__button {
     margin-left: 5px;
     cursor: pointer;
+
+    &--disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
   }
 
   &__unit {

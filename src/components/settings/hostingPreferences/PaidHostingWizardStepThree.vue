@@ -1,16 +1,32 @@
 <script lang="ts" setup>
+import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
+import { onMounted, ref } from 'vue'
 import type { PaidHostingWizardStep } from '@/constants/ui'
 
 const props = defineProps<{
   steps: PaidHostingWizardStep[]
 }>()
+
+const isProgressVisible = ref(false)
+
+onMounted(() => {
+  setTimeout(() => {
+    isProgressVisible.value = true
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  }, 3000)
+})
 </script>
 
 <template>
   <div class="paid-hosting-modal-wizard-step">
     <span class="paid-hosting-modal-wizard-step__title">
-      {{ props.steps[2]?.props.progressValue }}%
+      <span v-if="isProgressVisible">{{ props.steps[2]?.props.progressValue }}%</span>
+      <CircleSpinner
+        v-if="!isProgressVisible"
+        class="paid-hosting-modal-wizard-step__title--spinner"
+      />
     </span>
+
 
     <div class="paid-hosting-modal-wizard-step__description">
       <span>{{ props.steps[2]?.title }}</span>
@@ -25,13 +41,17 @@ const props = defineProps<{
 .paid-hosting-modal-wizard-step {
   display: flex;
   flex-direction: column;
-  padding: 105px 135px 80px;
+  padding: 75px 135px 60px;
 
   &__title {
     margin-top: 8px;
     font-size: 32px;
     justify-self: start;
     font-weight: 800;
+
+    &--spinner {
+      margin-bottom: 8px;
+    }
   }
 
   &__description {

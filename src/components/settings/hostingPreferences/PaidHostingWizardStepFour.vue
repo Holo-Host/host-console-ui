@@ -25,7 +25,7 @@ const props = defineProps<{
   display: flex;
   flex-direction: column;
   align-items: center;
-	width: 540px;
+  padding: 0 103px;
 
   &__icon {
     width: 75px;

@@ -2,7 +2,6 @@
 import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
 import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
-import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
 import { computed, markRaw, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -10,7 +9,7 @@ import PaidHostingWizardStepFour from '@/components/settings/hostingPreferences/
 import PaidHostingWizardStepOne from '@/components/settings/hostingPreferences/PaidHostingWizardStepOne.vue'
 import PaidHostingWizardStepThree from '@/components/settings/hostingPreferences/PaidHostingWizardStepThree.vue'
 import PaidHostingWizardStepTwo from '@/components/settings/hostingPreferences/PaidHostingWizardStepTwo.vue'
-import { PaidHostingWizardStep } from '@/constants/ui'
+import type { PaidHostingWizardStep } from '@/constants/ui'
 import { HApp, useHposInterface } from '@/interfaces/HposInterface'
 import { useDashboardStore } from '@/store/dashboard'
 import { usePreferencesStore } from '@/store/preferences'
@@ -22,7 +21,6 @@ const dashboardStore = useDashboardStore()
 const preferencesStore = usePreferencesStore()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
-const { showModal } = useModals()
 const { updateHAppHostingPlan } = useHposInterface()
 
 const props = defineProps<{
@@ -43,8 +41,11 @@ const prices = ref({
 })
 
 const isLoading = ref(false)
+
+// Raw hApps from the store
 const hApps = ref(dashboardStore.hostedHApps)
 
+// hApps mapped for the step two list
 const mappedHApps = ref<MappedHApp[]>([])
 
 onMounted(async () => {
@@ -149,8 +150,10 @@ function cancel(): void {
   isError.value = false
 
   if (currentStep.value === 4) {
+    // If we close the modal on the last step, we don't reset anything as the process is finished
     emit('close')
   } else {
+    // If we close the modal on any other step, we reset the values to pre-wizard
     emit('cancel')
   }
 }
@@ -214,6 +217,8 @@ const isNextButtonDisabled = computed((): boolean => {
     return (
       prices.value.cpu === null ||
       prices.value.dataTransfer === null ||
+      prices.value.cpu < 0 ||
+      prices.value.dataTransfer < 0 ||
       (prices.value.cpu === 0 && prices.value.dataTransfer === 0)
     )
   }
@@ -268,7 +273,7 @@ async function hAppUpdateTask(hApp): Promise<void> {
 
 const progress = computed(() => {
   const updatedHApps = hAppsToBeUpdated.value.filter((hApp) => hApp.isUpdated || hApp.isError)
-  return (updatedHApps.length / hAppsToBeUpdated.value.length) * 100
+  return (updatedHApps.length / hAppsToBeUpdated.value.length) * 100 || 0
 })
 
 async function setDefaultHostPreferences(): Promise<void> {
