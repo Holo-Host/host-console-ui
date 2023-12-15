@@ -123,6 +123,7 @@ function updateHostingPlan(): void {
 
       <PricesSection
         v-if="isPaidHostingEnabled"
+        :key="`${preferencesStore.pricesSettings.cpu}-${preferencesStore.pricesSettings.bandwidth}`"
         :is-loading="isUpdating"
         :data="pricesSettings"
         data-test-hosting-preferences-prices-section

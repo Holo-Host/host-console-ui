@@ -11,11 +11,13 @@ export const kSortOptions = {
 
 export interface PaidHostingWizardStep {
   id: number
-  title: string
-  description: string
+  title?: string
+  description?: string
   backButtonLabel?: string
   nextButtonLabel?: string
   props: Record<string, unknown>
+  isDismissible: boolean
+  hasCloseButton: boolean
 }
 
 export enum EModal {

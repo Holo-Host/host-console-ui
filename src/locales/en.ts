@@ -201,6 +201,14 @@ export default {
         paid_happs: 'Paid hApps',
         set_all_free: 'Set All Free',
         set_all_paid: 'Set All Paid'
+      },
+      step_three: {
+        description_part_one: 'We are updating your hosting preference.',
+        description_part_two: 'Please don’t close this window.'
+      },
+      step_four: {
+        title: 'Hosting Plan Updated',
+        description: 'Your hosting preferences have been saved.'
       }
     }
   },
