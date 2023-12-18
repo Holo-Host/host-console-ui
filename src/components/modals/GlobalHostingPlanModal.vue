@@ -56,6 +56,7 @@ onMounted(async () => {
       await dashboardStore.getHostedHApps()
 
       if (!isErrorPredicate(hApps.value)) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
         mappedHApps.value = dashboardStore.hostedHApps.map((hApp: HApp) => ({
           id: hApp.id,
           name: hApp.name,
@@ -80,7 +81,12 @@ onMounted(async () => {
 })
 
 const steps = computed(
-  (): [PaidHostingWizardStep, PaidHostingWizardStep, PaidHostingWizardStep] => [
+  (): [
+    PaidHostingWizardStep,
+    PaidHostingWizardStep,
+    PaidHostingWizardStep,
+    PaidHostingWizardStep
+  ] => [
     {
       id: 1,
       title: t('hosting_preferences.toggle_paid_hosting_modal.step_one.title'),
@@ -106,6 +112,7 @@ const steps = computed(
       description: t(
         'hosting_preferences.toggle_paid_hosting_modal.step_three.description_part_two'
       ),
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       props: { progressValue: progress.value },
       isDismissible: false,
       hasCloseButton: false
@@ -114,6 +121,7 @@ const steps = computed(
       id: 4,
       title: t('hosting_preferences.toggle_paid_hosting_modal.step_four.title'),
       description: t('hosting_preferences.toggle_paid_hosting_modal.step_four.description'),
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       props: { progressValue: progress.value },
       isDismissible: true,
       hasCloseButton: true
@@ -144,92 +152,6 @@ const nextButtonLabel = computed(() => {
   }
 })
 
-function cancel(): void {
-  isBusy.value = false
-  isConfirmed.value = false
-  isError.value = false
-
-  if (currentStep.value === 4) {
-    // If we close the modal on the last step, we don't reset anything as the process is finished
-    emit('close')
-  } else {
-    // If we close the modal on any other step, we reset the values to pre-wizard
-    emit('cancel')
-  }
-}
-
-function close(): void {
-  isBusy.value = false
-  isConfirmed.value = false
-  isError.value = false
-  emit('close')
-}
-
-// Steps management
-function goToPreviousStep(): void {
-  transitionName.value = 'slide-right'
-
-  if (currentStep.value > 1) {
-    currentStep.value -= 1
-  } else {
-    cancel()
-  }
-}
-
-async function goToNextStep(): Promise<void> {
-  transitionName.value = 'slide-left'
-
-  /* eslint-disable @typescript-eslint/no-magic-numbers */
-  switch (currentStep.value) {
-  case 0:
-    if (props.planValue === EHostingPlan.free) {
-      currentStep.value = 3
-      await setDefaultHostPreferences()
-      await updateHApps(EHostingPlan.free)
-    } else {
-      currentStep.value = 1
-    }
-
-    break
-
-  case steps.value[0]?.id:
-    currentStep.value = 2
-    break
-
-  case steps.value[1]?.id:
-    currentStep.value = 3
-    await setDefaultHostPreferences()
-    await updateHApps()
-    break
-
-  case steps.value[2]?.id:
-    currentStep.value = 4
-    break
-
-  default:
-    console.error('Sorry, there are no more steps, you are falling into oblivion.')
-  }
-  /* eslint-enable @typescript-eslint/no-magic-numbers */
-}
-
-const isNextButtonDisabled = computed((): boolean => {
-  if (currentStep.value === 1) {
-    return (
-      prices.value.cpu === null ||
-      prices.value.dataTransfer === null ||
-      prices.value.cpu < 0 ||
-      prices.value.dataTransfer < 0 ||
-      (prices.value.cpu === 0 && prices.value.dataTransfer === 0)
-    )
-  }
-
-  if (currentStep.value === 2) {
-    return false
-  }
-
-  return false
-})
-
 interface HAppUpdateTaskProps {
   id: string
   value: EHostingPlan
@@ -237,9 +159,10 @@ interface HAppUpdateTaskProps {
   isError: boolean
 }
 
+// Update hApps step
 const hAppsToBeUpdated = ref<HAppUpdateTaskProps[]>([])
 
-async function hAppUpdateTask(hApp): Promise<void> {
+async function hAppUpdateTask(hApp: UpdateHAppPlanPayload): Promise<void> {
   try {
     const result = await updateHAppHostingPlan(hApp)
 
@@ -273,20 +196,21 @@ async function hAppUpdateTask(hApp): Promise<void> {
 
 const progress = computed(() => {
   const updatedHApps = hAppsToBeUpdated.value.filter((hApp) => hApp.isUpdated || hApp.isError)
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   return (updatedHApps.length / hAppsToBeUpdated.value.length) * 100 || 0
 })
 
 async function setDefaultHostPreferences(): Promise<void> {
   try {
-    preferencesStore.updatePrice('cpu', prices.value.cpu)
-    preferencesStore.updatePrice('bandwidth', prices.value.dataTransfer)
+    preferencesStore.updatePrice('cpu', prices.value.cpu ?? 0)
+    preferencesStore.updatePrice('bandwidth', prices.value.dataTransfer ?? 0)
     await preferencesStore.setDefaultPreferences()
   } catch (e) {
     isError.value = true
   }
 }
 
-async function updateHApps(valueForAllHApps = null): Promise<void> {
+async function updateHApps(valueForAllHApps: EHostingPlan | null = null): Promise<void> {
   hAppsToBeUpdated.value = mappedHApps.value.map((hApp) => {
     return {
       id: hApp.id,
@@ -299,6 +223,7 @@ async function updateHApps(valueForAllHApps = null): Promise<void> {
   const promises = hAppsToBeUpdated.value.map(async (hApp) => hAppUpdateTask(hApp))
 
   await Promise.all(promises)
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   await goToNextStep()
 
   // if (!result) {
@@ -385,6 +310,99 @@ function updateValue(payload: UpdatePayload): void {
     console.error('Unknown prop')
   }
 }
+
+function cancel(): void {
+  isBusy.value = false
+  isConfirmed.value = false
+  isError.value = false
+
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  if (currentStep.value === 4) {
+    // If we close the modal on the last step, we don't reset anything as the process is finished
+    emit('close')
+  } else {
+    // If we close the modal on any other step, we reset the values to pre-wizard
+    emit('cancel')
+  }
+}
+
+function close(): void {
+  isBusy.value = false
+  isConfirmed.value = false
+  isError.value = false
+  emit('close')
+}
+
+// Steps management
+function goToPreviousStep(): void {
+  transitionName.value = 'slide-right'
+
+  if (currentStep.value > 1) {
+    currentStep.value -= 1
+  } else {
+    cancel()
+  }
+}
+
+async function goToNextStep(): Promise<void> {
+  transitionName.value = 'slide-left'
+
+  /* eslint-disable @typescript-eslint/no-magic-numbers */
+  switch (currentStep.value) {
+  case 0:
+    if (props.planValue === EHostingPlan.free) {
+      // If we set the plan to free, we skip the step one and two (price and hApps selection)
+      // and go directly to the last step where we update the default preferences and hApps
+      currentStep.value = 3
+      await setDefaultHostPreferences()
+      await updateHApps(EHostingPlan.free)
+    } else {
+      // If we set the plan to paid, we go to the step one (price selection)
+      currentStep.value = 1
+    }
+
+    break
+
+  case steps.value[0]?.id:
+    // If we set the plan to paid, we go to the step two (hApps selection)
+    currentStep.value = 2
+    break
+
+  case steps.value[1]?.id:
+    // If we set the plan to paid, we go to the step three (update default preferences and hApps)
+    currentStep.value = 3
+    await setDefaultHostPreferences()
+    await updateHApps()
+    break
+
+  case steps.value[2]?.id:
+    // Go to the step four (finish)
+    currentStep.value = 4
+    break
+
+  default:
+    console.error('Sorry, there are no more steps, you are falling into oblivion.')
+  }
+  /* eslint-enable @typescript-eslint/no-magic-numbers */
+}
+
+const isNextButtonDisabled = computed((): boolean => {
+  if (currentStep.value === 1) {
+    return (
+      prices.value.cpu === null ||
+      prices.value.dataTransfer === null ||
+      prices.value.cpu < 0 ||
+      prices.value.dataTransfer < 0 ||
+      (prices.value.cpu === 0 && prices.value.dataTransfer === 0)
+    )
+  }
+
+  if (currentStep.value === 2) {
+    return false
+  }
+
+  return false
+})
 </script>
 
 <template>

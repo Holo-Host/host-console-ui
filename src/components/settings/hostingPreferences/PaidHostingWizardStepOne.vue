@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import HostingPreferencesEditablePriceRow from '@/components/settings/hostingPreferences/EditablePriceRow.vue'
 import type { PaidHostingWizardStep } from '@/constants/ui'
+import { isPricesPropPredicate } from '@/constants/ui'
 import type { UpdatePricePayload } from '@/types/types'
 
 const { t } = useI18n()
@@ -14,12 +15,14 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:value'])
 
-const cpuPrice = ref(props.steps[0].props.cpu)
-const dataTransferPrice = ref(props.steps[0].props.dataTransfer)
+const cpuPrice = ref(isPricesPropPredicate(props.steps[0]?.props) ? props.steps[0]?.props.cpu : 0)
+const dataTransferPrice = ref(
+  isPricesPropPredicate(props.steps[0]?.props) ? props.steps[0]?.props.dataTransfer : 0
+)
 
 interface PriceItem {
   label: string
-  value: string | number | null
+  value: string | number | null | undefined
   unit: string
   prop: string
   isDisabled: boolean
@@ -56,11 +59,11 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
       class="paid-hosting-modal-wizard-step__title"
       data-test-paid-hosting-wizard-step-one-title
     >
-      {{ props.steps[0].title }}
+      {{ props.steps[0]?.title }}
     </span>
 
     <p class="paid-hosting-modal-wizard-step__description">
-      {{ props.steps[0].description }}
+      {{ props.steps[0]?.description }}
     </p>
 
     <div class="paid-hosting-modal-wizard-step-one__form">

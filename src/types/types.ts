@@ -89,7 +89,7 @@ export interface MappedHApp {
   id: string
   name: string
   icon: string
-  hostingPlan: string
+  hostingPlan: EHostingPlan
 }
 
 export interface UpdateHAppPlanProps {

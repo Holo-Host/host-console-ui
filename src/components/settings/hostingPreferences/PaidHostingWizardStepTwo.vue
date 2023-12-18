@@ -4,8 +4,7 @@ import { useI18n } from 'vue-i18n'
 import SearchInput from '@/components/SearchInput.vue'
 import HAppsListItem from '@/components/settings/hostingPreferences/HAppsListItem.vue'
 import type { PaidHostingWizardStep } from '@/constants/ui'
-import type { HApp } from '@/interfaces/HposInterface'
-import { isError as isErrorPredicate } from '@/types/predicates'
+import { isHAppsPropPredicate } from '@/constants/ui'
 import type { MappedHApp, UpdateHAppPlanProps } from '@/types/types'
 import { EHostingPlan } from '@/types/types'
 
@@ -32,16 +31,22 @@ function onSearchChange({ value, isActive }: SearchChangeProps): void {
 
 const foundHApps = computed((): MappedHApp[] => {
   if (searchIsActive.value && searchValue.value) {
-    return props.steps[1]?.props.hApps.filter((hApp: HApp) =>
-      hApp.name.toLowerCase().includes(searchValue.value.toLowerCase())
-    )
+    return props.steps[1]?.props && isHAppsPropPredicate(props.steps[1]?.props)
+      ? props.steps[1]?.props.hApps.filter((hApp: MappedHApp) =>
+        hApp.name.toLowerCase().includes(searchValue.value.toLowerCase())
+      )
+      : []
   } else {
-    return isErrorPredicate(props.steps[1].props.hApps) ? [] : props.steps[1].props.hApps
+    return props.steps[1]?.props && isHAppsPropPredicate(props.steps[1]?.props)
+      ? props.steps[1]?.props.hApps
+      : []
   }
 })
 
-const paidHAppsCount = computed(
-  () => props.steps[1].props.hApps.filter((hApp) => hApp.hostingPlan === EHostingPlan.paid).length
+const paidHAppsCount = computed(() =>
+  props.steps[1]?.props && isHAppsPropPredicate(props.steps[1]?.props)
+    ? props.steps[1]?.props.hApps.filter((hApp) => hApp.hostingPlan === EHostingPlan.paid).length
+    : 0
 )
 
 // Required to re-render the toggles

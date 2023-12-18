@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import HAppImage from '@uicommon/components/HAppImage.vue'
-import ToggleSwitch from '@uicommon/components/ToggleSwitch.vue'
 import { capitalize } from 'vue'
+import BaseToggleSwitch from '@/components/BaseToggleSwitch.vue'
 import { EHostingPlan } from '@/types/types'
 
 interface HApp {
@@ -39,7 +39,7 @@ function togglePlan(value: boolean): void {
     </div>
 
     <div class="happs-list-item__happ-toggle">
-      <ToggleSwitch
+      <BaseToggleSwitch
         :toggle-on="props.hApp.hostingPlan === EHostingPlan.paid"
         class="happs-list-item__happ-toggle-switch"
         @toggle="togglePlan"
