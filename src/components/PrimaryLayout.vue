@@ -72,6 +72,11 @@ onMounted(async () => {
 
       try {
         await userStore.getUser()
+
+        if (!userStore.holoFuel.nickname) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          showModal(EModal.welcome)
+        }
       } catch (e) {
         localStorage.removeItem(kAuthTokenLSKey)
         await router.push({ name: kRoutes.login.name })
@@ -80,14 +85,12 @@ onMounted(async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       hideOverlay()
       isLoading.value = false
-    }
-
-    await nextTick(() => {
+    } else {
       if (!userStore.holoFuel.nickname) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         showModal(EModal.welcome)
       }
-    })
+    }
   })
 })
 </script>
