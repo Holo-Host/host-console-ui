@@ -1,5 +1,5 @@
 import type { MappedHApp } from '@/types/types'
-import {Error} from '@/types/types';
+import { Error } from '@/types/types'
 
 export const kSortOptions = {
   alphabetical: {
@@ -58,3 +58,5 @@ export enum EModal {
 
 export const kMsInSecond = 1000
 export const kDefaultDateTimeFormat = 'DD MMM YYYY hh:mm UTC'
+
+export const kDefaultAnimationDuration = 300

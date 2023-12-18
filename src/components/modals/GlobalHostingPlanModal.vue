@@ -2,6 +2,7 @@
 import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
 import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
+import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
 import { computed, markRaw, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -10,6 +11,7 @@ import PaidHostingWizardStepOne from '@/components/settings/hostingPreferences/P
 import PaidHostingWizardStepThree from '@/components/settings/hostingPreferences/PaidHostingWizardStepThree.vue'
 import PaidHostingWizardStepTwo from '@/components/settings/hostingPreferences/PaidHostingWizardStepTwo.vue'
 import type { PaidHostingWizardStep } from '@/constants/ui'
+import { EModal, kDefaultAnimationDuration } from '@/constants/ui'
 import { HApp, useHposInterface } from '@/interfaces/HposInterface'
 import { useDashboardStore } from '@/store/dashboard'
 import { usePreferencesStore } from '@/store/preferences'
@@ -22,6 +24,8 @@ const preferencesStore = usePreferencesStore()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { updateHAppHostingPlan } = useHposInterface()
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+const { showModal } = useModals()
 
 const props = defineProps<{
   planValue: EHostingPlan
@@ -223,21 +227,20 @@ async function updateHApps(valueForAllHApps: EHostingPlan | null = null): Promis
   const promises = hAppsToBeUpdated.value.map(async (hApp) => hAppUpdateTask(hApp))
 
   await Promise.all(promises)
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  await goToNextStep()
 
-  // if (!result) {
-  //   // If failed
-  //   cancel()
-  //
-  //   setTimeout(() => {
-  //     showModal(EModal.error_modal)
-  //   }, 300)
-  // } else {
-  //   // If success
-  //   isBusy.value = false
-  //   isConfirmed.value = true
-  // }
+  if (!hAppsToBeUpdated.value.filter((hApp) => hApp.isError).length) {
+    // If failed
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    close()
+
+    setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      showModal(EModal.error_modal)
+    }, kDefaultAnimationDuration)
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    await goToNextStep()
+  }
 }
 
 interface UpdateHAppPlanPayload {
