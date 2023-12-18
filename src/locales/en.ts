@@ -143,7 +143,7 @@ export default {
       header: 'Invoice & Payment Terms',
       frequency: {
         label: 'Frequency of Invoicing',
-        part_one: 'Invoice hApp publishers the earlier of every',
+        part_one: 'Invoice hApp managers the earlier of every',
         part_two: 'or when an invoice amount reaches'
       },
       due: {
@@ -164,7 +164,8 @@ export default {
       header: 'Price Configuration',
       subheader: 'Default Rates',
       hfpermin: 'HF per min',
-      hfpergb: 'HF per GB'
+      hfpergb: 'HF per GB',
+      hfperhpu: 'HF per 1000 HPU'
     },
     toggle_paid_hosting: {
       paid_hosting: 'Paid Hosting',
@@ -225,7 +226,7 @@ export default {
       happ: 'hApp',
       invoice: 'Transaction Hash',
       payment_status: 'Payment Status',
-      publisher: 'Publisher'
+      publisher: 'hApp Manager'
     },
     status: {
       paid: 'Paid',
