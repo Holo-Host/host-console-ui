@@ -20,7 +20,7 @@ onMounted(() => {
 <template>
   <div class="paid-hosting-modal-wizard-step">
     <span class="paid-hosting-modal-wizard-step__title">
-      <span v-if="isProgressVisible">{{ props.steps[2]?.props.progressValue }}%</span>
+      <span v-if="isProgressVisible">{{ props.steps[2]?.props.progressValue.toFixed(0) }}%</span>
       <CircleSpinner
         v-if="!isProgressVisible"
         class="paid-hosting-modal-wizard-step__title--spinner"

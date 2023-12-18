@@ -39,7 +39,12 @@ const isError = ref(false)
 
 const transitionName = ref('')
 
-const prices = ref({
+interface Prices {
+  cpu: number | null
+  dataTransfer: number | null
+}
+
+const prices = ref<Prices>({
   cpu: null,
   dataTransfer: null
 })
@@ -168,7 +173,10 @@ const hAppsToBeUpdated = ref<HAppUpdateTaskProps[]>([])
 
 async function hAppUpdateTask(hApp: UpdateHAppPlanPayload): Promise<void> {
   try {
-    const result = await updateHAppHostingPlan(hApp)
+    const result = await updateHAppHostingPlan({
+      ...hApp,
+      prices: { cpu: prices.value.cpu ?? 0, bandwidth: prices.value.dataTransfer ?? 0 }
+    })
 
     if (result) {
       hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
@@ -228,7 +236,7 @@ async function updateHApps(valueForAllHApps: EHostingPlan | null = null): Promis
 
   await Promise.all(promises)
 
-  if (!hAppsToBeUpdated.value.filter((hApp) => hApp.isError).length) {
+  if (hAppsToBeUpdated.value.filter((hApp) => hApp.isError).length) {
     // If failed
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     close()

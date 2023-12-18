@@ -5,7 +5,8 @@ import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
 import { isKycLevel } from '@/types/predicates'
-import type { CheckAuthResponse, EUserKycLevel } from '@/types/types'
+import type { CheckAuthResponse, EUserKycLevel, PricesData } from '@/types/types'
+import { EHostingPlan } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
@@ -38,6 +39,7 @@ interface HposInterface {
 interface UpdateHAppHostingPlanPayload {
   id: string
   value: string
+  prices?: PricesData
 }
 
 interface RedeemHoloFuelPayload {
@@ -550,11 +552,12 @@ export function useHposInterface(): HposInterface {
 
   async function updateHAppHostingPlan({
     id,
-    value
+    value,
+    prices
   }: UpdateHAppHostingPlanPayload): Promise<boolean> {
     try {
       const params =
-        value === 'free'
+        value === EHostingPlan.paid
           ? {
               appId: localStorage.getItem(kCoreAppVersionLSKey),
               roleId: 'core-app',
@@ -563,9 +566,9 @@ export function useHposInterface(): HposInterface {
               payload: {
                 happ_id: id,
                 max_fuel_before_invoice: '1000',
-                price_compute: '0',
-                price_storage: '0',
-                price_bandwidth: '0',
+                price_compute: prices?.cpu.toString() ?? '0',
+                price_storage: prices?.storage?.toString() ?? '0',
+                price_bandwidth: prices?.bandwidth.toString() ?? '0',
                 max_time_before_invoice: { secs: 15000, nanos: 0 }
               }
             }

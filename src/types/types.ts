@@ -25,7 +25,7 @@ export interface HoloFuelProfile {
 }
 
 export interface PricesData {
-  storage: number
+  storage?: number
   bandwidth: number
   cpu: number
 }
