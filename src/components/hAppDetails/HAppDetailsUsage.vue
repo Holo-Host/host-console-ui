@@ -24,7 +24,7 @@ const props = defineProps<{
     <div class="happ-details-usage__usage-row">
       <span class="happ-details-usage__usage-row-label">{{ t('happ_details.seven_day_usage') }}:</span>
       <div class="happ-details-usage__usage-row-value-wrapper">
-        <span class="happ-details-usage__usage-row-value">{{ presentMicroSeconds(props.hApp.usage?.cpu) }}</span> {{ t('$.cpu') }}
+        <span class="happ-details-usage__usage-row-value">{{ props.hApp.usage?.cpu }} HPU</span> {{ t('$.cpu') }}
       </div>
       <!--      <div class="happ-details-usage__usage-row-value-wrapper happ-details-usage__storage">-->
       <!--        <span class="happ-details-usage__usage-row-value">{{ presentBytes(props.hApp.usage.storage) }}</span> {{ t('$.storage') }}-->

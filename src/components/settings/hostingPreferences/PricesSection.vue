@@ -36,7 +36,7 @@ const prices = computed((): PriceItem[] => [
   {
     label: t('$.cpu'),
     value: props.data.cpu || 0,
-    unit: t('hosting_preferences.prices.hfpermin'),
+    unit: t('hosting_preferences.prices.hfperhpu'),
     prop: 'cpu',
     isDisabled: false
   },

@@ -64,7 +64,7 @@ const isError = computed((): boolean => isErrorPredicate(props.data) && !!props.
           {{ $t('$.cpu') }}
         </span>
         <span class="bold">
-          {{ presentMicroSeconds(props.data ? props.data.totalUsage?.cpu : 0 ) }}
+          {{ props.data ? props.data.totalUsage?.cpu : 0 }} HPU
         </span>
       </div>
 
