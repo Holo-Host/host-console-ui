@@ -309,7 +309,7 @@ const mockHosts = [
       }
     },
     "preferences_hash": "uhCkkcbUz9JvKRn56E_c3IEaimnEYifLo2CbjavFrYYjYyqx05AI5"
-  }        
+  }
 ]
 
 const mockPaidInvoicesData = [
@@ -644,7 +644,7 @@ const data = {
   get: {
     '/api/v1/config': userConfig,
     '/api/v1/status': holoNixpkgs,
-    '/holochain-api/v1/hosted_happs': happs,
+    '/api/v2/hosted_happs': happs,
     '/holochain-api/v1/get_happs': mockHapps,
     '/holochain-api/v1/get_hosts': mockHosts,
     '/holochain-api/v1/usage': usage,

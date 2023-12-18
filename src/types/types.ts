@@ -25,7 +25,7 @@ export interface HoloFuelProfile {
 }
 
 export interface PricesData {
-  storage: number
+  storage?: number
   bandwidth: number
   cpu: number
 }
@@ -78,4 +78,21 @@ export interface HoloFuelCardData {
 export interface UpdatePricePayload {
   prop: string
   value: number
+}
+
+export enum EHostingPlan {
+  free = 'free',
+  paid = 'paid'
+}
+
+export interface MappedHApp {
+  id: string
+  name: string
+  icon: string
+  hostingPlan: EHostingPlan
+}
+
+export interface UpdateHAppPlanProps {
+  id: string
+  value: EHostingPlan
 }

@@ -22,6 +22,7 @@ export default {
     loading: 'Loading...',
     logout: 'Logout',
     next: 'Next',
+    search_happ: 'Search hApp',
     something_went_wrong: 'Something went wrong',
     storage: 'Storage',
     terms_of_service: 'Terms of Service',
@@ -163,7 +164,7 @@ export default {
       header: 'Price Configuration',
       subheader: 'Default Rates',
       hfpermin: 'HF per min',
-      hfpergb: 'HF per GB',
+      hfpergb: 'HF per GB'
     },
     toggle_paid_hosting: {
       paid_hosting: 'Paid Hosting',
@@ -172,8 +173,43 @@ export default {
       kyc_needed_part_three: 'to get paid to host hApps.',
       enabled: 'Enabled',
       disabled: 'Disabled',
-      invoice_info_enabled: 'Invoices will be sent to hApp managers for hosting services provided unless free hosting is enabled for individual hApps.',
-      invoice_info_disabled: 'You are currently hosting hApps for free, switch the toggle on to start getting paid. If you would like to continue hosting any individual hApps for free, please toggle “free hosting” on for each individual hApp.'
+      invoice_info_enabled:
+        'Invoices will be sent to hApp managers for hosting services provided unless free hosting is enabled for individual hApps.',
+      invoice_info_disabled:
+        'You are currently hosting hApps for free, switch the toggle on to start getting paid. If you would like to continue hosting any individual hApps for free, please toggle “free hosting” on for each individual hApp.'
+    },
+    toggle_paid_hosting_modal: {
+      paid: {
+        confirmation_button_label: 'Yes, switch to paid hosting',
+        title: 'Are you sure you want to stop hosting hApps for free?',
+        description:
+          "You'll have the option to choose individual happs to continue hosting for free"
+      },
+      free: {
+        confirmation_button_label: 'Yes, host for free',
+        title: 'Are you sure you want to host all hApps for free? ',
+        description: ''
+      },
+      step_one: {
+        title: 'Price Configuration',
+        description: 'Please set your desired rates below.',
+        default_rates: 'Default Rates'
+      },
+      step_two: {
+        title: 'Select hApps',
+        description: 'Choose which hApps you would like to host for free',
+        paid_happs: 'Paid hApps',
+        set_all_free: 'Set All Free',
+        set_all_paid: 'Set All Paid'
+      },
+      step_three: {
+        description_part_one: 'We are updating your hosting preference.',
+        description_part_two: 'Please don’t close this window.'
+      },
+      step_four: {
+        title: 'Hosting Plan Updated',
+        description: 'Your hosting preferences have been saved.'
+      }
     }
   },
   invoices: {
