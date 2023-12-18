@@ -1,30 +1,24 @@
 <script lang="ts" setup>
-const props = defineProps({
-  isDisabled: {
-    type: Boolean,
-    default: false
-  },
-  isBusy: {
-    type: Boolean,
-    default: false
-  },
-  toggleOn: {
-    type: Boolean,
-    default: false
-  },
-  labelToggledOff: {
-    type: String,
-    default: ''
-  },
-  labelToggledOn: {
-    type: String,
-    default: ''
+const props = withDefaults(
+  defineProps<{
+    isDisabled?: boolean
+    isBusy?: boolean
+    toggleOn?: boolean
+    labelToggledOff?: string
+    labelToggledOn?: string
+  }>(),
+  {
+    isDisabled: false,
+    isBusy: false,
+    toggleOn: false,
+    labelToggledOff: '',
+    labelToggledOn: ''
   }
-})
+)
 
 const emit = defineEmits(['toggle'])
 
-function toggleSwitch() {
+function toggleSwitch(): void {
   if (!props.isDisabled && !props.isBusy) {
     emit('toggle', !props.toggleOn)
   }

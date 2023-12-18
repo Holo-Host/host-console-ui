@@ -1,57 +1,22 @@
-<template>
-	<div class="search-input">
-		<div
-			class="search-input__wrapper"
-			:class="{ 'search-input--disabled': isDisabled }"
-		>
-			<input
-				:value="value"
-				class="search-input__search-input"
-				:placeholder="placeholder"
-				@input="onInput"
-			/>
-
-			<MagnifyingGlassIcon class="search-input__icon" />
-
-			<XMarkIcon
-				v-if="value"
-				class="search-input__ex-icon"
-				@click="clear"
-			/>
-		</div>
-	</div>
-</template>
-
 <script type="ts" setup>
 import { ref } from 'vue'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 
-const props = defineProps({
-	value: {
-		type: String,
-		required: true
-	},
-
-	placeholder: {
-		type: String,
-		default: ''
-	},
-
-	isDisabled: {
-		type: Boolean,
-		default: false
-	},
-
-	debounce: {
-		type: Number,
-		default: 500
-	},
-
-	minLength: {
-		type: Number,
-		default: 3
+const props = withDefaults(
+	defineProps<{
+		value: string
+		placeholder?: string
+		isDisabled?: boolean
+		debounce?: number
+		minLength?: number
+	}>(),
+	{
+		placeholder: '',
+		isDisabled: false,
+		debounce: 500,
+		minLength: 3
 	}
-})
+)
 
 const emit = defineEmits(['update'])
 
@@ -77,6 +42,30 @@ const clear = () => {
 	emit('update', { value: '', isActive: true })
 }
 </script>
+
+<template>
+	<div class="search-input">
+		<div
+			class="search-input__wrapper"
+			:class="{ 'search-input--disabled': isDisabled }"
+		>
+			<input
+				:value="value"
+				class="search-input__search-input"
+				:placeholder="placeholder"
+				@input="onInput"
+			/>
+
+			<MagnifyingGlassIcon class="search-input__icon" />
+
+			<XMarkIcon
+				v-if="value"
+				class="search-input__ex-icon"
+				@click="clear"
+			/>
+		</div>
+	</div>
+</template>
 
 <style lang="scss" scoped>
 .search-input {
