@@ -573,12 +573,19 @@ export function useHposInterface(): HposInterface {
               }
             }
           : {
-              appId: localStorage.getItem(kCoreAppVersionLSKey),
-              roleId: 'core-app',
-              zomeName: 'hha',
-              fnName: 'use_default_happ_preferences',
-              payload: id
+            appId: localStorage.getItem(kCoreAppVersionLSKey),
+            roleId: 'core-app',
+            zomeName: 'hha',
+            fnName: 'set_happ_preferences',
+            payload: {
+              happ_id: id,
+              max_fuel_before_invoice: '0',
+              price_compute: '0',
+              price_storage: '0',
+              price_bandwidth: '0',
+              max_time_before_invoice: { secs: 0, nanos: 0 }
             }
+          }
 
       await hposHolochainCall({
         method: 'post',
