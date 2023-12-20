@@ -4,7 +4,7 @@ import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
 import { useModals } from '@uicommon/composables/useModals'
 import { EButtonType } from '@uicommon/types/ui'
-import { computed, markRaw, onMounted, ref } from 'vue'
+import { computed, markRaw, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PaidHostingWizardStepFour from '@/components/settings/hostingPreferences/PaidHostingWizardStepFour.vue'
 import PaidHostingWizardStepOne from '@/components/settings/hostingPreferences/PaidHostingWizardStepOne.vue'
@@ -164,45 +164,74 @@ const nextButtonLabel = computed(() => {
 interface HAppUpdateTaskProps {
   id: string
   value: EHostingPlan
+  isRunning: boolean
   isUpdated: boolean
   isError: boolean
 }
 
+interface HAppUpdateTask {
+  id: string
+  run: () => Promise<void>
+}
+
 // Update hApps step
 const hAppsToBeUpdated = ref<HAppUpdateTaskProps[]>([])
+const tasks = ref<HAppUpdateTask[]>([])
 
-async function hAppUpdateTask(hApp: UpdateHAppPlanPayload): Promise<void> {
-  try {
-    const result = await updateHAppHostingPlan({
-      ...hApp,
-      prices: { cpu: prices.value.cpu ?? 0, bandwidth: prices.value.dataTransfer ?? 0 }
-    })
+function hAppUpdateTask(hApp: UpdateHAppPlanPayload): HAppUpdateTask {
+  return {
+    id: hApp.id,
+    run: async (): Promise<void> => {
+      try {
+        hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
+          if (hAppToBeUpdated.id === hApp.id) {
+            hAppToBeUpdated.isRunning = true
+          }
 
-    if (result) {
-      hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
-        if (hAppToBeUpdated.id === hApp.id) {
-          hAppToBeUpdated.isUpdated = true
+          return hAppToBeUpdated
+        })
+
+        const result = await updateHAppHostingPlan({
+          ...hApp,
+          prices: { cpu: prices.value.cpu ?? 0, bandwidth: prices.value.dataTransfer ?? 0 }
+        })
+
+        if (result) {
+          tasks.value.shift()
+
+          hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
+            if (hAppToBeUpdated.id === hApp.id) {
+              hAppToBeUpdated.isRunning = false
+              hAppToBeUpdated.isUpdated = true
+            }
+
+            return hAppToBeUpdated
+          })
+        } else {
+          tasks.value.shift()
+
+          hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
+            if (hAppToBeUpdated.id === hApp.id) {
+              hAppToBeUpdated.isRunning = false
+              hAppToBeUpdated.isError = true
+            }
+
+            return hAppToBeUpdated
+          })
         }
+      } catch (error) {
+        tasks.value.shift()
 
-        return hAppToBeUpdated
-      })
-    } else {
-      hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
-        if (hAppToBeUpdated.id === hApp.id) {
-          hAppToBeUpdated.isError = true
-        }
+        hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
+          if (hAppToBeUpdated.id === hApp.id) {
+            hAppToBeUpdated.isRunning = false
+            hAppToBeUpdated.isError = true
+          }
 
-        return hAppToBeUpdated
-      })
-    }
-  } catch (error) {
-    hAppsToBeUpdated.value = hAppsToBeUpdated.value.map((hAppToBeUpdated) => {
-      if (hAppToBeUpdated.id === hApp.id) {
-        hAppToBeUpdated.isError = true
+          return hAppToBeUpdated
+        })
       }
-
-      return hAppToBeUpdated
-    })
+    }
   }
 }
 
@@ -222,33 +251,50 @@ async function setDefaultHostPreferences(): Promise<void> {
   }
 }
 
+watch(
+  () => tasks.value.length,
+  async (length) => {
+    if (length) {
+      await tasks.value[0]?.run()
+    } else {
+      if (hAppsToBeUpdated.value.filter((hApp) => hApp.isError).length) {
+        // If failed
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        close()
+
+        setTimeout(() => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          showModal(EModal.error_modal)
+        }, kDefaultAnimationDuration)
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        await goToNextStep()
+      }
+    }
+  }
+)
+
 async function updateHApps(valueForAllHApps: EHostingPlan | null = null): Promise<void> {
   hAppsToBeUpdated.value = mappedHApps.value.map((hApp) => {
     return {
       id: hApp.id,
       value: valueForAllHApps ?? hApp.hostingPlan,
+      isRunning: false,
       isUpdated: false,
       isError: false
     }
   })
 
-  const promises = hAppsToBeUpdated.value.map(async (hApp) => hAppUpdateTask(hApp))
-
-  await Promise.all(promises)
-
-  if (hAppsToBeUpdated.value.filter((hApp) => hApp.isError).length) {
-    // If failed
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    close()
-
-    setTimeout(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      showModal(EModal.error_modal)
-    }, kDefaultAnimationDuration)
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    await goToNextStep()
+  // If we are setting hApps to paid,
+  // we do not set any prices on the hApps selected to be paid as they will use the new default prices
+  // we only set the prices to 0 on the hApps that should be free now (if any), the 0 values will override the default prices in that case
+  if (!valueForAllHApps) {
+    hAppsToBeUpdated.value = hAppsToBeUpdated.value.filter(
+      (hApp) => hApp.value === EHostingPlan.free
+    )
   }
+
+  tasks.value = hAppsToBeUpdated.value.map((hApp) => hAppUpdateTask(hApp))
 }
 
 interface UpdateHAppPlanPayload {

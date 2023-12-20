@@ -51,6 +51,7 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
         :label-toggled-on="t('hosting_preferences.toggle_paid_hosting.enabled')"
         :label-toggled-off="t('hosting_preferences.toggle_paid_hosting.disabled')"
         :is-disabled="userStore.kycLevel !== EUserKycLevel.two"
+        :class="{ 'toggle-paid-hosting-section__is-disabled': props.paidHostingEnabled }"
         @toggle="paidHostingToggled"
       >
         data-test-toggle-paid-hosting
@@ -69,7 +70,8 @@ const paidHostingToggled = (isToggledOn: boolean): void => {
 
 <style lang="scss" scoped>
 .toggle-paid-hosting-section {
-  &__is-loading {
+  &__is-loading,
+  &__is-disabled {
     opacity: 0.5;
     pointer-events: none;
   }
