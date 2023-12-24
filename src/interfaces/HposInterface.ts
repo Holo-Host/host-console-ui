@@ -517,6 +517,7 @@ export function useHposInterface(): HposInterface {
       await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
+        pathPrefix: '/api/v2',
         params
       })
 
@@ -592,6 +593,7 @@ export function useHposInterface(): HposInterface {
       await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
+        pathPrefix: '/api/v2',
         params
       })
 
@@ -626,6 +628,7 @@ export function useHposInterface(): HposInterface {
       const hostPreferences = await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
+        pathPrefix: '/api/v2',
         params
       })
 
@@ -732,6 +735,7 @@ export function useHposInterface(): HposInterface {
     const response = await hposHolochainCall({
       method: 'post',
       path: '/zome_call',
+      pathPrefix: '/api/v2',
       params
     })
 
@@ -786,6 +790,7 @@ export function useHposInterface(): HposInterface {
       await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
+        pathPrefix: '/api/v2',
         params
       })
 
@@ -888,6 +893,7 @@ export function useHposInterface(): HposInterface {
       const reserveAccountsDetails: ReserveSettingsResponse = (await hposHolochainCall({
         method: 'post',
         path: '/zome_call',
+        pathPrefix: '/api/v2',
         params: getReserveDetailsParams
       })) as ReserveSettingsResponse
 
@@ -909,6 +915,7 @@ export function useHposInterface(): HposInterface {
         const transaction: RedemptionTransaction = (await hposHolochainCall({
           method: 'post',
           path: '/zome_call',
+          pathPrefix: '/api/v2',
           params: initiateRedemptionParams
         })) as RedemptionTransaction
 
