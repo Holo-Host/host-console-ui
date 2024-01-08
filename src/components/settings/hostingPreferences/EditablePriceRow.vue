@@ -106,13 +106,13 @@ watch(
       :class="{ 'disabled': props.isDisabled }"
       @click="edit"
     />
+		<p
+			v-if="!isValid"
+			class="editable-price-row__editable-value-error-message"
+		>
+			{{ props.errorMessage }}
+		</p>
   </div>
-  <p
-    v-if="!isValid"
-    class="editable-price-row__editable-value-error-message"
-  >
-    {{ props.errorMessage }}
-  </p>
 </template>
 
 <style lang="scss" scoped>
@@ -150,8 +150,8 @@ watch(
 
   &__editable-value-error-message {
     position: absolute;
-    bottom: 44px;
-    left: 210px;
+    top: 28px;
+    left: 120px;
     color: var(--red-color);
     font-size: 10px;
   }
