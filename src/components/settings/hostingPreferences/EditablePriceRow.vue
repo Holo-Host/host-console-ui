@@ -15,11 +15,13 @@ const props = withDefaults(
     prop: string
     isDisabled?: boolean
     labelAlign?: 'left' | 'center'
+    errorMessage?: string
   }>(),
   {
     type: EInputType.text,
     isDisabled: false,
-    labelAlign: 'center'
+    labelAlign: 'center',
+    errorMessage: ''
   }
 )
 
@@ -40,20 +42,23 @@ function save(): void {
 }
 
 function cancel(): void {
-  editedValue.value = `${props.value}`
+  editedValue.value = `${props.value ?? 0}`
   isEditing.value = false
 }
 
 watch(
   () => editedValue.value,
   (value) => {
-    isValid.value = value && value >= 0
+    isValid.value = value >= 0
   }
 )
 </script>
 
 <template>
-  <div class="editable-price-row__editable-value">
+  <div
+    class="editable-price-row__editable-value"
+    :class="{ 'editable-price-row__editable-value--with-error': props.errorMessage }"
+  >
     <span
       class="editable-price-row__label"
       :class="{ 'editable-price-row__label--text-left': props.labelAlign === 'left' }"
@@ -71,6 +76,7 @@ watch(
       v-model="editedValue"
       :is-valid="isValid"
       :input-type="props.type"
+      :decimal-places="18"
       placeholder=""
       name="edited-value"
       class="editable-price-row__editable-value-input"
@@ -101,6 +107,12 @@ watch(
       @click="edit"
     />
   </div>
+  <p
+    v-if="!isValid"
+    class="editable-price-row__editable-value-error-message"
+  >
+    {{ props.errorMessage }}
+  </p>
 </template>
 
 <style lang="scss" scoped>
@@ -108,10 +120,15 @@ watch(
   color: var(--grey-dark-color);
 
   &__editable-value {
+    position: relative;
     display: flex;
     align-items: center;
     margin-bottom: 16px;
     height: 32px;
+
+    &--with-error {
+			height: 40px;
+    }
   }
 
   &__editable-value-input {
@@ -129,6 +146,14 @@ watch(
       cursor: not-allowed;
       pointer-events: none;
     }
+  }
+
+  &__editable-value-error-message {
+    position: absolute;
+    bottom: 44px;
+    left: 210px;
+    color: var(--red-color);
+    font-size: 10px;
   }
 
   &__button {
@@ -161,6 +186,9 @@ watch(
 
   &__readonly_value {
     width: 75px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 </style>

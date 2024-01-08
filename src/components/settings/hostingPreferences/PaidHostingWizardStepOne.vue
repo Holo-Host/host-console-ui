@@ -16,6 +16,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:value'])
 
 const cpuPrice = ref(isPricesPropPredicate(props.steps[0]?.props) ? props.steps[0]?.props.cpu : 0)
+
 const dataTransferPrice = ref(
   isPricesPropPredicate(props.steps[0]?.props) ? props.steps[0]?.props.dataTransfer : 0
 )
@@ -83,6 +84,7 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
           <HostingPreferencesEditablePriceRow
             v-for="price in prices"
             :key="price.label"
+						error-message="Price must be bigger or equal to 0"
             v-bind="price"
             :type="EInputType.number"
             label-align="left"
