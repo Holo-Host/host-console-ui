@@ -469,7 +469,8 @@ const isNextButtonDisabled = computed((): boolean => {
     :has-close-button="steps[currentStep - 1]?.hasCloseButton"
     is-visible
     :content-padding="currentStep === 0 ? 'md' : 'sm'"
-    @close="cancel"
+		class="stop-hosting-modal__wrapper"
+		@close="cancel"
   >
     <div
       v-if="!isError"
@@ -547,6 +548,10 @@ const isNextButtonDisabled = computed((): boolean => {
   align-items: center;
   flex-direction: column;
   font-weight: 600;
+
+	&__wrapper {
+		pointer-events: all;
+	}
 
   &__icon {
     width: 66px;
