@@ -84,7 +84,7 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
           <HostingPreferencesEditablePriceRow
             v-for="price in prices"
             :key="price.label"
-						error-message="Price must be bigger or equal to 0"
+            error-message="Price must be bigger or equal to 0"
             v-bind="price"
             :type="EInputType.number"
             label-align="left"
@@ -151,6 +151,26 @@ function updatePrice({ prop, value }: UpdatePricePayload): void {
       &-inputs {
         margin-top: 8px;
         margin-left: 90px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .paid-hosting-modal-wizard-step {
+    width: 100%;
+  }
+
+  .paid-hosting-modal-wizard-step-one {
+    &__form {
+      width: 100%;
+      padding: 16px 8px 0;
+
+      &-prices-section {
+        &-inputs {
+          margin-top: 8px;
+          margin-left: 0;
+        }
       }
     }
   }

@@ -90,14 +90,6 @@ function onTogglePaidHosting(isToggledOn: boolean): void {
   isPaidHostingEnabled.value = isToggledOn
 
   openModal()
-
-  // if (isToggledOn) {
-  //   preferencesStore.setInitialPricing()
-  // } else {
-  //   preferencesStore.clearPricing()
-  // }
-  //
-  // await setDefaultHostPreferences()
 }
 
 function updateHostingPlan(): void {
@@ -110,6 +102,7 @@ function updateHostingPlan(): void {
     :is-content-loading="isLoading"
     :is-content-error="isError"
     :title="$t('hosting_preferences.header')"
+    :class="{ 'hosting-preferences--modal-open': isModalVisible }"
     data-test-hosting-preferences-layout
     @try-again-clicked="getHostPreferences"
   >
@@ -158,6 +151,11 @@ function updateHostingPlan(): void {
 
 <style lang="scss" scoped>
 .hosting-preferences {
+  &--modal-open {
+    overflow: hidden;
+    pointer-events: none;
+  }
+
   &__prices {
     margin-top: 18px;
   }

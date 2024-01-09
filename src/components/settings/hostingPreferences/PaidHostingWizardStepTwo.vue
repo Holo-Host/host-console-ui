@@ -180,4 +180,17 @@ function updateSingle(data: UpdateHAppPlanProps): void {
     }
   }
 }
+
+@media screen and (max-width: 1050px) {
+  .paid-hosting-modal-wizard-step {
+    width: 100%;
+  }
+
+  .paid-hosting-modal-wizard-step-two {
+    &__form {
+      width: 100%;
+      padding: 16px 8px 0;
+    }
+  }
+}
 </style>

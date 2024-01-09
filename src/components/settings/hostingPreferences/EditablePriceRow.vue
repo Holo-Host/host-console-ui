@@ -106,12 +106,12 @@ watch(
       :class="{ 'disabled': props.isDisabled }"
       @click="edit"
     />
-		<p
-			v-if="!isValid"
-			class="editable-price-row__editable-value-error-message"
-		>
-			{{ props.errorMessage }}
-		</p>
+    <p
+      v-if="!isValid"
+      class="editable-price-row__editable-value-error-message"
+    >
+      {{ props.errorMessage }}
+    </p>
   </div>
 </template>
 
@@ -127,7 +127,7 @@ watch(
     height: 32px;
 
     &--with-error {
-			height: 40px;
+      height: 40px;
     }
   }
 
@@ -190,5 +190,11 @@ watch(
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+	@media screen and (max-width: 1050px) {
+		&__unit {
+			margin-left: 0;
+		}
+	}
 }
 </style>

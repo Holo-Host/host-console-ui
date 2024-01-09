@@ -583,5 +583,16 @@ const isNextButtonDisabled = computed((): boolean => {
       margin-left: 16px;
     }
   }
+
+  @media screen and (max-width: 1050px) {
+    &__form-buttons {
+      flex-direction: column;
+
+      &-next-button {
+        margin-top: 12px;
+        margin-left: 0;
+      }
+    }
+  }
 }
 </style>
