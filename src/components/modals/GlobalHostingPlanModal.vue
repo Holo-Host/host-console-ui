@@ -236,6 +236,12 @@ function hAppUpdateTask(hApp: UpdateHAppPlanPayload): HAppUpdateTask {
 }
 
 const progress = computed(() => {
+  // If we don't have any hApps to be updated, we are done
+  if (hAppsToBeUpdated.value.length === 0) {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return 100
+  }
+
   const updatedHApps = hAppsToBeUpdated.value.filter((hApp) => hApp.isUpdated || hApp.isError)
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   return (updatedHApps.length / hAppsToBeUpdated.value.length) * 100 || 0
@@ -292,6 +298,13 @@ async function updateHApps(valueForAllHApps: EHostingPlan | null = null): Promis
     hAppsToBeUpdated.value = hAppsToBeUpdated.value.filter(
       (hApp) => hApp.value === EHostingPlan.free
     )
+  }
+
+  // If we don't have any hApps to be updated, we are done
+  if (hAppsToBeUpdated.value.length === 0) {
+		// eslint-disable-next-line @typescript-eslint/no-use-before-define
+		await goToNextStep()
+    return
   }
 
   tasks.value = hAppsToBeUpdated.value.map((hApp) => hAppUpdateTask(hApp))
@@ -469,8 +482,8 @@ const isNextButtonDisabled = computed((): boolean => {
     :has-close-button="steps[currentStep - 1]?.hasCloseButton"
     is-visible
     :content-padding="currentStep === 0 ? 'md' : 'sm'"
-		class="stop-hosting-modal__wrapper"
-		@close="cancel"
+    class="stop-hosting-modal__wrapper"
+    @close="cancel"
   >
     <div
       v-if="!isError"
@@ -549,9 +562,9 @@ const isNextButtonDisabled = computed((): boolean => {
   flex-direction: column;
   font-weight: 600;
 
-	&__wrapper {
-		pointer-events: all;
-	}
+  &__wrapper {
+    pointer-events: all;
+  }
 
   &__icon {
     width: 66px;
