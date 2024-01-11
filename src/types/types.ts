@@ -32,11 +32,11 @@ export interface PricesData {
 
 export interface InvoicesData {
   due: {
-    period: number
+    period: number | string
   }
   frequency: {
     amount: number
-    period: number
+    period: number | string
   }
 }
 
@@ -96,3 +96,12 @@ export interface UpdateHAppPlanProps {
   id: string
   value: EHostingPlan
 }
+
+export type InvoiceFrequency = {
+  period: number | string;
+  amount: number | string;
+}
+
+export type InvoiceDue = {
+  period: number | string;
+};

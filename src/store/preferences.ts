@@ -33,13 +33,17 @@ export const usePreferencesStore = defineStore('preferences', {
 
   actions: {
     async setDefaultPreferences(): Promise<void> {
+
+      let maxTimeBeforeInvoice = Number(this.invoicesSettings.frequency.period) || 0;
+      let invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 0;
+
       const payload: DefaultPreferencesPayload = {
         max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
         max_time_before_invoice: {
-          secs: this.invoicesSettings.frequency.period * 24 * 60 * 60,
-          nanos: 0,
+          secs: maxTimeBeforeInvoice * 24 * 60 * 60,
+          nanos: 0
         },
-        invoice_due_in_days: this.invoicesSettings.due.period,
+        invoice_due_in_days: invoiceDuePeriod,
         price_compute: `${this.pricesSettings.cpu}`,
         price_storage: `${this.pricesSettings.storage}`,
         price_bandwidth: `${this.pricesSettings.bandwidth}`
@@ -87,7 +91,7 @@ export const usePreferencesStore = defineStore('preferences', {
         invoice_due_in_days: invoiceDueDays,
         price_compute: cpu,
         price_storage: storage,
-        price_bandwidth: bandwidth,
+        price_bandwidth: bandwidth
       } = response
 
       if (cpu && storage && bandwidth) {
@@ -108,20 +112,26 @@ export const usePreferencesStore = defineStore('preferences', {
             period: Number(invoiceDueDays)
           }
         }
+        if (this.invoicesSettings.frequency.period === 0) {
+          this.invoicesSettings.frequency.period = 'N/A'
+        }
+        if (this.invoicesSettings.due.period === 0) {
+          this.invoicesSettings.due.period = 'N/A'
+        }
       }
 
       this.isLoaded = true
     },
-    updateInvoiceFrequency(invoiceFrequency: number, invoiceMaxHolofuel: number) {
+    updateInvoiceFrequency(invoiceFrequency: number | string, invoiceMaxHolofuel: number) {
       this.invoicesSettings.frequency = {
-        amount: invoiceMaxHolofuel,
+        amount: Number(invoiceMaxHolofuel),
         period: invoiceFrequency
       }
     },
-    updateInvoiceDue(invoiceDueInDays: number) {
+    updateInvoiceDue(invoiceDueInDays: number | string) {
       this.invoicesSettings.due = {
         period: invoiceDueInDays
-      };
+      }
     }
   }
 })

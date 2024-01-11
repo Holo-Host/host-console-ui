@@ -8,7 +8,7 @@ import PricesSection from '@/components/settings/hostingPreferences/PricesSectio
 import TogglePaidHostingSection from '@/components/settings/hostingPreferences/TogglePaidHostingSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
 import { useUserStore } from '@/store/user'
-import type { UpdatePricePayload } from '@/types/types'
+import type { InvoiceDue, InvoiceFrequency, UpdatePricePayload } from '@/types/types'
 import { EHostingPlan, EUserKycLevel } from '@/types/types'
 
 const preferencesStore = usePreferencesStore()
@@ -96,13 +96,13 @@ function updateHostingPlan(): void {
   closeModal()
 }
 
-async function invoiceFrequencyChanged(value: { period: number, amount: number }): Promise<void> {
-  preferencesStore.updateInvoiceFrequency(value.period, value.amount);
+async function invoiceFrequencyChanged({ period, amount }: InvoiceFrequency): Promise<void> {
+  preferencesStore.updateInvoiceFrequency(period as number, amount);
   await setDefaultHostPreferences();
 }
 
-async function invoicePaymentDueChanged(value: { period: number }): Promise<void> {
-  preferencesStore.updateInvoiceDue(value.period);
+async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
+  preferencesStore.updateInvoiceDue(period);
   await setDefaultHostPreferences();
 }
 </script>
