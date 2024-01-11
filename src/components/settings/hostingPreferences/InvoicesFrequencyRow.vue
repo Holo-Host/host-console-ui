@@ -36,7 +36,7 @@ function onFrequencyAmountChange(value: number): void {
 
     <TimeDropdownSelect
       :value="props.data.frequency.period"
-      :options="['N/A', 7, 15, 30]"
+      :options="[7, 15, 30]"
       @update:selected-value="onFrequencyPeriodChange"
     />
 

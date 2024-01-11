@@ -12,11 +12,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:frequency', 'update:due'])
 
-function updateFrequency(value: number | string): void {
+function updateFrequency(value: number): void {
   emit('update:frequency', value)
 }
 
-function updateDue(value: number | string) {
+function updateDue(value: number) {
   emit('update:due', value)
 }
 </script>

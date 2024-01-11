@@ -27,7 +27,7 @@ function onDueChange(value: number | string): void {
 
     <TimeDropdownSelect
       :value="props.data.due.period"
-      :options="['N/A', 7, 14, 28]"
+      :options="[7, 14, 28]"
       @update:selected-value="onDueChange"
     />
 
