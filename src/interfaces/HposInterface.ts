@@ -113,19 +113,21 @@ interface CoreAppVersionResponse {
 }
 
 export interface HostPreferencesResponse {
-  max_fuel_before_invoice: string
-  max_time_before_invoice: [number, number]
-  price_bandwidth: string
   price_compute: string
   price_storage: string
+  price_bandwidth: string
+  max_time_before_invoice: { secs: number; nanos: number }
+  max_fuel_before_invoice: string
+  invoice_due_in_days: number
 }
 
 export interface DefaultPreferencesPayload {
-  max_fuel_before_invoice: string
   price_compute: string
   price_storage: string
   price_bandwidth: string
-  max_time_before_invoice: [number, number]
+  max_time_before_invoice: { secs: number; nanos: number }
+  max_fuel_before_invoice: string
+  invoice_due_in_days: number
 }
 
 type HposHolochainCallResponse =

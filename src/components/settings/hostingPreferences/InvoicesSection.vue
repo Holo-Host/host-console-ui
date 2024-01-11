@@ -16,7 +16,7 @@ function updateFrequency(value: number | string): void {
   emit('update:frequency', value)
 }
 
-function updateDue(value) {
+function updateDue(value: number | string) {
   emit('update:due', value)
 }
 </script>

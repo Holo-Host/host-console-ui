@@ -95,6 +95,16 @@ function onTogglePaidHosting(isToggledOn: boolean): void {
 function updateHostingPlan(): void {
   closeModal()
 }
+
+async function invoiceFrequencyChanged(value: { period: number, amount: number }): Promise<void> {
+  preferencesStore.updateInvoiceFrequency(value.period, value.amount);
+  await setDefaultHostPreferences();
+}
+
+async function invoicePaymentDueChanged(value: { period: number }): Promise<void> {
+  preferencesStore.updateInvoiceDue(value.period);
+  await setDefaultHostPreferences();
+}
 </script>
 
 <template>
@@ -130,6 +140,8 @@ function updateHostingPlan(): void {
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
         data-test-hosting-preferences-invoices-section
+        @update:frequency="invoiceFrequencyChanged"
+        @update:due="invoicePaymentDueChanged"
       />
 
       <HAppSelectionSection

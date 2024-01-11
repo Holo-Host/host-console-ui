@@ -32,11 +32,11 @@ export interface PricesData {
 
 export interface InvoicesData {
   due: {
-    period: string
+    period: number
   }
   frequency: {
     amount: number
-    period: string
+    period: number
   }
 }
 

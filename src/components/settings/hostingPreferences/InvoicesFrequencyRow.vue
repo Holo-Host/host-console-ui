@@ -35,16 +35,14 @@ function onFrequencyAmountChange(value: number): void {
     <span>{{ $t('hosting_preferences.invoices.frequency.part_one') }}</span>
 
     <TimeDropdownSelect
-      is-disabled
       :value="props.data.frequency.period"
-      :options="['N/A', 7, 30]"
+      :options="['N/A', 7, 15, 30]"
       @update:selected-value="onFrequencyPeriodChange"
     />
 
     <span>{{ $t('hosting_preferences.invoices.frequency.part_two') }}</span>
 
     <BaseEditableInput
-      is-disabled
       :value="formatCurrency(Number(props.data.frequency.amount), 0)"
       unit="HF"
       class="invoices-frequency-section__amount"
