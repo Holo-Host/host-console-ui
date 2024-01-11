@@ -151,14 +151,10 @@ export default {
         part_one: 'Payment is due',
         part_two: 'after invoice date'
       },
-      note_one: {
-        part_one: '*hApps will be paused from hosting if payment is not received',
+      note: {
+        part_one: '*Apps will be paused from hosting if payment is not received',
         part_two: 'after invoice date'
       },
-      note_two: {
-        part_one: '*hApps will be removed if payment is not received',
-        part_two: 'after invoice date'
-      }
     },
     prices: {
       header: 'Price Configuration',
