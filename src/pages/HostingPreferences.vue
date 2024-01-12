@@ -97,7 +97,7 @@ function updateHostingPlan(): void {
 }
 
 async function invoiceFrequencyChanged({ period, amount }: InvoiceFrequency): Promise<void> {
-  preferencesStore.updateInvoiceFrequency(period as number, amount);
+  preferencesStore.updateInvoiceFrequency(period, amount);
   await setDefaultHostPreferences();
 }
 
