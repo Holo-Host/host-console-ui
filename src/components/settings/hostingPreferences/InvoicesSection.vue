@@ -12,11 +12,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:frequency', 'update:due'])
 
-function updateFrequency(value: number | string): void {
+function updateFrequency(value: number): void {
   emit('update:frequency', value)
 }
 
-function updateDue(value) {
+function updateDue(value: number) {
   emit('update:due', value)
 }
 </script>
@@ -46,15 +46,9 @@ function updateDue(value) {
 
       <div class="invoices-section__notes">
         <div>
-          <span>{{ $t('hosting_preferences.invoices.note_one.part_one') }}</span>
-          <span class="invoices-section__notes-value">{{ 2 * props.data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
-          <span>{{ $t('hosting_preferences.invoices.note_one.part_two') }}</span>
-        </div>
-
-        <div class="invoices-section__note-two">
-          <span>{{ $t('hosting_preferences.invoices.note_two.part_one') }}</span>
-          <span class="invoices-section__notes-value">{{ 4 * props.data.due.period || 'N/A' }} {{ $t('$.days') }}</span>
-          <span>{{ $t('hosting_preferences.invoices.note_two.part_two') }}</span>
+          <span>{{ $t('hosting_preferences.invoices.note.part_one') }}</span>
+          <span class="invoices-section__notes-value">{{ props.data.due.period }} {{ $t('$.days') }}</span>
+          <span>{{ $t('hosting_preferences.invoices.note.part_two') }}</span>
         </div>
       </div>
     </div>

@@ -22,20 +22,27 @@ export const usePreferencesStore = defineStore('preferences', {
     },
     invoicesSettings: {
       frequency: {
-        amount: 0, // in fuel type
-        period: 'N/A' // in duration days
+        amount: 0,
+        period: 7
       },
       due: {
-        period: 'N/A' // in duration days
+        period: 7
       }
     }
   }),
 
   actions: {
     async setDefaultPreferences(): Promise<void> {
+      let maxTimeBeforeInvoice = Number(this.invoicesSettings.frequency.period) || 7
+      let invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 7
+
       const payload: DefaultPreferencesPayload = {
-        max_fuel_before_invoice: '0',
-        max_time_before_invoice: [0, 0],
+        max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
+        max_time_before_invoice: {
+          secs: maxTimeBeforeInvoice * 24 * 60 * 60,
+          nanos: 0
+        },
+        invoice_due_in_days: invoiceDuePeriod,
         price_compute: `${this.pricesSettings.cpu}`,
         price_storage: `${this.pricesSettings.storage}`,
         price_bandwidth: `${this.pricesSettings.bandwidth}`
@@ -78,8 +85,9 @@ export const usePreferencesStore = defineStore('preferences', {
       }
 
       const {
-        max_fuel_before_invoice: amount,
-        max_time_before_invoice: durationThreshold,
+        max_fuel_before_invoice: invoiceHolofuelThreshold,
+        max_time_before_invoice: invoiceDurationThreshold,
+        invoice_due_in_days: invoiceDueDays,
         price_compute: cpu,
         price_storage: storage,
         price_bandwidth: bandwidth
@@ -93,22 +101,28 @@ export const usePreferencesStore = defineStore('preferences', {
         }
       }
 
-      if (amount && durationThreshold) {
-        // NB: This value is not implemented in DNAs, return mock for now
-        const deadline = 'N/A'
-
-        this.invoicesSettings = {
-          frequency: {
-            amount: Number(amount),
-            period: 'N/A' // durationThreshold
-          },
-          due: {
-            period: deadline
-          }
+      this.invoicesSettings = {
+        frequency: {
+          amount: Number(invoiceHolofuelThreshold) || 0,
+          period: Number(invoiceDurationThreshold.secs / 24 / 60 / 60) || 7
+        },
+        due: {
+          period: Number(invoiceDueDays) || 7
         }
       }
 
       this.isLoaded = true
+    },
+    updateInvoiceFrequency(invoiceFrequency: number, invoiceMaxHolofuel: number) {
+      this.invoicesSettings.frequency = {
+        amount: invoiceMaxHolofuel,
+        period: invoiceFrequency
+      }
+    },
+    updateInvoiceDue(invoiceDueInDays: number) {
+      this.invoicesSettings.due = {
+        period: invoiceDueInDays
+      }
     }
   }
 })

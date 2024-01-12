@@ -8,7 +8,7 @@ import PricesSection from '@/components/settings/hostingPreferences/PricesSectio
 import TogglePaidHostingSection from '@/components/settings/hostingPreferences/TogglePaidHostingSection.vue'
 import { usePreferencesStore } from '@/store/preferences'
 import { useUserStore } from '@/store/user'
-import type { UpdatePricePayload } from '@/types/types'
+import type { InvoiceDue, InvoiceFrequency, UpdatePricePayload } from '@/types/types'
 import { EHostingPlan, EUserKycLevel } from '@/types/types'
 
 const preferencesStore = usePreferencesStore()
@@ -95,6 +95,16 @@ function onTogglePaidHosting(isToggledOn: boolean): void {
 function updateHostingPlan(): void {
   closeModal()
 }
+
+async function invoiceFrequencyChanged({ period, amount }: InvoiceFrequency): Promise<void> {
+  preferencesStore.updateInvoiceFrequency(period, amount);
+  await setDefaultHostPreferences();
+}
+
+async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
+  preferencesStore.updateInvoiceDue(period);
+  await setDefaultHostPreferences();
+}
 </script>
 
 <template>
@@ -130,6 +140,8 @@ function updateHostingPlan(): void {
         :data="invoicesSettings"
         class="hosting-preferences__invoices"
         data-test-hosting-preferences-invoices-section
+        @update:frequency="invoiceFrequencyChanged"
+        @update:due="invoicePaymentDueChanged"
       />
 
       <HAppSelectionSection

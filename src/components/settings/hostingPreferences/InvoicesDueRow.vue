@@ -26,9 +26,8 @@ function onDueChange(value: number | string): void {
     <span>{{ $t('hosting_preferences.invoices.due.part_one') }}</span>
 
     <TimeDropdownSelect
-      is-disabled
       :value="props.data.due.period"
-      :options="['N/A', 7, 30]"
+      :options="[7, 14, 28]"
       @update:selected-value="onDueChange"
     />
 
