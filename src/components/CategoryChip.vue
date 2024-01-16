@@ -1,8 +1,9 @@
 <template>
   <div class="category-chip"
   >
-    <span class="category-chip__dot"></span>
+    <span v-if="withDot" class="category-chip__dot"></span>
     <span class="category-chip__label">{{ label }}</span>
+		<slot />
   </div>
 </template>
 
@@ -11,7 +12,11 @@ const props = defineProps({
   label: {
     type: String,
     required: true
-  }
+  },
+	withDot: {
+		type: Boolean,
+		default: true
+	}
 })
 </script>
 

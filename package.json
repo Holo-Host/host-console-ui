@@ -13,6 +13,7 @@
     "start-mock-hpos-api-with-auth": "node mock-hpos-api/runMockHposApi.js --email test@test.com --password asasas"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.0.17",
     "@holo-host/hp-admin-keypair": "^0.3.0",
     "@vueuse/components": "^10.1.2",
