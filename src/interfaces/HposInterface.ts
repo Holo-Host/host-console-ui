@@ -152,7 +152,7 @@ type HposAdminCallResponse = HposConfigResponse
 
 type ServiceLogsResponse = Array<Record<string, unknown>>
 
-type ZomeCallResponse = number[] | null
+type ZomeCallResponse = Uint8Array | null
 
 export interface UsageResponse {
   totalHostedHapps: number
@@ -281,6 +281,7 @@ interface HposCallArgs {
   method: string
   path: string
   headers?: Record<string, unknown>
+  responseType?: string
   params?: Record<string, unknown>
 }
 
@@ -341,6 +342,7 @@ export function useHposInterface(): HposInterface {
     method = 'get',
     path,
     headers: userHeaders = {},
+    responseType = 'json',
     params
   }: HposCallArgs): Promise<HposHolochainCallResponse & HposAdminCallResponse> {
     const fullUrl = `${HPOS_API_URL}${pathPrefix}${path}`
@@ -361,7 +363,8 @@ export function useHposInterface(): HposInterface {
       return response.data
 
     case 'post':
-      response = await axios.post(fullUrl, params, { headers })
+        response = await axios
+          .post(fullUrl, params, { responseType, headers })
       return response.data
 
     case 'put':
@@ -522,6 +525,7 @@ export function useHposInterface(): HposInterface {
         method: 'post',
         path: '/zome_call',
         pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
         params
       })
 
@@ -598,6 +602,7 @@ export function useHposInterface(): HposInterface {
         method: 'post',
         path: '/zome_call',
         pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
         params
       })
 
@@ -633,6 +638,7 @@ export function useHposInterface(): HposInterface {
         method: 'post',
         path: '/zome_call',
         pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
         params
       })
 
@@ -740,6 +746,7 @@ export function useHposInterface(): HposInterface {
       method: 'post',
       path: '/zome_call',
       pathPrefix: '/api/v2',
+      responseType: 'arraybuffer',
       params
     })
 
@@ -748,7 +755,7 @@ export function useHposInterface(): HposInterface {
     const { agent_address: agentAddress, nickname, avatar_url: avatarUrl } = decode(response)
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
-    return { agentAddress: Uint8Array.from(agentAddress.data), nickname, avatarUrl }
+    return { agentAddress, nickname, avatarUrl }
   }
 
   function getHoloFuelProfile(): unknown {
@@ -795,6 +802,7 @@ export function useHposInterface(): HposInterface {
         method: 'post',
         path: '/zome_call',
         pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
         params
       })
 
@@ -898,6 +906,7 @@ export function useHposInterface(): HposInterface {
         method: 'post',
         path: '/zome_call',
         pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
         params: getReserveDetailsParams
       })
 
@@ -924,6 +933,7 @@ export function useHposInterface(): HposInterface {
           method: 'post',
           path: '/zome_call',
           pathPrefix: '/api/v2',
+          responseType: 'arraybuffer',
           params: initiateRedemptionParams
         })
 

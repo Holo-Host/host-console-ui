@@ -660,7 +660,7 @@ const data = {
   },
   post: {
     '/holochain-api/v1/zome_call': (args) => {
-      switch (args.fnName) {
+      switch (args.fn_name) {
         case 'get_my_profile':
           return getMyProfile
         case 'get_all_reserve_accounts_details':
