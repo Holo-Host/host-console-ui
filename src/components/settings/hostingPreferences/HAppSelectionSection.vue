@@ -3,6 +3,7 @@ import { XMarkIcon } from '@heroicons/vue/20/solid'
 import { computed, ref } from 'vue'
 import SettingsSection from '../SettingsSection.vue'
 import BaseCombobox from '@/components/BaseCombobox.vue'
+import BaseTooltip from '@/components/BaseTooltip.vue'
 import CategoryChip from '@/components/CategoryChip.vue'
 import CircledExIcon from '@/components/icons/CircledExIcon.vue'
 import FilledCheckIcon from '@/components/icons/FilledCheckIcon.vue'
@@ -11,44 +12,65 @@ import { countries } from '@/constants/countries'
 
 const isEditing = ref(false)
 
-const mappedCountries = countries.map((country, index) => ({
+interface Option {
+  id: number
+  label: string
+}
+
+const initiallySelectedJurisdictions: string[] = []
+const previouslySelectedJurisdictions = ref<Option[]>([])
+
+const mappedCountries: Option[] = countries.map((country, index) => ({
   id: index + 1,
   label: country
 }))
 
-const selectedJurisdictions = [
-  {
-    id: 1,
-    label: 'Nigeria'
-  },
-  {
-    id: 2,
-    label: 'Poland'
-  },
-  {
-    id: 3,
-    label: 'United States'
-  },
-  {
-    id: 4,
-    label: 'United Kingdom'
-  }
-]
+const selectedJurisdictions = ref<Option[]>(
+  mappedCountries.filter((country) => initiallySelectedJurisdictions.includes(country.label))
+)
 
 const visibleJurisdictions = computed(() => {
-  return [...selectedJurisdictions].splice(0, 2)
+  return [...selectedJurisdictions.value].splice(0, 2)
+})
+
+const remainingJurisdictions = computed(() => {
+  return [...selectedJurisdictions.value].splice(2)
 })
 
 const remainingJurisdictionsCount = computed(() => {
-  return selectedJurisdictions.length - visibleJurisdictions.value.length
+  return remainingJurisdictions.value.length
 })
+
+const isMoreSelectedJurisdictionsTooltipVisible = ref(false)
+
+function showMoreSelectedJurisdictions(): void {
+  isMoreSelectedJurisdictionsTooltipVisible.value = true
+}
 
 function edit(): void {
   isEditing.value = true
+  previouslySelectedJurisdictions.value = [...selectedJurisdictions.value]
 }
 
-function updateJurisdictions(selected: any): void {
-  console.log(selected)
+function updateJurisdictions(selected: Option[]): void {
+  selectedJurisdictions.value = selected
+}
+
+function removeJurisdiction(option: Option): void {
+  isEditing.value = true
+  selectedJurisdictions.value = selectedJurisdictions.value.filter(
+    (jurisdiction) => jurisdiction.id !== option.id
+  )
+}
+
+function save(): void {
+  // Make an API call to save new selected jurisdictions
+  isEditing.value = false
+}
+
+function cancel(): void {
+  isEditing.value = false
+  selectedJurisdictions.value = [...previouslySelectedJurisdictions.value]
 }
 </script>
 
@@ -59,7 +81,7 @@ function updateJurisdictions(selected: any): void {
   >
     <div class="card-content">
       <div class="happ-selection-section__jurisdiction-exclusions">
-        <span class="selection-label">
+        <span class="happ-selection-section__selection-label">
           {{ $t('hosting_preferences.happ_selection.jurisdiction_exclusions') }}
         </span>
         <div
@@ -75,20 +97,42 @@ function updateJurisdictions(selected: any): void {
               :with-dot="false"
               :label="option.label"
             >
-              <XMarkIcon class="happ-selection-section__jurisdiction-exclusions-selected-item-delete-icon" />
+              <XMarkIcon
+                class="happ-selection-section__jurisdiction-exclusions-selected-item-delete-icon"
+                @click="removeJurisdiction(option)"
+              />
             </CategoryChip>
           </div>
 
           <CategoryChip
+            v-if="selectedJurisdictions.length > 2"
             :with-dot="false"
             :label="`+${remainingJurisdictionsCount} more`"
-						class="happ-selection-section__jurisdiction-exclusions-selected-item"
-					>
+            class="happ-selection-section__jurisdiction-exclusions-selected-item"
+            @click="showMoreSelectedJurisdictions"
+          >
+            <BaseTooltip
+              v-click-outside="() => isMoreSelectedJurisdictionsTooltipVisible = false"
+              class="happ-selection-section__jurisdiction-exclusions-tooltip"
+              :is-visible="isMoreSelectedJurisdictionsTooltipVisible"
+            >
+              <div
+                v-for="remainingJurisdiction in remainingJurisdictions"
+                :key="remainingJurisdiction.id"
+                class="happ-selection-section__jurisdiction-exclusions-selected-item happ-selection-section__jurisdiction-exclusions-selected-item--remaining"
+              >
+                <span>{{ remainingJurisdiction.label }}</span>
+                <XMarkIcon
+                  class="happ-selection-section__jurisdiction-exclusions-selected-item-delete-icon"
+                  @click="removeJurisdiction(remainingJurisdiction)"
+                />
+              </div>
+            </BaseTooltip>
           </CategoryChip>
         </div>
         <span
           v-else
-          class="selection-choices"
+          class="happ-selection-section__jurisdiction-exclusions-selected"
         >
           None
         </span>
@@ -124,21 +168,29 @@ function updateJurisdictions(selected: any): void {
       </div>
 
       <div class="happ-selection-section__category-tags">
-        <span class="selection-label">
+        <span class="happ-selection-section__selection-label happ-selection-section__selection-label--main">
           {{ $t('hosting_preferences.happ_selection.category_tags') }}
         </span>
         <div class="happ-selection-section__category-tags-item selection-child-row">
-          <span class="selection-label">
+          <span class="happ-selection-section__selection-label happ-selection-section__selection-label--child">
             {{ $t('hosting_preferences.happ_selection.exclude') }}
           </span>
-          <span class="selection-choices">None</span>
+          <span
+            class="happ-selection-section__category-tags-selected"
+          >
+            None
+          </span>
           <PencilIcon />
         </div>
         <div class="happ-selection-section__category-tags-item selection-child-row">
-          <span class="selection-label">
+          <span class="happ-selection-section__selection-label happ-selection-section__selection-label--child happ-selection-section__selection-label--include">
             {{ $t('hosting_preferences.happ_selection.include') }}
           </span>
-          <span class="selection-choices">None</span>
+          <span
+            class="happ-selection-section__category-tags-selected"
+          >
+            None
+          </span>
           <PencilIcon />
         </div>
       </div>
@@ -151,20 +203,27 @@ function updateJurisdictions(selected: any): void {
   padding: 0 0 35px 0;
 }
 
-.selection-label {
-  flex-basis: 184px;
-}
-
-.selection-choices {
-  flex-basis: 44px;
-}
-
-.selection-child-row .selection-label {
-  flex-basis: 144px;
-}
-
 .happ-selection-section {
+  &__selection-label {
+    display: flex;
+    justify-content: end;
+    white-space: nowrap;
+
+    &--main {
+      width: 140px;
+    }
+
+    &--child {
+      margin-left: 50px;
+    }
+
+    &--include {
+      padding-left: 3px;
+    }
+  }
+
   &__jurisdiction-exclusions {
+    height: 28px;
     margin-top: 4px;
     display: flex;
     align-items: center;
@@ -172,11 +231,21 @@ function updateJurisdictions(selected: any): void {
     &-selected {
       display: flex;
       align-items: center;
+      margin-left: 60px;
     }
 
     &-selected-item {
       margin-right: 8px;
       white-space: nowrap;
+      cursor: pointer;
+      position: relative;
+
+      &--remaining {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 24px;
+      }
     }
 
     &-selected-item-delete-icon {
@@ -204,10 +273,20 @@ function updateJurisdictions(selected: any): void {
         cursor: pointer;
       }
     }
+
+    &-tooltip {
+      top: 32px;
+    }
   }
 
   &__category-tags {
     margin-top: 16px;
+
+    &-selected {
+      display: flex;
+      align-items: center;
+      margin-left: 60px;
+    }
   }
 
   &__category-tags-item {

@@ -7,7 +7,7 @@ import {
   ComboboxOption,
   TransitionRoot
 } from '@headlessui/vue'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+import { CheckIcon, ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { ref, computed } from 'vue'
 
 interface Option {
@@ -47,6 +47,7 @@ const filteredOptions = computed(() =>
 <template>
   <div class="base-combobox__wrapper">
     <Combobox
+      v-slot="{ open }"
       :model-value="props.selected"
       multiple
       @update:model-value="emit('update:selected', $event)"
@@ -64,9 +65,10 @@ const filteredOptions = computed(() =>
             <ComboboxButton
               class="base-combobox__button"
             >
-              <ChevronUpDownIcon
+              <ChevronDownIcon
                 class="base-combobox__chevron"
                 aria-hidden="true"
+                :class="{ 'base-combobox__chevron--open': open }"
               />
             </ComboboxButton>
           </div>
@@ -98,6 +100,8 @@ const filteredOptions = computed(() =>
                   :class="{
                     'base-combobox__option--active': active,
                     'base-combobox__option--inactive': !active,
+                    'base-combobox__option--selected': selected,
+                    'base-combobox__option--not-selected': !selected
                   }"
                 >
                   <span
@@ -134,46 +138,36 @@ const filteredOptions = computed(() =>
 
 <style lang="scss" scoped>
 .base-combobox {
-  &__wrapper {
-    width: 500px;
-  }
-
   &__combobox {
     display: flex;
   }
 
   &__combobox-content {
     position: relative;
-    margin-top: 4px;
   }
 
   &__combobox-input-wrapper {
     position: relative;
-    width: 100%;
     cursor: default;
     overflow: hidden;
     border-radius: 0.375rem;
     border: solid 1px var(--grey-light-color);
     background-color: #fff;
     text-align: left;
+  }
+
+  &__input {
+    padding: 8px 40px 8px 12px;
+    font-size: 14px;
+    line-height: 1.25rem;
+    color: var(--gray);
+    border: 1px solid transparent;
+    border-radius: 4px;
 
     &:focus {
       outline: 0;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px var(--primary-color);
-    }
-  }
-
-  &__input {
-    width: 100%;
-    border: none;
-    padding: 8px 40px 8px 12px;
-    font-size: 14px;
-    line-height: 1.25rem;
-    color: var(--gray);
-
-    &:focus {
-      outline-color: var(--primary-color);
     }
   }
 
@@ -192,7 +186,12 @@ const filteredOptions = computed(() =>
   &__chevron {
     width: 20px;
     height: 20px;
-    color: var(--gray-color);
+    color: var(--primary-color);
+    transition: transform 0.2s ease-in-out;
+
+    &--open {
+      transform: rotate(180deg);
+    }
   }
 
   &__options {
@@ -209,7 +208,6 @@ const filteredOptions = computed(() =>
     &:focus {
       outline: 0;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px var(--primary-color);
     }
   }
 
@@ -219,8 +217,12 @@ const filteredOptions = computed(() =>
     user-select: none;
     padding: 8px 16px 8px 40px;
 
+    &--selected {
+      background-color: var(--primary-lighter-color);
+    }
+
     &--active {
-      background-color: var(--primary-color);
+      background-color: var(--primary-light-color);
       color: var(--white);
     }
 
@@ -241,6 +243,7 @@ const filteredOptions = computed(() =>
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      padding-right: 12px;
 
       &--selected {
         font-weight: 700;
@@ -255,7 +258,7 @@ const filteredOptions = computed(() =>
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 0;
+      right: 12px;
       display: flex;
       align-items: center;
       padding-left: 12px;
