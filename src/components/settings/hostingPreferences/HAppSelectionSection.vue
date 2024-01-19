@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/20/solid'
-import { computed, ref } from 'vue'
 import SettingsSection from '../SettingsSection.vue'
 import BaseCombobox from '@/components/BaseCombobox.vue'
 import BaseTooltip from '@/components/BaseTooltip.vue'
@@ -8,70 +7,7 @@ import CategoryChip from '@/components/CategoryChip.vue'
 import CircledExIcon from '@/components/icons/CircledExIcon.vue'
 import FilledCheckIcon from '@/components/icons/FilledCheckIcon.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
-import { countries } from '@/constants/countries'
-
-const isEditing = ref(false)
-
-interface Option {
-  id: number
-  label: string
-}
-
-const initiallySelectedJurisdictions: string[] = []
-const previouslySelectedJurisdictions = ref<Option[]>([])
-
-const mappedCountries: Option[] = countries.map((country, index) => ({
-  id: index + 1,
-  label: country
-}))
-
-const selectedJurisdictions = ref<Option[]>(
-  mappedCountries.filter((country) => initiallySelectedJurisdictions.includes(country.label))
-)
-
-const visibleJurisdictions = computed(() => {
-  return [...selectedJurisdictions.value].splice(0, 2)
-})
-
-const remainingJurisdictions = computed(() => {
-  return [...selectedJurisdictions.value].splice(2)
-})
-
-const remainingJurisdictionsCount = computed(() => {
-  return remainingJurisdictions.value.length
-})
-
-const isMoreSelectedJurisdictionsTooltipVisible = ref(false)
-
-function showMoreSelectedJurisdictions(): void {
-  isMoreSelectedJurisdictionsTooltipVisible.value = true
-}
-
-function edit(): void {
-  isEditing.value = true
-  previouslySelectedJurisdictions.value = [...selectedJurisdictions.value]
-}
-
-function updateJurisdictions(selected: Option[]): void {
-  selectedJurisdictions.value = selected
-}
-
-function removeJurisdiction(option: Option): void {
-  isEditing.value = true
-  selectedJurisdictions.value = selectedJurisdictions.value.filter(
-    (jurisdiction) => jurisdiction.id !== option.id
-  )
-}
-
-function save(): void {
-  // Make an API call to save new selected jurisdictions
-  isEditing.value = false
-}
-
-function cancel(): void {
-  isEditing.value = false
-  selectedJurisdictions.value = [...previouslySelectedJurisdictions.value]
-}
+import JurisdictionExclusionSelect from '@/components/settings/hostingPreferences/JurisdictionExclusionSelect.vue'
 </script>
 
 <template>
@@ -80,92 +16,7 @@ function cancel(): void {
     class="happ-selection-section"
   >
     <div class="card-content">
-      <div class="happ-selection-section__jurisdiction-exclusions">
-        <span class="happ-selection-section__selection-label">
-          {{ $t('hosting_preferences.happ_selection.jurisdiction_exclusions') }}
-        </span>
-        <div
-          v-if="selectedJurisdictions.length > 0"
-          class="happ-selection-section__jurisdiction-exclusions-selected"
-        >
-          <div
-            v-for="option in visibleJurisdictions"
-            :key="option.id"
-            class="happ-selection-section__jurisdiction-exclusions-selected-item"
-          >
-            <CategoryChip
-              :with-dot="false"
-              :label="option.label"
-            >
-              <XMarkIcon
-                class="happ-selection-section__jurisdiction-exclusions-selected-item-delete-icon"
-                @click="removeJurisdiction(option)"
-              />
-            </CategoryChip>
-          </div>
-
-          <CategoryChip
-            v-if="selectedJurisdictions.length > 2"
-            :with-dot="false"
-            :label="`+${remainingJurisdictionsCount} more`"
-            class="happ-selection-section__jurisdiction-exclusions-selected-item"
-            @click="showMoreSelectedJurisdictions"
-          >
-            <BaseTooltip
-              v-click-outside="() => isMoreSelectedJurisdictionsTooltipVisible = false"
-              class="happ-selection-section__jurisdiction-exclusions-tooltip"
-              :is-visible="isMoreSelectedJurisdictionsTooltipVisible"
-            >
-              <div
-                v-for="remainingJurisdiction in remainingJurisdictions"
-                :key="remainingJurisdiction.id"
-                class="happ-selection-section__jurisdiction-exclusions-selected-item happ-selection-section__jurisdiction-exclusions-selected-item--remaining"
-              >
-                <span>{{ remainingJurisdiction.label }}</span>
-                <XMarkIcon
-                  class="happ-selection-section__jurisdiction-exclusions-selected-item-delete-icon"
-                  @click="removeJurisdiction(remainingJurisdiction)"
-                />
-              </div>
-            </BaseTooltip>
-          </CategoryChip>
-        </div>
-        <span
-          v-else
-          class="happ-selection-section__jurisdiction-exclusions-selected"
-        >
-          None
-        </span>
-        <PencilIcon
-          v-if="!isEditing"
-          class="happ-selection-section__jurisdiction-exclusions-edit-icon"
-          @click="edit"
-        />
-
-        <div
-          v-if="isEditing"
-          class="happ-selection-section__jurisdiction-exclusions-edit"
-        >
-          <FilledCheckIcon
-            class="happ-selection-section__jurisdiction-exclusions-edit-button"
-            data-testid="save-button"
-            @click="save"
-          />
-
-          <CircledExIcon
-            class="happ-selection-section__jurisdiction-exclusions-edit-button"
-            data-testid="cancel-button"
-            @click="cancel"
-          />
-
-          <BaseCombobox
-            :options="mappedCountries"
-            :selected="selectedJurisdictions"
-            class="happ-selection-section__jurisdiction-exclusions-combobox"
-            @update:selected="updateJurisdictions"
-          />
-        </div>
-      </div>
+      <JurisdictionExclusionSelect />
 
       <div class="happ-selection-section__category-tags">
         <span class="happ-selection-section__selection-label happ-selection-section__selection-label--main">
