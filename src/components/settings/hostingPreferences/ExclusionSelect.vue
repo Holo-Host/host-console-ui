@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/20/solid'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CircleSpinner from '../../../../ui-common-library/src/components/CircleSpinner.vue'
 import BaseCombobox from '@/components/BaseCombobox.vue'
@@ -89,6 +89,15 @@ function cancel(): void {
   isEditing.value = false
   selectedOptions.value = [...previouslySelected.value]
 }
+
+watch(
+  () => props.isSaving,
+  () => {
+    if (!props.isSaving) {
+      isEditing.value = false
+    }
+  }
+)
 </script>
 
 <template>
@@ -182,6 +191,7 @@ function cancel(): void {
     </div>
 
     <CircleSpinner
+      v-if="props.isSaving"
       :scale="0.5"
       class="exclusion-select__exclusions-edit-spinner"
     />
@@ -264,6 +274,8 @@ function cancel(): void {
       }
 
       &-spinner {
+        width: 24px;
+        margin-left: 8px;
       }
 
       &--disabled {
