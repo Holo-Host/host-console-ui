@@ -15,8 +15,8 @@ interface HposInterface {
   getUsage: () => Promise<UsageResponse | { error: unknown }>
   getHostedHApps: () => Promise<HApp[] | { error: unknown }>
   getHAppDetails: (id: string) => Promise<HAppDetails | { error: unknown }>
-  startHostingHApp: (id: string) => Promise<void | { error: unknown }>
-  stopHostingHApp: (id: string) => Promise<void | { error: unknown }>
+  startHostingHApp: (id: string, hpId: string) => Promise<void | { error: unknown }>
+  stopHostingHApp: (id: string, hpId: string) => Promise<void | { error: unknown }>
   setDefaultHAppPreferences: (preferences: DefaultPreferencesPayload) => Promise<boolean>
   updateHAppHostingPlan: (payload: UpdateHAppHostingPlanPayload) => Promise<boolean>
   getHostEarnings: () => Promise<HostEarnings | { error: unknown }>
@@ -476,13 +476,14 @@ export function useHposInterface(): HposInterface {
   }
 
   async function startHostingHApp(
-    id: string
+    id: string,
+    hpId: string
   ): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       const result = await hposHolochainCall({
         method: 'post',
         pathPrefix: '/api/v2',
-        path: `/hosted_happs/${id}/enable`
+        path: `/hosted_happs/${id}/${hpId}enable`
       })
 
       return result
@@ -493,13 +494,14 @@ export function useHposInterface(): HposInterface {
   }
 
   async function stopHostingHApp(
-    id: string
+    id: string,
+    hpId: string
   ): Promise<HposHolochainCallResponse | { error: unknown }> {
     try {
       const result = await hposHolochainCall({
         method: 'post',
         pathPrefix: '/api/v2',
-        path: `/hosted_happs/${id}/disable`
+        path: `/hosted_happs/${id}/${hpId}enable`
       })
 
       return result

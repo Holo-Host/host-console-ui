@@ -3,15 +3,16 @@ import { ExclamationCircleIcon, CheckCircleIcon } from '@heroicons/vue/24/outlin
 import BaseButton from '@uicommon/components/BaseButton'
 import BaseModal from '@uicommon/components/BaseModal'
 import { useModals } from '@uicommon/composables/useModals'
-import { EButtonType } from '@uicommon/types/ui'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EModal } from '@/constants/ui'
+import { useUserStore } from '@/store/user'
 import { HAppDetails, useHposInterface } from '@/interfaces/HposInterface'
 import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { t } = useI18n()
 const { stopHostingHApp, startHostingHApp } = useHposInterface()
+const userStore = useUserStore()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
@@ -31,9 +32,9 @@ async function confirm(): Promise<void> {
   let result = null
 
   if (props.hApp.enabled) {
-    result = await stopHostingHApp(props.hApp.id)
+    result = await stopHostingHApp(props.hApp.id, userStore.holoportId)
   } else {
-    result = await startHostingHApp(props.hApp.id)
+    result = await startHostingHApp(props.hApp.id, userStore.holoportId)
   }
 
   // If failed

@@ -64,7 +64,7 @@ onMounted(async () => {
   // we need to fetch user data again.
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   await nextTick(async (): Promise<void> => {
-    if (!userStore.publicKey) {
+    if (!(userStore.publicKey && userStore.holoportId)) {
       isLoading.value = true
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call

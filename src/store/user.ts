@@ -13,6 +13,7 @@ const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName, g
   useHposInterface()
 
 interface State {
+  holoportId: string | undefined,
   publicKey: string | undefined
   email: string
   networkFlavour: string
@@ -26,6 +27,7 @@ interface State {
 
 export const useUserStore = defineStore('user', {
   state: (): State => ({
+    holoportId: undefined,
     publicKey: undefined,
     email: '',
     networkFlavour: '',
@@ -67,6 +69,9 @@ export const useUserStore = defineStore('user', {
       if (coreAppVersion) {
         this.coreAppVersion = coreAppVersion
       }
+
+      const hostUrl = window.location.host;
+      this.holoportId = hostUrl.split(".")[0]
     },
 
     async updateHoloFuelProfile({
