@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ExclusionSelect from '@/components/settings/hostingPreferences/BaseCombobox.vue'
-import { countries } from '@/constants/countries'
+import { categories } from '@/constants/categories'
+
+const props = withDefaults(
+  defineProps<{
+    label?: string
+  }>(),
+  {
+    label: ''
+  }
+)
 
 const isSaving = ref(false)
 
@@ -18,8 +27,8 @@ function save(): void {
 
 <template>
   <ExclusionSelect
-    label="hosting_preferences.happ_selection.jurisdiction_exclusions"
-    :options="countries"
+    :label="props.label"
+    :options="categories"
     :is-saving="isSaving"
     @save="save"
   />

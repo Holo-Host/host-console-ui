@@ -21,14 +21,16 @@ interface Option {
 
 const props = withDefaults(
   defineProps<{
-    options: string[]
-    isLoading: boolean
-    isSaving: boolean
+    options?: string[]
+    isLoading?: boolean
+    isSaving?: boolean
+    label?: string
   }>(),
   {
     options: () => [],
     isLoading: false,
-    isSaving: false
+    isSaving: false,
+    label: ''
   }
 )
 
@@ -37,9 +39,9 @@ const isEditing = ref(false)
 const initiallySelected: string[] = []
 const previouslySelected = ref<Option[]>([])
 
-const mappedValues: Option[] = props.options.map((country, index) => ({
+const mappedValues: Option[] = props.options.map((label, index) => ({
   id: index + 1,
-  label: country
+  label
 }))
 
 const selectedOptions = ref<Option[]>(
@@ -47,6 +49,7 @@ const selectedOptions = ref<Option[]>(
 )
 
 const visibleOptions = computed(() => {
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   return [...selectedOptions.value].splice(0, 2)
 })
 
@@ -103,7 +106,7 @@ watch(
 <template>
   <div class="exclusion-select__exclusions">
     <span class="exclusion-select__selection-label">
-      {{ t('hosting_preferences.happ_selection.jurisdiction_exclusions') }}
+      {{ t(label) }}
     </span>
 
     <div

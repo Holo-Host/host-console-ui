@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SettingsSection from '../SettingsSection.vue'
 import PencilIcon from '@/components/icons/PencilIcon.vue'
+import CategoryExclusionSelect from '@/components/settings/hostingPreferences/CategoryExclusionSelect.vue'
 import JurisdictionExclusionSelect from '@/components/settings/hostingPreferences/JurisdictionExclusionSelect.vue'
 </script>
 
@@ -16,27 +17,15 @@ import JurisdictionExclusionSelect from '@/components/settings/hostingPreference
         <span class="happ-selection-section__selection-label happ-selection-section__selection-label--main">
           {{ $t('hosting_preferences.happ_selection.category_tags') }}
         </span>
-        <div class="happ-selection-section__category-tags-item selection-child-row">
-          <span class="happ-selection-section__selection-label happ-selection-section__selection-label--child">
-            {{ $t('hosting_preferences.happ_selection.exclude') }}
-          </span>
-          <span
-            class="happ-selection-section__category-tags-selected"
-          >
-            None
-          </span>
-          <PencilIcon />
+        <div class="happ-selection-section__category-tags-item happ-selection-section__category-tags-item-exclude">
+          <CategoryExclusionSelect
+            label="hosting_preferences.happ_selection.exclude"
+          />
         </div>
-        <div class="happ-selection-section__category-tags-item selection-child-row">
-          <span class="happ-selection-section__selection-label happ-selection-section__selection-label--child happ-selection-section__selection-label--include">
-            {{ $t('hosting_preferences.happ_selection.include') }}
-          </span>
-          <span
-            class="happ-selection-section__category-tags-selected"
-          >
-            None
-          </span>
-          <PencilIcon />
+        <div class="happ-selection-section__category-tags-item happ-selection-section__category-tags-item-include">
+          <CategoryExclusionSelect
+            label="hosting_preferences.happ_selection.include"
+          />
         </div>
       </div>
     </div>
@@ -64,6 +53,14 @@ import JurisdictionExclusionSelect from '@/components/settings/hostingPreference
     padding-left: 40px;
     display: flex;
     align-items: center;
+
+    &-exclude {
+      margin-left: 51px;
+    }
+
+    &-include {
+      margin-left: 54px;
+    }
   }
 }
 </style>
