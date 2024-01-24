@@ -1,3 +1,7 @@
 @import '../../../ui-common-library/artifacts/styles/common.css';
 @import 'styles.css';
 @import 'variables.css';
+
+.base-combobox__options {
+  z-index: 1;
+}
