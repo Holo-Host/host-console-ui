@@ -251,6 +251,8 @@ async function setDefaultHostPreferences(): Promise<void> {
   try {
     preferencesStore.updatePrice('cpu', prices.value.cpu ?? 0)
     preferencesStore.updatePrice('bandwidth', prices.value.dataTransfer ?? 0)
+    preferencesStore.updateInvoiceFrequency(7, 1);
+    preferencesStore.updateInvoiceDue(7);
     await preferencesStore.setDefaultPreferences()
   } catch (e) {
     isError.value = true
