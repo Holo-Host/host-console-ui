@@ -34,6 +34,7 @@ export default {
       'Please do not refresh this page. Download will begin shortly, we are preparing your files.'
   },
   earnings: {
+    earnings_in_the_past: 'Earnings in the past {numberOfDays} days are {trendDirection}',
     exceptions: 'Exceptions',
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
@@ -44,6 +45,7 @@ export default {
     redeem_holofuel: 'Redeem HoloFuel',
     redemption_history: 'Redemption History',
     title: 'Earnings',
+    totalling: 'Totalling {amount} HF',
     transfer_holofuel: 'Transfer HoloFuel',
     unpaid_and_late: 'Unpaid & Late Invoices',
     unpaid_invoices: 'Unpaid Invoices',
@@ -154,7 +156,7 @@ export default {
       note: {
         part_one: '*Apps will be paused from hosting if payment is not received',
         part_two: 'after invoice date'
-      },
+      }
     },
     prices: {
       header: 'Price Configuration',

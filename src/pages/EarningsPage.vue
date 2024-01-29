@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed, onMounted, ref } from 'vue'
+import EarningsCard from '@/components/earnings/EarningsCard.vue'
 import RedeemableHoloFuelCard from '@/components/earnings/RedeemableHoloFuelCard.vue'
-import WeeklyEarningsCard from '@/components/earnings/WeeklyEarningsCard.vue'
 import PrimaryLayout from '@/components/PrimaryLayout.vue'
 import { useDashboardStore } from '@/store/dashboard'
 import { useUserStore } from '@/store/user'
 import { isError as isErrorPredicate } from '@/types/predicates'
+import type { EarningsData } from '@/types/types'
 
 const dashboardStore = useDashboardStore()
 const userStore = useUserStore()
@@ -20,8 +20,21 @@ const rawWeeklyEarnings = computed((): string | number =>
     : 0
 )
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-const weeklyEarnings = computed((): number => formatCurrency(Number(rawWeeklyEarnings.value)) || 0)
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+const earnings: EarningsData = {
+  current: 1234,
+  previous: 1000,
+  daily: [
+    { date: '2023-01-01', paid: 100, unpaid: 20 },
+    { date: '2023-01-02', paid: 100, unpaid: 20 },
+    { date: '2023-01-03', paid: 100, unpaid: 20 },
+    { date: '2023-01-04', paid: 100, unpaid: 20 },
+    { date: '2023-01-05', paid: 100, unpaid: 20 },
+    { date: '2023-01-06', paid: 100, unpaid: 20 },
+    { date: '2023-01-07', paid: 100, unpaid: 20 }
+  ]
+}
+/* eslint-enable @typescript-eslint/no-magic-numbers */
 
 const redeemableHoloFuel = computed((): number =>
   !isErrorPredicate(dashboardStore.hostEarnings)
@@ -50,8 +63,8 @@ onMounted(async (): Promise<void> => {
     data-test-earnings-layout
   >
     <div>
-      <WeeklyEarningsCard
-        :data="weeklyEarnings"
+      <EarningsCard
+        :data="earnings"
         :is-loading="isLoading"
         :is-error="isError"
         data-test-earnings-weekly-earnings-card
