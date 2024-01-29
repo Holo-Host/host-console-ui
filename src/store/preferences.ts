@@ -104,7 +104,7 @@ export const usePreferencesStore = defineStore('preferences', {
       this.invoicesSettings = {
         frequency: {
           amount: Number(invoiceHolofuelThreshold) || 0,
-          period: Number(invoiceDurationThreshold.secs / 24 / 60 / 60) || 7
+          period: Number(invoiceDurationThreshold.secs) / 24 / 60 / 60 || 7
         },
         due: {
           period: Number(invoiceDueDays) || 7
