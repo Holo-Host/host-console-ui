@@ -199,27 +199,4 @@ onMounted(async () => {
   top: 4px;
   right: 0;
 }
-
-//.apexcharts-tooltip.apexcharts-theme-light {
-//  border: 1px solid #00cbd9;
-//  background: var(--primary-lighter-color);
-//  color: var(--grey-dark-color);
-//
-//  .apexcharts-tooltip-title {
-//    font-size: 12px;
-//    font-weight: 400;
-//    color: white;
-//    background: #00cbd9;
-//  }
-//}
-//
-//.apexcharts-legend {
-//  right: 16px !important;
-//}
-//
-//.apexcharts-menu-icon {
-//  position: absolute;
-//  top: 4px;
-//  right: 0;
-//}
 </style>
