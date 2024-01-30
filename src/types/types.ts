@@ -97,11 +97,23 @@ export interface UpdateHAppPlanProps {
   value: EHostingPlan
 }
 
-export type InvoiceFrequency = {
-  period: number;
-  amount: number;
+export interface InvoiceFrequency {
+  period: number
+  amount: number
 }
 
-export type InvoiceDue = {
-  period: number;
-};
+export interface InvoiceDue {
+  period: number
+}
+
+export interface DailyEarningsData {
+  date: string
+  paid: number
+  unpaid: number
+}
+
+export interface EarningsData {
+  current: number
+  previous: number
+  daily: DailyEarningsData[]
+}
