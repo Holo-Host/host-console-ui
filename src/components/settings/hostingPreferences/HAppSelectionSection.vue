@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SettingsSection from '../SettingsSection.vue'
-import PencilIcon from '@/components/icons/PencilIcon.vue'
 import CategoryExclusionSelect from '@/components/settings/hostingPreferences/CategoryExclusionSelect.vue'
 import JurisdictionExclusionSelect from '@/components/settings/hostingPreferences/JurisdictionExclusionSelect.vue'
 </script>
@@ -35,6 +34,8 @@ import JurisdictionExclusionSelect from '@/components/settings/hostingPreference
 <style lang="scss" scoped>
 .card-content {
   padding: 0 0 35px 0;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .happ-selection-section {
