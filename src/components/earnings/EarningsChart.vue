@@ -1,23 +1,25 @@
 <script lang="ts" setup>
 import { formatCurrency } from '@uicommon/utils/numbers'
 import ApexCharts from 'apexcharts'
+import dayjs from 'dayjs'
 import { computed, onMounted, ref, watch } from 'vue'
+import type { DailyEarningsData } from '@/types/types'
 
 const chart = ref<ApexCharts | null>(null)
 
 const props = defineProps<{
-  data: unknown
+  data: DailyEarningsData[]
 }>()
 
 const options = computed(() => ({
   series: [
     {
       name: 'Paid',
-      data: [40000, 55000, 41000, 67000, 22000, 43000, 12000]
+      data: props.data.map((item) => item.paid)
     },
     {
       name: 'Unpaid',
-      data: [13000, 23000, 20000, 8000, 13000, 27000, 0]
+      data: props.data.map((item) => item.unpaid)
     }
   ],
   colors: ['#00cbd9', '#c6f1f4'],
@@ -37,7 +39,7 @@ const options = computed(() => ({
     }
   },
   xaxis: {
-    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    categories: props.data.map((item) => dayjs(item.date).format('ddd')),
     axisBorder: {
       show: true,
       color: 'black',

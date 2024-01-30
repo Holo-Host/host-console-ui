@@ -4,7 +4,7 @@ import { formatCurrency } from '@uicommon/utils/numbers'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EarningsChart from '@/components/earnings/EarningsChart.vue'
-import TmpGraphIcon from '@/components/icons/TmpGraphIcon.vue'
+import TrendChip from '@/components/TrendChip.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 import type { EarningsData } from '@/types/types'
 
@@ -14,6 +14,13 @@ const props = defineProps<{
 
 const { goToHoloFuel } = useGoToHoloFuel()
 const { t } = useI18n()
+
+const trendValue = computed(() => {
+  const currentEarnings = Number(props.earnings.current)
+  const previousEarnings = Number(props.earnings.previous)
+
+  return ((currentEarnings - previousEarnings) / previousEarnings) * 100
+})
 
 const trendDirection = computed(() => {
   const currentEarnings = Number(props.earnings.current)
@@ -32,6 +39,7 @@ const trendDirection = computed(() => {
         </span>
         <span class="weekly-earnings-data__header-label-bottom">
           {{ t('earnings.totalling', { amount: formatCurrency(props.earnings.current, 0) }) }}
+          <TrendChip :value="trendValue" />
         </span>
       </div>
 
@@ -44,6 +52,7 @@ const trendDirection = computed(() => {
     </div>
 
     <EarningsChart
+      :data="props.earnings.daily"
       class="weekly-earnings-data__graph"
     />
   </div>
@@ -51,6 +60,7 @@ const trendDirection = computed(() => {
 
 <style lang="scss" scoped>
 .weekly-earnings-data {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-top: 10px;
@@ -71,6 +81,8 @@ const trendDirection = computed(() => {
       }
 
       &-bottom {
+        display: flex;
+        position: relative;
         margin-top: 4px;
         font-size: 16px;
         font-weight: 800;
@@ -83,6 +95,8 @@ const trendDirection = computed(() => {
   }
 
   &__holofuel-button {
+    position: absolute;
+    right: 40px;
     height: 40px;
     margin-left: 8px;
     margin-top: -8px;
@@ -100,15 +114,17 @@ const trendDirection = computed(() => {
   .weekly-earnings-data {
     padding: 0;
 
+    &__header {
+      flex-direction: column;
+    }
+
     &__holofuel-button {
+      position: relative;
+      right: 0;
       margin-left: 0;
       margin-top: 40px;
       height: 50px;
       transform: scale(1);
-    }
-
-    &__graph {
-      display: none;
     }
   }
 }

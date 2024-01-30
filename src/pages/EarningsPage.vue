@@ -22,16 +22,16 @@ const rawWeeklyEarnings = computed((): string | number =>
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 const earnings: EarningsData = {
-  current: 1234,
-  previous: 1000,
+  current: 170000,
+  previous: 133000,
   daily: [
-    { date: '2023-01-01', paid: 100, unpaid: 20 },
-    { date: '2023-01-02', paid: 100, unpaid: 20 },
-    { date: '2023-01-03', paid: 100, unpaid: 20 },
-    { date: '2023-01-04', paid: 100, unpaid: 20 },
-    { date: '2023-01-05', paid: 100, unpaid: 20 },
-    { date: '2023-01-06', paid: 100, unpaid: 20 },
-    { date: '2023-01-07', paid: 100, unpaid: 20 }
+    { date: '2023-01-01', paid: 10000, unpaid: 9000 },
+    { date: '2023-01-02', paid: 10000, unpaid: 3000 },
+    { date: '2023-01-03', paid: 30000, unpaid: 10000 },
+    { date: '2023-01-04', paid: 40000, unpaid: 4000 },
+    { date: '2023-01-05', paid: 50000, unpaid: 5000 },
+    { date: '2023-01-06', paid: 20000, unpaid: 2000 },
+    { date: '2023-01-07', paid: 10000, unpaid: 7000 }
   ]
 }
 /* eslint-enable @typescript-eslint/no-magic-numbers */
