@@ -39,7 +39,7 @@ const trendDirection = computed(() => {
         </span>
         <span class="weekly-earnings-data__header-label-bottom">
           {{ t('earnings.totalling', { amount: formatCurrency(props.earnings.current, 0) }) }}
-          <TrendChip :value="trendValue" />
+          <TrendChip :value="trendValue || 0" />
         </span>
       </div>
 
@@ -73,6 +73,8 @@ const trendDirection = computed(() => {
     &-label {
       display: flex;
       flex-direction: column;
+      opacity: 0.25;
+      pointer-events: none;
 
       &-top {
         font-size: 12px;
@@ -92,6 +94,8 @@ const trendDirection = computed(() => {
 
   &__graph {
     margin-top: 10px;
+    opacity: 0.25;
+    pointer-events: none;
   }
 
   &__holofuel-button {
