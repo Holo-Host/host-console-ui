@@ -8,13 +8,12 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EModal } from '@/constants/ui'
 import { HAppDetails, useHposInterface } from '@/interfaces/HposInterface'
-import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { t } = useI18n()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
-const { updateHAppHostingPlan, getHostPreferences } = useHposInterface()
+const { updateHAppHostingPlan } = useHposInterface()
 
 const props = defineProps<{
   hApp: HAppDetails

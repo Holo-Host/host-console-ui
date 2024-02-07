@@ -568,14 +568,19 @@ export function useHposInterface(): HposInterface {
     try {
       const params =
         value === EHostingPlan.paid
-          ? {
+          ? // When the hosting plan is set to paid, we need to remove the prices values
+        // so the default values are used, that is why we are not sending the prices,
+        // we use use_default_happ_preferences instead of set_happ_preferences
+          {
               appId: localStorage.getItem(kCoreAppVersionLSKey),
               roleId: 'core-app',
               zomeName: 'hha',
               fnName: 'use_default_happ_preferences',
               payload: id
             }
-          : {
+          : // When the hosting plan is set to free, we need to set the prices values to 0,
+        // that will override the default values
+          {
             appId: localStorage.getItem(kCoreAppVersionLSKey),
             roleId: 'core-app',
             zomeName: 'hha',
