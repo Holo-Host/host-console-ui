@@ -8,7 +8,6 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EModal } from '@/constants/ui'
 import { HAppDetails, useHposInterface } from '@/interfaces/HposInterface'
-import { isError as isErrorPredicate } from '@/types/predicates'
 
 const { t } = useI18n()
 
@@ -51,7 +50,10 @@ async function confirm(): Promise<void> {
   let result = null
 
   if (props.planValue === 'paid') {
-    result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'paid' })
+    result = await updateHAppHostingPlan({
+      id: props.hApp.id,
+      value: 'paid'
+    })
 
     if (result) {
       emit('update:hosting-plan', 'paid')
