@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { decode } from "@msgpack/msgpack"
+import { decode } from '@msgpack/msgpack'
 import axios from 'axios'
 import { decodeAgentId } from '../../ui-common-library/src/utils/agent'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
@@ -363,8 +363,7 @@ export function useHposInterface(): HposInterface {
       return response.data
 
     case 'post':
-        response = await axios
-          .post(fullUrl, params, { responseType, headers })
+        response = await axios.post(fullUrl, params, { responseType, headers })
       return response.data
 
     case 'put':
@@ -580,7 +579,8 @@ export function useHposInterface(): HposInterface {
                 price_compute: prices?.cpu.toString() ?? '0',
                 price_storage: prices?.storage?.toString() ?? '0',
                 price_bandwidth: prices?.bandwidth.toString() ?? '0',
-                max_time_before_invoice: { secs: 15000, nanos: 0 }
+                max_time_before_invoice: { secs: 15000, nanos: 0 },
+                invoice_due_in_days: 7
               }
             }
           : {
@@ -594,7 +594,8 @@ export function useHposInterface(): HposInterface {
               price_compute: '0',
               price_storage: '0',
               price_bandwidth: '0',
-              max_time_before_invoice: { secs: 0, nanos: 0 }
+              max_time_before_invoice: { secs: 15000, nanos: 0 },
+              invoice_due_in_days: 7
             }
           }
 
@@ -937,9 +938,7 @@ export function useHposInterface(): HposInterface {
           params: initiateRedemptionParams
         })
 
-        const transaction: RedemptionTransaction = decode(
-          response
-        ) as RedemptionTransaction
+        const transaction: RedemptionTransaction = decode(response) as RedemptionTransaction
 
         return transaction
       }

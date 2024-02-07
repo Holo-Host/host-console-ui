@@ -14,7 +14,7 @@ const { t } = useI18n()
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
-const { updateHAppHostingPlan } = useHposInterface()
+const { updateHAppHostingPlan, getHostPreferences } = useHposInterface()
 
 const props = defineProps<{
   hApp: HAppDetails
@@ -51,7 +51,25 @@ async function confirm(): Promise<void> {
   let result = null
 
   if (props.planValue === 'paid') {
-    result = await updateHAppHostingPlan({ id: props.hApp.id, value: 'paid' })
+    // If the user is trying to switch to paid plan, we need to get the default prices
+    // to set them as the new hosting plan prices
+    const defaultPrices = await getHostPreferences()
+
+    if (isErrorPredicate(defaultPrices)) {
+      isError.value = true
+      isBusy.value = false
+      return
+    }
+
+    result = await updateHAppHostingPlan({
+      id: props.hApp.id,
+      value: 'paid',
+      prices: {
+        cpu: Number(defaultPrices.price_compute),
+        storage: Number(defaultPrices.price_storage),
+        bandwidth: Number(defaultPrices.price_bandwidth)
+      }
+    })
 
     if (result) {
       emit('update:hosting-plan', 'paid')
