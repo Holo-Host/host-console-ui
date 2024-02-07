@@ -572,16 +572,8 @@ export function useHposInterface(): HposInterface {
               appId: localStorage.getItem(kCoreAppVersionLSKey),
               roleId: 'core-app',
               zomeName: 'hha',
-              fnName: 'set_happ_preferences',
-              payload: {
-                happ_id: id,
-                max_fuel_before_invoice: '1000',
-                price_compute: prices?.cpu.toString() ?? '0',
-                price_storage: prices?.storage?.toString() ?? '0',
-                price_bandwidth: prices?.bandwidth.toString() ?? '0',
-                max_time_before_invoice: { secs: 15000, nanos: 0 },
-                invoice_due_in_days: 7
-              }
+              fnName: 'use_default_happ_preferences',
+              payload: id
             }
           : {
             appId: localStorage.getItem(kCoreAppVersionLSKey),

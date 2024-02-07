@@ -51,24 +51,9 @@ async function confirm(): Promise<void> {
   let result = null
 
   if (props.planValue === 'paid') {
-    // If the user is trying to switch to paid plan, we need to get the default prices
-    // to set them as the new hosting plan prices
-    const defaultPrices = await getHostPreferences()
-
-    if (isErrorPredicate(defaultPrices)) {
-      isError.value = true
-      isBusy.value = false
-      return
-    }
-
     result = await updateHAppHostingPlan({
       id: props.hApp.id,
-      value: 'paid',
-      prices: {
-        cpu: Number(defaultPrices.price_compute),
-        storage: Number(defaultPrices.price_storage),
-        bandwidth: Number(defaultPrices.price_bandwidth)
-      }
+      value: 'paid'
     })
 
     if (result) {
