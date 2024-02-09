@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { ClipboardDocumentIcon } from '@heroicons/vue/24/outline'
 import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
 import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
 import Identicon from '@uicommon/components/Identicon.vue'
 import { decodeAgentId } from '@uicommon/utils/agent'
+import { copyToClipboard } from '@uicommon/utils/clipboardUtils'
 import PaidInvoicesExpandableContent from '@/components/invoices/PaidInvoicesExpandableContent.vue'
 import type { Transaction } from '@/interfaces/HposInterface'
 
@@ -55,7 +57,12 @@ const props = withDefaults(
 
     <BaseTableRowItem
       :value="props.invoice.formattedId"
-    />
+    >
+      <ClipboardDocumentIcon
+        class="earnings-history-table-row__transaction-link-icon"
+        @click="copyToClipboard(props.invoice.id)"
+      />
+    </BaseTableRowItem>
 
     <BaseTableRowItem
       :value="props.invoice.formattedAmount"
@@ -76,3 +83,14 @@ const props = withDefaults(
     </template>
   </BaseTableRow>
 </template>
+
+<style lang="scss" scoped>
+.earnings-history-table-row {
+  &__transaction-link-icon {
+    width: 17px;
+    margin-left: 4px;
+    color: var(--grey-dark-color);
+    cursor: pointer;
+  }
+}
+</style>

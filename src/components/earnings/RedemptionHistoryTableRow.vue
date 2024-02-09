@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/20/solid'
+import { ClipboardDocumentIcon } from '@heroicons/vue/24/outline'
 import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
 import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
+import { copyToClipboard } from '@uicommon/utils/clipboardUtils'
 import { ref } from 'vue'
 import type { Redemption } from '@/interfaces/HposInterface'
 
@@ -102,15 +103,27 @@ function showTransactionPrice(state: boolean): void {
       is-bold
       :is-italic="props.redemption.status === 'pending'"
     >
-      <a
-        v-if="props.redemption.transactionId"
-        :href="`https://goerli.etherscan.io/tx/${props.redemption.transactionId}`"
-        target="_blank"
-        class="redemption-history-table-row__transaction-link"
-      >
-        <ArrowTopRightOnSquareIcon class="redemption-history-table-row__transaction-link-icon" />
-      </a>
+      <ClipboardDocumentIcon
+        class="redemption-history-table-row__transaction-link-icon"
+        @click="copyToClipboard(props.redemption.transactionId)"
+      />
     </BaseTableRowItem>
+
+    <!--		<BaseTableRowItem-->
+    <!--      :value="props.redemption.formattedTransactionId"-->
+    <!--      is-visible-on-mobile-->
+    <!--      is-bold-->
+    <!--      :is-italic="props.redemption.status === 'pending'"-->
+    <!--    >-->
+    <!--      <a-->
+    <!--        v-if="props.redemption.transactionId"-->
+    <!--        :href="`https://goerli.etherscan.io/tx/${props.redemption.transactionId}`"-->
+    <!--        target="_blank"-->
+    <!--        class="redemption-history-table-row__transaction-link"-->
+    <!--      >-->
+    <!--        <ArrowTopRightOnSquareIcon class="redemption-history-table-row__transaction-link-icon" />-->
+    <!--      </a>-->
+    <!--    </BaseTableRowItem>-->
 
     <BaseTableRowItem
       :value="props.redemption.status"
@@ -133,9 +146,9 @@ function showTransactionPrice(state: boolean): void {
 
   &__transaction-link-icon {
     width: 17px;
-    margin-top: 2px;
     margin-left: 4px;
     color: var(--grey-dark-color);
+    cursor: pointer;
   }
 
   &__info {
