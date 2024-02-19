@@ -47,6 +47,11 @@ const redemptions = computed(() => {
           ? `...${redemption.transactionId.substring(
               redemption.transactionId.length - kVisibleHashLength
             )}`
+          : '---',
+      formattedTransactionEthHash: redemption.transactionEthHash
+          ? `...${redemption.transactionEthHash.substring(
+              redemption.transactionEthHash.length - kVisibleHashLength
+            )}`
           : '---'
       }))
     : []
@@ -104,6 +109,16 @@ const headersMap = computed(
         {
           key: 'transactionId',
           label: t('redemption.history.headers.transaction_id'),
+          isVisibleOnMobile: true,
+          isSortable: true,
+          type: 'string'
+        }
+      ],
+      [
+        'transactionEthHash',
+        {
+          key: 'transactionEthHash',
+          label: t('redemption.history.headers.transaction_eth_hash'),
           isVisibleOnMobile: true,
           isSortable: true,
           type: 'string'
