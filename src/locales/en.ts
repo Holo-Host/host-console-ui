@@ -222,7 +222,7 @@ export default {
       created: 'Date Created',
       due: 'Date Due',
       happ: 'hApp',
-      invoice: 'Transaction Hash',
+      invoice: 'HF Transaction ID',
       payment_status: 'Payment Status',
       publisher: 'hApp Manager'
     },

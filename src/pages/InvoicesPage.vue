@@ -6,7 +6,7 @@ import CircleSpinner from '@uicommon/components/CircleSpinner.vue'
 import { useFilter } from '@uicommon/composables/useFilter'
 import { useModals } from '@uicommon/composables/useModals'
 import { ESpinnerSize } from '@uicommon/types/ui'
-import { encodeAgentId, decodeAgentId } from '@uicommon/utils/agent'
+import { encodeAgentId } from '@uicommon/utils/agent'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import dayjs from 'dayjs'
 import { unparse } from 'papaparse'
@@ -130,21 +130,21 @@ const invoices = computed(() => {
 
   return Array.isArray(rawInvoices)
     ? rawInvoices.map((invoice) => ({
-        ...invoice,
-        formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
-        happ: invoice.happ.name,
-        formattedExpirationDate: dayjs(new Date(invoice.expirationDate / kMsInSecond)).format(
-          kDefaultDateFormat
-        ),
-        amount: Number(invoice.amount),
-        formattedCompletedDate: dayjs(invoice.completedDate / kMsInSecond).format(
-          kDefaultDateFormat
-        ),
-        formattedCreatedDate: dayjs(invoice.createdDate / kMsInSecond).format(kDefaultDateFormat),
-        formattedAmount:
+      ...invoice,
+      formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
+      happ: invoice.happ.name,
+      formattedExpirationDate: invoice.expirationDate
+          ? dayjs(new Date(invoice.expirationDate / kMsInSecond)).format(kDefaultDateFormat)
+        : '-',
+      amount: Number(invoice.amount),
+      formattedCompletedDate: dayjs(invoice.completedDate / kMsInSecond).format(
+        kDefaultDateFormat
+      ),
+      formattedCreatedDate: dayjs(invoice.createdDate / kMsInSecond).format(kDefaultDateFormat),
+      formattedAmount:
           invoice.amount && Number(invoice.amount) ? formatCurrency(Number(invoice.amount)) : 0,
-        status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
-      }))
+      status: t(isPaidInvoices.value ? 'invoices.status.paid' : 'invoices.status.unpaid')
+    }))
     : []
 })
 
