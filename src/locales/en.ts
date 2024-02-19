@@ -253,6 +253,7 @@ export default {
         hf_amount: 'HF Amount',
         redemption_amount: 'Redemption Amount',
         transaction_id: 'HF Transaction ID',
+        transaction_eth_hash: 'ETH Transaction Hash',
         status: 'Status'
       },
       original_requested_amount: 'Original Requested Amount: {amount}'

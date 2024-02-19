@@ -7,6 +7,7 @@ export function parseRedemption(redemption): Redemption {
     completedAmount: Number(redemption.amount),
     redemptionAmount: Number(redemption.amount),
     transactionId: redemption.id,
+    transactionEthHash: redemption.ethereumTransactionHash,
     status: redemption.status,
     isPartial: false
   }

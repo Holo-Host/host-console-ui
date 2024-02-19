@@ -254,6 +254,7 @@ export interface Redemption {
   completedAmount: string
   redemptionAmount: string
   transactionId: string
+  transactionEthHash: string
   status: string
   isPartial: boolean
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ClipboardDocumentIcon } from '@heroicons/vue/24/outline'
+import { ClipboardDocumentIcon, ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/outline'
 import BaseTableRow from '@uicommon/components/BaseTableRow.vue'
 import BaseTableRowItem from '@uicommon/components/BaseTableRowItem.vue'
 import { copyToClipboard } from '@uicommon/utils/clipboardUtils'
@@ -12,6 +12,7 @@ interface ExtendedRedemption extends Redemption {
   formattedRequestedAmount: string
   formattedRedemptionAmount: string
   formattedTransactionId: string
+  formattedEthTransactionId: string
 }
 
 const props = defineProps<{
@@ -109,21 +110,23 @@ function showTransactionPrice(state: boolean): void {
       />
     </BaseTableRowItem>
 
-    <!--		<BaseTableRowItem-->
-    <!--      :value="props.redemption.formattedTransactionId"-->
-    <!--      is-visible-on-mobile-->
-    <!--      is-bold-->
-    <!--      :is-italic="props.redemption.status === 'pending'"-->
-    <!--    >-->
-    <!--      <a-->
-    <!--        v-if="props.redemption.transactionId"-->
-    <!--        :href="`https://goerli.etherscan.io/tx/${props.redemption.transactionId}`"-->
-    <!--        target="_blank"-->
-    <!--        class="redemption-history-table-row__transaction-link"-->
-    <!--      >-->
-    <!--        <ArrowTopRightOnSquareIcon class="redemption-history-table-row__transaction-link-icon" />-->
-    <!--      </a>-->
-    <!--    </BaseTableRowItem>-->
+    <BaseTableRowItem
+      :value="props.redemption.formattedEthTransactionId"
+      is-visible-on-mobile
+      is-bold
+      :is-italic="props.redemption.status === 'pending'"
+    >
+      <a
+        v-if="props.redemption.transactionEthHash"
+        :href="`https://goerli.etherscan.io/tx/${props.redemption.transactionEthHash}`"
+        target="_blank"
+        class="redemption-history-table-row__transaction-link"
+      >
+        {{ props.redemption.formattedTransactionEthHash }}
+        <ArrowTopRightOnSquareIcon class="redemption-history-table-row__transaction-link-icon" />
+      </a>
+			<span v-else>{{ props.redemption.formattedTransactionEthHash }}</span>
+    </BaseTableRowItem>
 
     <BaseTableRowItem
       :value="props.redemption.status"
@@ -141,12 +144,17 @@ function showTransactionPrice(state: boolean): void {
   }
 
   &__transaction-link {
+    display: flex;
+    align-items: center;
     height: 22px;
+    text-decoration: none;
+    color: var(--grey-color);
   }
 
   &__transaction-link-icon {
     width: 17px;
     margin-left: 4px;
+    margin-top: -4px;
     color: var(--grey-dark-color);
     cursor: pointer;
   }
