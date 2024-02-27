@@ -1,13 +1,12 @@
 /* eslint-disable camelcase */
 import { decode } from '@msgpack/msgpack'
 import axios from 'axios'
-import { decodeAgentId } from '../../ui-common-library/src/utils/agent'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
 import { isKycLevel } from '@/types/predicates'
 import type { CheckAuthResponse, EUserKycLevel, PricesData } from '@/types/types'
-import { EHostingPlan } from '@/types/types'
+import { ECriteriaType, EHostingPlan } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
@@ -35,6 +34,10 @@ interface HposInterface {
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
   HPOS_API_URL: string
+  getHostingJurisdictions: () => Promise<HposHolochainCallResponse | { error: unknown }>
+  setHostingJurisdictions: (
+    payload: SetHostingJurisdictionsPayload
+  ) => Promise<HposHolochainCallResponse | { error: unknown }>
 }
 
 interface UpdateHAppHostingPlanPayload {
@@ -122,6 +125,18 @@ export interface HostPreferencesResponse {
   invoice_due_in_days: number
 }
 
+export interface HostingJurisdictionsResponse {
+  timestamp: number
+  criteria_type: any
+  value: string[]
+}
+
+export interface SetHostingJurisdictionsPayload {
+  holoport_id?: string
+  criteria_type: ECriteriaType
+  value: string[]
+}
+
 export interface DefaultPreferencesPayload {
   price_compute: string
   price_storage: string
@@ -147,6 +162,7 @@ type HposHolochainCallResponse =
   | EUserKycLevel
   | ServiceLogsResponse
   | ZomeCallResponse
+  | HostingJurisdictionsResponse
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -648,6 +664,83 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getHostingJurisdictions(): Promise<
+    HposHolochainCallResponse | { error: unknown }
+    > {
+    let holoportId = ''
+
+    if (window.location.host.split(':')[0] === 'localhost') {
+      const holoportUrl = `${import.meta.env.VITE_HOLOPORT_URL}` || ''
+      holoportId = holoportUrl.split('//')[1]?.split('.')[0] ?? ''
+    } else {
+      holoportId = window.location.host.split('//')[1]?.split('.')[0] ?? ''
+    }
+
+    const params = {
+      appId: localStorage.getItem(kCoreAppVersionLSKey),
+      roleId: 'core-app',
+      zomeName: 'hha',
+      fnName: 'get_hosting_jurisdictions',
+      payload: holoportId
+    }
+
+    try {
+      const hostingJurisdictions = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
+        params
+      })
+
+      return hostingJurisdictions
+    } catch (error) {
+      console.error('getHostingJurisdictions encountered an error: ', error)
+      return {
+        criteria_type: { Include: null },
+        value: ['Poland'],
+        timestamp: 0
+      }
+
+      // return false
+    }
+  }
+
+  async function setHostingJurisdictions(
+    payload: SetHostingJurisdictionsPayload
+  ): Promise<boolean> {
+    let holoportId = ''
+
+    if (window.location.host.split(':')[0] === 'localhost') {
+      const holoportUrl = `${import.meta.env.VITE_HOLOPORT_URL}` || ''
+      holoportId = holoportUrl.split('//')[1]?.split('.')[0] ?? ''
+    } else {
+      holoportId = window.location.host.split('//')[1]?.split('.')[0] ?? ''
+    }
+
+    try {
+      const params = {
+        appId: localStorage.getItem(kCoreAppVersionLSKey),
+        roleId: 'core-app',
+        zomeName: 'hha',
+        fnName: 'set_hosting_jurisdictions',
+        payload: { holoport_id: holoportId, ...payload }
+      }
+
+      await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
+        params
+      })
+
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   async function checkAuth(
     email: string,
     password: string,
@@ -698,6 +791,7 @@ export function useHposInterface(): HposInterface {
         method: 'get',
         path: '/config'
       })
+
       return {
         hostPubKey: admin.public_key,
         registrationEmail: admin.email,
@@ -970,7 +1064,9 @@ export function useHposInterface(): HposInterface {
     stopHostingHApp,
     updateHAppHostingPlan,
     getServiceLogs,
-    HPOS_API_URL
+    HPOS_API_URL,
+    getHostingJurisdictions,
+    setHostingJurisdictions
   }
 }
 /* eslint-enable camelcase */
