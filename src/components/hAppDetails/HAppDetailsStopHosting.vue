@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseButton from '@uicommon/components/BaseButton.vue'
+import BaseChip from '@uicommon/components/BaseChip.vue'
 import { EButtonType } from '@uicommon/types/ui'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -35,6 +36,7 @@ function updateHosting(isEnabled: boolean): void {
 <template>
   <div>
     <div class="happ-details__row">
+      <BaseChip v-if="!props.hApp.enabled && props.hApp.isAutoDisabled" label="Suspended" />
       <BaseButton
         :type="props.hApp.enabled ? EButtonType.tertiary : EButtonType.primary"
         :title="props.hApp.enabled ? t('happ_details.disable_hosting') : t('happ_details.enable_hosting')"

@@ -169,6 +169,8 @@ export interface HApp {
   icon?: string
   name: string
   enabled: boolean
+  isHostDisabled: boolean
+  isAutoDisabled: boolean
   isPaused: boolean
   sourceChains: number
   hostedAgents?: number
@@ -185,6 +187,8 @@ export interface HAppDetails {
   description: string
   categories: string[]
   enabled: boolean
+  isHostDisabled: boolean
+  isAutoDisabled: boolean
   isPaused: boolean
   sourceChains: number
   daysHosted: number
