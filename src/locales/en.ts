@@ -263,6 +263,7 @@ export default {
       amount_input_label: 'Redemption Amount',
       amount_input_placeholder: 'Enter HF amount',
       amount_input_error: 'Amount exceeds redeemable balance.',
+      amount_input_error_maximum_value: 'Maximum redeemable amount is 1000 HF',
       amount_input_error_minimum_value: 'Minimum redeemable amount is 10 HF',
       amount_input_tip: '*Note: HoloFuel and HOT are currently 1:1',
       confirm_and_redeem: 'Confirm & Redeem',

@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import RedeemHoloFuelFormStepOne from './RedeemHoloFuelFormStepOne.vue'
 import RedeemHoloFuelFormStepTwo from './RedeemHoloFuelFormStepTwo.vue'
+import { kMinimumRedeemableHoloFuel, kMaximumRedeemableHoloFuel } from '@/constants/ui'
 import { RedemptionTransaction, useHposInterface } from '@/interfaces/HposInterface'
 import { kRoutes } from '@/router'
 import { useDashboardStore } from '@/store/dashboard'
@@ -33,8 +34,6 @@ const step = ref(1)
 const isBusy = ref(false)
 const isStepOneValid = ref(false)
 const wasStepOneSubmitted = ref(false)
-
-const kMinimumRedeemableHoloFuel = 10
 
 const canSubmit = computed((): boolean => {
   if (step.value === 1) {
@@ -68,6 +67,10 @@ async function handleSubmit(): Promise<void> {
     wasStepOneSubmitted.value = true
 
     if (Number(amount.value) < kMinimumRedeemableHoloFuel) {
+      return
+    }
+
+    if (Number(amount.value) > kMaximumRedeemableHoloFuel) {
       return
     }
 
