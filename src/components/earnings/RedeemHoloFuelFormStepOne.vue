@@ -3,6 +3,7 @@ import BaseInput from '@uicommon/components/BaseInput.vue'
 import { EInputType } from '@uicommon/types/ui'
 import { formatCurrency } from '@uicommon/utils/numbers'
 import { ref, computed, watch } from 'vue'
+import { kMinimumRedeemableHoloFuel, kMaximumRedeemableHoloFuel } from '@/constants/ui'
 
 const props = defineProps<{
   redeemableAmount: string
@@ -13,24 +14,36 @@ const props = defineProps<{
 
 const emit = defineEmits(['update', 'update:is-valid'])
 
-const kMinimumRedeemableHoloFuel = 10
-
 const amount = ref(`${props.amount}` || '')
 const hotAddress = ref(`${props.hotAddress}` || '')
 const hotAddressValidationIsActive = ref(false)
 
+const amountIsWithinAllowedRange = computed(
+  () =>
+    Number(amount.value) >= kMinimumRedeemableHoloFuel &&
+    Number(amount.value) <= kMaximumRedeemableHoloFuel
+)
+
 const isAmountValid = computed(
   () =>
-    (!props.wasSubmitted || Number(amount.value) >= kMinimumRedeemableHoloFuel) &&
+    (!props.wasSubmitted || amountIsWithinAllowedRange.value) &&
     Number(amount.value) <= Number(props.redeemableAmount)
 )
 
 const amountErrorMessage = computed(() => {
-  if (Number(amount.value) >= Number(props.redeemableAmount)) {
+  if (Number(amount.value) > Number(props.redeemableAmount)) {
     return 'redemption.redeem_holofuel.amount_input_error'
   }
 
-  return 'redemption.redeem_holofuel.amount_input_error_minimum_value'
+  if (Number(amount.value) < kMinimumRedeemableHoloFuel) {
+    return 'redemption.redeem_holofuel.amount_input_error_minimum_value'
+  }
+
+  if (Number(amount.value) > kMaximumRedeemableHoloFuel) {
+    return 'redemption.redeem_holofuel.amount_input_error_maximum_value'
+  }
+
+  return ''
 })
 
 const isHotAddressValid = computed(() => /^0x[a-fA-F0-9]{40}$/.test(hotAddress.value))

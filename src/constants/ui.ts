@@ -1,6 +1,9 @@
 import type { MappedHApp } from '@/types/types'
 import { Error } from '@/types/types'
 
+export const kMinimumRedeemableHoloFuel = 10
+export const kMaximumRedeemableHoloFuel = 1000
+
 export const kSortOptions = {
   alphabetical: {
     label: 'Alphabetical',
