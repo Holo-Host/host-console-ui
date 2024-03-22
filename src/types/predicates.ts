@@ -1,5 +1,4 @@
 import type {
-  HostingJurisdictionsResponse,
   HostPreferencesResponse,
   Redemption,
   Transaction
@@ -23,12 +22,6 @@ export function isHoloFuelProfile(target: unknown): target is HoloFuelProfile {
 export function isHostPreferencesResponse(target: unknown): target is HostPreferencesResponse {
   return target !== undefined
 }
-
-// export function isHostingJurisdictionsResponse(
-//   target: unknown
-// ): target is HostingJurisdictionsResponse {
-//   return target !== undefined
-// }
 
 export function isNumber(target: unknown): target is number {
   return typeof target === 'number'

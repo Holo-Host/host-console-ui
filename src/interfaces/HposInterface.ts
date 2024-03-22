@@ -128,12 +128,6 @@ export interface HostPreferencesResponse {
   timestamp: number
 }
 
-// export interface HostingJurisdictionsResponse {
-//   timestamp: number
-//   jurisdictions: string[]
-//   exclude_jurisdictions: boolean
-// }
-
 export interface SetHostingJurisdictionsPayload {
   holoport_id?: string
   jurisdictions: string[]
@@ -165,7 +159,6 @@ type HposHolochainCallResponse =
   | EUserKycLevel
   | ServiceLogsResponse
   | ZomeCallResponse
-  // | HostingJurisdictionsResponse
 
 type HposAdminCallResponse = HposConfigResponse
 

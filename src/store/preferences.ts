@@ -4,7 +4,7 @@ import {
   SetHostingJurisdictionsPayload,
   useHposInterface
 } from '@/interfaces/HposInterface'
-import { isHostPreferencesResponse } from '@/types/predicates' // isHostingJurisdictionsResponse, 
+import { isHostPreferencesResponse } from '@/types/predicates'
 import type { HostingJurisdictions, InvoicesData, PricesData } from '@/types/types'
 import { ECriteriaType } from '@/types/types'
 
@@ -96,11 +96,9 @@ export const usePreferencesStore = defineStore('preferences', {
 
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
-      // const hostingJurisdictionsResponse = await getHostingJurisdictions()
 
       if (
-        !isHostPreferencesResponse(response)  // ||
-        // !isHostingJurisdictionsResponse(hostingJurisdictionsResponse)
+        !isHostPreferencesResponse(response)
       ) {
         return
       }
