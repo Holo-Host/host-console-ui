@@ -4,7 +4,7 @@ import {
   SetHostingJurisdictionsPayload,
   useHposInterface
 } from '@/interfaces/HposInterface'
-import { isHostingJurisdictionsResponse, isHostPreferencesResponse } from '@/types/predicates'
+import { isHostPreferencesResponse } from '@/types/predicates' // isHostingJurisdictionsResponse, 
 import type { HostingJurisdictions, InvoicesData, PricesData } from '@/types/types'
 import { ECriteriaType } from '@/types/types'
 
@@ -96,22 +96,22 @@ export const usePreferencesStore = defineStore('preferences', {
 
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
-      const hostingJurisdictionsResponse = await getHostingJurisdictions()
+      // const hostingJurisdictionsResponse = await getHostingJurisdictions()
 
       if (
-        !isHostPreferencesResponse(response) ||
-        !isHostingJurisdictionsResponse(hostingJurisdictionsResponse)
+        !isHostPreferencesResponse(response)  // ||
+        // !isHostingJurisdictionsResponse(hostingJurisdictionsResponse)
       ) {
         return
       }
 
       this.hostingJurisdictions = {
-        value: hostingJurisdictionsResponse.value,
+        value: response.jurisdictions,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        criteriaType: Object.keys(hostingJurisdictionsResponse.criteria_type).includes('Include')
-          ? ECriteriaType.include
-          : ECriteriaType.exclude,
-        timestamp: hostingJurisdictionsResponse.timestamp
+        criteriaType: response.exclude_jurisdictions
+          ? ECriteriaType.exclude
+          : ECriteriaType.include,
+        timestamp: response.timestamp
       }
 
       const {
@@ -163,8 +163,10 @@ export const usePreferencesStore = defineStore('preferences', {
       // If the request was successful, update the store
       if (result) {
         this.hostingJurisdictions = {
-          value: payload.value,
-          criteriaType: payload.criteria_type,
+          value: payload.jurisdictions,
+          criteriaType: payload.exclude_jurisdictions
+          ? ECriteriaType.exclude
+          : ECriteriaType.include,
           timestamp: Date.now()
         }
       } else {

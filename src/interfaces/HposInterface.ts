@@ -123,21 +123,24 @@ export interface HostPreferencesResponse {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
+  jurisdictions: string[]
+  exclude_jurisdictions: boolean
+  timestamp: number
 }
 
-export interface HostingJurisdictionsResponse {
-  timestamp: number
-  criteria_type: any
-  value: string[]
-}
+// export interface HostingJurisdictionsResponse {
+//   timestamp: number
+//   jurisdictions: string[]
+//   exclude_jurisdictions: boolean
+// }
 
 export interface SetHostingJurisdictionsPayload {
   holoport_id?: string
-  criteria_type: ECriteriaType
-  value: string[]
+  jurisdictions: string[]
+  exclude_jurisdictions: boolean
 }
 
-export interface DefaultPreferencesPayload {
+    export interface DefaultPreferencesPayload {
   price_compute: string
   price_storage: string
   price_bandwidth: string
@@ -162,7 +165,7 @@ type HposHolochainCallResponse =
   | EUserKycLevel
   | ServiceLogsResponse
   | ZomeCallResponse
-  | HostingJurisdictionsResponse
+  // | HostingJurisdictionsResponse
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -697,8 +700,8 @@ export function useHposInterface(): HposInterface {
     } catch (error) {
       console.error('getHostingJurisdictions encountered an error: ', error)
       return {
-        criteria_type: { Include: null },
-        value: ['Poland'],
+        exclude_jurisdictions: false,
+        jurisdictions: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
         timestamp: 0
       }
 

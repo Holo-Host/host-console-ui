@@ -24,11 +24,11 @@ export function isHostPreferencesResponse(target: unknown): target is HostPrefer
   return target !== undefined
 }
 
-export function isHostingJurisdictionsResponse(
-  target: unknown
-): target is HostingJurisdictionsResponse {
-  return target !== undefined
-}
+// export function isHostingJurisdictionsResponse(
+//   target: unknown
+// ): target is HostingJurisdictionsResponse {
+//   return target !== undefined
+// }
 
 export function isNumber(target: unknown): target is number {
   return typeof target === 'number'
