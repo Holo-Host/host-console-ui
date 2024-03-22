@@ -1,4 +1,9 @@
-import type { HostPreferencesResponse, Redemption, Transaction } from '@/interfaces/HposInterface'
+import type {
+  HostingJurisdictionsResponse,
+  HostPreferencesResponse,
+  Redemption,
+  Transaction
+} from '@/interfaces/HposInterface'
 import type { AdminSignature, CheckAuthResponse, Error, HoloFuelProfile } from '@/types/types'
 import { EUserKycLevel } from '@/types/types'
 
@@ -16,6 +21,12 @@ export function isHoloFuelProfile(target: unknown): target is HoloFuelProfile {
 }
 
 export function isHostPreferencesResponse(target: unknown): target is HostPreferencesResponse {
+  return target !== undefined
+}
+
+export function isHostingJurisdictionsResponse(
+  target: unknown
+): target is HostingJurisdictionsResponse {
   return target !== undefined
 }
 

@@ -21,6 +21,7 @@ const isPaidHostingEnabled = ref(userStore.kycLevel !== EUserKycLevel.two)
 
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
+const hostingJurisdictions = computed(() => preferencesStore.hostingJurisdictions)
 
 const isModalVisible = ref(false)
 
@@ -97,13 +98,13 @@ function updateHostingPlan(): void {
 }
 
 async function invoiceFrequencyChanged({ period, amount }: InvoiceFrequency): Promise<void> {
-  preferencesStore.updateInvoiceFrequency(period, amount);
-  await setDefaultHostPreferences();
+  preferencesStore.updateInvoiceFrequency(period, amount)
+  await setDefaultHostPreferences()
 }
 
 async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
-  preferencesStore.updateInvoiceDue(period);
-  await setDefaultHostPreferences();
+  preferencesStore.updateInvoiceDue(period)
+  await setDefaultHostPreferences()
 }
 </script>
 
@@ -145,6 +146,7 @@ async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
       />
 
       <HAppSelectionSection
+        :hosting-jurisdictions="hostingJurisdictions"
         class="hosting-preferences__happ-selection"
         data-test-hosting-preferences-happ-selection-section
       />
