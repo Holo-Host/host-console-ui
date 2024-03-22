@@ -34,10 +34,6 @@ interface HposInterface {
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
   HPOS_API_URL: string
-  getHostingJurisdictions: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  setHostingJurisdictions: (
-    payload: SetHostingJurisdictionsPayload
-  ) => Promise<HposHolochainCallResponse | { error: unknown }>
 }
 
 interface UpdateHAppHostingPlanPayload {
@@ -128,19 +124,15 @@ export interface HostPreferencesResponse {
   timestamp: number
 }
 
-export interface SetHostingJurisdictionsPayload {
-  holoport_id?: string
-  jurisdictions: string[]
-  exclude_jurisdictions: boolean
-}
-
-    export interface DefaultPreferencesPayload {
+export interface DefaultPreferencesPayload {
   price_compute: string
   price_storage: string
   price_bandwidth: string
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
+  jurisdictions: string[]
+  exclude_jurisdictions: boolean
 }
 
 type HposHolochainCallResponse =
@@ -702,41 +694,6 @@ export function useHposInterface(): HposInterface {
     }
   }
 
-  async function setHostingJurisdictions(
-    payload: SetHostingJurisdictionsPayload
-  ): Promise<boolean> {
-    let holoportId = ''
-
-    if (window.location.host.split(':')[0] === 'localhost') {
-      const holoportUrl = `${import.meta.env.VITE_HOLOPORT_URL}` || ''
-      holoportId = holoportUrl.split('//')[1]?.split('.')[0] ?? ''
-    } else {
-      holoportId = window.location.host.split('//')[1]?.split('.')[0] ?? ''
-    }
-
-    try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'core-app',
-        zomeName: 'hha',
-        fnName: 'set_hosting_jurisdictions',
-        payload: { holoport_id: holoportId, ...payload }
-      }
-
-      await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
-        responseType: 'arraybuffer',
-        params
-      })
-
-      return true
-    } catch (error) {
-      return false
-    }
-  }
-
   async function checkAuth(
     email: string,
     password: string,
@@ -1061,8 +1018,6 @@ export function useHposInterface(): HposInterface {
     updateHAppHostingPlan,
     getServiceLogs,
     HPOS_API_URL,
-    getHostingJurisdictions,
-    setHostingJurisdictions
   }
 }
 /* eslint-enable camelcase */

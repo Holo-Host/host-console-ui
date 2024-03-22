@@ -4,37 +4,23 @@ import SettingsSection from '../SettingsSection.vue'
 import ExclusionSelect from '@/components/settings/hostingPreferences/ExclusionSelect.vue'
 import { categories } from '@/constants/categories'
 import { countries } from '@/constants/countries'
-import { usePreferencesStore } from '@/store/preferences'
 import type { HostingJurisdictions } from '@/types/types'
 import { ECriteriaType } from '@/types/types'
 
-const preferencesStore = usePreferencesStore()
-
 const props = defineProps<{
   hostingJurisdictions: HostingJurisdictions
+  isJurisdictionLoading: boolean
 }>()
 
-const isJurisdictionExclusionsBusy = ref(false)
 const isHostingCategoriesExclusionsBusy = ref(false)
 
-async function saveHostingJurisdictions(
-  value: string[],
-  criteriaType: ECriteriaType
-): Promise<void> {
-  isJurisdictionExclusionsBusy.value = true
+const emit = defineEmits(['update:jurisdiction'])
 
-  const payload = {
-    criteria_type: criteriaType,
-    value
-  }
-
-  // Make an API call to save new selected options
-  try {
-    await preferencesStore.setHostingJurisdictions(payload)
-    isJurisdictionExclusionsBusy.value = false
-  } catch (error) {
-    isJurisdictionExclusionsBusy.value = false
-  }
+function updateJurisdiction(jurisdiction:  {
+      criteria_type: ECriteriaType
+      value: string[],
+    }): void {
+  emit('update:jurisdiction', jurisdiction)
 }
 
 function saveHostingCategoriesExclusions(): void {
@@ -63,9 +49,9 @@ function saveHostingCategoriesExclusions(): void {
             :key="props.hostingJurisdictions.timestamp"
             label="hosting_preferences.happ_selection.exclude"
             :options="countries"
-            :is-busy="isJurisdictionExclusionsBusy"
+            :is-busy="isJurisdictionLoading"
             :initially-selected="props.hostingJurisdictions.criteriaType === ECriteriaType.exclude ? props.hostingJurisdictions.value : []"
-            @save="saveHostingJurisdictions($event, ECriteriaType.exclude)"
+            @update:value="updateJurisdiction({value: $event, criteria_type: ECriteriaType.exclude})"
           />
         </div>
         <div class="happ-selection-section__tags-item happ-selection-section__tags-item-include">
@@ -73,9 +59,9 @@ function saveHostingCategoriesExclusions(): void {
             :key="props.hostingJurisdictions.timestamp"
             label="hosting_preferences.happ_selection.include"
             :options="countries"
-            :is-busy="isJurisdictionExclusionsBusy"
+            :is-busy="isJurisdictionLoading"
             :initially-selected="props.hostingJurisdictions.criteriaType === 'include' ? props.hostingJurisdictions.value : []"
-            @save="saveHostingJurisdictions($event, ECriteriaType.include)"
+            @update:value="updateJurisdiction({value: $event, criteria_type: ECriteriaType.include})"
           />
         </div>
       </div>

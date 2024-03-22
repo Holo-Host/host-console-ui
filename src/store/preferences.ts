@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import {
   DefaultPreferencesPayload,
-  SetHostingJurisdictionsPayload,
   useHposInterface
 } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
@@ -11,8 +10,6 @@ import { ECriteriaType } from '@/types/types'
 const {
   getHostPreferences,
   setDefaultHAppPreferences,
-  getHostingJurisdictions,
-  setHostingJurisdictions
 } = useHposInterface()
 
 const kInitialPrice = 0.0001
@@ -62,7 +59,9 @@ export const usePreferencesStore = defineStore('preferences', {
         invoice_due_in_days: invoiceDuePeriod,
         price_compute: `${this.pricesSettings.cpu}`,
         price_storage: `${this.pricesSettings.storage}`,
-        price_bandwidth: `${this.pricesSettings.bandwidth}`
+        price_bandwidth: `${this.pricesSettings.bandwidth}`,
+        jurisdictions: this.hostingJurisdictions.value,
+        exclude_jurisdictions: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude,
       }
 
       await setDefaultHAppPreferences(payload)
@@ -94,12 +93,22 @@ export const usePreferencesStore = defineStore('preferences', {
       }
     },
 
+    updateHostingJurisdiction(jurisdiction: {
+      criteria_type: ECriteriaType
+      value: string[],
+    }): void {
+      this.hostingJurisdictions.value = jurisdiction.value;
+      this.hostingJurisdictions.criteriaType = jurisdiction.criteria_type;
+    },
+
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 
       if (
         !isHostPreferencesResponse(response)
       ) {
+        // If the request failed, update the timestamp to trigger a re-render of the selects
+        this.hostingJurisdictions.timestamp = Date.now()
         return
       }
 
@@ -154,23 +163,5 @@ export const usePreferencesStore = defineStore('preferences', {
         period: invoiceDueInDays
       }
     },
-
-    async setHostingJurisdictions(payload: SetHostingJurisdictionsPayload) {
-      const result = await setHostingJurisdictions(payload)
-
-      // If the request was successful, update the store
-      if (result) {
-        this.hostingJurisdictions = {
-          value: payload.jurisdictions,
-          criteriaType: payload.exclude_jurisdictions
-          ? ECriteriaType.exclude
-          : ECriteriaType.include,
-          timestamp: Date.now()
-        }
-      } else {
-        // If the request failed, update the timestamp to trigger a re-render of the selects
-        this.hostingJurisdictions.timestamp = Date.now()
-      }
-    }
   }
 })

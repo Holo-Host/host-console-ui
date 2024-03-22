@@ -9,7 +9,7 @@ import TogglePaidHostingSection from '@/components/settings/hostingPreferences/T
 import { usePreferencesStore } from '@/store/preferences'
 import { useUserStore } from '@/store/user'
 import type { InvoiceDue, InvoiceFrequency, UpdatePricePayload } from '@/types/types'
-import { EHostingPlan, EUserKycLevel } from '@/types/types'
+import { EHostingPlan, ECriteriaType, EUserKycLevel } from '@/types/types'
 
 const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()
@@ -87,6 +87,14 @@ async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
   await setDefaultHostPreferences()
 }
 
+async function updateHostingJurisdiction(jursidiction: {
+      criteria_type: ECriteriaType
+      value: string[],
+    }): Promise<void> {
+  preferencesStore.updateHostingJurisdiction(jurisdiction)
+  await setDefaultHostPreferences()
+}
+
 function onTogglePaidHosting(isToggledOn: boolean): void {
   isPaidHostingEnabled.value = isToggledOn
 
@@ -146,11 +154,13 @@ async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
       />
 
       <HAppSelectionSection
+        :is-jurisdiction-loading="isUpdating"
         :hosting-jurisdictions="hostingJurisdictions"
         class="hosting-preferences__happ-selection"
-        data-test-hosting-preferences-happ-selection-section
-      />
-
+        data-test-hosting-preferences-happ-selection-section        
+        @update:jurisdiction="updateHostingJurisdiction"
+        />
+        
       <GlobalHostingPlanModal
         :key="isPaidHostingEnabled"
         :plan-value="isPaidHostingEnabled ? EHostingPlan.paid : EHostingPlan.free"
