@@ -1,18 +1,15 @@
 import { defineStore } from 'pinia'
 import {
   DefaultPreferencesPayload,
-  SetHostingJurisdictionsPayload,
   useHposInterface
 } from '@/interfaces/HposInterface'
-import { isHostingJurisdictionsResponse, isHostPreferencesResponse } from '@/types/predicates'
+import { isHostPreferencesResponse } from '@/types/predicates'
 import type { HostingJurisdictions, InvoicesData, PricesData } from '@/types/types'
 import { ECriteriaType } from '@/types/types'
 
 const {
   getHostPreferences,
   setDefaultHAppPreferences,
-  getHostingJurisdictions,
-  setHostingJurisdictions
 } = useHposInterface()
 
 const kInitialPrice = 0.0001
@@ -54,15 +51,19 @@ export const usePreferencesStore = defineStore('preferences', {
       const invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 7
 
       const payload: DefaultPreferencesPayload = {
+        price_compute: `${this.pricesSettings.cpu}`,
+        price_storage: `${this.pricesSettings.storage}`,
+        price_bandwidth: `${this.pricesSettings.bandwidth}`,
         max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
         max_time_before_invoice: {
           secs: maxTimeBeforeInvoice * 24 * 60 * 60,
           nanos: 0
         },
         invoice_due_in_days: invoiceDuePeriod,
-        price_compute: `${this.pricesSettings.cpu}`,
-        price_storage: `${this.pricesSettings.storage}`,
-        price_bandwidth: `${this.pricesSettings.bandwidth}`
+        jurisdiction_prefs: {
+          value: this.hostingJurisdictions.value,
+          is_exclusion: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude,
+        }
       }
 
       await setDefaultHAppPreferences(payload)
@@ -94,24 +95,32 @@ export const usePreferencesStore = defineStore('preferences', {
       }
     },
 
+    updateHostingJurisdiction(jurisdiction: {
+      criteria_type: ECriteriaType
+      value: string[],
+    }): void {
+      this.hostingJurisdictions.value = jurisdiction.value;
+      this.hostingJurisdictions.criteriaType = jurisdiction.criteria_type;
+    },
+
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
-      const hostingJurisdictionsResponse = await getHostingJurisdictions()
 
       if (
-        !isHostPreferencesResponse(response) ||
-        !isHostingJurisdictionsResponse(hostingJurisdictionsResponse)
+        !isHostPreferencesResponse(response)
       ) {
+        // If the request failed, update the timestamp to trigger a re-render of the selects
+        this.hostingJurisdictions.timestamp = Date.now()
         return
       }
 
       this.hostingJurisdictions = {
-        value: hostingJurisdictionsResponse.value,
+        value: response.jurisdiction_prefs.value || [],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        criteriaType: Object.keys(hostingJurisdictionsResponse.criteria_type).includes('Include')
-          ? ECriteriaType.include
-          : ECriteriaType.exclude,
-        timestamp: hostingJurisdictionsResponse.timestamp
+        criteriaType: response.jurisdiction_prefs.is_exclusion
+          ? ECriteriaType.exclude
+          : ECriteriaType.include,
+        timestamp: response.timestamp
       }
 
       const {
@@ -156,21 +165,5 @@ export const usePreferencesStore = defineStore('preferences', {
         period: invoiceDueInDays
       }
     },
-
-    async setHostingJurisdictions(payload: SetHostingJurisdictionsPayload) {
-      const result = await setHostingJurisdictions(payload)
-
-      // If the request was successful, update the store
-      if (result) {
-        this.hostingJurisdictions = {
-          value: payload.value,
-          criteriaType: payload.criteria_type,
-          timestamp: Date.now()
-        }
-      } else {
-        // If the request failed, update the timestamp to trigger a re-render of the selects
-        this.hostingJurisdictions.timestamp = Date.now()
-      }
-    }
   }
 })

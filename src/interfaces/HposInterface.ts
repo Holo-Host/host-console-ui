@@ -34,10 +34,6 @@ interface HposInterface {
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
   HPOS_API_URL: string
-  getHostingJurisdictions: () => Promise<HposHolochainCallResponse | { error: unknown }>
-  setHostingJurisdictions: (
-    payload: SetHostingJurisdictionsPayload
-  ) => Promise<HposHolochainCallResponse | { error: unknown }>
 }
 
 interface UpdateHAppHostingPlanPayload {
@@ -123,18 +119,11 @@ export interface HostPreferencesResponse {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
-}
-
-export interface HostingJurisdictionsResponse {
+  jurisdiction_prefs: {
+    value: string[],
+    is_exclusion: boolean;
+  }
   timestamp: number
-  criteria_type: any
-  value: string[]
-}
-
-export interface SetHostingJurisdictionsPayload {
-  holoport_id?: string
-  criteria_type: ECriteriaType
-  value: string[]
 }
 
 export interface DefaultPreferencesPayload {
@@ -144,6 +133,10 @@ export interface DefaultPreferencesPayload {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
+  jurisdiction_prefs: {
+    value: string[],
+    is_exclusion: boolean;
+  }
 }
 
 type HposHolochainCallResponse =
@@ -162,7 +155,6 @@ type HposHolochainCallResponse =
   | EUserKycLevel
   | ServiceLogsResponse
   | ZomeCallResponse
-  | HostingJurisdictionsResponse
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -697,47 +689,14 @@ export function useHposInterface(): HposInterface {
     } catch (error) {
       console.error('getHostingJurisdictions encountered an error: ', error)
       return {
-        criteria_type: { Include: null },
-        value: ['Poland'],
+        jurisdiction_prefs: {
+          value: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
+          is_exclusion: false,
+        },
         timestamp: 0
       }
 
       // return false
-    }
-  }
-
-  async function setHostingJurisdictions(
-    payload: SetHostingJurisdictionsPayload
-  ): Promise<boolean> {
-    let holoportId = ''
-
-    if (window.location.host.split(':')[0] === 'localhost') {
-      const holoportUrl = `${import.meta.env.VITE_HOLOPORT_URL}` || ''
-      holoportId = holoportUrl.split('//')[1]?.split('.')[0] ?? ''
-    } else {
-      holoportId = window.location.host.split('//')[1]?.split('.')[0] ?? ''
-    }
-
-    try {
-      const params = {
-        appId: localStorage.getItem(kCoreAppVersionLSKey),
-        roleId: 'core-app',
-        zomeName: 'hha',
-        fnName: 'set_hosting_jurisdictions',
-        payload: { holoport_id: holoportId, ...payload }
-      }
-
-      await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
-        responseType: 'arraybuffer',
-        params
-      })
-
-      return true
-    } catch (error) {
-      return false
     }
   }
 
@@ -1065,8 +1024,6 @@ export function useHposInterface(): HposInterface {
     updateHAppHostingPlan,
     getServiceLogs,
     HPOS_API_URL,
-    getHostingJurisdictions,
-    setHostingJurisdictions
   }
 }
 /* eslint-enable camelcase */

@@ -16,7 +16,7 @@ import { HApp, useHposInterface } from '@/interfaces/HposInterface'
 import { useDashboardStore } from '@/store/dashboard'
 import { usePreferencesStore } from '@/store/preferences'
 import { isError as isErrorPredicate } from '@/types/predicates'
-import { EHostingPlan, MappedHApp } from '@/types/types'
+import { EHostingPlan, ECriteriaType, MappedHApp } from '@/types/types'
 
 const { t } = useI18n()
 const dashboardStore = useDashboardStore()
@@ -254,7 +254,11 @@ async function setDefaultHostPreferences(): Promise<void> {
     preferencesStore.updateInvoiceFrequency(7, 1);
     preferencesStore.updateInvoiceDue(7);
     preferencesStore.updateInvoiceFrequency(7, 0);
-    await preferencesStore.setDefaultPreferences()
+    preferencesStore.updateHostingJurisdiction({
+      value: [],
+      criteria_type: ECriteriaType.exclude,
+    });
+    await preferencesStore.setDefaultPreferences();
   } catch (e) {
     isError.value = true
   }
