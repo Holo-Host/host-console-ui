@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import { decode } from '@msgpack/msgpack'
 import axios from 'axios'
-import { decodeAgentId } from '../../ui-common-library/src/utils/agent'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
@@ -34,6 +33,7 @@ interface HposInterface {
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
+  getHistogramData: () => Promise<HposHolochainCallResponse>
   HPOS_API_URL: string
 }
 
@@ -846,6 +846,18 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getHistogramData(): Promise<HposHolochainCallResponse> {
+    try {
+      return await hposHolochainCall({
+        method: 'get',
+        pathPrefix: '/api/v2',
+        path: '/holofuel_redeemable_for_last_week'
+      })
+    } catch (error) {
+      return false
+    }
+  }
+
   async function getCoreAppVersion(): Promise<CoreAppVersion> {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -970,6 +982,7 @@ export function useHposInterface(): HposInterface {
     stopHostingHApp,
     updateHAppHostingPlan,
     getServiceLogs,
+    getHistogramData,
     HPOS_API_URL
   }
 }

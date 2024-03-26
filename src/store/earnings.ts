@@ -3,7 +3,8 @@ import { Earnings, Redemption, Transaction, useHposInterface } from '@/interface
 import { isRedemptionsArray, isTransactionsArray } from '@/types/predicates'
 import { parseRedemption } from '@/utils/redemptions'
 
-const { getPaidInvoices, getUnpaidInvoices, getRedemptionHistory } = useHposInterface()
+const { getPaidInvoices, getUnpaidInvoices, getRedemptionHistory, getHistogramData } =
+  useHposInterface()
 
 interface State {
   earnings: Earnings
@@ -66,6 +67,30 @@ export const useEarningsStore = defineStore('earnings', {
         this.redemptions = parsedRedemptions
         return true
       }
+
+      return false
+    },
+
+    async getHistogramData(): Promise<boolean> {
+      const data = await getHistogramData()
+      console.log(data)
+
+      // if (isRedemptionsArray(redemptions)) {
+      //   // Turn an object of arrays into a single array with proper status assigned
+      //   const flattenedRedemptions = []
+      //
+      //   Object.entries(redemptions.redemptions).forEach(([key, value]) =>
+      //     // status is a key an array of redemptions with that status is the value
+      //     value.forEach((redemption) => flattenedRedemptions.push({ ...redemption, status: key }))
+      //   )
+      //
+      //   const parsedRedemptions = flattenedRedemptions.map((redemption) =>
+      //     parseRedemption(redemption)
+      //   )
+      //
+      //   this.redemptions = parsedRedemptions
+      //   return true
+      // }
 
       return false
     }

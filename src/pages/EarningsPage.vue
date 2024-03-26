@@ -7,9 +7,11 @@ import { useDashboardStore } from '@/store/dashboard'
 import { useUserStore } from '@/store/user'
 import { isError as isErrorPredicate } from '@/types/predicates'
 import type { EarningsData } from '@/types/types'
+import {useEarningsStore} from '@/store/earnings';
 
 const dashboardStore = useDashboardStore()
 const userStore = useUserStore()
+const earningsStore = useEarningsStore()
 
 const isLoading = ref(false)
 const isError = computed(() => !!dashboardStore.hostEarnings.error)
@@ -42,10 +44,18 @@ async function getEarnings(): Promise<void> {
   isLoading.value = false
 }
 
+async function getHistogramData(): Promise<void> {
+  isLoading.value = true
+  await earningsStore.getHistogramData()
+  isLoading.value = false
+}
+
 onMounted(async (): Promise<void> => {
   if (!rawWeeklyEarnings.value || !Number(rawWeeklyEarnings.value)) {
     await getEarnings()
   }
+
+	await getHistogramData()
 })
 </script>
 
