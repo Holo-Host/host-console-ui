@@ -119,8 +119,10 @@ export interface HostPreferencesResponse {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
-  jurisdictions: string[]
-  exclude_jurisdictions: boolean
+  jurisdiction_prefs: {
+    value: string[],
+    is_exclusion: boolean;
+  }
   timestamp: number
 }
 
@@ -131,8 +133,10 @@ export interface DefaultPreferencesPayload {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
-  jurisdictions: string[]
-  exclude_jurisdictions: boolean
+  jurisdiction_prefs: {
+    value: string[],
+    is_exclusion: boolean;
+  }
 }
 
 type HposHolochainCallResponse =
@@ -685,8 +689,10 @@ export function useHposInterface(): HposInterface {
     } catch (error) {
       console.error('getHostingJurisdictions encountered an error: ', error)
       return {
-        exclude_jurisdictions: false,
-        jurisdictions: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
+        jurisdiction_prefs: {
+          value: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
+          is_exclusion: false,
+        },
         timestamp: 0
       }
 

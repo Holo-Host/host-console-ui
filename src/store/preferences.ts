@@ -51,17 +51,19 @@ export const usePreferencesStore = defineStore('preferences', {
       const invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 7
 
       const payload: DefaultPreferencesPayload = {
+        price_compute: `${this.pricesSettings.cpu}`,
+        price_storage: `${this.pricesSettings.storage}`,
+        price_bandwidth: `${this.pricesSettings.bandwidth}`,
         max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
         max_time_before_invoice: {
           secs: maxTimeBeforeInvoice * 24 * 60 * 60,
           nanos: 0
         },
         invoice_due_in_days: invoiceDuePeriod,
-        price_compute: `${this.pricesSettings.cpu}`,
-        price_storage: `${this.pricesSettings.storage}`,
-        price_bandwidth: `${this.pricesSettings.bandwidth}`,
-        jurisdictions: this.hostingJurisdictions.value,
-        exclude_jurisdictions: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude,
+        jurisdiction_prefs: {
+          value: this.hostingJurisdictions.value,
+          is_exclusion: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude,
+        }
       }
 
       await setDefaultHAppPreferences(payload)
@@ -113,9 +115,9 @@ export const usePreferencesStore = defineStore('preferences', {
       }
 
       this.hostingJurisdictions = {
-        value: response.jurisdictions,
+        value: response.jurisdiction_prefs.value || [],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        criteriaType: response.exclude_jurisdictions
+        criteriaType: response.jurisdiction_prefs.is_exclusion
           ? ECriteriaType.exclude
           : ECriteriaType.include,
         timestamp: response.timestamp
