@@ -87,10 +87,13 @@ async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
   await setDefaultHostPreferences()
 }
 
-async function updateHostingJurisdiction(jursidiction: {
-      criteria_type: ECriteriaType
-      value: string[],
-    }): Promise<void> {
+interface HostingJurisdiction {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  criteria_type: ECriteriaType
+  value: string[]
+}
+
+async function updateHostingJurisdiction(jurisdiction: HostingJurisdiction): Promise<void> {
   preferencesStore.updateHostingJurisdiction(jurisdiction)
   await setDefaultHostPreferences()
 }
@@ -157,10 +160,10 @@ async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
         :is-jurisdiction-loading="isUpdating"
         :hosting-jurisdictions="hostingJurisdictions"
         class="hosting-preferences__happ-selection"
-        data-test-hosting-preferences-happ-selection-section        
+        data-test-hosting-preferences-happ-selection-section
         @update:jurisdiction="updateHostingJurisdiction"
-        />
-        
+      />
+
       <GlobalHostingPlanModal
         :key="isPaidHostingEnabled"
         :plan-value="isPaidHostingEnabled ? EHostingPlan.paid : EHostingPlan.free"

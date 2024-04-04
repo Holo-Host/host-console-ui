@@ -1,16 +1,10 @@
 import { defineStore } from 'pinia'
-import {
-  DefaultPreferencesPayload,
-  useHposInterface
-} from '@/interfaces/HposInterface'
+import { DefaultPreferencesPayload, useHposInterface } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
 import type { HostingJurisdictions, InvoicesData, PricesData } from '@/types/types'
 import { ECriteriaType } from '@/types/types'
 
-const {
-  getHostPreferences,
-  setDefaultHAppPreferences,
-} = useHposInterface()
+const { getHostPreferences, setDefaultHAppPreferences } = useHposInterface()
 
 const kInitialPrice = 0.0001
 
@@ -62,7 +56,7 @@ export const usePreferencesStore = defineStore('preferences', {
         invoice_due_in_days: invoiceDuePeriod,
         jurisdiction_prefs: {
           value: this.hostingJurisdictions.value,
-          is_exclusion: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude,
+          is_exclusion: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude
         }
       }
 
@@ -97,27 +91,25 @@ export const usePreferencesStore = defineStore('preferences', {
 
     updateHostingJurisdiction(jurisdiction: {
       criteria_type: ECriteriaType
-      value: string[],
+      value: string[]
     }): void {
-      this.hostingJurisdictions.value = jurisdiction.value;
-      this.hostingJurisdictions.criteriaType = jurisdiction.criteria_type;
+      this.hostingJurisdictions.value = jurisdiction.value
+      this.hostingJurisdictions.criteriaType = jurisdiction.criteria_type
     },
 
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 
-      if (
-        !isHostPreferencesResponse(response)
-      ) {
+      if (!isHostPreferencesResponse(response)) {
         // If the request failed, update the timestamp to trigger a re-render of the selects
         this.hostingJurisdictions.timestamp = Date.now()
         return
       }
 
       this.hostingJurisdictions = {
-        value: response.jurisdiction_prefs.value || [],
+        value: response.jurisdiction_prefs?.value || [],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        criteriaType: response.jurisdiction_prefs.is_exclusion
+        criteriaType: response.jurisdiction_prefs?.is_exclusion
           ? ECriteriaType.exclude
           : ECriteriaType.include,
         timestamp: response.timestamp
@@ -164,6 +156,6 @@ export const usePreferencesStore = defineStore('preferences', {
       this.invoicesSettings.due = {
         period: invoiceDueInDays
       }
-    },
+    }
   }
 })

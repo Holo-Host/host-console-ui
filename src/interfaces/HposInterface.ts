@@ -120,8 +120,8 @@ export interface HostPreferencesResponse {
   max_fuel_before_invoice: string
   invoice_due_in_days: number
   jurisdiction_prefs: {
-    value: string[],
-    is_exclusion: boolean;
+    value: string[]
+    is_exclusion: boolean
   }
   timestamp: number
 }
@@ -134,8 +134,8 @@ export interface DefaultPreferencesPayload {
   max_fuel_before_invoice: string
   invoice_due_in_days: number
   jurisdiction_prefs: {
-    value: string[],
-    is_exclusion: boolean;
+    value: string[]
+    is_exclusion: boolean
   }
 }
 
@@ -658,7 +658,7 @@ export function useHposInterface(): HposInterface {
 
   async function getHostingJurisdictions(): Promise<
     HposHolochainCallResponse | { error: unknown }
-    > {
+  > {
     let holoportId = ''
 
     if (window.location.host.split(':')[0] === 'localhost') {
@@ -691,7 +691,7 @@ export function useHposInterface(): HposInterface {
       return {
         jurisdiction_prefs: {
           value: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
-          is_exclusion: false,
+          is_exclusion: false
         },
         timestamp: 0
       }
@@ -1023,7 +1023,7 @@ export function useHposInterface(): HposInterface {
     stopHostingHApp,
     updateHAppHostingPlan,
     getServiceLogs,
-    HPOS_API_URL,
+    HPOS_API_URL
   }
 }
 /* eslint-enable camelcase */

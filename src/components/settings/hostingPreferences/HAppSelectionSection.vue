@@ -16,10 +16,13 @@ const isHostingCategoriesExclusionsBusy = ref(false)
 
 const emit = defineEmits(['update:jurisdiction'])
 
-function updateJurisdiction(jurisdiction:  {
-      criteria_type: ECriteriaType
-      value: string[],
-    }): void {
+interface Jurisdiction {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  criteria_type: ECriteriaType
+  value: string[]
+}
+
+function updateJurisdiction(jurisdiction: Jurisdiction): void {
   emit('update:jurisdiction', jurisdiction)
 }
 
@@ -51,7 +54,7 @@ function saveHostingCategoriesExclusions(): void {
             :options="countries"
             :is-busy="isJurisdictionLoading"
             :initially-selected="props.hostingJurisdictions.criteriaType === ECriteriaType.exclude ? props.hostingJurisdictions.value : []"
-            @update:value="updateJurisdiction({value: $event, criteria_type: ECriteriaType.exclude})"
+            @save="updateJurisdiction({value: $event, criteria_type: ECriteriaType.exclude})"
           />
         </div>
         <div class="happ-selection-section__tags-item happ-selection-section__tags-item-include">
@@ -61,7 +64,7 @@ function saveHostingCategoriesExclusions(): void {
             :options="countries"
             :is-busy="isJurisdictionLoading"
             :initially-selected="props.hostingJurisdictions.criteriaType === 'include' ? props.hostingJurisdictions.value : []"
-            @update:value="updateJurisdiction({value: $event, criteria_type: ECriteriaType.include})"
+            @save="updateJurisdiction({value: $event, criteria_type: ECriteriaType.include})"
           />
         </div>
       </div>
