@@ -41,8 +41,15 @@ export const usePreferencesStore = defineStore('preferences', {
 
   actions: {
     async setDefaultPreferences(): Promise<void> {
-      const maxTimeBeforeInvoice = Number(this.invoicesSettings.frequency.period) || 7
+      const maxDaysBeforeInvoice = Number(this.invoicesSettings.frequency.period) || 7
       const invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 7
+      let maxTimeBeforeInvoice = maxDaysBeforeInvoice * 24 * 60 * 60
+
+      // NB: 18446744073709551615 is the max u64 number, which is the required type for `max_time_before_invoice.secs`
+      // Number should never need to exceed this amount.
+      if (maxTimeBeforeInvoice > 18446744073709551615) {
+        maxTimeBeforeInvoice = 18446744073709551615
+      } 
 
       const payload: DefaultPreferencesPayload = {
         price_compute: `${this.pricesSettings.cpu}`,
@@ -50,8 +57,8 @@ export const usePreferencesStore = defineStore('preferences', {
         price_bandwidth: `${this.pricesSettings.bandwidth}`,
         max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
         max_time_before_invoice: {
-          secs: maxTimeBeforeInvoice * 24 * 60 * 60,
-          nanos: 0
+          secs: maxTimeBeforeInvoice,
+          nanos: 0,
         },
         invoice_due_in_days: invoiceDuePeriod,
         jurisdiction_prefs: {
