@@ -9,7 +9,7 @@ import TogglePaidHostingSection from '@/components/settings/hostingPreferences/T
 import { usePreferencesStore } from '@/store/preferences'
 import { useUserStore } from '@/store/user'
 import type { InvoiceDue, InvoiceFrequency, UpdatePricePayload } from '@/types/types'
-import { EHostingPlan, EUserKycLevel } from '@/types/types'
+import { EHostingPlan, ECriteriaType, EUserKycLevel } from '@/types/types'
 
 const preferencesStore = usePreferencesStore()
 const userStore = useUserStore()
@@ -21,6 +21,7 @@ const isPaidHostingEnabled = ref(userStore.kycLevel !== EUserKycLevel.two)
 
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
+const hostingJurisdictions = computed(() => preferencesStore.hostingJurisdictions)
 
 const isModalVisible = ref(false)
 
@@ -86,6 +87,17 @@ async function updatePrice({ prop, value }: UpdatePricePayload): Promise<void> {
   await setDefaultHostPreferences()
 }
 
+interface HostingJurisdiction {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  criteria_type: ECriteriaType
+  value: string[]
+}
+
+async function updateHostingJurisdiction(jurisdiction: HostingJurisdiction): Promise<void> {
+  preferencesStore.updateHostingJurisdiction(jurisdiction)
+  await setDefaultHostPreferences()
+}
+
 function onTogglePaidHosting(isToggledOn: boolean): void {
   isPaidHostingEnabled.value = isToggledOn
 
@@ -97,13 +109,13 @@ function updateHostingPlan(): void {
 }
 
 async function invoiceFrequencyChanged({ period, amount }: InvoiceFrequency): Promise<void> {
-  preferencesStore.updateInvoiceFrequency(period, amount);
-  await setDefaultHostPreferences();
+  preferencesStore.updateInvoiceFrequency(period, amount)
+  await setDefaultHostPreferences()
 }
 
 async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
-  preferencesStore.updateInvoiceDue(period);
-  await setDefaultHostPreferences();
+  preferencesStore.updateInvoiceDue(period)
+  await setDefaultHostPreferences()
 }
 </script>
 
@@ -145,8 +157,11 @@ async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
       />
 
       <HAppSelectionSection
+        :is-jurisdiction-loading="isUpdating"
+        :hosting-jurisdictions="hostingJurisdictions"
         class="hosting-preferences__happ-selection"
         data-test-hosting-preferences-happ-selection-section
+        @update:jurisdiction="updateHostingJurisdiction"
       />
 
       <GlobalHostingPlanModal

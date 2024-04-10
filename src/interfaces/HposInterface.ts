@@ -1,13 +1,12 @@
 /* eslint-disable camelcase */
 import { decode } from '@msgpack/msgpack'
 import axios from 'axios'
-import { decodeAgentId } from '../../ui-common-library/src/utils/agent'
 import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
 import { isKycLevel } from '@/types/predicates'
 import type { CheckAuthResponse, EUserKycLevel, PricesData } from '@/types/types'
-import { EHostingPlan } from '@/types/types'
+import { ECriteriaType, EHostingPlan } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
 
@@ -120,6 +119,11 @@ export interface HostPreferencesResponse {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
+  jurisdiction_prefs: {
+    value: string[]
+    is_exclusion: boolean
+  }
+  timestamp: number
 }
 
 export interface DefaultPreferencesPayload {
@@ -129,6 +133,10 @@ export interface DefaultPreferencesPayload {
   max_time_before_invoice: { secs: number; nanos: number }
   max_fuel_before_invoice: string
   invoice_due_in_days: number
+  jurisdiction_prefs: {
+    value: string[]
+    is_exclusion: boolean
+  }
 }
 
 type HposHolochainCallResponse =
@@ -648,6 +656,50 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getHostingJurisdictions(): Promise<
+    HposHolochainCallResponse | { error: unknown }
+  > {
+    let holoportId = ''
+
+    if (window.location.host.split(':')[0] === 'localhost') {
+      const holoportUrl = `${import.meta.env.VITE_HOLOPORT_URL}` || ''
+      holoportId = holoportUrl.split('//')[1]?.split('.')[0] ?? ''
+    } else {
+      holoportId = window.location.host.split('//')[1]?.split('.')[0] ?? ''
+    }
+
+    const params = {
+      appId: localStorage.getItem(kCoreAppVersionLSKey),
+      roleId: 'core-app',
+      zomeName: 'hha',
+      fnName: 'get_hosting_jurisdictions',
+      payload: holoportId
+    }
+
+    try {
+      const hostingJurisdictions = await hposHolochainCall({
+        method: 'post',
+        path: '/zome_call',
+        pathPrefix: '/api/v2',
+        responseType: 'arraybuffer',
+        params
+      })
+
+      return hostingJurisdictions
+    } catch (error) {
+      console.error('getHostingJurisdictions encountered an error: ', error)
+      return {
+        jurisdiction_prefs: {
+          value: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
+          is_exclusion: false
+        },
+        timestamp: 0
+      }
+
+      // return false
+    }
+  }
+
   async function checkAuth(
     email: string,
     password: string,
@@ -698,6 +750,7 @@ export function useHposInterface(): HposInterface {
         method: 'get',
         path: '/config'
       })
+
       return {
         hostPubKey: admin.public_key,
         registrationEmail: admin.email,

@@ -1,4 +1,8 @@
-import type { HostPreferencesResponse, Redemption, Transaction } from '@/interfaces/HposInterface'
+import type {
+  HostPreferencesResponse,
+  Redemption,
+  Transaction
+} from '@/interfaces/HposInterface'
 import type { AdminSignature, CheckAuthResponse, Error, HoloFuelProfile } from '@/types/types'
 import { EUserKycLevel } from '@/types/types'
 

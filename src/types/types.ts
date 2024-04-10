@@ -117,3 +117,14 @@ export interface EarningsData {
   previous: number
   daily: DailyEarningsData[]
 }
+
+export enum ECriteriaType {
+  include = 'include',
+  exclude = 'exclude'
+}
+
+export interface HostingJurisdictions {
+  value: string[]
+  criteriaType: ECriteriaType
+  timestamp: number
+}

@@ -25,18 +25,19 @@ const props = withDefaults(
     isLoading?: boolean
     isSaving?: boolean
     label?: string
+    initiallySelected?: string[]
   }>(),
   {
     options: () => [],
     isLoading: false,
     isSaving: false,
-    label: ''
+    label: '',
+    initiallySelected: () => []
   }
 )
 
 const isEditing = ref(false)
 
-const initiallySelected: string[] = []
 const previouslySelected = ref<Option[]>([])
 
 const mappedValues: Option[] = props.options.map((label, index) => ({
@@ -45,7 +46,7 @@ const mappedValues: Option[] = props.options.map((label, index) => ({
 }))
 
 const selectedOptions = ref<Option[]>(
-  mappedValues.filter((option) => initiallySelected.includes(option.label))
+  mappedValues.filter((option) => props.initiallySelected.includes(option.label))
 )
 
 const visibleOptions = computed(() => {
@@ -85,7 +86,10 @@ function removeOption(optionToBeRemoved: Option): void {
 }
 
 function save(): void {
-  emit('save', selectedOptions.value)
+  emit(
+    'save',
+    selectedOptions.value.map((option) => option.label)
+  )
 }
 
 function cancel(): void {
@@ -156,15 +160,18 @@ watch(
         </BaseTooltip>
       </CategoryChip>
     </div>
+
     <span
       v-else
       class="exclusion-select__exclusions-selected"
     >
       None
     </span>
+
     <PencilIcon
       v-if="!isEditing"
       class="exclusion-select__exclusions-edit-icon"
+      :class="{ 'exclusion-select__exclusions-edit-icon--disabled': props.isSaving }"
       @click="edit"
     />
 
@@ -261,6 +268,12 @@ watch(
       margin-left: 8px;
       margin-top: 4px;
       cursor: pointer;
+
+      &--disabled {
+        opacity: 0.15;
+        pointer-events: none;
+        cursor: not-allowed;
+      }
     }
 
     &-combobox {
@@ -283,6 +296,8 @@ watch(
 
       &--disabled {
         opacity: 0.15;
+        pointer-events: none;
+        cursor: not-allowed;
       }
     }
 

@@ -1,15 +1,18 @@
 import { defineStore } from 'pinia'
-import { useHposInterface, DefaultPreferencesPayload } from '@/interfaces/HposInterface'
+import { DefaultPreferencesPayload, useHposInterface } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
-import type { InvoicesData, PricesData } from '@/types/types'
+import type { HostingJurisdictions, InvoicesData, PricesData } from '@/types/types'
+import { ECriteriaType } from '@/types/types'
 
 const { getHostPreferences, setDefaultHAppPreferences } = useHposInterface()
+
 const kInitialPrice = 0.0001
 
 interface State {
   isLoaded: boolean
   pricesSettings: PricesData
   invoicesSettings: InvoicesData
+  hostingJurisdictions: HostingJurisdictions
 }
 
 export const usePreferencesStore = defineStore('preferences', {
@@ -28,24 +31,40 @@ export const usePreferencesStore = defineStore('preferences', {
       due: {
         period: 7
       }
+    },
+    hostingJurisdictions: {
+      value: [],
+      criteriaType: ECriteriaType.exclude,
+      timestamp: 0
     }
   }),
 
   actions: {
     async setDefaultPreferences(): Promise<void> {
-      let maxTimeBeforeInvoice = Number(this.invoicesSettings.frequency.period) || 7
-      let invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 7
+      const maxDaysBeforeInvoice = Number(this.invoicesSettings.frequency.period) || 7
+      const invoiceDuePeriod = Number(this.invoicesSettings.due.period) || 7
+      let maxTimeBeforeInvoice = maxDaysBeforeInvoice * 24 * 60 * 60
+
+      // NB: 18446744073709551615 is the max u64 number, which is the required type for `max_time_before_invoice.secs`
+      // Number should never need to exceed this amount.
+      if (maxTimeBeforeInvoice > 18446744073709551615) {
+        maxTimeBeforeInvoice = 18446744073709551615
+      } 
 
       const payload: DefaultPreferencesPayload = {
-        max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
-        max_time_before_invoice: {
-          secs: maxTimeBeforeInvoice * 24 * 60 * 60,
-          nanos: 0
-        },
-        invoice_due_in_days: invoiceDuePeriod,
         price_compute: `${this.pricesSettings.cpu}`,
         price_storage: `${this.pricesSettings.storage}`,
-        price_bandwidth: `${this.pricesSettings.bandwidth}`
+        price_bandwidth: `${this.pricesSettings.bandwidth}`,
+        max_fuel_before_invoice: `${this.invoicesSettings.frequency.amount}`,
+        max_time_before_invoice: {
+          secs: maxTimeBeforeInvoice,
+          nanos: 0,
+        },
+        invoice_due_in_days: invoiceDuePeriod,
+        jurisdiction_prefs: {
+          value: this.hostingJurisdictions.value,
+          is_exclusion: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude
+        }
       }
 
       await setDefaultHAppPreferences(payload)
@@ -77,11 +96,30 @@ export const usePreferencesStore = defineStore('preferences', {
       }
     },
 
+    updateHostingJurisdiction(jurisdiction: {
+      criteria_type: ECriteriaType
+      value: string[]
+    }): void {
+      this.hostingJurisdictions.value = jurisdiction.value
+      this.hostingJurisdictions.criteriaType = jurisdiction.criteria_type
+    },
+
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 
       if (!isHostPreferencesResponse(response)) {
+        // If the request failed, update the timestamp to trigger a re-render of the selects
+        this.hostingJurisdictions.timestamp = Date.now()
         return
+      }
+
+      this.hostingJurisdictions = {
+        value: response.jurisdiction_prefs?.value || [],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        criteriaType: response.jurisdiction_prefs?.is_exclusion
+          ? ECriteriaType.exclude
+          : ECriteriaType.include,
+        timestamp: response.timestamp
       }
 
       const {
@@ -113,12 +151,14 @@ export const usePreferencesStore = defineStore('preferences', {
 
       this.isLoaded = true
     },
+
     updateInvoiceFrequency(invoiceFrequency: number, invoiceMaxHolofuel: number) {
       this.invoicesSettings.frequency = {
         amount: invoiceMaxHolofuel,
         period: invoiceFrequency
       }
     },
+
     updateInvoiceDue(invoiceDueInDays: number) {
       this.invoicesSettings.due = {
         period: invoiceDueInDays
