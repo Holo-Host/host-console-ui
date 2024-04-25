@@ -35,6 +35,7 @@ export default {
   },
   earnings: {
     earnings_in_the_past: 'Earnings in the past {numberOfDays} days are {trendDirection}',
+    earnings_in_the_past_days: 'Earnings in the past {numberOfDays} days',
     exceptions: 'Exceptions',
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
