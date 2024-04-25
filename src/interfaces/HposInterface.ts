@@ -5,7 +5,7 @@ import { kAuthTokenLSKey, kCoreAppVersionLSKey } from '@/constants'
 import kHttpStatus from '@/constants/httpStatues'
 import router from '@/router'
 import { isKycLevel } from '@/types/predicates'
-import type { CheckAuthResponse, EUserKycLevel, PricesData } from '@/types/types'
+import type { CheckAuthResponse, EarningsData, EUserKycLevel, PricesData } from '@/types/types'
 import { ECriteriaType, EHostingPlan } from '@/types/types'
 import { retry } from '@/utils/functionUtils'
 import { eraseHpAdminKeypair, getHpAdminKeypair } from '@/utils/keyManagement'
@@ -33,6 +33,7 @@ interface HposInterface {
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
+  getHoloFuelDailyStats: () => Promise<unknown | boolean>
   HPOS_API_URL: string
 }
 
@@ -155,6 +156,7 @@ type HposHolochainCallResponse =
   | EUserKycLevel
   | ServiceLogsResponse
   | ZomeCallResponse
+  | EarningsData
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -1000,6 +1002,16 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function getHoloFuelDailyStats(): Promise<HposHolochainCallResponse> {
+    const result = await hposHolochainCall({
+      method: 'get',
+      pathPrefix: '/api/v2',
+      path: '/holofuel_redeemable_for_last_week'
+    })
+
+    return result
+  }
+
   return {
     getUsage,
     getHostedHApps,
@@ -1023,6 +1035,7 @@ export function useHposInterface(): HposInterface {
     stopHostingHApp,
     updateHAppHostingPlan,
     getServiceLogs,
+    getHoloFuelDailyStats,
     HPOS_API_URL
   }
 }

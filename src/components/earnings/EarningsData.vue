@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import BaseButton from '@uicommon/components/BaseButton.vue'
 import { formatCurrency } from '@uicommon/utils/numbers'
-import { computed } from 'vue'
+// import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import EarningsChart from '@/components/earnings/EarningsChart.vue'
-import TrendChip from '@/components/TrendChip.vue'
+// import TrendChip from '@/components/TrendChip.vue'
 import { useGoToHoloFuel } from '@/composables/useGoToHoloFuel'
 import type { EarningsData } from '@/types/types'
 
@@ -15,19 +15,19 @@ const props = defineProps<{
 const { goToHoloFuel } = useGoToHoloFuel()
 const { t } = useI18n()
 
-const trendValue = computed(() => {
-  const currentEarnings = Number(props.earnings.current)
-  const previousEarnings = Number(props.earnings.previous)
-
-  return ((currentEarnings - previousEarnings) / previousEarnings) * 100
-})
-
-const trendDirection = computed(() => {
-  const currentEarnings = Number(props.earnings.current)
-  const previousEarnings = Number(props.earnings.previous)
-
-  return currentEarnings >= previousEarnings ? 'up' : 'down'
-})
+// const trendValue = computed(() => {
+//   const currentEarnings = Number(props.earnings.current)
+//   const previousEarnings = Number(props.earnings.previous)
+//
+//   return ((currentEarnings - previousEarnings) / previousEarnings) * 100
+// })
+//
+// const trendDirection = computed(() => {
+//   const currentEarnings = Number(props.earnings.current)
+//   const previousEarnings = Number(props.earnings.previous)
+//
+//   return currentEarnings >= previousEarnings ? 'up' : 'down'
+// })
 </script>
 
 <template>
@@ -35,11 +35,12 @@ const trendDirection = computed(() => {
     <div class="weekly-earnings-data__header">
       <div class="weekly-earnings-data__header-label">
         <span class="weekly-earnings-data__header-label-top">
-          {{ t('earnings.earnings_in_the_past', { numberOfDays: 7, trendDirection }) }}
+          <!--          {{ t('earnings.earnings_in_the_past', { numberOfDays: 7, trendDirection }) }}-->
+          {{ t('earnings.earnings_in_the_past_days', { numberOfDays: 7 }) }}
         </span>
         <span class="weekly-earnings-data__header-label-bottom">
-          {{ t('earnings.totalling', { amount: formatCurrency(props.earnings.current, 0) }) }}
-          <TrendChip :value="trendValue || 0" />
+          {{ t('earnings.totalling', { amount: formatCurrency(props.earnings.redeemed, 0) }) }}
+          <!--          <TrendChip :value="trendValue || 0" />-->
         </span>
       </div>
 
@@ -52,7 +53,7 @@ const trendDirection = computed(() => {
     </div>
 
     <EarningsChart
-      :data="props.earnings.daily"
+      :data="props.earnings.dailies"
       class="weekly-earnings-data__graph"
     />
   </div>
@@ -73,7 +74,6 @@ const trendDirection = computed(() => {
     &-label {
       display: flex;
       flex-direction: column;
-      opacity: 0.25;
       pointer-events: none;
 
       &-top {
@@ -94,8 +94,6 @@ const trendDirection = computed(() => {
 
   &__graph {
     margin-top: 10px;
-    opacity: 0.25;
-    pointer-events: none;
   }
 
   &__holofuel-button {

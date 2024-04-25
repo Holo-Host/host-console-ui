@@ -113,9 +113,8 @@ export interface DailyEarningsData {
 }
 
 export interface EarningsData {
-  current: number
-  previous: number
-  daily: DailyEarningsData[]
+  redeemed: number
+  dailies: DailyEarningsData[]
 }
 
 export enum ECriteriaType {
