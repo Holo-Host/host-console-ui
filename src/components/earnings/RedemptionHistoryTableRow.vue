@@ -118,7 +118,7 @@ function showTransactionPrice(state: boolean): void {
     >
       <a
         v-if="props.redemption.transactionEthHash"
-        :href="`https://goerli.etherscan.io/tx/${props.redemption.transactionEthHash}`"
+        :href="`https://sepolia.etherscan.io/tx/${props.redemption.transactionEthHash}`"
         target="_blank"
         class="redemption-history-table-row__transaction-link"
       >
