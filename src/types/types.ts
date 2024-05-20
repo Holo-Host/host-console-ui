@@ -108,8 +108,8 @@ export interface InvoiceDue {
 
 export interface DailyEarningsData {
   date: string
-  paid: number
-  unpaid: number
+  paid: string
+  unpaid: string
 }
 
 export interface EarningsData {

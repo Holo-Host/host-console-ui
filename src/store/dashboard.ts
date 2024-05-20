@@ -2,7 +2,12 @@ import { defineStore } from 'pinia'
 import { HApp, HostEarnings, UsageResponse, useHposInterface } from '@/interfaces/HposInterface'
 import type { EarningsData } from '@/types/types'
 
-const { getUsage, getHostedHApps, getHostEarnings, getHoloFuelDailyStats } = useHposInterface()
+const {
+  getUsage,
+  getHostedHApps,
+  getHostEarnings,
+  getHoloFuelDailyStats
+} = useHposInterface()
 
 interface State {
   usage: UsageResponse | { error: unknown }
@@ -49,6 +54,13 @@ export const useDashboardStore = defineStore('dashboard', {
 
     async getHoloFuelDailyStats(): Promise<void> {
       this.earningsStats = await getHoloFuelDailyStats()
+    },
+
+    resetHoloFuelDailyStats(): void {
+      this.earningsStats = {
+        dailies: [],
+        redeemed: 0
+      }
     }
   }
 })
