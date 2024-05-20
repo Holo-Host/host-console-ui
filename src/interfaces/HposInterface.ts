@@ -33,7 +33,8 @@ interface HposInterface {
   getRedemptionHistory: () => Promise<HposHolochainCallResponse>
   getCoreAppVersion: () => Promise<CoreAppVersion>
   redeemHoloFuel: (payload: RedeemHoloFuelPayload) => Promise<RedemptionTransaction | boolean>
-  getHoloFuelDailyStats: () => Promise<unknown | boolean>
+  getHoloFuelDailyStats: () => Promise<EarningsData | boolean>
+  resetHoloFuelDailyStats: () => void
   HPOS_API_URL: string
 }
 
