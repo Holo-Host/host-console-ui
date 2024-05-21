@@ -33,7 +33,7 @@ const totalEarnings = computed(() =>
           {{ t('earnings.earnings_in_the_past_days', { numberOfDays: 7 }) }}
         </span>
         <span class="weekly-earnings-data__header-label-bottom">
-          {{ t('earnings.totalling', { amount: formatCurrency(totalEarnings, 2) }) }}
+          {{ formatCurrency(totalEarnings, 2) }} HF
         </span>
       </div>
 
