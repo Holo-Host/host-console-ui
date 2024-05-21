@@ -20,7 +20,7 @@ function presentCurrency(value: number): string {
   }
 
   if (value === 0) {
-    return '0 HF'
+    return '0'
   }
 
   const k = 1000
