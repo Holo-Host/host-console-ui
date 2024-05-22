@@ -2,14 +2,36 @@
 import { formatCurrency } from '@uicommon/utils/numbers'
 import ApexCharts from 'apexcharts'
 import dayjs from 'dayjs'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useDashboardStore } from '@/store/dashboard'
 import type { DailyEarningsData } from '@/types/types'
+
+const dashboardStore = useDashboardStore()
 
 const chart = ref<ApexCharts | null>(null)
 
 const props = defineProps<{
   data: DailyEarningsData[]
 }>()
+
+function presentCurrency(value: number): string {
+  if (isNaN(value)) {
+    return '--'
+  }
+
+  if (value === 0) {
+    return '0'
+  }
+
+  const k = 1000
+  const sizes = ['', 'K', 'M']
+
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  const i = Math.min(Math.floor(Math.log(value) / Math.log(k)), 4)
+
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  return `${parseFloat((value / Math.pow(k, i)).toFixed(2))}${sizes[i]}`
+}
 
 const options = computed(() => ({
   series: [
@@ -81,7 +103,7 @@ const options = computed(() => ({
       offsetX: -1,
       offsetY: 0,
       rotate: 0,
-      formatter: (value) => value
+      formatter: (value) => `${presentCurrency(value)}`
     },
     axisBorder: {
       show: true,
@@ -152,7 +174,7 @@ watch(
   () => props.data,
   async (value) => {
     if (value && chart.value) {
-      chart.value.updateSeries(value)
+      await chart.value.updateSeries(value)
     }
   },
   {
@@ -165,6 +187,10 @@ onMounted(async () => {
     chart.value = new ApexCharts(document.getElementById('earnings-chart'), options.value)
     await chart.value.render()
   }
+})
+
+onUnmounted(() => {
+  dashboardStore.resetHoloFuelDailyStats()
 })
 </script>
 

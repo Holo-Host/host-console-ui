@@ -13,6 +13,7 @@ const emit = defineEmits(['try-again-clicked'])
 const props = defineProps<{
   data: EarningsData
   isLoading: boolean
+  isLoadingStats: boolean
   isError: boolean
 }>()
 </script>
@@ -24,7 +25,10 @@ const props = defineProps<{
     @try-again-clicked="emit('try-again-clicked')"
   >
     <template #left>
-      <EarningsDataComponent :earnings="props.data" />
+      <EarningsDataComponent
+        :earnings="props.data"
+        :is-loading="props.isLoadingStats"
+      />
     </template>
 
     <template #right>
