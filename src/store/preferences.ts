@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { DefaultPreferencesPayload, useHposInterface } from '@/interfaces/HposInterface'
 import { isHostPreferencesResponse } from '@/types/predicates'
-import type { HostingJurisdictions, InvoicesData, PricesData } from '@/types/types'
+import type {
+  HostingCategories,
+  HostingJurisdictions,
+  InvoicesData,
+  PricesData
+} from '@/types/types'
 import { ECriteriaType } from '@/types/types'
 
 const { getHostPreferences, setDefaultHAppPreferences } = useHposInterface()
@@ -13,6 +18,12 @@ interface State {
   pricesSettings: PricesData
   invoicesSettings: InvoicesData
   hostingJurisdictions: HostingJurisdictions
+  hostingCategories: HostingCategories
+}
+
+interface RawHostingCategories {
+  criteria_type: ECriteriaType
+  value: string[]
 }
 
 export const usePreferencesStore = defineStore('preferences', {
@@ -33,6 +44,11 @@ export const usePreferencesStore = defineStore('preferences', {
       }
     },
     hostingJurisdictions: {
+      value: [],
+      criteriaType: ECriteriaType.exclude,
+      timestamp: 0
+    },
+    hostingCategories: {
       value: [],
       criteriaType: ECriteriaType.exclude,
       timestamp: 0
@@ -64,6 +80,10 @@ export const usePreferencesStore = defineStore('preferences', {
         jurisdiction_prefs: {
           value: this.hostingJurisdictions.value,
           is_exclusion: this.hostingJurisdictions.criteriaType === ECriteriaType.exclude
+        },
+        categories_prefs: {
+          value: this.hostingCategories.value,
+          is_exclusion: this.hostingCategories.criteriaType === ECriteriaType.exclude
         }
       }
 
@@ -104,12 +124,18 @@ export const usePreferencesStore = defineStore('preferences', {
       this.hostingJurisdictions.criteriaType = jurisdiction.criteria_type
     },
 
+    updateHostingCategories(categories: RawHostingCategories): void {
+      this.hostingCategories.value = categories.value
+      this.hostingCategories.criteriaType = categories.criteria_type
+    },
+
     async getHostPreferences(): Promise<void> {
       const response = await getHostPreferences()
 
       if (!isHostPreferencesResponse(response)) {
         // If the request failed, update the timestamp to trigger a re-render of the selects
         this.hostingJurisdictions.timestamp = Date.now()
+        this.hostingCategories.timestamp = Date.now()
         return
       }
 
@@ -117,6 +143,15 @@ export const usePreferencesStore = defineStore('preferences', {
         value: response.jurisdiction_prefs?.value || [],
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         criteriaType: response.jurisdiction_prefs?.is_exclusion
+          ? ECriteriaType.exclude
+          : ECriteriaType.include,
+        timestamp: response.timestamp
+      }
+
+      this.hostingCategories = {
+        value: response.categories_prefs?.value || [],
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        criteriaType: response.categories_prefs?.is_exclusion
           ? ECriteriaType.exclude
           : ECriteriaType.include,
         timestamp: response.timestamp

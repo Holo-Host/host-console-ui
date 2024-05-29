@@ -125,6 +125,10 @@ export interface HostPreferencesResponse {
     value: string[]
     is_exclusion: boolean
   }
+  categories_prefs: {
+    value: string[]
+    is_exclusion: boolean
+  }
   timestamp: number
 }
 
@@ -136,6 +140,10 @@ export interface DefaultPreferencesPayload {
   max_fuel_before_invoice: string
   invoice_due_in_days: number
   jurisdiction_prefs: {
+    value: string[]
+    is_exclusion: boolean
+  }
+  categories_prefs: {
     value: string[]
     is_exclusion: boolean
   }
@@ -656,50 +664,6 @@ export function useHposInterface(): HposInterface {
     } catch (error) {
       console.error('getHostPreferences encountered an error: ', error)
       return false
-    }
-  }
-
-  async function getHostingJurisdictions(): Promise<
-    HposHolochainCallResponse | { error: unknown }
-  > {
-    let holoportId = ''
-
-    if (window.location.host.split(':')[0] === 'localhost') {
-      const holoportUrl = `${import.meta.env.VITE_HOLOPORT_URL}` || ''
-      holoportId = holoportUrl.split('//')[1]?.split('.')[0] ?? ''
-    } else {
-      holoportId = window.location.host.split('//')[1]?.split('.')[0] ?? ''
-    }
-
-    const params = {
-      appId: localStorage.getItem(kCoreAppVersionLSKey),
-      roleId: 'core-app',
-      zomeName: 'hha',
-      fnName: 'get_hosting_jurisdictions',
-      payload: holoportId
-    }
-
-    try {
-      const hostingJurisdictions = await hposHolochainCall({
-        method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
-        responseType: 'arraybuffer',
-        params
-      })
-
-      return hostingJurisdictions
-    } catch (error) {
-      console.error('getHostingJurisdictions encountered an error: ', error)
-      return {
-        jurisdiction_prefs: {
-          value: ['Poland'], // QUESTION: shouldn't this be empty if there is an error?
-          is_exclusion: false
-        },
-        timestamp: 0
-      }
-
-      // return false
     }
   }
 
