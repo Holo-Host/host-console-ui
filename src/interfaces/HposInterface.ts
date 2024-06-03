@@ -25,6 +25,7 @@ interface HposInterface {
   getKycLevel: () => Promise<EUserKycLevel | null>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
+  updateSshSettings: (access: boolean) => Promise<void>
   getHoloFuelProfile: () => unknown
   updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
@@ -839,6 +840,21 @@ export function useHposInterface(): HposInterface {
     }
   }
 
+  async function updateSshSettings(access: boolean): Promise<void> {
+    try {
+      let method = 'delete'
+      if (access) {
+        method = 'put'
+      }
+        await hposAdminCall({
+        method: method,
+        path: '/profiles/development/features/ssh',
+      })
+    } catch (error) {
+      console.error('updateSshSettings failed: ', error)
+    }
+  }
+
   async function updateHoloFuelProfile({
     nickname,
     avatarUrl
@@ -1021,6 +1037,7 @@ export function useHposInterface(): HposInterface {
     getUser,
     getHposStatus,
     updateHoloportName,
+    updateSshSettings,
     getHoloFuelProfile,
     updateHoloFuelProfile,
     getPaidInvoices,
