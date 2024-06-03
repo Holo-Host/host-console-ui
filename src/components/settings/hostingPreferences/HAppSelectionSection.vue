@@ -78,8 +78,8 @@ function updateCategories(categories: Categories): void {
             label="hosting_preferences.happ_selection.exclude"
             :options="categories"
             :is-busy="isLoading"
-            :initially-selected="props.hostingCategories.criteriaType === 'include' ? props.hostingCategories.value : []"
-            @save="updateCategories({value: $event, criteria_type: ECriteriaType.include})"
+            :initially-selected="props.hostingCategories.criteriaType === 'exclude' ? props.hostingCategories.value : []"
+            @save="updateCategories({value: $event, criteria_type: ECriteriaType.exclude})"
           />
         </div>
         <div class="happ-selection-section__tags-item happ-selection-section__tags-item-include">
