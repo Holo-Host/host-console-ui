@@ -52,6 +52,13 @@ const totalEarnings = computed(() =>
     />
 
     <div
+      v-else-if="props.earnings.dailies.length === 0"
+      class="weekly-earnings-data__graph--no-data"
+    >
+      {{ t('earnings.no_data') }}
+    </div>
+
+    <div
       v-else
       class="weekly-earnings-data__graph--loading"
     >
@@ -103,6 +110,14 @@ const totalEarnings = computed(() =>
     margin-top: 10px;
 
     &--loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 255px;
+    }
+
+    &--no-data {
+      font-size: 14px;
       display: flex;
       justify-content: center;
       align-items: center;

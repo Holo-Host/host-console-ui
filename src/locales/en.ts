@@ -40,6 +40,7 @@ export default {
     last_30_days: 'Last 30 days',
     last_7_days: 'Last 7 days',
     last_day: 'Last day',
+    no_data: 'You have no earnings data for the past 7 days.',
     paid_invoices: 'Paid Invoices',
     payments: 'Payments',
     redeemable_holofuel: 'Redeemable HoloFuel',
