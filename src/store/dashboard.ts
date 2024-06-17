@@ -2,12 +2,7 @@ import { defineStore } from 'pinia'
 import { HApp, HostEarnings, UsageResponse, useHposInterface } from '@/interfaces/HposInterface'
 import type { EarningsData } from '@/types/types'
 
-const {
-  getUsage,
-  getHostedHApps,
-  getHostEarnings,
-  getHoloFuelDailyStats
-} = useHposInterface()
+const { getUsage, getHostedHApps, getHostEarnings, getHoloFuelDailyStats } = useHposInterface()
 
 interface State {
   usage: UsageResponse | { error: unknown }

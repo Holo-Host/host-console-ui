@@ -421,7 +421,7 @@ export function useHposInterface(): HposInterface {
     // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
     try {
       return await hposCall({
-        pathPrefix: '/holochain-api/v1',
+        pathPrefix: '/holochain-api/v2',
         ...args
       })
     } catch (err) {
@@ -438,7 +438,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
-        path: '/usage',
+        path: '/holoport/usage',
         params: {
           usage_interval: 1
         }
@@ -453,8 +453,7 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'get',
-        pathPrefix: '/api/v2',
-        path: '/hosted_happs',
+        path: '/apps/hosted',
         params: {
           usage_interval: 7
         }
@@ -478,8 +477,7 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'get',
-        pathPrefix: '/api/v2',
-        path: `/hosted_happs/${id}`
+        path: `/apps/hosted/${id}`
       })
 
       if (isHAppDetails(result)) {
@@ -500,8 +498,7 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'post',
-        pathPrefix: '/api/v2',
-        path: `/hosted_happs/${id}/enable`
+        path: `/apps/hosted/${id}/enable`
       })
 
       return result
@@ -517,8 +514,7 @@ export function useHposInterface(): HposInterface {
     try {
       const result = await hposHolochainCall({
         method: 'post',
-        pathPrefix: '/api/v2',
-        path: `/hosted_happs/${id}/disable`
+        path: `/apps/hosted/${id}/disable`
       })
 
       return result
@@ -542,8 +538,7 @@ export function useHposInterface(): HposInterface {
 
       await hposHolochainCall({
         method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
+        path: '/apps/call_zome',
         responseType: 'arraybuffer',
         params
       })
@@ -563,8 +558,7 @@ export function useHposInterface(): HposInterface {
       promises.push(
         hposHolochainCall({
           method: 'get',
-          pathPrefix: '/api/v2',
-          path: `/hosted_happs/${id}/logs?days=30`
+          path: `/apps/hosted/${id}/logs?days=30`
         })
       )
     })
@@ -618,8 +612,7 @@ export function useHposInterface(): HposInterface {
 
       await hposHolochainCall({
         method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
+        path: '/apps/call_zome',
         responseType: 'arraybuffer',
         params
       })
@@ -634,7 +627,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
-        path: '/host_earnings'
+        path: '/host/earnings'
       })
     } catch (error) {
       console.error('getHostEarnings encountered an error: ', error)
@@ -654,8 +647,7 @@ export function useHposInterface(): HposInterface {
     try {
       const hostPreferences = await hposHolochainCall({
         method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
+        path: '/apps/call_zome',
         responseType: 'arraybuffer',
         params
       })
@@ -763,8 +755,7 @@ export function useHposInterface(): HposInterface {
 
     const response = await hposHolochainCall({
       method: 'post',
-      path: '/zome_call',
-      pathPrefix: '/api/v2',
+      path: '/apps/call_zome',
       responseType: 'arraybuffer',
       params
     })
@@ -819,8 +810,7 @@ export function useHposInterface(): HposInterface {
 
       await hposHolochainCall({
         method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
+        path: '/apps/call_zome',
         responseType: 'arraybuffer',
         params
       })
@@ -835,7 +825,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
-        path: '/host_invoices',
+        path: '/host/invoices',
         params: { invoice_set: 'paid' }
       })
     } catch (error) {
@@ -847,7 +837,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
-        path: '/host_invoices',
+        path: '/host/invoices',
         params: { invoice_set: 'unpaid' }
       })
     } catch (error) {
@@ -859,7 +849,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
-        path: '/redemptions'
+        path: '/host/redemptions'
       })
     } catch (error) {
       return false
@@ -872,7 +862,7 @@ export function useHposInterface(): HposInterface {
       // @ts-ignore
       const { version: coreAppVersion } = await hposHolochainCall({
         method: 'get',
-        path: '/core_app_version'
+        path: '/apps/core/version'
       })
 
       if (typeof coreAppVersion === 'string') {
@@ -894,7 +884,7 @@ export function useHposInterface(): HposInterface {
       // @ts-ignore
       const data = await hposHolochainCall({
         method: 'get',
-        path: '/kyc'
+        path: '/host/kyc'
       })
 
       if (isKycLevel(data)) {
@@ -923,8 +913,7 @@ export function useHposInterface(): HposInterface {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       const response = await hposHolochainCall({
         method: 'post',
-        path: '/zome_call',
-        pathPrefix: '/api/v2',
+        path: '/apps/call_zome',
         responseType: 'arraybuffer',
         params: getReserveDetailsParams
       })
@@ -950,8 +939,7 @@ export function useHposInterface(): HposInterface {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const response = await hposHolochainCall({
           method: 'post',
-          path: '/zome_call',
-          pathPrefix: '/api/v2',
+          path: '/apps/call_zome',
           responseType: 'arraybuffer',
           params: initiateRedemptionParams
         })

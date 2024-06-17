@@ -86,7 +86,7 @@ describe('hApps page', () => {
     }
 
     axios.get.mockImplementation((path) => {
-      if (path.endsWith('hosted_happs')) {
+      if (path.endsWith('hosted')) {
         return hostedHAppsResult
       }
 
