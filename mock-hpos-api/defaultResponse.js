@@ -639,27 +639,27 @@ let mockDefaultHappPreferences = {
   price_storage: (Math.random() * 10).toFixed(5).toString()
 }
 
-// NB: both /api and /holochain-api calls are mocked here
+// NB: both /api calls are mocked here
 const data = {
   get: {
     '/api/v1/config': userConfig,
     '/api/v1/status': holoNixpkgs,
     '/api/v2/apps/hosted': happs,
-    '/holochain-api/v1/get_happs': mockHapps,
-    '/holochain-api/v1/get_hosts': mockHosts,
-    '/holochain-api/v2/holoport/usage': usage,
-    '/holochain-api/v2/host/earnings': earnings,
-    '/holochain-api/v2/apps/core/version': coreAppVersion,
-    '/holochain-api/v2/host/invoices': mockPaidInvoicesData,
-    '/holochain-api/v2/host/redemptions': mockRedemptionHistoryData,
-    '/holochain-api/v2/host/kyc': mockKycData.kyc
+    '/api/v1/get_happs': mockHapps,
+    '/api/v1/get_hosts': mockHosts,
+    '/api/v2/holoport/usage': usage,
+    '/api/v2/host/earnings': earnings,
+    '/api/v2/apps/core/version': coreAppVersion,
+    '/api/v2/host/invoices': mockPaidInvoicesData,
+    '/api/v2/host/redemptions': mockRedemptionHistoryData,
+    '/api/v2/host/kyc': mockKycData.kyc
   },
   put: {
     '/api/v1/config': (args) => args,
     '/api/v1/holoport/name': {}
   },
   post: {
-    '/holochain-api/v1/apps/call_zome': (args) => {
+    '/api/v2/apps/call_zome': (args) => {
       switch (args.fnName) {
         case 'get_my_profile':
           return getMyProfile

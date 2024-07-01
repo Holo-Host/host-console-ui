@@ -421,7 +421,7 @@ export function useHposInterface(): HposInterface {
     // On 401 redirect to login and unset authToken because the reason for 401 might be it's expired
     try {
       return await hposCall({
-        pathPrefix: '/holochain-api/v2',
+        pathPrefix: '/api/v2',
         ...args
       })
     } catch (err) {

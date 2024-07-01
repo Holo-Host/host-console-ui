@@ -53,10 +53,6 @@ export default defineConfig(({ mode }) => {
             '^/api/*': {
               target: env.VITE_HOLOPORT_URL,
               changeOrigin: true
-              },
-            '^/holochain-api/*': {
-              target: env.VITE_HOLOPORT_URL,
-              changeOrigin: true
               }
           }
         },
