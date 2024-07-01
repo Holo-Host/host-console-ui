@@ -882,7 +882,7 @@ export function useHposInterface(): HposInterface {
       // @ts-ignore
       const data = await hposHolochainCall({
         method: 'get',
-        path: '/host/kyc'
+        path: '/host/kyc_level'
       })
 
       if (isKycLevel(data)) {
