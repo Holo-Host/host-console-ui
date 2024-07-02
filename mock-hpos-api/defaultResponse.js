@@ -652,7 +652,7 @@ const data = {
     '/api/v2/apps/core/version': coreAppVersion,
     '/api/v2/host/invoices': mockPaidInvoicesData,
     '/api/v2/host/redemptions': mockRedemptionHistoryData,
-    '/api/v2/host/kyc': mockKycData.kyc
+    '/api/v2/host/kyc_level': mockKycData.kyc
   },
   put: {
     '/api/v1/config': (args) => args,
