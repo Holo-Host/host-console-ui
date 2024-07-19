@@ -131,7 +131,7 @@ const invoices = computed(() => {
   return Array.isArray(rawInvoices)
     ? rawInvoices.map((invoice) => {
       const note = JSON.parse(invoice.note);
-      const expirationDate = note['invoice_due_date'] ? new Date(note['invoice_due_date']) : 'N/A';
+      const expirationDate = note['invoice_due_date'] ? new Date(note['invoice_due_date'] * 1_000) : 'N/A';
       return {
         ...invoice,
         formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
