@@ -110,7 +110,9 @@ interface HoloFuelProfileResponse {
   avatar_url: string
 }
 
-type CoreAppVersionResponse = string | null
+interface CoreAppVersionResponse {
+  version: string
+}
 
 export interface HostPreferencesResponse {
   price_compute: string
@@ -858,7 +860,7 @@ export function useHposInterface(): HposInterface {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const coreAppVersion = await hposHolochainCall({
+      const { version: coreAppVersion } = await hposHolochainCall({
         method: 'get',
         path: '/apps/core/version'
       })
