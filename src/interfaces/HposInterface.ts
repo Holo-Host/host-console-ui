@@ -842,13 +842,17 @@ export function useHposInterface(): HposInterface {
 
   async function updateSshSettings(access: boolean): Promise<void> {
     try {
-      let method = 'delete'
-      if (access) {
-        method = 'put'
+      const method = 'put'
+      const data = {
+        enable: access,
+        include_default: access,
+        pubkeys: []
       }
-        await hposAdminCall({
-        method: method,
-        path: '/profiles/development/features/ssh',
+
+      await hposAdminCall({
+        method,
+        path: '/ssh',
+        params: { data }
       })
     } catch (error) {
       console.error('updateSshSettings failed: ', error)
