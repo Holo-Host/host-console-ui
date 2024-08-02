@@ -78,7 +78,7 @@ describe('dashboard page', () => {
         return Promise.resolve(defaultSshAccessResult)
       }
 
-      if (path.endsWith('hosted_happs')) {
+      if (path.endsWith('hosted')) {
         return hostedHappsResult
       }
 

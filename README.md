@@ -53,7 +53,7 @@ Start UI server
 yarn serve
 ```
 
-Using this command, all requests to `localhost:8080/api/` and `localhost:8080/holochain-api/` are forwarded to the holoport. This is really helpful for development/testing.
+Using this command, all requests to `localhost:8080/api/` are forwarded to the holoport. This is really helpful for development/testing.
 
 If you want to run it against mocked data you will need to run it as below.
 

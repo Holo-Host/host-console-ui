@@ -127,3 +127,9 @@ export interface HostingJurisdictions {
   criteriaType: ECriteriaType
   timestamp: number
 }
+
+export interface HostingCategories {
+  value: string[]
+  criteriaType: ECriteriaType
+  timestamp: number
+}

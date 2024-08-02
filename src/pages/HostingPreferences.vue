@@ -22,6 +22,7 @@ const isPaidHostingEnabled = ref(userStore.kycLevel !== EUserKycLevel.two)
 const pricesSettings = computed(() => preferencesStore.pricesSettings)
 const invoicesSettings = computed(() => preferencesStore.invoicesSettings)
 const hostingJurisdictions = computed(() => preferencesStore.hostingJurisdictions)
+const hostingCategories = computed(() => preferencesStore.hostingCategories)
 
 const isModalVisible = ref(false)
 
@@ -93,8 +94,19 @@ interface HostingJurisdiction {
   value: string[]
 }
 
+interface HostingCategories {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  criteria_type: ECriteriaType
+  value: string[]
+}
+
 async function updateHostingJurisdiction(jurisdiction: HostingJurisdiction): Promise<void> {
   preferencesStore.updateHostingJurisdiction(jurisdiction)
+  await setDefaultHostPreferences()
+}
+
+async function updateHostingCategories(categories: HostingCategories): Promise<void> {
+  preferencesStore.updateHostingCategories(categories)
   await setDefaultHostPreferences()
 }
 
@@ -157,11 +169,13 @@ async function invoicePaymentDueChanged({ period }: InvoiceDue): Promise<void> {
       />
 
       <HAppSelectionSection
-        :is-jurisdiction-loading="isUpdating"
+        :is-loading="isUpdating"
         :hosting-jurisdictions="hostingJurisdictions"
+        :hosting-categories="hostingCategories"
         class="hosting-preferences__happ-selection"
         data-test-hosting-preferences-happ-selection-section
         @update:jurisdiction="updateHostingJurisdiction"
+        @update:categories="updateHostingCategories"
       />
 
       <GlobalHostingPlanModal
