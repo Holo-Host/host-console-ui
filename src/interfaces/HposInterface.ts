@@ -849,6 +849,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/host/redemptions'
       })
     } catch (error) {
@@ -959,7 +960,7 @@ export function useHposInterface(): HposInterface {
     const result = await hposHolochainCall({
       method: 'get',
       pathPrefix: '/api/v2',
-      path: '/holofuel_redeemable_for_last_week'
+      path: '/host/redeemable_histogram'
     })
 
     return result
