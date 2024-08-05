@@ -825,6 +825,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/host/invoices',
         params: { invoice_set: 'paid' }
       })
@@ -837,6 +838,7 @@ export function useHposInterface(): HposInterface {
     try {
       return await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/host/invoices',
         params: { invoice_set: 'unpaid' }
       })
@@ -863,6 +865,7 @@ export function useHposInterface(): HposInterface {
       // @ts-ignore
       const { version: coreAppVersion } = await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/apps/core/version'
       })
 
@@ -885,6 +888,7 @@ export function useHposInterface(): HposInterface {
       // @ts-ignore
       const data = await hposHolochainCall({
         method: 'get',
+        pathPrefix: '/api/v2',
         path: '/host/kyc_level'
       })
 
