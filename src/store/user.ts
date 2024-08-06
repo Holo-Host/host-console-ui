@@ -9,7 +9,7 @@ import { EUserKycLevel } from '@/types/types'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-assignment
 const { showModal } = useModals()
 
-const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName, getKycLevel } =
+const { getCoreAppVersion, getUser, updateHoloFuelProfile, updateHoloportName, getKycLevel, updateSshSettings } =
   useHposInterface()
 
 interface State {
@@ -29,7 +29,7 @@ export const useUserStore = defineStore('user', {
     publicKey: undefined,
     email: '',
     networkFlavour: '',
-    sshAccess: true,
+    sshAccess: false,
     deviceName: '',
     hposVersion: '',
     holoFuel: {
@@ -52,6 +52,7 @@ export const useUserStore = defineStore('user', {
         this.publicKey = user.hostPubKey
         this.email = user.registrationEmail ?? ''
         this.networkFlavour = holoport.networkFlavour ?? ''
+        this.sshAccess = holoport.ssh_enabled ?? false
         this.deviceName = holoport.name ?? ''
         this.hposVersion = holoport.hposVersion ?? ''
         this.holoFuel = holoFuelProfile
@@ -90,6 +91,11 @@ export const useUserStore = defineStore('user', {
       this.deviceName = name
 
       await updateHoloportName(name)
+    },
+
+    async updateSshAccess(access: boolean): Promise<void> {
+      this.sshAccess = access
+      await updateSshSettings(access) 
     }
   }
 })

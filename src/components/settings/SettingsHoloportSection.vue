@@ -19,7 +19,7 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['update:device-name'])
+const emit = defineEmits(['update:device-name', 'update:ssh-access'])
 
 const isEditingDeviceName = ref(false)
 const editedDeviceName = ref('')
@@ -37,6 +37,10 @@ function saveDeviceName(): void {
 function cancelEditDeviceName(): void {
   isEditingDeviceName.value = false
   editedDeviceName.value = ''
+}
+
+function toggleSshAccess(): void {
+  emit('update:ssh-access', !props.settings.sshAccess)
 }
 </script>
 
@@ -92,8 +96,8 @@ function cancelEditDeviceName(): void {
     <SettingsRow :label="$t('settings.ssh_access')">
       <BaseCheckbox
         id="sshAccess"
-        is-disabled
         :checked="props.settings.sshAccess"
+        @change="toggleSshAccess"
       />
     </SettingsRow>
 

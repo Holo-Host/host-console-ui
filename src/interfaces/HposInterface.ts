@@ -25,6 +25,7 @@ interface HposInterface {
   getKycLevel: () => Promise<EUserKycLevel | null>
   getHposStatus: () => Promise<HPosStatus>
   updateHoloportName: (name: string) => Promise<void>
+  updateSshSettings: (access: boolean) => Promise<void>
   getHoloFuelProfile: () => unknown
   updateHoloFuelProfile: ({ nickname, avatarUrl }: UpdateHoloFuelProfilePayload) => Promise<boolean>
   getPaidInvoices: () => Promise<HposHolochainCallResponse>
@@ -246,6 +247,7 @@ interface HPosStatus {
   networkFlavour?: string
   hposVersion?: string
   name?: string
+  ssh_enabled?: boolean
 }
 
 interface CoreAppVersion {
@@ -726,7 +728,7 @@ export function useHposInterface(): HposInterface {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const { holo_nixpkgs, holoport } = await hposAdminCall({
+      const { holo_nixpkgs, holoport, ssh } = await hposAdminCall({
         method: 'get',
         path: '/status'
       })
@@ -737,7 +739,8 @@ export function useHposInterface(): HposInterface {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         hposVersion: formatHposVersion(holo_nixpkgs),
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
-        name: holoport.name
+        name: holoport.name,
+        ssh_enabled: holoport.ssh_enabled
       }
     } catch (err) {
       return {}
@@ -791,6 +794,22 @@ export function useHposInterface(): HposInterface {
       })
     } catch (error) {
       console.error('updateHoloportName failed: ', error)
+    }
+  }
+
+  async function updateSshSettings(access: boolean): Promise<void> {
+    try {
+      await hposAdminCall({
+        method: 'put',
+        path: '/ssh',
+        params: {
+          enable: access,
+          include_default: access,
+          pubkeys: []
+        }
+      })
+    } catch (error) {
+      console.error('updateSshSettings failed: ', error)
     }
   }
 
@@ -978,6 +997,7 @@ export function useHposInterface(): HposInterface {
     getUser,
     getHposStatus,
     updateHoloportName,
+    updateSshSettings,
     getHoloFuelProfile,
     updateHoloFuelProfile,
     getPaidInvoices,

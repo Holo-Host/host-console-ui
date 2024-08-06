@@ -12,6 +12,10 @@ const user = computed(() => userStore)
 async function onDeviceNameUpdate(deviceName: string): Promise<void> {
   await userStore.updateDeviceName(deviceName)
 }
+
+async function onSshAccessUpdate(sshAccess: boolean): Promise<void> {
+  await userStore.updateSshAccess(sshAccess)
+}
 </script>
 
 <template>
@@ -19,6 +23,7 @@ async function onDeviceNameUpdate(deviceName: string): Promise<void> {
     <SettingsHoloportSection
       :settings="user"
       @update:device-name="onDeviceNameUpdate"
+      @update:ssh-access="onSshAccessUpdate"
     />
 
     <SettingsHolofuelSection
