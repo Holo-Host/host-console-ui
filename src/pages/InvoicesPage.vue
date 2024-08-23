@@ -128,8 +128,6 @@ const invoices = computed(() => {
     ? earningsStore.paidInvoices
     : earningsStore.unpaidInvoices
 
-  console.log(rawInvoices)
-
   return Array.isArray(rawInvoices)
     ? rawInvoices.map((invoice) => {
       return {
