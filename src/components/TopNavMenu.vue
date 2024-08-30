@@ -58,6 +58,7 @@ async function openSettingsAndCloseMenu(): Promise<void> {
         v-if="props.agentAddress"
         size="42"
         :agent-key="props.agentAddress"
+        :tooltip-style="{ top: '25px', right: '-120px', zIndex: 9999 }"
         role="img"
         aria-label="Agent Identity Icon"
       />
