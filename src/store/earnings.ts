@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Earnings, Redemption, Transaction, useHposInterface } from '@/interfaces/HposInterface'
+import { Earnings, Redemption, RedemptionHistory, Transaction, useHposInterface } from '@/interfaces/HposInterface'
 import { isRedemptionsArray, isTransactionsArray } from '@/types/predicates'
 import { parseRedemption } from '@/utils/redemptions'
 
@@ -48,26 +48,23 @@ export const useEarningsStore = defineStore('earnings', {
     },
 
     async getRedemptionHistory(): Promise<boolean> {
-      const redemptions = await getRedemptionHistory()
+      const redemptions = await getRedemptionHistory() as RedemptionHistory;
+      if (!isRedemptionsArray(redemptions.accepted))
+        return false;
+      if (!isRedemptionsArray(redemptions.completed))
+        return false;
+      if (!isRedemptionsArray(redemptions.declined))
+        return false;
+      if (!isRedemptionsArray(redemptions.pending))
+        return false;
 
-      if (isRedemptionsArray(redemptions)) {
-        // Turn an object of arrays into a single array with proper status assigned
-        const flattenedRedemptions = []
-
-        Object.entries(redemptions.redemptions).forEach(([key, value]) =>
-          // status is a key an array of redemptions with that status is the value
-          value.forEach((redemption) => flattenedRedemptions.push({ ...redemption, status: key }))
-        )
-
-        const parsedRedemptions = flattenedRedemptions.map((redemption) =>
-          parseRedemption(redemption)
-        )
-
-        this.redemptions = parsedRedemptions
-        return true
-      }
-
-      return false
+      this.redemptions = [
+        ...redemptions.accepted,
+        ...redemptions.completed,
+        ...redemptions.declined,
+        ...redemptions.pending
+      ]
+      return true;
     }
   }
 })
