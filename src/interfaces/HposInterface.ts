@@ -167,6 +167,14 @@ type HposHolochainCallResponse =
   | ServiceLogsResponse
   | ZomeCallResponse
   | EarningsData
+  | RedemptionHistory
+
+export interface RedemptionHistory {
+  accepted: Redemption[]
+  completed: Redemption[]
+  declined: Redemption[]
+  pending: Redemption[]
+}
 
 type HposAdminCallResponse = HposConfigResponse
 
@@ -380,24 +388,24 @@ export function useHposInterface(): HposInterface {
     let response
 
     switch (method) {
-    case 'get':
-      response = await axios.get(fullUrl, { params, headers })
-      return response.data
+      case 'get':
+        response = await axios.get(fullUrl, { params, headers })
+        return response.data
 
-    case 'post':
+      case 'post':
         response = await axios.post(fullUrl, params, { responseType, headers })
-      return response.data
+        return response.data
 
-    case 'put':
-      response = await axios.put(fullUrl, params, { headers })
-      return response.data
+      case 'put':
+        response = await axios.put(fullUrl, params, { headers })
+        return response.data
 
-    case 'delete':
-      response = await axios.delete(fullUrl, { params, headers })
-      return response.data
+      case 'delete':
+        response = await axios.delete(fullUrl, { params, headers })
+        return response.data
 
-    default:
-      throw new Error(`No case in hposCall for ${method} method`)
+      default:
+        throw new Error(`No case in hposCall for ${method} method`)
     }
   }
 
@@ -585,9 +593,9 @@ export function useHposInterface(): HposInterface {
       const params =
         value === EHostingPlan.paid
           ? // When the hosting plan is set to paid, we need to remove the prices values
-        // so the default values are used, that is why we are not sending the prices,
-        // we use use_default_happ_preferences instead of set_happ_preferences
-          {
+            // so the default values are used, that is why we are not sending the prices,
+            // we use use_default_happ_preferences instead of set_happ_preferences
+            {
               appId: localStorage.getItem(kCoreAppVersionLSKey),
               roleId: 'core-app',
               zomeName: 'hha',
@@ -595,22 +603,22 @@ export function useHposInterface(): HposInterface {
               payload: id
             }
           : // When the hosting plan is set to free, we need to set the prices values to 0,
-        // that will override the default values
-          {
-            appId: localStorage.getItem(kCoreAppVersionLSKey),
-            roleId: 'core-app',
-            zomeName: 'hha',
-            fnName: 'set_happ_preferences',
-            payload: {
-              happ_id: id,
-              max_fuel_before_invoice: '0',
-              price_compute: '0',
-              price_storage: '0',
-              price_bandwidth: '0',
-              max_time_before_invoice: { secs: 15000, nanos: 0 },
-              invoice_due_in_days: 7
+            // that will override the default values
+            {
+              appId: localStorage.getItem(kCoreAppVersionLSKey),
+              roleId: 'core-app',
+              zomeName: 'hha',
+              fnName: 'set_happ_preferences',
+              payload: {
+                happ_id: id,
+                max_fuel_before_invoice: '0',
+                price_compute: '0',
+                price_storage: '0',
+                price_bandwidth: '0',
+                max_time_before_invoice: { secs: 15000, nanos: 0 },
+                invoice_due_in_days: 7
+              }
             }
-          }
 
       await hposHolochainCall({
         method: 'post',
