@@ -57,7 +57,7 @@ const earnings = computed(() =>
 const recentPayments = computed(() =>
   isError(dashboardStore.hostEarnings)
     ? dashboardStore.hostEarnings
-    : dashboardStore.hostEarnings.recentPayments.slice(0, kPaymentsToDisplay)
+    : dashboardStore.hostEarnings.recentPayments.filter(payment => payment.status === 'Completed').slice(0, kPaymentsToDisplay)
 )
 
 const usage = computed(() => dashboardStore.usage)
