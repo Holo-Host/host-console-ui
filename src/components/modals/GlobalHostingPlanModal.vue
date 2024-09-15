@@ -258,6 +258,10 @@ async function setDefaultHostPreferences(): Promise<void> {
       value: [],
       criteria_type: ECriteriaType.exclude,
     });
+    preferencesStore.updateHostingCategories({
+      value: [],
+      criteria_type: ECriteriaType.exclude,
+    })
     await preferencesStore.setDefaultPreferences();
   } catch (e) {
     isError.value = true
