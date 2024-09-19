@@ -134,8 +134,8 @@ const invoices = computed(() => {
         ...invoice,
         formattedId: `...${invoice.id.substring(invoice.id.length - kVisibleHashLength)}`,
         happ: invoice.happ.name,
-        formattedExpirationDate: invoice.invoiceDetails.end
-            ? dayjs(invoice.invoiceDetails.end / 1000).format(kDefaultDateFormat)
+        formattedExpirationDate: invoice.invoiceDetails.due
+            ? dayjs(invoice.invoiceDetails.due / 1000).format(kDefaultDateFormat)
           : '-',
         amount: Number(invoice.amount),
         formattedCompletedDate: dayjs(invoice.completedDate / kMsInSecond).format(
